@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/teacher")
 public class TeacherController {
@@ -23,6 +25,15 @@ public class TeacherController {
                     request.getPassword()
             );
             return ResponseEntity.ok("Teacher registered successfully: " + teacher.getName());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/students/{classId}")
+    public ResponseEntity<?> getStudents(@PathVariable Long classId) {
+        try {
+            return ResponseEntity.ok(teacherService.getStudentsInClass(classId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
