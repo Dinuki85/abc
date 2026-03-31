@@ -8,7 +8,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-primary: #17a2b8;
+  --color-primary-hover: #138496;
+  --color-secondary: #ffc107;
+  --color-secondary-hover: #e0a800;
+  --color-dark: #343a40;
+  --color-light: #f8f9fa;
+  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
