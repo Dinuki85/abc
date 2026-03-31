@@ -1,6 +1,7 @@
 package com.abc.controller;
 
 import com.abc.dto.AssignStudentRequest;
+import com.abc.dto.AssignTeacherRequest;
 import com.abc.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,19 @@ public class AdminController {
                     request.getClassId()
             );
             return ResponseEntity.ok("Student assigned successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/assign-teacher")
+    public ResponseEntity<?> assignTeacher(@RequestBody AssignTeacherRequest request) {
+        try {
+            adminService.assignTeacherToClass(
+                    request.getTeacherId(),
+                    request.getClassId()
+            );
+            return ResponseEntity.ok("Teacher assigned successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -56,4 +56,19 @@ public class AdminService {
 
         studentClassRepository.save(studentClass);
     }
+
+    public void assignTeacherToClass(Long teacherId, Long classId) {
+        User teacher = userRepository.findById(teacherId)
+                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
+        if (!teacher.getRole().equals(com.abc.entity.Role.TEACHER)) {
+            throw new RuntimeException("User is not a teacher");
+        }
+
+        SchoolClass schoolClass = schoolClassRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+
+        schoolClass.setTeacher(teacher);
+        schoolClassRepository.save(schoolClass);
+    }
 }
