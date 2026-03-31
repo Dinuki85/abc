@@ -4,13 +4,14 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
 
 interface Props {
-  children: JSX.Element;
-  width?: "fit-content" | "100%";
+  children: React.ReactNode;
+  width?: "fit-content" | "100%" | string;
+  delay?: number;
 }
 
-export const Reveal = ({ children, width = "fit-content" }: Props) => {
+export const Reveal = ({ children, width = "100%", delay = 0.1 }: Props) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const mainControls = useAnimation();
 
   useEffect(() => {
@@ -20,18 +21,20 @@ export const Reveal = ({ children, width = "fit-content" }: Props) => {
   }, [isInView, mainControls]);
 
   return (
-    <div ref={ref} style={{ position: "relative", width, overflow: "hidden" }}>
+    <div ref={ref} style={{ position: "relative", width }}>
       <motion.div
         variants={{
-          hidden: { opacity: 0, y: 75 },
+          hidden: { opacity: 0, y: 50 },
           visible: { opacity: 1, y: 0 },
         }}
         initial="hidden"
         animate={mainControls}
-        transition={{ duration: 0.5, delay: 0.25 }}
+        transition={{ duration: 0.6, delay: delay, ease: "easeOut" }}
       >
         {children}
       </motion.div>
     </div>
   );
 };
+
+export default Reveal;
