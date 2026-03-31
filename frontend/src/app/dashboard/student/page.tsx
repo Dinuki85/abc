@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/Button';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, 
   Settings, 
@@ -13,22 +13,30 @@ import {
   FileText,
   UserCheck2,
   CalendarDays,
-  GraduationCap
+  GraduationCap,
+  ChevronRight,
+  ArrowRight,
+  ShieldCheck,
+  MapPin,
+  Phone
 } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import { mockApi, MockStudent } from '@/lib/mock-api';
 
 export default function StudentDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<MockStudent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const currentUser = mockApi.getCurrentUser();
     if (!currentUser) {
       router.push('/login');
-    } else if (!currentUser.profileCompleted || currentUser.isFirstLogin) {
-      router.push('/login'); // Redirection logic will handle it
+    } else if (currentUser.isFirstLogin) {
+      router.push('/login'); 
     } else {
       setUser(currentUser);
+      setIsLoading(false);
     }
   }, [router]);
 
@@ -37,176 +45,263 @@ export default function StudentDashboard() {
     router.push('/login');
   };
 
-  if (!user) return null;
+  if (isLoading || !user) return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
+
+  const steps = [
+    { 
+      id: 1, 
+      title: 'Profile Setup', 
+      desc: 'Personal & Parent details',
+      status: user.profileCompleted ? 'completed' : 'pending',
+      action: !user.profileCompleted ? () => router.push('/dashboard/student/profile-setup') : null
+    },
+    { 
+      id: 2, 
+      title: 'Grade Assignment', 
+      desc: 'Office staff placement',
+      status: user.gradeId ? 'completed' : user.profileCompleted ? 'pending' : 'locked'
+    },
+    { 
+      id: 3, 
+      title: 'Final Audit', 
+      desc: 'Class teacher verification',
+      status: user.verificationStatus === 'VERIFIED' ? 'completed' : user.verificationStatus === 'NEEDS_CORRECTION' ? 'warning' : user.gradeId ? 'pending' : 'locked',
+      action: user.verificationStatus === 'NEEDS_CORRECTION' ? () => router.push('/dashboard/student/profile-setup') : null
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {/* Top Navbar */}
-      <nav className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-30">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg rotate-3 group hover:rotate-0 transition-transform">
-            <span className="text-xl font-bold">A</span>
+      <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 flex items-center justify-between shadow-sm sticky top-0 z-50">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-100 rotate-6 group hover:rotate-0 transition-transform cursor-pointer">
+             <GraduationCap size={28} />
           </div>
-          <span className="text-xl font-bold text-slate-800 tracking-tight hidden sm:block">Student Portal</span>
+          <div>
+            <span className="text-xl font-black text-slate-900 tracking-tight block leading-none">Student Portal</span>
+            <span className="text-[10px] text-indigo-600 font-black uppercase tracking-widest leading-none mt-1">Academic Year 2024/25</span>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col items-end mr-2">
-            <span className="text-sm font-bold text-slate-900 leading-none">{user.fullName}</span>
-            <span className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">{user.username}</span>
+        <div className="flex items-center gap-6">
+          <div className="hidden md:flex flex-col items-end border-r border-slate-100 pr-6">
+            <span className="text-sm font-black text-slate-900 leading-none">{user.fullName}</span>
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">{user.username}</span>
           </div>
-          <Button variant="outline" size="sm" onClick={handleLogout} className="rounded-xl border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all">
+          <Button variant="ghost" size="sm" onClick={handleLogout} className="rounded-xl font-bold text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
             <LogOut size={18} className="mr-2" />
             Logout
           </Button>
         </div>
       </nav>
 
-      <main className="flex-grow p-6 md:p-8 max-w-7xl mx-auto w-full space-y-8">
-        {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-primary to-indigo-700 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl relative overflow-hidden">
-          <div className="relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold font-handlee mb-4 tracking-tight">Welcome Back, {user.fullName.split(' ')[0]}!</h1>
-            <p className="text-white/80 max-w-2xl text-lg leading-relaxed">
-              Manage your academic profile, view school updates, and track your data verification status all in one place.
-            </p>
+      <main className="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10">
+        
+        {/* Welcome Header */}
+        <div className="relative overflow-hidden bg-slate-900 rounded-[3rem] p-10 md:p-16 text-white shadow-2xl">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <h1 className="text-5xl font-black tracking-tight mb-4">Hello, <span className="text-indigo-400">{user.fullName.split(' ')[0]}</span>!</h1>
+              <p className="text-slate-400 text-lg leading-relaxed font-medium">
+                Your digital student identity is being processed. Complete all steps below to unlock full access to your classroom resources.
+              </p>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 flex flex-col items-center justify-center text-center space-y-4"
+            >
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center ${
+                user.verificationStatus === 'VERIFIED' ? 'bg-emerald-500/20 text-emerald-400 ring-8 ring-emerald-500/10' :
+                user.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-500/20 text-rose-400 ring-8 ring-rose-500/10' :
+                'bg-blue-500/20 text-indigo-400 ring-8 ring-blue-500/10'
+              }`}>
+                {user.verificationStatus === 'VERIFIED' ? <ShieldCheck size={40} /> : <Clock size={40} />}
+              </div>
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500">Global Verification</p>
+                <p className="text-2xl font-black mt-1 italic">{user.verificationStatus}</p>
+              </div>
+            </motion.div>
           </div>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 shrink-0" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/20 rounded-full blur-2xl -ml-10 -mb-10" />
+          
+          {/* Abstract backgrounds */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-600/10 rounded-full blur-[100px] -mr-40 -mt-40" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] -ml-32 -mb-32" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Status Overview */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-               <div className="flex items-center justify-between mb-8">
-                <h3 className="text-xl font-bold text-slate-800 flex items-center gap-3">
-                  <UserCheck2 className="text-primary w-6 h-6" />
-                  Verification Status
-                </h3>
-               </div>
-
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                 <div className={`p-6 rounded-3xl border-2 transition-all cursor-default ${
-                   user.verificationStatus === 'VERIFIED' 
-                   ? 'border-emerald-100 bg-emerald-50/50' 
-                   : user.verificationStatus === 'NEEDS_CORRECTION' 
-                   ? 'border-rose-100 bg-rose-50/50' 
-                   : 'border-blue-100 bg-blue-50/50'
-                 }`}>
-                   <div className="flex flex-col items-center text-center space-y-3">
-                      {user.verificationStatus === 'VERIFIED' ? (
-                        <CheckCircle2 className="w-10 h-10 text-emerald-500" />
-                      ) : user.verificationStatus === 'NEEDS_CORRECTION' ? (
-                        <AlertCircle className="w-10 h-10 text-rose-500" />
-                      ) : (
-                        <Clock className="w-10 h-10 text-blue-500" />
-                      )}
-                      <div>
-                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">State</p>
-                        <p className={`text-xl font-bold ${
-                          user.verificationStatus === 'VERIFIED' ? 'text-emerald-600' : 
-                          user.verificationStatus === 'NEEDS_CORRECTION' ? 'text-rose-600' : 'text-blue-600'
-                        }`}>
-                          {user.verificationStatus}
-                        </p>
-                      </div>
-                   </div>
-                 </div>
-
-                 <div className="p-6 rounded-3xl border-2 border-slate-100 bg-slate-50/50">
-                    <div className="flex flex-col items-center text-center space-y-3">
-                      <FileText className="w-10 h-10 text-slate-400" />
-                      <div>
-                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Profile</p>
-                        <p className="text-xl font-bold text-slate-700">Completed</p>
-                      </div>
-                    </div>
-                 </div>
-
-                 <div className="p-6 rounded-3xl border-2 border-slate-100 bg-slate-50/50">
-                    <div className="flex flex-col items-center text-center space-y-3">
-                      <GraduationCap className="w-10 h-10 text-primary" />
-                      <div>
-                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Grade & Class</p>
-                        <p className="text-xl font-bold text-slate-700">
-                          {user.gradeId ? `${mockApi.getGradeName(user.gradeId)} - ${mockApi.getClassName(user.classId)}` : 'Not Assigned'}
-                        </p>
-                      </div>
-                    </div>
-                 </div>
-
-                 <div className="p-6 rounded-3xl border-2 border-slate-100 bg-slate-50/50 lg:col-span-3">
-                    <div className="flex flex-col items-center text-center space-y-3">
-                      <CalendarDays className="w-10 h-10 text-slate-400" />
-                      <div>
-                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Academic Year</p>
-                        <p className="text-xl font-bold text-slate-700">2024 / 2025</p>
-                      </div>
-                    </div>
-                 </div>
-               </div>
-
-               {user.verificationStatus === 'NEEDS_CORRECTION' && (
-                 <div className="mt-8 bg-rose-50 border border-rose-200 p-6 rounded-3xl animate-pulse">
-                    <div className="flex items-start gap-4">
-                      <AlertCircle className="w-6 h-6 text-rose-600 shrink-0 mt-1" />
-                      <div>
-                        <h4 className="text-rose-800 font-bold text-lg">Action Required!</h4>
-                        <p className="text-rose-700 font-medium mb-4">{user.verificationComment || 'Your profile needs updates before final verification.'}</p>
-                        <Button onClick={() => router.push('/dashboard/student/profile-setup')} className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold">
-                          Update My Profile
-                        </Button>
-                      </div>
-                    </div>
-                 </div>
-               )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 group hover:shadow-xl transition-shadow cursor-pointer">
-                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 ring-4 ring-blue-50/50 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <User size={24} />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">My Information</h3>
-                  <p className="text-slate-500 font-medium leading-relaxed mb-6">Review your personal and parent contact details submitted for school records.</p>
-               </div>
-
-               <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100 group hover:shadow-xl transition-shadow cursor-pointer">
-                  <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6 ring-4 ring-indigo-50/50 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                    <Settings size={24} />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">Security Settings</h3>
-                  <p className="text-slate-500 font-medium leading-relaxed mb-6">Update your password frequently to keep your student account secure.</p>
-               </div>
-            </div>
+        {/* Progress Tracker */}
+        <section className="bg-white rounded-[3rem] p-8 md:p-12 shadow-sm border border-slate-100">
+          <div className="flex items-center justify-between mb-12">
+            <h3 className="text-2xl font-black text-slate-900 flex items-center gap-3">
+              <UserCheck2 className="text-indigo-600" size={28} />
+              Onboarding Progress
+            </h3>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-4 py-2 rounded-full border border-slate-100">Step {steps.findIndex(s => s.status !== 'completed') + 1} of 3</span>
           </div>
 
-          {/* Quick Info Sidebar */}
-          <div className="space-y-8">
-            <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100">
-               <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                 <CalendarDays className="text-primary w-5 h-5" />
-                 Upcoming Events
-               </h3>
-               <div className="space-y-6">
-                 {[
-                   { date: 'APR 15', title: 'Mid-term Exams', type: 'Academic' },
-                   { date: 'APR 22', title: 'New Year Festival', type: 'Event' },
-                   { date: 'MAY 05', title: 'Sports Meet 2024', type: 'Sports' }
-                 ].map((event, i) => (
-                   <div key={i} className="flex items-center gap-4 group">
-                     <div className="w-14 h-14 rounded-2xl bg-slate-50 flex flex-col items-center justify-center text-primary font-bold group-hover:bg-primary group-hover:text-white transition-colors">
-                       <span className="text-[10px] uppercase leading-tight">{event.date.split(' ')[0]}</span>
-                       <span className="text-lg leading-tight">{event.date.split(' ')[1]}</span>
-                     </div>
-                     <div>
-                       <h4 className="font-bold text-slate-800 leading-tight group-hover:text-primary transition-colors">{event.title}</h4>
-                       <p className="text-xs text-slate-500 font-medium">{event.type}</p>
-                     </div>
-                   </div>
-                 ))}
-               </div>
-               <Button variant="ghost" className="w-full mt-8 text-primary font-bold hover:bg-primary/5 rounded-xl">View Calendar</Button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden md:block absolute top-[44px] left-20 right-20 h-1 bg-slate-50" />
+            
+            {steps.map((step, i) => (
+              <div key={step.id} className="relative z-10 flex flex-col items-center text-center">
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: i * 0.1 }}
+                  className={`w-24 h-24 rounded-[2rem] flex items-center justify-center mb-6 border-4 transition-all duration-500 ${
+                    step.status === 'completed' ? 'bg-emerald-500 border-emerald-100 text-white shadow-xl shadow-emerald-100' :
+                    step.status === 'pending' ? 'bg-white border-indigo-600 text-indigo-600 shadow-xl shadow-indigo-100' :
+                    step.status === 'warning' ? 'bg-rose-500 border-rose-100 text-white shadow-xl shadow-rose-100 animate-pulse' :
+                    'bg-slate-50 border-slate-100 text-slate-300'
+                  }`}
+                >
+                  {step.status === 'completed' ? <CheckCircle2 size={36} /> : 
+                   step.status === 'warning' ? <AlertCircle size={36} /> :
+                   <span className="text-3xl font-black">{step.id}</span>}
+                </motion.div>
+                
+                <h4 className={`text-lg font-black mb-1 ${step.status === 'locked' ? 'text-slate-300' : 'text-slate-900'}`}>{step.title}</h4>
+                <p className="text-sm font-medium text-slate-400 mb-6">{step.desc}</p>
+                
+                {step.action && (
+                  <Button 
+                    onClick={step.action}
+                    className={`rounded-2xl font-black text-xs uppercase tracking-widest px-6 h-10 shadow-lg transition-transform active:scale-95 ${
+                      step.status === 'warning' ? 'bg-rose-600 text-white shadow-rose-100' : 'bg-indigo-600 text-white shadow-indigo-100'
+                    }`}
+                  >
+                    Resolve Now <ArrowRight size={14} className="ml-2" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Info Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          
+          {/* Identity Card */}
+          <div className="lg:col-span-1 bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110" />
+            <h3 className="text-xl font-black text-slate-900 mb-8 flex items-center gap-3 relative z-10">
+              <User className="text-indigo-600" size={24} />
+              My Identity
+            </h3>
+
+            <div className="space-y-6 relative z-10">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl">
+                  <GraduationCap size={20} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Placement</p>
+                  <p className="text-slate-800 font-bold leading-tight">
+                    {user.gradeId ? `${mockApi.getGradeName(user.gradeId)} — ${mockApi.getClassName(user.classId)}` : 'Awaiting Assignment'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-slate-50 text-slate-400 rounded-2xl">
+                  <MapPin size={20} />
+                </div>
+                <div className="overflow-hidden">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Home Address</p>
+                  <p className="text-slate-800 font-bold leading-tight truncate">{user.profileData?.address || 'Not Provided'}</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-slate-50 text-slate-400 rounded-2xl">
+                  <Phone size={20} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Emergency Contact</p>
+                  <p className="text-slate-800 font-bold leading-tight">{user.profileData?.parentContact || 'Not Provided'}</p>
+                </div>
+              </div>
+            </div>
+            
+            <Button variant="ghost" onClick={() => router.push('/dashboard/student/profile-setup')} className="w-full mt-10 rounded-2xl border-2 border-slate-50 font-bold text-slate-400 hover:border-indigo-600 hover:text-indigo-600 transition-all h-14">
+              Edit Details
+            </Button>
+          </div>
+
+          {/* Messages / Notifications */}
+          <div className="lg:col-span-2 space-y-10">
+            {user.verificationStatus === 'NEEDS_CORRECTION' ? (
+              <motion.div 
+                animate={{ x: [0, 5, -5, 0] }}
+                transition={{ repeat: Infinity, duration: 4 }}
+                className="bg-rose-50 border-2 border-rose-100 rounded-[3rem] p-10 flex items-start gap-8 shadow-xl shadow-rose-100"
+              >
+                <div className="w-20 h-20 bg-rose-600 rounded-[2rem] flex items-center justify-center text-white shrink-0 shadow-lg shadow-rose-200">
+                  <AlertCircle size={40} />
+                </div>
+                <div>
+                  <h4 className="text-2xl font-black text-rose-900 mb-2">Teacher's Feedback</h4>
+                  <p className="text-rose-800 font-bold italic text-lg leading-relaxed mb-6">
+                    "{user.verificationComment || 'Please check your parent contact number, it seems to be incorrect.'}"
+                  </p>
+                  <Button onClick={() => router.push('/dashboard/student/profile-setup')} className="bg-rose-600 text-white rounded-2xl font-black uppercase tracking-widest h-14 px-8 shadow-xl shadow-rose-200">
+                    Fix Record Now
+                  </Button>
+                </div>
+              </motion.div>
+            ) : user.verificationStatus === 'VERIFIED' ? (
+              <div className="bg-emerald-50 border-2 border-emerald-100 rounded-[3rem] p-10 flex items-center gap-8 shadow-xl shadow-emerald-100">
+                <div className="w-20 h-20 bg-emerald-500 rounded-[2rem] flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-200">
+                   <ShieldCheck size={40} />
+                </div>
+                <div>
+                  <h4 className="text-2xl font-black text-emerald-900 leading-none mb-2">Verified Profile</h4>
+                  <p className="text-emerald-700 font-medium text-lg leading-relaxed">
+                    Your records are in perfect order. You are officially enrolled as a student of Andiambalama Maha Vidyalaya.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-indigo-50 border-2 border-indigo-100 rounded-[3rem] p-10 flex items-center gap-8 shadow-xl shadow-indigo-100">
+                <div className="w-20 h-20 bg-indigo-600 rounded-[2rem] flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-200">
+                   <Clock size={40} />
+                </div>
+                <div>
+                  <h4 className="text-2xl font-black text-indigo-900 leading-none mb-2">Audit Underway</h4>
+                  <p className="text-indigo-700 font-medium text-lg leading-relaxed">
+                    Our team is currently reviewing your profile submission. This process usually takes 24-48 hours.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 group cursor-pointer hover:shadow-xl transition-all">
+                <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                  <CalendarDays size={28} />
+                </div>
+                <h4 className="text-lg font-black text-slate-800 mb-2">Class Schedule</h4>
+                <p className="text-sm font-medium text-slate-400">View your daily timetable once your assignment is finalized.</p>
+              </div>
+              <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 group cursor-pointer hover:shadow-xl transition-all">
+                <div className="w-14 h-14 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                  <Settings size={28} />
+                </div>
+                <h4 className="text-lg font-black text-slate-800 mb-2">Security Hub</h4>
+                <p className="text-sm font-medium text-slate-400">Manage passwords and login activity for your account.</p>
+              </div>
             </div>
           </div>
         </div>

@@ -16,6 +16,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { mockApi, MockStudent, Grade, Class } from '@/lib/mock-api';
+import { Input } from '@/components/ui/Input';
 
 export default function ClassesViewPage() {
   const router = useRouter();

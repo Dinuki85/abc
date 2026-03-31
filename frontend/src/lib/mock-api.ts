@@ -30,20 +30,18 @@ export interface MockStudent {
   };
 }
 
-const GRADES: Grade[] = [
-  { id: 1, name: "Grade 6" },
-  { id: 2, name: "Grade 10" },
-  { id: 3, name: "A/L" }
-];
+const GRADES: Grade[] = Array.from({ length: 13 }, (_, i) => ({
+  id: i + 1,
+  name: `Grade ${i + 1}`,
+}));
 
-const CLASSES: Class[] = [
-  { id: 1, name: "A", gradeId: 1 },
-  { id: 2, name: "B", gradeId: 1 },
-  { id: 3, name: "A", gradeId: 2 },
-  { id: 4, name: "B", gradeId: 2 },
-  { id: 5, name: "Maths A", gradeId: 3 },
-  { id: 6, name: "Bio B", gradeId: 3 }
-];
+const CLASSES: Class[] = GRADES.flatMap(g => 
+  ["A", "B", "C"].map((name, i) => ({
+    id: g.id * 10 + i,
+    name,
+    gradeId: g.id
+  }))
+);
 
 const INITIAL_STUDENTS: MockStudent[] = [
   {
@@ -203,6 +201,14 @@ class MockApiService {
 
   getStudentsByClass(classId: number): MockStudent[] {
     return this.users.filter(u => u.classId === classId && u.role === 'STUDENT');
+  }
+
+  getUnassignedStudents(): MockStudent[] {
+    return this.users.filter(u => u.role === 'STUDENT' && u.profileCompleted && !u.gradeId);
+  }
+
+  getPendingVerificationStudents(): MockStudent[] {
+    return this.users.filter(u => u.role === 'STUDENT' && u.profileCompleted && u.gradeId && u.verificationStatus === 'PENDING');
   }
 }
 
