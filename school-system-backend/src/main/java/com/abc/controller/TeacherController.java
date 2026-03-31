@@ -1,13 +1,12 @@
 package com.abc.controller;
 
 import com.abc.dto.TeacherRegistrationRequest;
+import com.abc.dto.VerifyStudentRequest;
 import com.abc.entity.Teacher;
 import com.abc.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/teacher")
@@ -34,6 +33,20 @@ public class TeacherController {
     public ResponseEntity<?> getStudents(@PathVariable Long classId) {
         try {
             return ResponseEntity.ok(teacherService.getStudentsInClass(classId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<?> verify(@RequestBody VerifyStudentRequest request) {
+        try {
+            teacherService.verifyStudent(
+                    request.getStudentId(),
+                    request.getStatus(),
+                    request.getComment()
+            );
+            return ResponseEntity.ok("Student verification updated successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

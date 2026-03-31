@@ -6,9 +6,13 @@ import com.abc.entity.Student;
 import com.abc.entity.StudentClass;
 import com.abc.entity.Teacher;
 import com.abc.entity.User;
+import com.abc.entity.Verification;
+import com.abc.entity.VerificationStatus;
 import com.abc.repository.StudentClassRepository;
+import com.abc.repository.StudentRepository;
 import com.abc.repository.TeacherRepository;
 import com.abc.repository.UserRepository;
+import com.abc.repository.VerificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,13 @@ public class TeacherService {
     private TeacherRepository teacherRepository;
 
     @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
     private StudentClassRepository studentClassRepository;
+
+    @Autowired
+    private VerificationRepository verificationRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -62,5 +72,19 @@ public class TeacherService {
             response.setProfileCompleted(s.isProfileCompleted());
             return response;
         }).collect(Collectors.toList());
+    }
+
+    public Verification verifyStudent(Long studentId, VerificationStatus status, String comment) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        Verification verification = verificationRepository.findByStudent_Id(studentId)
+                .orElse(new Verification());
+
+        verification.setStudent(student);
+        verification.setStatus(status);
+        verification.setComment(comment);
+
+        return verificationRepository.save(verification);
     }
 }
