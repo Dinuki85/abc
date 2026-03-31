@@ -17,6 +17,17 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @jakarta.annotation.PostConstruct
+    public void initDummyUser() {
+        if (userRepository.findByUsername("STU2024001").isEmpty()) {
+            User user = new User();
+            user.setUsername("STU2024001");
+            user.setPassword(passwordEncoder.encode("temp123"));
+            user.setRole(com.abc.entity.Role.STUDENT);
+            userRepository.save(user);
+        }
+    }
+
     public User login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isPresent()) {
