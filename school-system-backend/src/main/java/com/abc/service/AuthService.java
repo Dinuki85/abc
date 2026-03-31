@@ -18,21 +18,8 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     @jakarta.annotation.PostConstruct
-    public void initDummyUser() {
-        if (userRepository.findByUsername("STU2024001").isEmpty()) {
-            User user = new User();
-            user.setUsername("STU2024001");
-            user.setPassword(passwordEncoder.encode("temp123"));
-            user.setRole(com.abc.entity.Role.STUDENT);
-            userRepository.save(user);
-        }
-        if (userRepository.findByUsername("STU2024002").isEmpty()) {
-            User user = new User();
-            user.setUsername("STU2024002");
-            user.setPassword(passwordEncoder.encode("temp123"));
-            user.setRole(com.abc.entity.Role.STUDENT);
-            userRepository.save(user);
-        }
+    public void init() {
+        // Initialization moved to DataInitializer
     }
 
     public User login(String username, String password) {
