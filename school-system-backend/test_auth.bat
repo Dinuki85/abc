@@ -1,0 +1,13 @@
+@echo off
+echo Testing Login (Incorrect Password)...
+curl -X POST http://localhost:8087/api/auth/login -H "Content-Type: application/json" -d "{\"username\": \"STU2024001\", \"password\": \"wrong123\"}"
+echo .
+echo Testing Login (Correct Password)...
+curl -X POST http://localhost:8087/api/auth/login -H "Content-Type: application/json" -d "{\"username\": \"STU2024001\", \"password\": \"temp123\"}"
+echo .
+echo Testing Change Password...
+curl -X POST http://localhost:8087/api/auth/change-password -H "Content-Type: application/json" -d "{\"username\": \"STU2024001\", \"newPassword\": \"newpass123\"}"
+echo .
+echo Testing Login (New Password)...
+curl -X POST http://localhost:8087/api/auth/login -H "Content-Type: application/json" -d "{\"username\": \"STU2024001\", \"password\": \"newpass123\"}"
+echo .

@@ -1,11 +1,7 @@
 package com.abc.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @Entity
 @Table(name = "verification")
 public class Verification {
@@ -23,4 +19,18 @@ public class Verification {
 
     @Column(columnDefinition = "TEXT")
     private String comment;
+
+    public Verification() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Student getStudent() { return student; }
+    public void setStudent(Student student) { this.student = student; }
+
+    public VerificationStatus getStatus() { return status; }
+    public void setStatus(VerificationStatus status) { this.status = status; }
+
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
 }
