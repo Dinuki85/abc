@@ -21,8 +21,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/teacher/**").hasRole("TEACHER")
+                .requestMatchers("/api/student/**").hasRole("STUDENT")
                 .anyRequest().authenticated()
-            );
+            )
+            .httpBasic(org.springframework.security.config.Customizer.withDefaults());
         return http.build();
     }
 }
