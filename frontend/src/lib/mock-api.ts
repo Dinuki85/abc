@@ -1,21 +1,49 @@
 'use client';
 
+export interface Grade {
+  id: number;
+  name: string;
+}
+
+export interface Class {
+  id: number;
+  name: string;
+  gradeId: number;
+}
+
 export interface MockStudent {
   username: string; // Index Number
   fullName: string;
-  grade: string;
+  grade: string; // Keep for legacy/compat
   password: string;
   role: 'STUDENT' | 'TEACHER' | 'ADMIN';
   isFirstLogin: boolean;
   profileCompleted: boolean;
   verificationStatus: 'PENDING' | 'VERIFIED' | 'NEEDS_CORRECTION';
   verificationComment?: string;
+  gradeId?: number | null;
+  classId?: number | null;
   profileData?: {
     address: string;
     parentName: string;
     parentContact: string;
   };
 }
+
+const GRADES: Grade[] = [
+  { id: 1, name: "Grade 6" },
+  { id: 2, name: "Grade 10" },
+  { id: 3, name: "A/L" }
+];
+
+const CLASSES: Class[] = [
+  { id: 1, name: "A", gradeId: 1 },
+  { id: 2, name: "B", gradeId: 1 },
+  { id: 3, name: "A", gradeId: 2 },
+  { id: 4, name: "B", gradeId: 2 },
+  { id: 5, name: "Maths A", gradeId: 3 },
+  { id: 6, name: "Bio B", gradeId: 3 }
+];
 
 const INITIAL_STUDENTS: MockStudent[] = [
   {
@@ -27,6 +55,8 @@ const INITIAL_STUDENTS: MockStudent[] = [
     isFirstLogin: true,
     profileCompleted: false,
     verificationStatus: 'PENDING',
+    gradeId: null,
+    classId: null
   },
   {
     username: 'STU2024002',
@@ -37,6 +67,8 @@ const INITIAL_STUDENTS: MockStudent[] = [
     isFirstLogin: false,
     profileCompleted: true,
     verificationStatus: 'VERIFIED',
+    gradeId: 2, // Grade 10
+    classId: 3, // A
     profileData: {
       address: '123 Main St, Andiambalama',
       parentName: 'S. Silva',
@@ -60,7 +92,7 @@ class MockApiService {
 
   constructor() {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('school_mock_users');
+      const saved = localStorage.getItem('school_mock_users_v2');
       if (saved) {
         this.users = JSON.parse(saved);
       } else {
@@ -74,8 +106,24 @@ class MockApiService {
 
   private save() {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('school_mock_users', JSON.stringify(this.users));
+      localStorage.setItem('school_mock_users_v2', JSON.stringify(this.users));
     }
+  }
+
+  getGrades(): Grade[] {
+    return GRADES;
+  }
+
+  getClassesByGrade(gradeId: number): Class[] {
+    return CLASSES.filter(c => c.gradeId === gradeId);
+  }
+
+  getGradeName(id?: number | null): string {
+    return GRADES.find(g => g.id === id)?.name || 'Not Assigned';
+  }
+
+  getClassName(id?: number | null): string {
+    return CLASSES.find(c => c.id === id)?.name || 'Not Assigned';
   }
 
   login(username: string, password: string): MockStudent | null {
@@ -141,6 +189,22 @@ class MockApiService {
     }
     return false;
   }
+
+  assignClass(username: string, gradeId: number, classId: number) {
+    const index = this.users.findIndex(u => u.username === username);
+    if (index !== -1) {
+      this.users[index].gradeId = gradeId;
+      this.users[index].classId = classId;
+      this.save();
+      return true;
+    }
+    return false;
+  }
+
+  getStudentsByClass(classId: number): MockStudent[] {
+    return this.users.filter(u => u.classId === classId && u.role === 'STUDENT');
+  }
 }
 
 export const mockApi = new MockApiService();
+

@@ -12,7 +12,8 @@ import {
   AlertCircle, 
   FileText,
   UserCheck2,
-  CalendarDays
+  CalendarDays,
+  GraduationCap
 } from 'lucide-react';
 import { mockApi, MockStudent } from '@/lib/mock-api';
 
@@ -123,6 +124,18 @@ export default function StudentDashboard() {
                  </div>
 
                  <div className="p-6 rounded-3xl border-2 border-slate-100 bg-slate-50/50">
+                    <div className="flex flex-col items-center text-center space-y-3">
+                      <GraduationCap className="w-10 h-10 text-primary" />
+                      <div>
+                        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Grade & Class</p>
+                        <p className="text-xl font-bold text-slate-700">
+                          {user.gradeId ? `${mockApi.getGradeName(user.gradeId)} - ${mockApi.getClassName(user.classId)}` : 'Not Assigned'}
+                        </p>
+                      </div>
+                    </div>
+                 </div>
+
+                 <div className="p-6 rounded-3xl border-2 border-slate-100 bg-slate-50/50 lg:col-span-3">
                     <div className="flex flex-col items-center text-center space-y-3">
                       <CalendarDays className="w-10 h-10 text-slate-400" />
                       <div>
