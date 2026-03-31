@@ -7,12 +7,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @GetMapping("/grades")
+    public ResponseEntity<List<?>> getGrades() {
+        return ResponseEntity.ok(adminService.getAllGrades());
+    }
+
+    @GetMapping("/classes")
+    public ResponseEntity<List<?>> getClasses() {
+        return ResponseEntity.ok(adminService.getAllClasses());
+    }
+
+    @GetMapping("/teachers")
+    public ResponseEntity<List<?>> getTeachers() {
+        return ResponseEntity.ok(adminService.getTeachers());
+    }
+
+    @GetMapping("/unassigned-students")
+    public ResponseEntity<List<?>> getUnassignedStudents() {
+        return ResponseEntity.ok(adminService.getUnassignedStudents());
+    }
 
     @PostMapping("/assign-student")
     public ResponseEntity<?> assignStudent(@RequestBody AssignStudentRequest request) {

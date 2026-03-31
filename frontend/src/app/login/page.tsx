@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import { AlertCircle, Lock, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { api } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Lock, User, AlertCircle } from 'lucide-react';
-import { mockApi } from '@/lib/mock-api';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,22 +21,28 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const user = mockApi.login(username, password);
+      const user = await api.login(username, password);
 
       if (user) {
         // Redirection logic based on user status
         if (user.role === 'STUDENT') {
-          if (user.isFirstLogin) {
+          if (user.firstLogin) {
             router.push('/change-password');
-          } else if (!user.profileCompleted) {
-            router.push('/dashboard/student/profile-setup');
           } else {
-            router.push('/dashboard/student');
+            // Check student profile completion
+            const profile = await api.getStudentProfile(username);
+            if (profile && !profile.profileCompleted) {
+              router.push('/dashboard/student/profile-setup');
+            } else {
+              router.push('/dashboard/student');
+            }
           }
         } else if (user.role === 'TEACHER') {
-          router.push('/dashboard/teacher/students');
-        } else {
+          router.push('/teacher/students');
+        } else if (user.role === 'ADMIN') {
           router.push('/admin');
+        } else {
+          router.push('/dashboard');
         }
       } else {
         setError('Invalid index number or password. Please try again.');

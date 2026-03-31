@@ -42,9 +42,9 @@ export function TableBody({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function TableCell({ children, className = '' }: { children: React.ReactNode, className?: string }) {
+export function TableCell({ children, className = '', colSpan }: { children: React.ReactNode, className?: string, colSpan?: number }) {
   return (
-    <td className={`px-6 py-4 whitespace-nowrap ${className}`}>
+    <td className={`px-6 py-4 whitespace-nowrap ${className}`} colSpan={colSpan}>
       {children}
     </td>
   );

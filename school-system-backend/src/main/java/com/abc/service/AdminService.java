@@ -13,6 +13,9 @@ import com.abc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AdminService {
 
@@ -70,5 +73,25 @@ public class AdminService {
 
         schoolClass.setTeacher(teacher);
         schoolClassRepository.save(schoolClass);
+    }
+
+    public List<Grade> getAllGrades() {
+        return gradeRepository.findAll();
+    }
+
+    public List<SchoolClass> getAllClasses() {
+        return schoolClassRepository.findAll();
+    }
+
+    public List<User> getTeachers() {
+        return userRepository.findAll().stream()
+                .filter(u -> u.getRole().equals(com.abc.entity.Role.TEACHER))
+                .collect(Collectors.toList());
+    }
+
+    public List<Student> getUnassignedStudents() {
+        return studentRepository.findAll().stream()
+                .filter(s -> studentClassRepository.findByStudent(s).isEmpty())
+                .collect(Collectors.toList());
     }
 }

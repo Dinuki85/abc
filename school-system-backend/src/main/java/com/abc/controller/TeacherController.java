@@ -4,9 +4,14 @@ import com.abc.dto.TeacherRegistrationRequest;
 import com.abc.dto.VerifyStudentRequest;
 import com.abc.entity.Teacher;
 import com.abc.service.TeacherService;
+import com.abc.repository.SchoolClassRepository;
+import com.abc.entity.SchoolClass;
+import com.abc.entity.User;
+import com.abc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RestController
 @RequestMapping("/api/teacher")
@@ -14,6 +19,26 @@ public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
+
+    @Autowired
+    private SchoolClassRepository schoolClassRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/my-class")
+    public ResponseEntity<?> getMyClass() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        SchoolClass schoolClass = schoolClassRepository.findAll().stream()
+                .filter(c -> c.getTeacher() != null && c.getTeacher().getId().equals(user.getId()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No class assigned to this teacher"));
+        
+        return ResponseEntity.ok(schoolClass);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody TeacherRegistrationRequest request) {

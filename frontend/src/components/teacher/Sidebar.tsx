@@ -3,38 +3,36 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
-  BarChart3, 
   Users, 
-  UserSquare2, 
-  BookOpen, 
-  Users2, 
-  Trophy, 
   FileCheck, 
   Settings,
   LogOut,
-  Award
+  LayoutDashboard
 } from 'lucide-react';
+import { api } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 
 const menuItems = [
-  { name: 'Dashboard', href: '/admin', icon: BarChart3 },
-  { name: 'Students', href: '/admin/students', icon: Users },
-  { name: 'Student Assignment', href: '/admin/assignment', icon: BookOpen },
-  { name: 'Staff', href: '/admin/staff', icon: UserSquare2 },
-  { name: 'Staff Assignment', href: '/admin/staff/assignment', icon: Award },
-  { name: 'Classes', href: '/admin/classes', icon: BookOpen },
-  { name: 'Parents', href: '/admin/parents', icon: Users2 },
-  { name: 'Exams', href: '/admin/exams', icon: FileCheck },
-  { name: 'Users', href: '/admin/users', icon: Settings },
+  { name: 'Dashboard', href: '/teacher', icon: LayoutDashboard },
+  { name: 'My Students', href: '/teacher/students', icon: Users },
+  { name: 'Verification', href: '/teacher/verify', icon: FileCheck },
+  { name: 'Settings', href: '/teacher/settings', icon: Settings },
 ];
 
-export default function Sidebar() {
+export default function TeacherSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    api.logout();
+    router.push('/login');
+  };
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 transition-transform translate-x-0 bg-white/40 backdrop-blur-xl border-r border-white/20 shadow-2xl flex flex-col">
       <div className="h-16 flex items-center px-6 border-b border-white/20">
-        <Link href="/admin" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-          EduAdmin
+        <Link href="/teacher" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
+          EduTeacher
         </Link>
       </div>
 
@@ -49,11 +47,11 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center px-3 py-3 rounded-xl transition-all duration-200 group ${
                 isActive 
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30' 
-                  : 'text-slate-600 hover:bg-white/60 hover:text-blue-600'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/30' 
+                  : 'text-slate-600 hover:bg-white/60 hover:text-emerald-600'
               }`}
             >
-              <Icon size={20} className={`mr-3 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-colors`} />
+              <Icon size={20} className={`mr-3 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-emerald-600'} transition-colors`} />
               <span className="font-medium">{item.name}</span>
             </Link>
           );
@@ -61,13 +59,13 @@ export default function Sidebar() {
       </div>
 
       <div className="p-4 border-t border-white/20">
-        <Link
-          href="/"
-          className="flex items-center px-3 py-3 rounded-xl text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors group"
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center px-3 py-3 rounded-xl text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors group text-left"
         >
           <LogOut size={20} className="mr-3 text-slate-400 group-hover:text-rose-600 transition-colors" />
           <span className="font-medium">Logout</span>
-        </Link>
+        </button>
       </div>
     </aside>
   );
