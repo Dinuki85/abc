@@ -5,15 +5,28 @@ const API_BASE_URL = 'http://localhost:8091/api';
 export interface User {
   id: number;
   username: string;
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN' | 'STAFF';
+  role: 'ROLE_STUDENT' | 'ROLE_TEACHER' | 'ROLE_ADMIN' | 'ROLE_STAFF';
   firstLogin: boolean;
 }
 
 export interface StudentProfile {
+  id?: number;
   username: string;
+  fullName: string;
+  initials: string;
+  nameWithInitials: string;
+  dob: string;
+  gender: string;
+  religion: string;
+  nationality: string;
+  birthCertificateNumber: string;
+  nic: string;
   address: string;
-  parentName: string;
-  parentContact: string;
+  bloodGroup: string;
+  medicalHistory: string;
+  guardianName: string;
+  guardianNic: string;
+  guardianContact: string;
   profileCompleted: boolean;
 }
 
@@ -75,6 +88,16 @@ class ApiService {
     } catch (error) {
       return null;
     }
+  }
+
+  async saveStudentProfile(username: string, profile: Partial<StudentProfile>) {
+    const response = await fetch(`${API_BASE_URL}/student/profile?username=${username}`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(profile)
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return await response.json();
   }
 
   async assignStudent(username: string, gradeId: number, classId: number) {
@@ -145,6 +168,14 @@ class ApiService {
     });
     if (!response.ok) throw new Error(await response.text());
     return true;
+  }
+
+  async getStaffProfile(): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/staff/me`, {
+      headers: this.getHeaders()
+    });
+    if (response.ok) return await response.json();
+    return null;
   }
 
   getCurrentUser(): User | null {

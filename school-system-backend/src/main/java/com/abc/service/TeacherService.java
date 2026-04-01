@@ -1,23 +1,15 @@
 package com.abc.service;
 
 import com.abc.dto.StudentResponse;
-import com.abc.entity.Role;
-import com.abc.entity.Student;
-import com.abc.entity.StudentClass;
-import com.abc.entity.Teacher;
-import com.abc.entity.User;
-import com.abc.entity.Verification;
-import com.abc.entity.VerificationStatus;
-import com.abc.repository.StudentClassRepository;
-import com.abc.repository.StudentRepository;
-import com.abc.repository.TeacherRepository;
-import com.abc.repository.UserRepository;
-import com.abc.repository.VerificationRepository;
+import com.abc.entity.*;
+import com.abc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +19,7 @@ public class TeacherService {
     private UserRepository userRepository;
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private StaffRepository staffRepository;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -41,7 +33,7 @@ public class TeacherService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Teacher registerTeacher(String name, String username, String password) {
+    public Staff registerTeacher(String name, String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
@@ -49,14 +41,18 @@ public class TeacherService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.setRole(Role.TEACHER);
+        user.setRole(Role.ROLE_TEACHER);
         user.setFirstLogin(false);
 
-        Teacher teacher = new Teacher();
-        teacher.setUser(user);
-        teacher.setName(name);
+        Staff staff = new Staff();
+        staff.setUser(user);
+        staff.setName(name);
+        
+        Set<Designation> designations = new HashSet<>();
+        designations.add(Designation.CLASS_TEACHER);
+        staff.setDesignations(designations);
 
-        return teacherRepository.save(teacher);
+        return staffRepository.save(staff);
     }
 
     public List<StudentResponse> getStudentsInClass(Long classId) {
@@ -66,9 +62,11 @@ public class TeacherService {
             Student s = sc.getStudent();
             StudentResponse response = new StudentResponse();
             response.setUsername(s.getUser().getUsername());
+            response.setFullName(s.getFullName());
+            response.setNameWithInitials(s.getNameWithInitials());
             response.setAddress(s.getAddress());
-            response.setParentName(s.getParentName());
-            response.setParentContact(s.getParentContact());
+            response.setParentName(s.getGuardianName());
+            response.setParentContact(s.getGuardianContact());
             response.setProfileCompleted(s.isProfileCompleted());
             return response;
         }).collect(Collectors.toList());

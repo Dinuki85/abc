@@ -17,8 +17,8 @@ public class SchoolClass {
     private Grade grade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")
-    private User teacher;
+    @JoinColumn(name = "staff_id")
+    private Staff classTeacher;
 
     public SchoolClass() {}
 
@@ -31,6 +31,6 @@ public class SchoolClass {
     public Grade getGrade() { return grade; }
     public void setGrade(Grade grade) { this.grade = grade; }
 
-    public User getTeacher() { return teacher; }
-    public void setTeacher(User teacher) { this.teacher = teacher; }
+    public Staff getClassTeacher() { return classTeacher; }
+    public void setClassTeacher(Staff classTeacher) { this.classTeacher = classTeacher; }
 }

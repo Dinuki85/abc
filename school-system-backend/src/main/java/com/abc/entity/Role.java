@@ -1,5 +1,5 @@
 package com.abc.entity;
 
 public enum Role {
-    STUDENT, STAFF, TEACHER, ADMIN
+    ROLE_STUDENT, ROLE_STAFF, ROLE_TEACHER, ROLE_ADMIN
 }

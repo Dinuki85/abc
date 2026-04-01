@@ -12,6 +12,10 @@ public class Grade {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "section_head_id")
+    private Staff sectionHead;
+
     public Grade() {}
 
     public Long getId() { return id; }
@@ -19,4 +23,7 @@ public class Grade {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public Staff getSectionHead() { return sectionHead; }
+    public void setSectionHead(Staff sectionHead) { this.sectionHead = sectionHead; }
 }

@@ -44,14 +44,14 @@ public class DataInitializer {
             User user = new User();
             user.setUsername("STU2024001");
             user.setPassword(passwordEncoder.encode("temp123"));
-            user.setRole(Role.STUDENT);
+            user.setRole(Role.ROLE_STUDENT);
             userRepository.save(user);
         }
         if (userRepository.findByUsername("STU2024002").isEmpty()) {
             User user = new User();
             user.setUsername("STU2024002");
             user.setPassword(passwordEncoder.encode("temp123"));
-            user.setRole(Role.STUDENT);
+            user.setRole(Role.ROLE_STUDENT);
             userRepository.save(user);
         }
     }
@@ -61,7 +61,7 @@ public class DataInitializer {
             User admin = new User();
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole(Role.ADMIN);
+            admin.setRole(Role.ROLE_ADMIN);
             admin.setFirstLogin(false);
             userRepository.save(admin);
         }

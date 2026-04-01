@@ -1,8 +1,10 @@
 package com.abc.controller;
 
+import com.abc.dto.BulkIntakeRequest;
 import com.abc.dto.AssignStudentRequest;
 import com.abc.dto.AssignTeacherRequest;
 import com.abc.service.AdminService;
+import com.abc.service.IntakeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,18 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private IntakeService intakeService;
+
+    @PostMapping("/intake")
+    public ResponseEntity<?> bulkIntake(@RequestBody BulkIntakeRequest request) {
+        try {
+            return ResponseEntity.ok(intakeService.bulkCreateStudents(request.getIndexNumbers()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping("/grades")
     public ResponseEntity<List<?>> getGrades() {

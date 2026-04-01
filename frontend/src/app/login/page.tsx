@@ -25,7 +25,7 @@ export default function LoginPage() {
 
       if (user) {
         // Redirection logic based on user status
-        if (user.role === 'STUDENT') {
+        if (user.role === 'ROLE_STUDENT') {
           if (user.firstLogin) {
             router.push('/change-password');
           } else {
@@ -37,9 +37,9 @@ export default function LoginPage() {
               router.push('/dashboard/student');
             }
           }
-        } else if (user.role === 'TEACHER') {
-          router.push('/teacher/students');
-        } else if (user.role === 'ADMIN') {
+        } else if (user.role === 'ROLE_TEACHER' || user.role === 'ROLE_STAFF') {
+          router.push('/staff');
+        } else if (user.role === 'ROLE_ADMIN') {
           router.push('/admin');
         } else {
           router.push('/dashboard');

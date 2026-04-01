@@ -1,13 +1,12 @@
 package com.abc.service;
 
+import com.abc.dto.StudentProfileRequest;
 import com.abc.entity.Student;
 import com.abc.entity.User;
 import com.abc.repository.StudentRepository;
 import com.abc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -18,7 +17,7 @@ public class StudentService {
     @Autowired
     private UserRepository userRepository;
 
-    public Student saveStudentProfile(String username, String address, String parentName, String parentContact) {
+    public Student saveStudentProfile(String username, StudentProfileRequest request) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -26,9 +25,21 @@ public class StudentService {
                 .orElse(new Student());
 
         student.setUser(user);
-        student.setAddress(address);
-        student.setParentName(parentName);
-        student.setParentContact(parentContact);
+        student.setFullName(request.getFullName());
+        student.setInitials(request.getInitials());
+        student.setNameWithInitials(request.getNameWithInitials());
+        student.setDob(request.getDob());
+        student.setGender(request.getGender());
+        student.setReligion(request.getReligion());
+        student.setNationality(request.getNationality());
+        student.setBirthCertificateNumber(request.getBirthCertificateNumber());
+        student.setNic(request.getNic());
+        student.setAddress(request.getAddress());
+        student.setBloodGroup(request.getBloodGroup());
+        student.setMedicalHistory(request.getMedicalHistory());
+        student.setGuardianName(request.getGuardianName());
+        student.setGuardianNic(request.getGuardianNic());
+        student.setGuardianContact(request.getGuardianContact());
         student.setProfileCompleted(true);
 
         return studentRepository.save(student);

@@ -18,12 +18,7 @@ public class StudentController {
     @PostMapping("/profile")
     public ResponseEntity<?> saveProfile(@RequestParam String username, @RequestBody StudentProfileRequest request) {
         try {
-            Student student = studentService.saveStudentProfile(
-                    username,
-                    request.getAddress(),
-                    request.getParentName(),
-                    request.getParentContact()
-            );
+            Student student = studentService.saveStudentProfile(username, request);
             return ResponseEntity.ok(mapToResponse(student));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -43,9 +38,13 @@ public class StudentController {
     private StudentResponse mapToResponse(Student student) {
         StudentResponse response = new StudentResponse();
         response.setUsername(student.getUser().getUsername());
+        response.setFullName(student.getFullName());
+        response.setNameWithInitials(student.getNameWithInitials());
+        response.setDob(student.getDob());
+        response.setGender(student.getGender());
         response.setAddress(student.getAddress());
-        response.setParentName(student.getParentName());
-        response.setParentContact(student.getParentContact());
+        response.setParentName(student.getGuardianName());
+        response.setParentContact(student.getGuardianContact());
         response.setProfileCompleted(student.isProfileCompleted());
         return response;
     }

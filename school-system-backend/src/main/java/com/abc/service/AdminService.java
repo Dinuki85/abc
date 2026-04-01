@@ -1,17 +1,12 @@
 package com.abc.service;
 
-import com.abc.entity.Grade;
-import com.abc.entity.SchoolClass;
-import com.abc.entity.Student;
-import com.abc.entity.StudentClass;
-import com.abc.entity.User;
-import com.abc.repository.GradeRepository;
-import com.abc.repository.SchoolClassRepository;
-import com.abc.repository.StudentClassRepository;
-import com.abc.repository.StudentRepository;
-import com.abc.repository.UserRepository;
+import com.abc.entity.*;
+import com.abc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +28,9 @@ public class AdminService {
 
     @Autowired
     private StudentClassRepository studentClassRepository;
+
+    @Autowired
+    private StaffRepository staffRepository;
 
     public void assignStudentToClass(String username, Long gradeId, Long classId) {
         User user = userRepository.findByUsername(username)
@@ -60,18 +58,18 @@ public class AdminService {
         studentClassRepository.save(studentClass);
     }
 
-    public void assignTeacherToClass(Long teacherId, Long classId) {
-        User teacher = userRepository.findById(teacherId)
-                .orElseThrow(() -> new RuntimeException("Teacher not found"));
+    public void assignTeacherToClass(Long staffId, Long classId) {
+        Staff staff = staffRepository.findById(staffId)
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
 
-        if (!teacher.getRole().equals(com.abc.entity.Role.TEACHER)) {
-            throw new RuntimeException("User is not a teacher");
+        if (!staff.getDesignations().contains(Designation.CLASS_TEACHER)) {
+            throw new RuntimeException("Staff is not a class teacher");
         }
 
         SchoolClass schoolClass = schoolClassRepository.findById(classId)
                 .orElseThrow(() -> new RuntimeException("Class not found"));
 
-        schoolClass.setTeacher(teacher);
+        schoolClass.setClassTeacher(staff);
         schoolClassRepository.save(schoolClass);
     }
 
@@ -83,10 +81,8 @@ public class AdminService {
         return schoolClassRepository.findAll();
     }
 
-    public List<User> getTeachers() {
-        return userRepository.findAll().stream()
-                .filter(u -> u.getRole().equals(com.abc.entity.Role.TEACHER))
-                .collect(Collectors.toList());
+    public List<Staff> getTeachers() {
+        return staffRepository.findAll();
     }
 
     public List<Student> getUnassignedStudents() {
