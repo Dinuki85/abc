@@ -36,21 +36,11 @@ export default function Facilities() {
                 </div>
                 <div className="space-y-3 relative z-10">
                   <h4 className="text-2xl font-bold text-dark group-hover:text-white transition-colors duration-500 font-handlee">
-                    {facility.title.split('&').map((p, idx, arr) => (
-                      <React.Fragment key={idx}>
-                        {p}
-                        {idx < arr.length - 1 && <span className="text-primary group-hover:text-white mx-1 font-handlee">&</span>}
-                      </React.Fragment>
-                    ))}
+                    {facility.title}
                   </h4>
                   <div className="w-12 h-1 bg-primary/20 group-hover:bg-white/40 mx-auto rounded-full transition-all duration-500 group-hover:w-20"></div>
                   <p className="text-gray-600 group-hover:text-white/90 text-center leading-relaxed font-medium transition-colors duration-500">
-                    {facility.desc.split('&').map((p, idx, arr) => (
-                      <React.Fragment key={idx}>
-                        {p}
-                        {idx < arr.length - 1 && <span className="text-primary group-hover:text-white mx-1 font-bold">&</span>}
-                      </React.Fragment>
-                    ))}
+                    {facility.desc}
                   </p>
                 </div>
               </div>
