@@ -113,7 +113,7 @@ export default function MyStudentsPage() {
                     </span>
                   )}
                 </TableCell>
-                <TableCell className="font-medium">{student.parentContact || 'N/A'}</TableCell>
+                <TableCell className="font-medium">{student.guardianContact || 'N/A'}</TableCell>
                 <TableCell className="text-right">
                   <Button 
                     variant="primary" 

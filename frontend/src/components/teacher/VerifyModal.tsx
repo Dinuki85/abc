@@ -93,8 +93,8 @@ export function VerifyModal({ student, onClose, onSuccess }: VerifyModalProps) {
                 </div>
                 <InfoBlock label="Birth Certificate No" value={student.birthCertificateNumber} icon={ShieldCheck} />
                 <InfoBlock label="NIC" value={student.nic} icon={ShieldCheck} />
-                <InfoBlock label="Guardian Name" value={student.parentName} icon={User} />
-                <InfoBlock label="Guardian Contact" value={student.parentContact} icon={MapPin} />
+                <InfoBlock label="Guardian Name" value={student.guardianName} icon={User} />
+                <InfoBlock label="Guardian Contact" value={student.guardianContact} icon={MapPin} />
               </div>
             </section>
 

@@ -104,6 +104,21 @@ export default function TeacherDashboard() {
     }
   };
 
+  const handleStudentClick = async (student: StudentProfile) => {
+    // Show a quick fallback or loader if we want
+    setActiveStudent(student);
+    
+    try {
+      // Fetch full details since the table list only has summary data
+      const fullDetails = await api.searchStudent(student.username);
+      if (fullDetails) {
+        setActiveStudent(fullDetails);
+      }
+    } catch (error) {
+      console.error('Failed to load full student details', error);
+    }
+  };
+
   const getStatusBadge = (student: StudentProfile) => {
     if (student.verificationStatus === 'VERIFIED') {
       return (
@@ -235,7 +250,7 @@ export default function TeacherDashboard() {
                         {filteredStudents.map(student => (
                           <TableRow 
                             key={student.id} 
-                            onClick={() => setActiveStudent(student)}
+                            onClick={() => handleStudentClick(student)}
                             className="cursor-pointer hover:bg-cyan-50/50 group border-b border-slate-50 transition-colors"
                           >
                             <TableCell className="pl-8 py-4">
