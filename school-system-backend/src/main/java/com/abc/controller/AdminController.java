@@ -1,8 +1,7 @@
 package com.abc.controller;
 
-import com.abc.dto.BulkIntakeRequest;
-import com.abc.dto.AssignStudentRequest;
-import com.abc.dto.AssignTeacherRequest;
+import com.abc.dto.*;
+import com.abc.entity.*;
 import com.abc.service.AdminService;
 import com.abc.service.IntakeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +31,15 @@ public class AdminController {
 
     @GetMapping("/grades")
     public ResponseEntity<List<?>> getGrades() {
+        System.out.println("Fetching all grades for dropdown...");
         return ResponseEntity.ok(adminService.getAllGrades());
     }
 
     @GetMapping("/classes")
-    public ResponseEntity<List<?>> getClasses() {
+    public ResponseEntity<List<?>> getClasses(@RequestParam(required = false) Long gradeId) {
+        if (gradeId != null) {
+            return ResponseEntity.ok(adminService.getClassesByGrade(gradeId));
+        }
         return ResponseEntity.ok(adminService.getAllClasses());
     }
 
@@ -72,6 +75,93 @@ public class AdminController {
                     request.getClassId()
             );
             return ResponseEntity.ok("Teacher assigned successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/assign-teacher-grade")
+    public ResponseEntity<?> assignTeacherToGrade(@RequestBody AssignTeacherToGradeRequest request) {
+        try {
+            adminService.assignTeacherToGrade(
+                    request.getTeacherId(),
+                    request.getGradeId()
+            );
+            return ResponseEntity.ok("Teacher assigned to grade successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/create-teacher")
+    public ResponseEntity<?> createTeacher(@RequestBody TeacherRegistrationRequest request) {
+        try {
+            adminService.createTeacher(request.getName(), request.getUsername(), request.getPassword(), request.getDesignation());
+            return ResponseEntity.ok("Teacher created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/classes")
+    public ResponseEntity<?> createClass(@RequestBody ClassCreateRequest request) {
+        try {
+            adminService.createClass(request.getGradeId(), request.getClassName());
+            return ResponseEntity.ok("Class created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/students")
+    public ResponseEntity<?> getAllStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String searchTerm,
+            @RequestParam(required = false) Long gradeId,
+            @RequestParam(required = false) Long classId,
+            @RequestParam(required = false) boolean all) {
+        if (all) {
+            return ResponseEntity.ok(adminService.getAllStudents());
+        }
+        return ResponseEntity.ok(adminService.getPaginatedStudents(page, size, searchTerm, gradeId, classId));
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<?> getStats() {
+        return ResponseEntity.ok(adminService.getAdminStats());
+    }
+
+    @GetMapping("/teachers/overview")
+    public ResponseEntity<?> getTeacherOverview() {
+        return ResponseEntity.ok(adminService.getTeacherOverview());
+    }
+
+    @PostMapping("/enroll-student")
+    public ResponseEntity<?> enrollStudent(@RequestBody EnrollStudentRequest request) {
+        try {
+            adminService.enrollStudent(request);
+            return ResponseEntity.ok("Student enrolled successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/teachers/{id}")
+    public ResponseEntity<?> updateTeacher(@PathVariable Long id, @RequestBody TeacherRegistrationRequest request) {
+        try {
+            adminService.updateTeacher(id, request.getName(), request.getDesignation());
+            return ResponseEntity.ok("Teacher updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/teachers/{id}")
+    public ResponseEntity<?> deleteTeacher(@PathVariable Long id) {
+        try {
+            adminService.deleteTeacher(id);
+            return ResponseEntity.ok("Teacher deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

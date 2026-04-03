@@ -14,11 +14,6 @@ export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Gallery' },
-  ];
-
   const categories: Category[] = ['All', 'Academic', 'Celebration', 'Achievements'];
 
   const images = [
@@ -38,8 +33,7 @@ export default function GalleryPage() {
     <main className="min-h-screen bg-gray-50 pb-20">
       <PageHeader 
         title="Gallery" 
-        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning growth and exciting opportunities."
-        breadcrumbs={breadcrumbs}
+        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning, growth & exciting opportunities."
       />
 
       <section className="container-custom py-16">
@@ -84,6 +78,7 @@ export default function GalleryPage() {
                   src={img.src}
                   alt={img.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-white">
@@ -124,6 +119,7 @@ export default function GalleryPage() {
                 src={selectedImage}
                 alt="Enlarged gallery view"
                 fill
+                sizes="100vw"
                 className="object-contain"
               />
               <button

@@ -1,15 +1,21 @@
 package com.abc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "students")
+@Table(name = "students", indexes = {
+    @Index(name = "idx_student_user", columnList = "user_id"),
+    @Index(name = "idx_student_grade", columnList = "grade_id"),
+    @Index(name = "idx_student_verification", columnList = "verification_status")
+})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
@@ -51,8 +57,19 @@ public class Student {
     @Column(name = "guardian_contact")
     private String guardianContact;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "grade_id")
+    private Grade grade;
+
     @Column(name = "profile_completed")
     private boolean profileCompleted = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "verification_status", nullable = false)
+    private VerificationStatus verificationStatus = VerificationStatus.PENDING;
+
+    @Column(name = "verification_comment", columnDefinition = "TEXT")
+    private String verificationComment;
 
     public Student() {}
 
@@ -107,6 +124,15 @@ public class Student {
     public String getGuardianContact() { return guardianContact; }
     public void setGuardianContact(String guardianContact) { this.guardianContact = guardianContact; }
 
+    public Grade getGrade() { return grade; }
+    public void setGrade(Grade grade) { this.grade = grade; }
+
     public boolean isProfileCompleted() { return profileCompleted; }
     public void setProfileCompleted(boolean profileCompleted) { this.profileCompleted = profileCompleted; }
+
+    public VerificationStatus getVerificationStatus() { return verificationStatus; }
+    public void setVerificationStatus(VerificationStatus verificationStatus) { this.verificationStatus = verificationStatus; }
+
+    public String getVerificationComment() { return verificationComment; }
+    public void setVerificationComment(String verificationComment) { this.verificationComment = verificationComment; }
 }

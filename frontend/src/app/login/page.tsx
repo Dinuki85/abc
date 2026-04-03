@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircle, Lock, User } from 'lucide-react';
+import { AlertCircle, Lock, User, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -24,28 +24,31 @@ export default function LoginPage() {
       const user = await api.login(username, password);
 
       if (user) {
-        // Redirection logic based on user status
+        // Handle redirection based on role and status
+        if (user.firstLogin) {
+          router.push('/change-password');
+          return;
+        }
+
         if (user.role === 'ROLE_STUDENT') {
-          if (user.firstLogin) {
-            router.push('/change-password');
+          // Check student profile completion
+          const profile = await api.getStudentProfile(username);
+          if (!profile || !profile.profileCompleted) {
+            router.push('/dashboard/student/profile-setup');
           } else {
-            // Check student profile completion
-            const profile = await api.getStudentProfile(username);
-            if (profile && !profile.profileCompleted) {
-              router.push('/dashboard/student/profile-setup');
-            } else {
-              router.push('/dashboard/student');
-            }
+            router.push('/dashboard/student');
           }
-        } else if (user.role === 'ROLE_TEACHER' || user.role === 'ROLE_STAFF') {
-          router.push('/staff');
+        } else if (user.role === 'ROLE_TEACHER') {
+          router.push('/teacher');
         } else if (user.role === 'ROLE_ADMIN') {
           router.push('/admin');
+        } else if (user.role === 'ROLE_STAFF') {
+          router.push('/staff');
         } else {
           router.push('/dashboard');
         }
       } else {
-        setError('Invalid index number or password. Please try again.');
+        setError('Invalid username or password. Please try again.');
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -60,10 +63,24 @@ export default function LoginPage() {
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl mix-blend-multiply" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-indigo-500/10 blur-3xl mix-blend-multiply" />
       
+      {/* Back Button */}
+      <Link 
+        href="/" 
+        className="absolute top-8 left-8 flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-all font-medium group z-50"
+      >
+        <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:bg-blue-50 transition-colors border border-slate-100">
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+        </div>
+        <span className="hidden sm:inline">Back to Home</span>
+      </Link>
+      
       <div className="relative sm:mx-auto sm:w-full sm:max-w-md z-10 px-4">
         <div className="text-center mb-8">
+          
+       
           <Link href="/" className="inline-block text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-            Andiambalama MV
+          <img src="/img/favicon.png" alt="AMV Logo" className="w-40 h-30 object-contain mx-auto block" />
+ Andiambalama MV
           </Link>
           <h2 className="mt-6 text-2xl font-bold text-slate-900 tracking-tight">
             Sign in to your account
@@ -85,9 +102,9 @@ export default function LoginPage() {
             <div className="space-y-4">
               <div className="relative">
                 <Input 
-                  label="Index Number" 
+                  label="User Name" 
                   type="text" 
-                  placeholder="e.g. STU2024001" 
+                  placeholder="Enter User Name" 
                   id="username" 
                   className="pl-10 h-11"
                   required

@@ -21,29 +21,30 @@ import {
   Phone
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { mockApi, MockStudent } from '@/lib/mock-api';
+import { api, User as ApiUser } from '@/lib/api';
+import DashboardNavbar from '@/components/DashboardNavbar';
 
 export default function StudentDashboard() {
   const router = useRouter();
-  const [user, setUser] = useState<MockStudent | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const currentUser = mockApi.getCurrentUser();
+    const currentUser = api.getCurrentUser();
     if (!currentUser) {
       router.push('/login');
-    } else if (currentUser.isFirstLogin) {
+    } else if (currentUser.role !== 'ROLE_STUDENT') {
+      router.push('/login');
+    } else if (currentUser.firstLogin) {
       router.push('/login'); 
     } else {
-      setUser(currentUser);
-      setIsLoading(false);
+      // Load full student profile
+      api.getStudentProfile(currentUser.username).then(profile => {
+        setUser({ ...currentUser, ...profile });
+        setIsLoading(false);
+      });
     }
   }, [router]);
-
-  const handleLogout = () => {
-    mockApi.logout();
-    router.push('/login');
-  };
 
   if (isLoading || !user) return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -76,28 +77,7 @@ export default function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      {/* Top Navbar */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 flex items-center justify-between shadow-sm sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-100 rotate-6 group hover:rotate-0 transition-transform cursor-pointer">
-             <GraduationCap size={28} />
-          </div>
-          <div>
-            <span className="text-xl font-black text-slate-900 tracking-tight block leading-none">Student Portal</span>
-            <span className="text-[10px] text-indigo-600 font-black uppercase tracking-widest leading-none mt-1">Academic Year 2024/25</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-6">
-          <div className="hidden md:flex flex-col items-end border-r border-slate-100 pr-6">
-            <span className="text-sm font-black text-slate-900 leading-none">{user.fullName}</span>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">{user.username}</span>
-          </div>
-          <Button variant="ghost" size="sm" onClick={handleLogout} className="rounded-xl font-bold text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
-            <LogOut size={18} className="mr-2" />
-            Logout
-          </Button>
-        </div>
-      </nav>
+      <DashboardNavbar />
 
       <main className="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10">
         
@@ -209,7 +189,7 @@ export default function StudentDashboard() {
                 <div>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Placement</p>
                   <p className="text-slate-800 font-bold leading-tight">
-                    {user.gradeId ? `${mockApi.getGradeName(user.gradeId)} — ${mockApi.getClassName(user.classId)}` : 'Awaiting Assignment'}
+                    {user.gradeName ? `${user.gradeName} — ${user.className}` : 'Awaiting Assignment'}
                   </p>
                 </div>
               </div>
@@ -220,7 +200,7 @@ export default function StudentDashboard() {
                 </div>
                 <div className="overflow-hidden">
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Home Address</p>
-                  <p className="text-slate-800 font-bold leading-tight truncate">{user.profileData?.address || 'Not Provided'}</p>
+                  <p className="text-slate-800 font-bold leading-tight truncate">{user.address || 'Not Provided'}</p>
                 </div>
               </div>
 
@@ -230,7 +210,7 @@ export default function StudentDashboard() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Emergency Contact</p>
-                  <p className="text-slate-800 font-bold leading-tight">{user.profileData?.parentContact || 'Not Provided'}</p>
+                  <p className="text-slate-800 font-bold leading-tight">{user.guardianContact || 'Not Provided'}</p>
                 </div>
               </div>
             </div>

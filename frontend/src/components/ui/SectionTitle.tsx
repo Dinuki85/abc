@@ -19,7 +19,12 @@ export function SectionTitle({ subtitle, title, alignment = 'center' }: SectionT
         <span className="px-3">{subtitle}</span>
       </p>
       <h2 className="text-4xl md:text-5xl font-bold font-handlee text-dark mb-4 leading-tight">
-        {title}
+        {title.split('&').map((part, index, array) => (
+          <React.Fragment key={index}>
+            {part}
+            {index < array.length - 1 && <span className="text-primary mx-1 font-handlee">&</span>}
+          </React.Fragment>
+        ))}
       </h2>
       <div className={`h-1.5 w-24 bg-primary rounded-full mt-4 ${alignment === 'center' ? 'mx-auto' : ''}`}></div>
     </div>

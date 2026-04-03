@@ -21,6 +21,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 
             transition-all duration-200 outline-none
             disabled:opacity-50 disabled:bg-slate-50
+            text-slate-900 placeholder:text-slate-500 font-medium
             ${error ? 'border-rose-300 focus:ring-rose-500/50 focus:border-rose-500' : 'border-slate-200'}
             ${className}
           `}

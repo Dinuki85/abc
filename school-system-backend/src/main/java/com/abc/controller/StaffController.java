@@ -34,30 +34,37 @@ public class StaffController {
 
     @GetMapping("/me")
     public ResponseEntity<?> getMyProfile() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Staff staff = staffRepository.findByUser(user)
-                .orElseThrow(() -> new RuntimeException("Staff profile not found"));
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("staff", staff);
-
-        // If Class Teacher, get class
-        SchoolClass myClass = schoolClassRepository.findAll().stream()
-                .filter(c -> c.getClassTeacher() != null && c.getClassTeacher().getId().equals(staff.getId()))
-                .findFirst()
-                .orElse(null);
-        response.put("assignedClass", myClass);
-
-        // If Section Head, get Grade
-        Grade mySection = gradeRepository.findAll().stream()
-                .filter(g -> g.getSectionHead() != null && g.getSectionHead().getId().equals(staff.getId()))
-                .findFirst()
-                .orElse(null);
-        response.put("assignedSection", mySection);
-
-        return ResponseEntity.ok(response);
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+    
+            Staff staff = staffRepository.findByUser(user).orElse(null);
+            
+            if (staff == null) {
+                return ResponseEntity.ok(new HashMap<>());
+            }
+    
+            Map<String, Object> response = new HashMap<>();
+            response.put("staff", staff);
+    
+            // If Class Teacher, get class
+            SchoolClass myClass = schoolClassRepository.findAll().stream()
+                    .filter(c -> c.getClassTeacher() != null && c.getClassTeacher().getId().equals(staff.getId()))
+                    .findFirst()
+                    .orElse(null);
+            response.put("assignedClass", myClass);
+    
+            // If Section Head, get Grade
+            Grade mySection = gradeRepository.findAll().stream()
+                    .filter(g -> g.getSectionHead() != null && g.getSectionHead().getId().equals(staff.getId()))
+                    .findFirst()
+                    .orElse(null);
+            response.put("assignedSection", mySection);
+    
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

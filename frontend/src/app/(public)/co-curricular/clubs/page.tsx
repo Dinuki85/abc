@@ -8,12 +8,6 @@ import Reveal from '@/components/ui/Reveal';
 import { Shield, Cross, Theater, BadgeCheck, Users, Lightbulb, ArrowRight } from 'lucide-react';
 
 export default function ClubsPage() {
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Co-Curricular' },
-    { label: 'Club & Society' },
-  ];
-
   const clubs = [
     {
       id: 1,
@@ -68,9 +62,8 @@ export default function ClubsPage() {
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
       <PageHeader 
-        title="Our Clubs and Society" 
-        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning growth and exciting opportunities."
-        breadcrumbs={breadcrumbs}
+        title="Our Clubs & Societies" 
+        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning, growth & exciting opportunities."
       />
 
       <section className="container-custom py-16">

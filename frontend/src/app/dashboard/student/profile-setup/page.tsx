@@ -16,7 +16,8 @@ import {
   ArrowLeft,
   CheckCircle2,
   Calendar,
-  Contact
+  Contact,
+  AlertCircle
 } from 'lucide-react';
 
 const steps = [
@@ -31,6 +32,7 @@ export default function ProfileSetupPage() {
   const [user, setUser] = useState<User | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [classes, setClasses] = useState<any[]>([]);
   const [formData, setFormData] = useState<Partial<StudentProfile>>({
     fullName: '',
     initials: '',
@@ -47,37 +49,87 @@ export default function ProfileSetupPage() {
     guardianContact: '',
     bloodGroup: '',
     medicalHistory: '',
+    gradeId: undefined,
+    classId: undefined,
   });
+  const [selectedGradeId, setSelectedGradeId] = useState<string>('');
 
   useEffect(() => {
     const currentUser = api.getCurrentUser();
-    if (!currentUser || currentUser.role !== 'STUDENT') {
+    if (!currentUser || currentUser.role !== 'ROLE_STUDENT') {
       router.push('/login');
       return;
     }
     setUser(currentUser);
     
-    // Check if profile is already completed
     api.getStudentProfile(currentUser.username).then(profile => {
-      if (profile?.profileCompleted) {
-        router.push('/dashboard/student');
+      if (profile) {
+        // Sanitize incoming profile to convert nulls to empty strings for controlled components
+        const sanitized: any = { ...profile };
+        Object.keys(sanitized).forEach(key => {
+          if (sanitized[key] === null) sanitized[key] = '';
+        });
+        setFormData(prev => ({
+          ...prev,
+          ...sanitized,
+          classId: profile.classId ? profile.classId.toString() : ''
+        }));
+        if (profile.gradeId) {
+          setSelectedGradeId(profile.gradeId.toString());
+        }
       }
     });
+
+    // Fetch classes for selection so students can pick their exact classroom
+    api.getClasses().then(setClasses);
   }, [router]);
+
+  const filteredClasses = selectedGradeId 
+    ? classes.filter(c => c.grade?.id?.toString() === selectedGradeId)
+    : [];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, steps.length));
+  const isStepValid = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.fullName && formData.initials && formData.nameWithInitials && formData.dob && formData.gender && formData.classId;
+      case 2:
+        return formData.birthCertificateNumber && formData.religion && formData.nationality;
+      case 3:
+        return formData.address && formData.guardianName && formData.guardianNic && formData.guardianContact;
+      case 4:
+        return formData.bloodGroup && formData.medicalHistory;
+      default:
+        return true;
+    }
+  };
+
+  const nextStep = () => {
+    if (isStepValid()) {
+      setCurrentStep(prev => Math.min(prev + 1, steps.length));
+    } else {
+      alert("Please fill in all required fields in this section.");
+    }
+  };
+  
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
   const handleSubmit = async () => {
     if (!user) return;
     setIsLoading(true);
     try {
-      await api.saveStudentProfile(user.username, formData);
+      const profileToSave: StudentProfile = {
+        ...formData as StudentProfile,
+        username: user.username,
+        // Ensure numeric IDs are sent correctly to avoid 400 Bad Request
+        gradeId: selectedGradeId ? parseInt(selectedGradeId) : undefined,
+        classId: formData.classId ? parseInt(formData.classId as any) : undefined
+      };
+      await api.saveStudentProfile(user.username, profileToSave);
       // Update local user state
       const updatedUser = { ...user, firstLogin: false };
       localStorage.setItem('school_user', JSON.stringify(updatedUser));
@@ -99,32 +151,37 @@ export default function ProfileSetupPage() {
               <Input 
                 label="Full Name (As per Birth Certificate)" 
                 name="fullName"
-                value={formData.fullName}
+                value={formData.fullName || ''}
                 onChange={handleInputChange}
                 placeholder="e.g. Pathirage Don Kamal Perera"
+                required
               />
               <Input 
                 label="Initials" 
                 name="initials"
-                value={formData.initials}
+                value={formData.initials || ''}
                 onChange={handleInputChange}
                 placeholder="e.g. P.D.K."
+                required
               />
               <Input 
                 label="Name with Initials" 
                 name="nameWithInitials"
-                value={formData.nameWithInitials}
+                value={formData.nameWithInitials || ''}
                 onChange={handleInputChange}
                 placeholder="e.g. P.D.K. Perera"
+                required
               />
               <div className="space-y-1">
                 <label className="block text-sm font-medium text-slate-700">Gender</label>
                 <select 
                   name="gender"
                   className="w-full px-4 py-2 bg-white/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
-                  value={formData.gender}
+                  value={formData.gender || ''}
                   onChange={handleInputChange}
+                  required
                 >
+                  <option value="">Select Gender</option>
                   <option value="MALE">Male</option>
                   <option value="FEMALE">Female</option>
                   <option value="OTHER">Other</option>
@@ -134,9 +191,54 @@ export default function ProfileSetupPage() {
                 label="Date of Birth" 
                 type="date"
                 name="dob"
-                value={formData.dob}
+                value={formData.dob || ''}
                 onChange={handleInputChange}
+                required
               />
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-slate-700 font-bold uppercase tracking-tight text-[10px]">Applying Grade</label>
+                <select 
+                  className={`w-full h-11 px-4 py-2 bg-white/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 outline-none transition-all font-medium text-slate-600 ${formData.gradeId ? 'bg-slate-50 cursor-not-allowed opacity-80' : ''}`}
+                  value={selectedGradeId || ''}
+                  onChange={(e) => {
+                    setSelectedGradeId(e.target.value);
+                    setFormData(prev => ({ ...prev, classId: undefined }));
+                  }}
+                  disabled={!!formData.gradeId}
+                  required
+                >
+                  <option value="">Select Grade (1-13)</option>
+                  {Array.from(new Set(classes.map(c => c.grade).filter(Boolean).map(g => JSON.stringify(g))))
+                    .map(gStr => JSON.parse(gStr))
+                    .sort((a, b) => (a.id || 0) - (b.id || 0))
+                    .map(grade => (
+                      <option key={grade.id} value={grade.id}>{grade.name}</option>
+                    ))
+                  }
+                </select>
+                {formData.gradeId && (
+                  <p className="text-[10px] text-indigo-500 font-bold mt-1 uppercase tracking-tight"> Officially assigned by admin</p>
+                )}
+              </div>
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-slate-700 font-bold uppercase tracking-tight text-[10px]">Specific Class</label>
+                <select 
+                  name="classId"
+                  className={`w-full h-11 px-4 py-2 bg-white/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 outline-none transition-all font-medium text-slate-600 ${formData.classId ? 'bg-slate-50 cursor-not-allowed opacity-80' : ''}`}
+                  value={formData.classId || ''}
+                  onChange={handleInputChange}
+                  disabled={!selectedGradeId || !!formData.classId}
+                  required
+                >
+                  <option value="">Select Class (A, B, C...)</option>
+                  {filteredClasses.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+                {formData.classId && (
+                  <p className="text-[10px] text-indigo-500 font-bold mt-1 uppercase tracking-tight"> Officially assigned by admin</p>
+                )}
+              </div>
             </div>
           </div>
         );
@@ -147,28 +249,31 @@ export default function ProfileSetupPage() {
               <Input 
                 label="Birth Certificate Number" 
                 name="birthCertificateNumber"
-                value={formData.birthCertificateNumber}
+                value={formData.birthCertificateNumber || ''}
                 onChange={handleInputChange}
+                required
               />
               <Input 
                 label="NIC Number (Optional for under 16)" 
                 name="nic"
-                value={formData.nic}
+                value={formData.nic || ''}
                 onChange={handleInputChange}
                 placeholder="e.g. 200512345678"
               />
               <Input 
                 label="Religion" 
                 name="religion"
-                value={formData.religion}
+                value={formData.religion || ''}
                 onChange={handleInputChange}
                 placeholder="e.g. Buddhist"
+                required
               />
               <Input 
                 label="Nationality" 
                 name="nationality"
-                value={formData.nationality}
+                value={formData.nationality || ''}
                 onChange={handleInputChange}
+                required
               />
             </div>
           </div>
@@ -179,28 +284,32 @@ export default function ProfileSetupPage() {
              <Input 
                 label="Permanent Address" 
                 name="address"
-                value={formData.address}
+                value={formData.address || ''}
                 onChange={handleInputChange}
                 placeholder="Full residential address"
+                required
               />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Input 
                 label="Guardian Full Name" 
                 name="guardianName"
-                value={formData.guardianName}
+                value={formData.guardianName || ''}
                 onChange={handleInputChange}
+                required
               />
               <Input 
                 label="Guardian NIC" 
                 name="guardianNic"
-                value={formData.guardianNic}
+                value={formData.guardianNic || ''}
                 onChange={handleInputChange}
+                required
               />
               <Input 
                 label="Guardian Contact Number" 
                 name="guardianContact"
-                value={formData.guardianContact}
+                value={formData.guardianContact || ''}
                 onChange={handleInputChange}
+                required
               />
             </div>
           </div>
@@ -214,8 +323,9 @@ export default function ProfileSetupPage() {
                 <select 
                   name="bloodGroup"
                   className="w-full px-4 py-2 bg-white/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
-                  value={formData.bloodGroup}
+                  value={formData.bloodGroup || ''}
                   onChange={handleInputChange}
+                  required
                 >
                   <option value="">Select Blood Group</option>
                   <option value="A+">A+</option>
@@ -230,13 +340,14 @@ export default function ProfileSetupPage() {
               </div>
             </div>
             <div className="space-y-1">
-                <label className="block text-sm font-medium text-slate-700">Special Medical History / Allergies</label>
+                <label className="block text-sm font-medium text-slate-700">Special Medical History / Allergies (Enter 'None' if not applicable)</label>
                 <textarea 
                   name="medicalHistory"
                   className="w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 outline-none transition-all min-h-[120px]"
-                  value={formData.medicalHistory}
+                  value={formData.medicalHistory || ''}
                   onChange={handleInputChange}
                   placeholder="Mention any chronic illnesses, regular medications or severe allergies..."
+                  required
                 />
             </div>
           </div>
@@ -249,7 +360,9 @@ export default function ProfileSetupPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-slate-900 font-handlee">Complete Your Student Profile</h1>
+        <h1 className="text-3xl font-bold text-slate-900 font-handlee">
+          {formData.profileCompleted ? 'Update Your Student Profile' : 'Complete Your Student Profile'}
+        </h1>
         <p className="text-slate-500">Please provide accurate information as per your official documents.</p>
       </div>
 
@@ -281,6 +394,18 @@ export default function ProfileSetupPage() {
           );
         })}
       </div>
+
+      {formData.verificationStatus === 'NEEDS_CORRECTION' && (
+        <div className="bg-rose-50 border-2 border-rose-100 rounded-2xl p-6 flex flex-col gap-3 shadow-lg shadow-rose-100/50 animate-in zoom-in-95 duration-300">
+          <div className="flex items-center gap-3 text-rose-600 font-black uppercase tracking-widest text-xs">
+            <AlertCircle size={18} />
+            Teacher's Correction Needed
+          </div>
+          <p className="text-rose-800 font-medium italic">
+            "{formData.verificationComment || 'Please review your details and correct any errors identified by your teacher.'}"
+          </p>
+        </div>
+      )}
 
       <Card className="p-8 border-none shadow-xl bg-white/70 backdrop-blur-md">
         <div className="mb-10 flex items-center gap-3">
@@ -315,10 +440,11 @@ export default function ProfileSetupPage() {
             <Button 
               onClick={handleSubmit} 
               isLoading={isLoading}
+              disabled={!isStepValid()}
               className="bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2 group"
             >
               <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-              Complete Registration
+              {formData.profileCompleted ? 'Update My Profile' : 'Complete Registration'}
             </Button>
           )}
         </div>

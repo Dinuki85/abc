@@ -4,29 +4,31 @@ import Link from 'next/link';
 interface PageHeaderProps {
   title: string;
   description?: string;
-  breadcrumbs?: { label: string; href?: string }[];
 }
 
-export function PageHeader({ title, description, breadcrumbs }: PageHeaderProps) {
+export function PageHeader({ title, description }: PageHeaderProps) {
   return (
     <div className="relative bg-primary pt-32 pb-20 mb-16 overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
-        <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl"></div>
-      </div>
-
-      <div className="container-custom relative z-10 flex flex-col items-center justify-center text-center">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-handlee mb-4 shadow-sm pb-2">
-          {title}
+      {/* Background decoration */}
+      <div className="container-custom relative z-10 text-center">
+        <h1 className="text-5xl md:text-7xl font-bold text-white font-handlee mb-6 tracking-tight">
+          {title.split('&').map((p, idx, arr) => (
+            <React.Fragment key={idx}>
+              {p}
+              {idx < arr.length - 1 && <span className="text-secondary mx-1 font-handlee">&</span>}
+            </React.Fragment>
+          ))}
         </h1>
-        
         {description && (
-          <p className="max-w-2xl mx-auto text-white/90 text-lg md:text-xl font-medium mb-8">
-            {description}
+          <p className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+             {description.split('&').map((p, idx, arr) => (
+              <React.Fragment key={idx}>
+                {p}
+                {idx < arr.length - 1 && <span className="text-secondary mx-1 font-handlee">&</span>}
+              </React.Fragment>
+            ))}
           </p>
         )}
-        
 
       </div>
     </div>

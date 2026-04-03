@@ -15,26 +15,26 @@ import {
   ExternalLink,
   ChevronDown
 } from 'lucide-react';
-import { mockApi, MockStudent, Grade, Class } from '@/lib/mock-api';
+import { api, User as ApiUser } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
 
 export default function ClassesViewPage() {
   const router = useRouter();
-  const [grades, setGrades] = useState<Grade[]>([]);
-  const [availableClasses, setAvailableClasses] = useState<Class[]>([]);
+  const [grades, setGrades] = useState<any[]>([]);
+  const [availableClasses, setAvailableClasses] = useState<any[]>([]);
   const [selectedGradeId, setSelectedGradeId] = useState<string>('');
   const [selectedClassId, setSelectedClassId] = useState<string>('');
-  const [students, setStudents] = useState<MockStudent[]>([]);
+  const [students, setStudents] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [staff, setStaff] = useState<MockStudent | null>(null);
+  const [staff, setStaff] = useState<any>(null);
 
   useEffect(() => {
-    const currentUser = mockApi.getCurrentUser();
-    if (!currentUser || currentUser.role !== 'TEACHER') {
+    const currentUser = api.getCurrentUser();
+    if (!currentUser || (currentUser.role !== 'ROLE_TEACHER' && currentUser.role !== 'ROLE_STAFF')) {
       router.push('/login');
     } else {
       setStaff(currentUser);
-      setGrades(mockApi.getGrades());
+      api.getGrades().then(setGrades);
     }
   }, [router]);
 
@@ -43,7 +43,7 @@ export default function ClassesViewPage() {
     setSelectedClassId('');
     setStudents([]);
     if (gradeId) {
-      setAvailableClasses(mockApi.getClassesByGrade(parseInt(gradeId)));
+      api.getClassesByGrade(parseInt(gradeId)).then(setAvailableClasses);
     } else {
       setAvailableClasses([]);
     }
@@ -52,7 +52,7 @@ export default function ClassesViewPage() {
   const onClassChange = (classId: string) => {
     setSelectedClassId(classId);
     if (classId) {
-      setStudents(mockApi.getStudentsByClass(parseInt(classId)));
+      api.getStudentsByClass(parseInt(classId)).then(setStudents);
     } else {
       setStudents([]);
     }

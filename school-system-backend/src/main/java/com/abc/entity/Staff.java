@@ -1,16 +1,21 @@
 package com.abc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "staff")
+@Table(name = "staff", indexes = {
+    @Index(name = "idx_staff_user", columnList = "user_id"),
+    @Index(name = "idx_staff_grade", columnList = "assigned_grade_id")
+})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
@@ -22,6 +27,11 @@ public class Staff {
     @Enumerated(EnumType.STRING)
     @Column(name = "designation")
     private Set<Designation> designations;
+
+    @JsonIgnoreProperties({"sectionHead"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_grade_id")
+    private Grade assignedGrade;
 
     public Staff() {}
 
@@ -36,4 +46,7 @@ public class Staff {
 
     public Set<Designation> getDesignations() { return designations; }
     public void setDesignations(Set<Designation> designations) { this.designations = designations; }
+
+    public Grade getAssignedGrade() { return assignedGrade; }
+    public void setAssignedGrade(Grade assignedGrade) { this.assignedGrade = assignedGrade; }
 }

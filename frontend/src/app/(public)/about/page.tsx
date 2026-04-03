@@ -5,10 +5,6 @@ import Reveal from '@/components/ui/Reveal';
 import { Check, Castle, Music, MonitorPlay, Mic2, FlaskConical, Library } from 'lucide-react';
 
 export default function AboutPage() {
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'About Us' },
-  ];
 
   const facilities = [
     {
@@ -67,7 +63,6 @@ export default function AboutPage() {
       <PageHeader 
         title="About Us" 
         description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning growth and exciting opportunities."
-        breadcrumbs={breadcrumbs}
       />
 
       {/* About Section */}
@@ -116,14 +111,14 @@ export default function AboutPage() {
                   <ul className="space-y-4">
                     {[
                       'Academic Excellence',
-                      'Critical Thinking and Problem-Solving Skills',
-                      'Responsibility and Work Ethic'
+                      'Critical Thinking & Problem-Solving Skills',
+                      'Responsibility & Work Ethic'
                     ].map((item, index) => (
                       <li key={index} className="flex items-center gap-4 border-b border-gray-200 pb-3 last:border-0 last:pb-0">
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                           <Check className="w-5 h-5 text-primary" />
                         </div>
-                        <span className="font-bold text-gray-800">{item}</span>
+                        <span className="font-bold text-gray-800" dangerouslySetInnerHTML={{ __html: item }} />
                       </li>
                     ))}
                   </ul>

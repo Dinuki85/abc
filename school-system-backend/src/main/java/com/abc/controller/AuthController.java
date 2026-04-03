@@ -15,10 +15,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        System.out.println(">>> Login Request: username=" + request.getUsername());
         try {
             User user = authService.login(request.getUsername(), request.getPassword());
+            System.out.println(">>> Login Successful for user: " + request.getUsername());
             return ResponseEntity.ok(user);
         } catch (Exception e) {
+            System.err.println(">>> Login Failed for user: " + request.getUsername() + " Error: " + e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -14,7 +14,7 @@
   --color-secondary-hover: #e0a800;
   --color-dark: #343a40;
   --color-light: #f8f9fa;
-  --font-handlee: var(--font-handlee), cursive;
+  --font-handlee: var(--font-handlee), sans-serif;
   --font-nunito: var(--font-nunito), sans-serif;
   
   --shadow-professional: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
@@ -38,7 +38,7 @@ body {
 }
 
 h1, h2, h3, h4, .font-handlee {
-  font-family: var(--font-handlee), cursive;
+  font-family: var(--font-handlee), sans-serif;
 }
 
 .section-spacing {

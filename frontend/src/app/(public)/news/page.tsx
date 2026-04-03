@@ -8,11 +8,6 @@ import Reveal from '@/components/ui/Reveal';
 import { Calendar, ArrowRight } from 'lucide-react';
 
 export default function NewsPage() {
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'News & Events' },
-  ];
-
   const newsItems = [
     {
       id: 1,
@@ -67,14 +62,13 @@ export default function NewsPage() {
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
       <PageHeader 
-        title="Latest News" 
+        title="Latest News & Events" 
         description="Stay updated with the latest events, celebrations, and academic achievements at Andiambalama Maha Vidyalaya."
-        breadcrumbs={breadcrumbs}
       />
 
       <section className="container-custom py-16">
         <Reveal>
-          <SectionTitle subtitle="News updates" title="Latest News and Events" alignment="center" />
+          <SectionTitle subtitle="News updates" title="Latest News & Events" alignment="center" />
         </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
@@ -87,6 +81,7 @@ export default function NewsPage() {
                     src={item.image} 
                     alt={item.title} 
                     fill 
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
                   {item.isUpcoming && (

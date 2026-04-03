@@ -4,6 +4,7 @@ public class TeacherRegistrationRequest {
     private String name;
     private String username;
     private String password;
+    private String designation;
 
     public TeacherRegistrationRequest() {}
 
@@ -15,4 +16,7 @@ public class TeacherRegistrationRequest {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getDesignation() { return designation; }
+    public void setDesignation(String designation) { this.designation = designation; }
 }

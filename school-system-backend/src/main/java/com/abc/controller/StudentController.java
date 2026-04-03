@@ -15,6 +15,9 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private com.abc.repository.StudentClassRepository studentClassRepository;
+
     @PostMapping("/profile")
     public ResponseEntity<?> saveProfile(@RequestParam String username, @RequestBody StudentProfileRequest request) {
         try {
@@ -42,10 +45,25 @@ public class StudentController {
         response.setNameWithInitials(student.getNameWithInitials());
         response.setDob(student.getDob());
         response.setGender(student.getGender());
+        response.setReligion(student.getReligion());
+        response.setNationality(student.getNationality());
+        response.setBirthCertificateNumber(student.getBirthCertificateNumber());
+        response.setNic(student.getNic());
         response.setAddress(student.getAddress());
-        response.setParentName(student.getGuardianName());
-        response.setParentContact(student.getGuardianContact());
+        response.setBloodGroup(student.getBloodGroup());
+        response.setMedicalHistory(student.getMedicalHistory());
+        response.setGuardianName(student.getGuardianName());
+        response.setGuardianContact(student.getGuardianContact());
         response.setProfileCompleted(student.isProfileCompleted());
+        response.setVerificationStatus(student.getVerificationStatus() != null ? student.getVerificationStatus().name() : null);
+        response.setVerificationComment(student.getVerificationComment());
+        
+        studentClassRepository.findByStudent(student).ifPresent(sc -> {
+            response.setGradeName(sc.getSchoolClass().getGrade().getName());
+            response.setClassName(sc.getSchoolClass().getName());
+            response.setClassId(sc.getSchoolClass().getId());
+        });
+        
         return response;
     }
 }

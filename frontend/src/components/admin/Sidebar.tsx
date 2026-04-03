@@ -12,35 +12,32 @@ import {
   FileCheck, 
   Settings,
   LogOut,
-  Award
+  Award,
+  ShieldCheck
 } from 'lucide-react';
 
 const menuItems = [
   { name: 'Dashboard', href: '/admin', icon: BarChart3 },
   { name: 'Students', href: '/admin/students', icon: Users },
-  { name: 'Student Assignment', href: '/admin/assignment', icon: BookOpen },
   { name: 'Staff', href: '/admin/staff', icon: UserSquare2 },
   { name: 'Staff Assignment', href: '/admin/staff/assignment', icon: Award },
   { name: 'Classes', href: '/admin/classes', icon: BookOpen },
   { name: 'Parents', href: '/admin/parents', icon: Users2 },
   { name: 'Exams', href: '/admin/exams', icon: FileCheck },
   { name: 'Users', href: '/admin/users', icon: Settings },
+  { name: 'Security', href: '/admin/profile', icon: ShieldCheck },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 transition-transform translate-x-0 bg-white/40 backdrop-blur-xl border-r border-white/20 shadow-2xl flex flex-col">
-      <div className="h-16 flex items-center px-6 border-b border-white/20">
-        <Link href="/admin" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-          EduAdmin
-        </Link>
-      </div>
-
+    <aside className="h-full w-64 bg-white/40 backdrop-blur-xl border-r border-slate-200/50 shadow-2xl flex flex-col pt-4">
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
         {menuItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          const isActive = item.href === '/admin' 
+            ? pathname === '/admin' 
+            : pathname.startsWith(item.href);
           const Icon = item.icon;
           
           return (

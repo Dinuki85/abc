@@ -1,5 +1,8 @@
 package com.abc.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentProfileRequest {
     private String fullName;
     private String initials;
@@ -16,6 +19,8 @@ public class StudentProfileRequest {
     private String guardianName;
     private String guardianNic;
     private String guardianContact;
+    private Long gradeId;
+    private Long classId;
 
     public StudentProfileRequest() {}
 
@@ -64,4 +69,10 @@ public class StudentProfileRequest {
 
     public String getGuardianContact() { return guardianContact; }
     public void setGuardianContact(String guardianContact) { this.guardianContact = guardianContact; }
+
+    public Long getGradeId() { return gradeId; }
+    public void setGradeId(Long gradeId) { this.gradeId = gradeId; }
+
+    public Long getClassId() { return classId; }
+    public void setClassId(Long classId) { this.classId = classId; }
 }

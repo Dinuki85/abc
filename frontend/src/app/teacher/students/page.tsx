@@ -45,22 +45,10 @@ export default function MyStudentsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageHeader 
-          title="Classroom Management" 
-          description={myClass ? `Managing students for Grade ${myClass.grade?.name} - ${myClass.name}` : "View and verify student profiles."}
-        />
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="flex items-center gap-2 h-10 border-slate-200"
-          onClick={fetchInitialData}
-          disabled={isLoading}
-        >
-          <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
-          Refresh
-        </Button>
-      </div>
+      <PageHeader 
+        title="Classroom Management" 
+        description={myClass ? `Managing students for Grade ${myClass.grade?.name} - ${myClass.name}` : "View and verify student profiles."}
+      />
 
       {message && (
         <div className={`p-4 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300 ${
@@ -77,6 +65,16 @@ export default function MyStudentsPage() {
             <Users size={18} className="text-emerald-500" />
             Class List: {students.length} Students
           </h3>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex items-center gap-2 h-8 border-slate-200"
+            onClick={fetchInitialData}
+            disabled={isLoading}
+          >
+            <RefreshCw size={14} className={isLoading ? "animate-spin" : ""} />
+            Refresh
+          </Button>
         </div>
 
         <Table>
@@ -96,7 +94,7 @@ export default function MyStudentsPage() {
                 </TableRow>
               ))
             ) : students.length === 0 ? (
-              <TableRow>
+              <TableRow key="empty">
                 <TableCell colSpan={4} className="text-center py-12 text-slate-400 italic">
                   No students assigned to your class yet.
                 </TableCell>

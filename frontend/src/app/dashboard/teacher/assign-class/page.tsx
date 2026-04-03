@@ -16,50 +16,57 @@ import {
   ChevronRight,
   ArrowRight
 } from 'lucide-react';
-import { mockApi, MockStudent, Grade, Class } from '@/lib/mock-api';
+import { api, StudentProfile, Grade } from '@/lib/api';
 
 export default function AssignClassPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [student, setStudent] = useState<MockStudent | null>(null);
+  const [student, setStudent] = useState<StudentProfile | null>(null);
   const [grades, setGrades] = useState<Grade[]>([]);
-  const [availableClasses, setAvailableClasses] = useState<Class[]>([]);
+  const [availableClasses, setAvailableClasses] = useState<any[]>([]);
   const [selectedGradeId, setSelectedGradeId] = useState<string>('');
   const [selectedClassId, setSelectedClassId] = useState<string>('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [staff, setStaff] = useState<MockStudent | null>(null);
+  const [staff, setStaff] = useState<any>(null);
 
   useEffect(() => {
-    const currentUser = mockApi.getCurrentUser();
-    if (!currentUser || currentUser.role !== 'TEACHER') {
+    const currentUser = api.getCurrentUser();
+    if (!currentUser || (currentUser.role !== 'ROLE_TEACHER' && currentUser.role !== 'ROLE_STAFF')) {
       router.push('/login');
     } else {
       setStaff(currentUser);
-      setGrades(mockApi.getGrades());
+      api.getGrades().then(setGrades);
     }
   }, [router]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
     setStudent(null);
     setSelectedGradeId('');
     setSelectedClassId('');
+    setIsLoading(true);
     
-    const found = mockApi.searchStudent(searchQuery);
-    if (found) {
-      if (found.verificationStatus !== 'VERIFIED') {
-        setError('This student is not yet VERIFIED. Only verified students can be assigned to classes.');
+    try {
+      const found = await api.searchStudent(searchQuery);
+      if (found) {
+        if (found.verificationStatus !== 'VERIFIED') {
+          setError('This student is not yet VERIFIED. Only verified students can be assigned to classes.');
+        } else {
+          setStudent(found);
+          // Auto-select if already assigned
+          // Note: Backend might need to provide gradeId/classId as numbers if they are stored that way
+        }
       } else {
-        setStudent(found);
-        if (found.gradeId) setSelectedGradeId(found.gradeId.toString());
-        if (found.classId) setSelectedClassId(found.classId.toString());
+        setError('No student found with that index number.');
       }
-    } else {
-      setError('No student found with that index number.');
+    } catch (err: any) {
+      setError(err.message || 'Search failed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,7 +74,7 @@ export default function AssignClassPage() {
     setSelectedGradeId(gradeId);
     setSelectedClassId('');
     if (gradeId) {
-      setAvailableClasses(mockApi.getClassesByGrade(parseInt(gradeId)));
+      api.getClassesByGrade(parseInt(gradeId)).then(setAvailableClasses);
     } else {
       setAvailableClasses([]);
     }
@@ -78,23 +85,19 @@ export default function AssignClassPage() {
     setIsLoading(true);
     
     try {
-      const result = mockApi.assignClass(
+      const success = await api.assignStudent(
         student.username, 
         parseInt(selectedGradeId), 
         parseInt(selectedClassId)
       );
-      if (result) {
-        setSuccess(`Student ${student.fullName} has been assigned to ${mockApi.getGradeName(parseInt(selectedGradeId))} - ${mockApi.getClassName(parseInt(selectedClassId))}.`);
-        setStudent({ 
-          ...student, 
-          gradeId: parseInt(selectedGradeId), 
-          classId: parseInt(selectedClassId) 
-        });
+      if (success) {
+        setSuccess(`Student ${student.fullName} has been assigned to class successfully.`);
+        // Refresh student state if needed or just show success
       } else {
         setError('Failed to assign class.');
       }
-    } catch (err) {
-      setError('An error occurred.');
+    } catch (err: any) {
+      setError(err.message || 'An error occurred.');
     } finally {
       setIsLoading(false);
     }
@@ -117,7 +120,7 @@ export default function AssignClassPage() {
             <span className="text-sm font-bold text-slate-900 leading-none">{staff.fullName}</span>
             <span className="text-[11px] text-indigo-600 font-bold uppercase tracking-wider">Teacher Incharge</span>
           </div>
-          <Button variant="outline" size="sm" onClick={() => { mockApi.logout(); router.push('/login'); }} className="rounded-xl border-slate-200">
+          <Button variant="outline" size="sm" onClick={() => { api.logout(); router.push('/login'); }} className="rounded-xl border-slate-200">
             <LogOut size={18} className="mr-2" />
             Logout
           </Button>
@@ -177,10 +180,10 @@ export default function AssignClassPage() {
                           <span className="text-xs font-bold text-emerald-700 uppercase">Verification</span>
                           <ShieldCheck size={16} className="text-emerald-600" />
                        </div>
-                       {student.gradeId && (
+                       {student.gradeName && (
                          <div className="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-100">
                             <span className="text-xs font-bold text-slate-500 uppercase">Currently In</span>
-                            <span className="text-sm font-bold text-slate-800">{mockApi.getGradeName(student.gradeId)} - {mockApi.getClassName(student.classId)}</span>
+                            <span className="text-sm font-bold text-slate-800">{student.gradeName} - {student.className}</span>
                          </div>
                        )}
                     </div>

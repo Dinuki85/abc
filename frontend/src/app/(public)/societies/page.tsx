@@ -59,9 +59,9 @@ export default function SocietiesPage() {
            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--color-secondary)_0%,_transparent_60%)] opacity-20"></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-4">
-          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter uppercase">Clubs & Societies</h1>
+          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter uppercase">Clubs <span className="font-handlee text-secondary">&</span> Societies</h1>
           <p className="text-white/80 text-xl font-medium max-w-3xl mx-auto italic leading-relaxed">
-            Beyond the classroom, we foster leadership, creativity, and community service through a vibrant range of extracurricular groups.
+            Beyond the classroom, we foster leadership, creativity <span className="font-handlee text-secondary">&</span> community service through a vibrant range of extracurricular groups.
           </p>
         </div>
       </section>

@@ -14,18 +14,12 @@ import {
 } from 'lucide-react';
 
 export default function ContactPage() {
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Contact Us' },
-  ];
-
   return (
     <main className="min-h-screen bg-gray-50 pb-20 font-sans">
       
       <PageHeader 
         title="Contact Us" 
-        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning growth and exciting opportunities."
-        breadcrumbs={breadcrumbs}
+        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning, growth & exciting opportunities."
       />
 
       {/* Map Section */}
@@ -91,7 +85,7 @@ export default function ContactPage() {
                 <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
                 
                 <div className="relative z-10 space-y-10">
-                  <h3 className="text-3xl font-bold font-handlee text-white mb-2">Our Details</h3>
+                  <h3 className="text-3xl font-bold font-handlee text-white mb-2">Our Details & Support</h3>
                   <p className="text-white/80 font-medium leading-relaxed">
                     Labore sea amet kasd diam justo amet ut vero justo. Ipsum ut et kasd duo sit, ipsum sea et erat est dolore.
                   </p>

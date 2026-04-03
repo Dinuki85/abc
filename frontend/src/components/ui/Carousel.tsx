@@ -23,9 +23,10 @@ export default function Carousel({
   interval = 5000,
   itemsPerView = { mobile: 1, tablet: 2, desktop: 3 }
 }: CarouselProps) {
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  const [windowWidth, setWindowWidth] = useState(1200);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(true);
+  const [hasMounted, setHasMounted] = useState(false);
   const controls = useAnimationControls();
   
   // Clone children for infinite loop: [End of original] [Original] [Start of original]
@@ -44,6 +45,8 @@ export default function Carousel({
   const itemWidth = 100 / visibleCount;
 
   useEffect(() => {
+    setHasMounted(true);
+    setWindowWidth(window.innerWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -91,6 +94,8 @@ export default function Carousel({
       return () => clearInterval(timer);
     }
   }, [autoPlay, interval, handleNext]);
+
+  if (!hasMounted) return null;
 
   return (
     <div className="relative group w-full overflow-hidden pb-12">

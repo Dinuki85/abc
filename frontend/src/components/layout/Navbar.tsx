@@ -44,13 +44,9 @@ export default function Navbar() {
           {/* Logo Section */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-12 h-12 transition-transform duration-300 group-hover:scale-110">
-                <Image 
-                  src="/img/favicon.png" 
-                  alt="AMV Logo" 
-                  fill
-                  className="rounded-full object-contain"
-                />
+                <div className="w-12 h-12 flex-shrink-0">
+          <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain" />
+      
               </div>
               <div className="flex flex-col">
                 <span className="text-2xl font-bold text-primary font-handlee leading-tight">AMV</span>

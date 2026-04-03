@@ -1,9 +1,14 @@
 package com.abc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "classes")
+@Table(name = "classes", indexes = {
+    @Index(name = "idx_class_grade", columnList = "grade_id"),
+    @Index(name = "idx_class_teacher", columnList = "staff_id")
+})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SchoolClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +21,7 @@ public class SchoolClass {
     @JoinColumn(name = "grade_id", nullable = false)
     private Grade grade;
 
+    @JsonIgnoreProperties({"assignedGrade"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staff_id")
     private Staff classTeacher;

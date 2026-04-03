@@ -21,22 +21,23 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { mockApi, MockStudent } from '@/lib/mock-api';
+import { api, StudentProfile, User as ApiUser } from '@/lib/api';
 
 export default function TeacherStudentsPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [student, setStudent] = useState<MockStudent | null>(null);
-  const [pendingStudents, setPendingStudents] = useState<MockStudent[]>([]);
+  const [student, setStudent] = useState<StudentProfile | null>(null);
+  const [pendingStudents, setPendingStudents] = useState<StudentProfile[]>([]);
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [staff, setStaff] = useState<MockStudent | null>(null);
+  const [staff, setStaff] = useState<ApiUser | null>(null);
+  const [assignedGrade, setAssignedGrade] = useState<{ id: number, name: string } | null>(null);
 
   useEffect(() => {
-    const currentUser = mockApi.getCurrentUser();
-    if (!currentUser || currentUser.role !== 'TEACHER') {
+    const currentUser = api.getCurrentUser();
+    if (!currentUser || currentUser.role !== 'ROLE_TEACHER') {
       router.push('/login');
     } else {
       setStaff(currentUser);
@@ -44,52 +45,68 @@ export default function TeacherStudentsPage() {
     }
   }, [router]);
 
-  const refreshPendingQueue = () => {
-    setPendingStudents(mockApi.getPendingVerificationStudents());
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-    
-    const found = mockApi.searchStudent(searchQuery);
-    if (found) {
-      setStudent(found);
-    } else {
-      setError('No student found with that index number.');
+  const refreshPendingQueue = async () => {
+    try {
+      const myGrade = await api.getMyGrade();
+      if (myGrade && myGrade.id) {
+        setAssignedGrade(myGrade);
+        const students = await api.getStudentsByGrade(myGrade.id);
+        // Only show students who have completed their profile and are pending verification
+        setPendingStudents(students.filter((s: StudentProfile) => s.profileCompleted && (!s.verificationStatus || s.verificationStatus === 'PENDING')));
+      } else {
+        // Fallback or handle unassigned case
+        console.warn('Teacher has no assigned grade');
+      }
+    } catch (err) {
+      console.error('Failed to fetch pending queue', err);
     }
   };
 
-  const handleVerify = (status: MockStudent['verificationStatus']) => {
-    if (!student) return;
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
     setIsLoading(true);
     
-    setTimeout(() => {
-      try {
-        const result = mockApi.verifyStudent(student.username, status, comment);
-        if (result) {
-          setSuccess(`Student marked as ${status} successfully.`);
-          // Refresh local student state
-          setStudent({ ...student, verificationStatus: status, verificationComment: comment });
-          setComment('');
-          refreshPendingQueue();
-          setTimeout(() => setSuccess(''), 5000);
-        } else {
-          setError('Failed to update verification status.');
-        }
-      } catch (err) {
-        setError('An error occurred.');
-      } finally {
-        setIsLoading(false);
+    try {
+      const found = await api.searchStudent(searchQuery);
+      if (found) {
+        setStudent(found);
+      } else {
+        setError('No student found with that index number.');
       }
-    }, 800);
+    } catch (err: any) {
+      setError(err.message || 'Search failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerify = async (status: 'VERIFIED' | 'NEEDS_CORRECTION') => {
+    if (!student || !student.id) return;
+    setIsLoading(true);
+    setError('');
+    setSuccess('');
+    
+    try {
+      await api.verifyStudent(student.id, status, comment);
+      setSuccess(`Student record marked as ${status} successfully.`);
+      // Refresh local student state
+      setStudent({ ...student, verificationStatus: status, verificationComment: comment });
+      setComment('');
+      refreshPendingQueue();
+      setTimeout(() => setSuccess(''), 5000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to update verification status.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!staff) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
       {/* Dynamic Header */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 flex items-center justify-between shadow-sm sticky top-0 z-50">
         <div className="flex items-center gap-3">
@@ -103,13 +120,15 @@ export default function TeacherStudentsPage() {
         </div>
         <div className="flex items-center gap-6">
           <div className="hidden md:flex flex-col items-end border-r border-slate-100 pr-6">
-            <span className="text-sm font-black text-slate-900 leading-none">{staff.fullName}</span>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Authorized Teacher</span>
+            <span className="text-sm font-black text-slate-900 leading-none">{staff.username}</span>
+            <span className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider mt-1">
+              {assignedGrade ? `Grade ${assignedGrade.name} Auditor` : 'Authorized Teacher'}
+            </span>
           </div>
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={() => { mockApi.logout(); router.push('/login'); }} 
+            onClick={() => { api.logout(); router.push('/login'); }} 
             className="rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all font-bold px-4"
           >
             <LogOut size={18} className="mr-2" />
@@ -188,7 +207,7 @@ export default function TeacherStudentsPage() {
                         <span className="text-indigo-600 font-black tracking-widest uppercase text-xs">{student.username}</span>
                         <div className="h-1 w-1 bg-slate-300 rounded-full" />
                         <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase tracking-tighter">
-                          {mockApi.getGradeName(student.gradeId)} — {mockApi.getClassName(student.classId)}
+                          {student.gradeName} — {student.className}
                         </span>
                       </div>
                     </div>
@@ -196,9 +215,9 @@ export default function TeacherStudentsPage() {
 
                   <div className="grid grid-cols-1 gap-6">
                     {[
-                      { icon: MapPin, label: 'Permanent Address', value: student.profileData?.address },
-                      { icon: User, label: 'Parent / Guardian', value: student.profileData?.parentName },
-                      { icon: Phone, label: 'Contact Number', value: student.profileData?.parentContact }
+                      { icon: MapPin, label: 'Permanent Address', value: student.address },
+                      { icon: User, label: 'Parent / Guardian', value: student.guardianName },
+                      { icon: Phone, label: 'Contact Number', value: student.guardianContact }
                     ].map((item, idx) => (
                       <div key={idx} className="p-6 rounded-3xl bg-slate-50 border border-slate-100 group hover:bg-white hover:shadow-xl hover:shadow-slate-100 transition-all duration-300">
                         <div className="flex items-start gap-4">
@@ -371,7 +390,7 @@ export default function TeacherStudentsPage() {
                           <p className={`text-[10px] font-bold ${
                             student?.username === stu.username ? 'text-indigo-200' : 'text-slate-500'
                           }`}>
-                            {mockApi.getGradeName(stu.gradeId)}–{mockApi.getClassName(stu.classId)}
+                            {stu.gradeName}—{stu.className}
                           </p>
                         </div>
                       </div>

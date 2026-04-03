@@ -9,18 +9,11 @@ import { Button } from '@/components/ui/Button';
 import { Search, ChevronRight, User, MessageCircle, MoreVertical } from 'lucide-react';
 
 export default function SportsPage() {
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Co-Curricular' },
-    { label: 'Sports' },
-  ];
-
   return (
     <main className="min-h-screen bg-white">
       <PageHeader 
-        title="Our Sports" 
-        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning growth and exciting opportunities."
-        breadcrumbs={breadcrumbs}
+        title="Our Sports & Athletics" 
+        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning, growth & exciting opportunities."
       />
 
       <section className="container-custom py-16">
@@ -52,7 +45,7 @@ export default function SportsPage() {
                 </div>
                 <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed mb-12">
                   <p>
-                    Sri Lankan school cricket is deeply ingrained in the country's sporting culture, serving as a crucial platform for nurturing young talent. It's a vibrant and competitive scene, with numerous schools across the island participating in various tournaments and leagues. Schools like St. Joseph's College, Royal College, and Trinity College have historically been powerhouse teams. The schools cricket season typically runs from September to April, featuring both traditional formats and limited-overs cricket.
+                    Sri Lankan school cricket is deeply ingrained in the country's sporting culture, serving as a crucial platform for nurturing young talent. It's a vibrant & competitive scene, with numerous schools across the island participating in various tournaments & leagues. Schools like St. Joseph's College, Royal College & Trinity College have historically been powerhouse teams. The schools cricket season typically runs from September to April, featuring both traditional formats & limited-overs cricket.
                   </p>
                   <p>
                     Many Sri Lankan cricket stars, including Muttiah Muralitharan and Kumar Sangakkara, honed their skills playing school cricket before making it to the national team. The schools cricket structure plays a pivotal role in identifying and grooming future cricketing talents for Sri Lanka.
@@ -73,7 +66,7 @@ export default function SportsPage() {
                     />
                   </div>
                   <p className="text-gray-700 leading-relaxed prose-lg">
-                    Sri Lankan school Elle, also known as "Lankarama," is a traditional game deeply rooted in the island's culture. It's a team sport resembling a mix of baseball and cricket, played with a ball made of stitched coconut husk and a bat called a "wambey." The objective is to hit the ball thrown by the opposing team and score runs by running between two designated points. Elle is often played in schoolyards and open spaces, fostering teamwork, coordination, and physical fitness among participants. While not as widely recognized internationally as cricket, Elle holds significant cultural importance in Sri Lanka, reflecting the nation's rich heritage and love for indigenous games.
+                    Sri Lankan school Elle, also known as "Lankarama," is a traditional game deeply rooted in the island's culture. It's a team sport resembling a mix of baseball & cricket, played with a ball made of stitched coconut husk & a bat called a "wambey." The objective is to hit the ball thrown by the opposing team & score runs by running between two designated points. Elle is often played in schoolyards & open spaces, fostering teamwork, coordination & physical fitness among participants. While not as widely recognized internationally as cricket, Elle holds significant cultural importance in Sri Lanka, reflecting the nation's rich heritage & love for indigenous games.
                   </p>
                 </div>
               </Reveal>

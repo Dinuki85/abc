@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface StudentClassRepository extends JpaRepository<StudentClass, Long> {
     Optional<StudentClass> findByStudent(Student student);
     List<StudentClass> findBySchoolClass_Id(Long classId);
+    long countBySchoolClass_Id(Long classId);
 }

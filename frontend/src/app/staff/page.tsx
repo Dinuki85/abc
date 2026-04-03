@@ -15,13 +15,21 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+import { useRouter } from 'next/navigation';
+
 export default function StaffDashboardPage() {
+  const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const currentUser = api.getCurrentUser();
+    if (!currentUser || (currentUser.role !== 'ROLE_TEACHER' && currentUser.role !== 'ROLE_STAFF')) {
+      router.push('/login');
+    } else {
+      fetchData();
+    }
+  }, [router]);
 
   const fetchData = async () => {
     try {

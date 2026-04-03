@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
+import { api, User as ApiUser } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
 import { Lock, ShieldCheck, AlertCircle } from 'lucide-react';
-import { mockApi } from '@/lib/mock-api';
 
 export default function ChangePasswordPage() {
   const router = useRouter();
@@ -14,11 +14,11 @@ export default function ChangePasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<ApiUser | null>(null);
 
   useEffect(() => {
-    const currentUser = mockApi.getCurrentUser();
-    if (!currentUser || !currentUser.isFirstLogin) {
+    const currentUser = api.getCurrentUser();
+    if (!currentUser || !currentUser.firstLogin) {
       router.push('/login');
     } else {
       setUser(currentUser);
@@ -43,9 +43,19 @@ export default function ChangePasswordPage() {
     }
 
     try {
-      const success = mockApi.changePassword(user.username, newPassword);
+      if (!user) throw new Error('User not found');
+      const success = await api.changePassword(user.username, newPassword);
       if (success) {
-        router.push('/dashboard/student/profile-setup');
+        // Redirect based on role
+        if (user.role === 'ROLE_STUDENT') {
+          router.push('/dashboard/student/profile-setup');
+        } else if (user.role === 'ROLE_TEACHER') {
+          router.push('/dashboard/teacher/classes');
+        } else if (user.role === 'ROLE_ADMIN') {
+          router.push('/admin');
+        } else {
+          router.push('/dashboard');
+        }
       } else {
         setError('Failed to update password. Please try again.');
       }

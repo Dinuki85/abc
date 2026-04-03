@@ -7,18 +7,13 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 
 export default function AcademicsPage() {
-  const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Academics' },
-  ];
-
   const academicPrograms = [
     { 
-      title: 'Grade 6 - 9', 
+      title: 'Secondary Level (Grade 6 - 9)', 
       img: 'class-1.jpg', 
-      desc: 'a diverse range of subjects, including mathematics, science, IT, social studies, and religious education with extracurricular activities.',
+      desc: 'A comprehensive curriculum covering core subjects with a focus on holistic development and parallel classes for better student attention.',
       medium: 'Sinhala/English',
-      parallel: '04 Classes',
+      parallel: 'Classes A & B',
       periods: '08 Periods',
       extracurricular: [
         '1. Karate', '2. Taekwondo', '3. Chess', '4. Athletics', '5. Cricket', '6. Elle'
@@ -39,11 +34,11 @@ export default function AcademicsPage() {
       ]
     },
     { 
-      title: 'Grade 10 - 11', 
+      title: 'Senior Secondary (Grade 10 - 11)', 
       img: 'class-2.jpg', 
-      desc: 'Preparing for General Certificate of Education Ordinary Level (G.C.E. O/L) examinations, which are a significant milestone in their academic journey.',
+      desc: 'Focused preparation for the G.C.E. Ordinary Level (O/L) examinations, offering a wide choice of basket subjects.',
       medium: 'Sinhala/English',
-      parallel: '03 Classes',
+      parallel: 'Classes A & B',
       periods: '08 Periods',
       extracurricular: [
         '1. Karate', '2. Taekwondo', '3. Chess', '4. Athletics', '5. Cricket', '6. Elle'
@@ -63,7 +58,7 @@ export default function AcademicsPage() {
     { 
       title: 'Advanced Level - Mathematics', 
       img: 'class-3.jpg', 
-      desc: 'syllabus aims to provide a strong foundation in mathematics, Physics, Chemistry and IT to pursuing further studies in engineering related fields.',
+      desc: 'Expert-led stream providing a strong foundation for Engineering and Physical Science fields.',
       medium: 'Sinhala',
       altSubject: 'ICT',
       periods: '08 Periods',
@@ -82,7 +77,7 @@ export default function AcademicsPage() {
     { 
       title: 'Advanced Level - Commerce', 
       img: 'class-4.jpg', 
-      desc: 'Students learn about various aspects of commerce, such as trade, entrepreneurship, marketing, and business operations as wel as equips students with knowledge and skills relevant to careers in business, finance, banking, and related fields',
+      desc: 'Leading stream for aspiring business leaders and finance professionals.',
       medium: 'Sinhala',
       optional: 'IT',
       periods: '08 Periods',
@@ -94,7 +89,7 @@ export default function AcademicsPage() {
     { 
       title: 'Advanced Level - Arts', 
       img: 'class-5.jpg', 
-      desc: 'This stream encourages students to think critically, appreciate cultural diversity, and engage with society\'s social, political, and ethical issues. It also provides a foundation for careers in fields such as education, journalism, law, social work, and the arts.',
+      desc: 'Diverse stream promoting critical thinking and cultural appreciation with state-of-the-art facilities.',
       medium: 'Sinhala',
       optional: 'IT & More',
       periods: '08 Periods',
@@ -108,9 +103,9 @@ export default function AcademicsPage() {
       ]
     },
     { 
-      title: '13 Years Guaranteed Education', 
+      title: 'Professional Studies (After A/Ls)', 
       img: 'class-6.jpg', 
-      desc: 'This programme is to be implemented under the theme “The professional turning point in Free Education”. This scheme would enable students who sit for the G.C.E. Ordinary Level Examination to obtain Higher Educational qualifications notwithstanding whether they pass or fail.',
+      desc: 'Specialized programs and vocational training for students after their Advanced Level examinations.',
       medium: 'Sinhala',
       academic: '1 1/2 Years',
       vocational: '06 Months',
@@ -128,8 +123,7 @@ export default function AcademicsPage() {
       
       <PageHeader 
         title="Academics" 
-        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning growth and exciting opportunities."
-        breadcrumbs={breadcrumbs}
+        description="We are thrilled to have you join us on our digital journey as we embark on our academic years filled with learning, growth & exciting opportunities."
       />
 
       {/* Popular Classes Section */}
@@ -154,7 +148,7 @@ export default function AcademicsPage() {
                 </div>
                 
                 <div className="p-8 text-center border-b border-gray-100">
-                  <h4 className="text-2xl font-bold font-handlee text-dark mb-4 group-hover:text-primary transition-colors">{prog.title}</h4>
+                  <h4 className="text-xl font-bold font-handlee text-dark mb-4 group-hover:text-primary transition-colors tracking-tight line-clamp-1">{prog.title}</h4>
                   <p className="text-gray-600 text-sm font-medium leading-relaxed">{prog.desc}</p>
                 </div>
 
@@ -286,8 +280,8 @@ export default function AcademicsPage() {
                   <ul className="space-y-4 pt-4">
                     {[
                       'Grade 06 Enrollment', 
-                      'Advance Level Enrollment', 
-                      '13 Years Guaranteed Education Enrollment'
+                      'Advanced Level Enrollment', 
+                      'Post-A/L Professional Studies'
                     ].map(item => (
                       <li key={item} className="flex items-center gap-4 text-dark font-bold">
                         <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
@@ -301,7 +295,7 @@ export default function AcademicsPage() {
                   <div className="flex flex-col sm:flex-row flex-wrap gap-4 pt-8">
                     <Button className="w-full sm:w-auto">Applications Grade 06</Button>
                     <Button variant="secondary" className="w-full sm:w-auto">Applications A/L</Button>
-                    <Button variant="outline" className="w-full sm:w-auto">13 Years Guaranteed Education</Button>
+                    <Button variant="outline" className="w-full sm:w-auto">Post-A/L Programs</Button>
                   </div>
                 </div>
               </Reveal>
