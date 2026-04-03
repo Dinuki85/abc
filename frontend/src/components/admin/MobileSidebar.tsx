@@ -50,7 +50,7 @@ export default function MobileSidebar({ isOpen, onClose, menuItems, brandName = 
           {menuItems.map((item) => {
             const isActive = item.href === '/admin' 
               ? pathname === '/admin' 
-              : pathname.startsWith(item.href);
+              : (pathname === item.href || pathname.startsWith(item.href + '/'));
             const Icon = item.icon;
             
             return (

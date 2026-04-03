@@ -1,26 +1,14 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 
 export default function AdminDashboard() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-
   const [stats, setStats] = useState<any>(null);
 
   useEffect(() => {
-    const currentUser = api.getCurrentUser();
-    if (!currentUser || currentUser.role !== 'ROLE_ADMIN') {
-      router.push('/login');
-    } else {
-      setIsLoading(false);
-      api.getAdminStats().then(setStats);
-    }
-  }, [router]);
-
-  if (isLoading) return null;
+    api.getAdminStats().then(setStats);
+  }, []);
   
   return (
     <div className="space-y-6">

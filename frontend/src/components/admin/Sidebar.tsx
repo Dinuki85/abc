@@ -2,42 +2,32 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  BarChart3, 
-  Users, 
-  UserSquare2, 
-  BookOpen, 
-  Users2, 
-  Trophy, 
-  FileCheck, 
-  Settings,
-  LogOut,
-  Award,
-  ShieldCheck
-} from 'lucide-react';
+import { LucideIcon, LogOut } from 'lucide-react';
 
-const menuItems = [
-  { name: 'Dashboard', href: '/admin', icon: BarChart3 },
-  { name: 'Students', href: '/admin/students', icon: Users },
-  { name: 'Staff', href: '/admin/staff', icon: UserSquare2 },
-  { name: 'Staff Assignment', href: '/admin/staff/assignment', icon: Award },
-  { name: 'Classes', href: '/admin/classes', icon: BookOpen },
-  { name: 'Parents', href: '/admin/parents', icon: Users2 },
-  { name: 'Exams', href: '/admin/exams', icon: FileCheck },
-  { name: 'Users', href: '/admin/users', icon: Settings },
-  { name: 'Security', href: '/admin/profile', icon: ShieldCheck },
-];
+interface MenuItem {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+}
 
-export default function Sidebar() {
+interface SidebarProps {
+  menuItems: MenuItem[];
+}
+
+export default function Sidebar({ menuItems }: SidebarProps) {
   const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (href === '/admin') return pathname === '/admin';
+    // Exact match for non-root items to avoid "Staff" matching "Staff Assignment"
+    return pathname === href || pathname.startsWith(href + '/');
+  };
 
   return (
     <aside className="h-full w-64 bg-white/40 backdrop-blur-xl border-r border-slate-200/50 shadow-2xl flex flex-col pt-4">
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
         {menuItems.map((item) => {
-          const isActive = item.href === '/admin' 
-            ? pathname === '/admin' 
-            : pathname.startsWith(item.href);
+          const active = isActive(item.href);
           const Icon = item.icon;
           
           return (
@@ -45,12 +35,12 @@ export default function Sidebar() {
               key={item.name}
               href={item.href}
               className={`flex items-center px-3 py-3 rounded-xl transition-all duration-200 group ${
-                isActive 
+                active 
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30' 
                   : 'text-slate-600 hover:bg-white/60 hover:text-blue-600'
               }`}
             >
-              <Icon size={20} className={`mr-3 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-colors`} />
+              <Icon size={20} className={`mr-3 ${active ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-colors`} />
               <span className="font-medium">{item.name}</span>
             </Link>
           );
