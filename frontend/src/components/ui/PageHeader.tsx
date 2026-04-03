@@ -12,21 +12,11 @@ export function PageHeader({ title, description }: PageHeaderProps) {
       {/* Background decoration */}
       <div className="container-custom relative z-10 text-center">
         <h1 className="text-5xl md:text-7xl font-bold text-white font-handlee mb-6 tracking-tight">
-          {title.split('&').map((p, idx, arr) => (
-            <React.Fragment key={idx}>
-              {p}
-              {idx < arr.length - 1 && <span className="text-secondary mx-1 font-handlee">&</span>}
-            </React.Fragment>
-          ))}
+          {title}
         </h1>
         {description && (
           <p className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-             {description.split('&').map((p, idx, arr) => (
-              <React.Fragment key={idx}>
-                {p}
-                {idx < arr.length - 1 && <span className="text-secondary mx-1 font-handlee">&</span>}
-              </React.Fragment>
-            ))}
+             {description}
           </p>
         )}
 
