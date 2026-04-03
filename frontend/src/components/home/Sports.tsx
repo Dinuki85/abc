@@ -73,7 +73,7 @@ export default function Sports() {
                       {sport.sport.split('&').map((part, index, array) => (
                         <React.Fragment key={index}>
                           {part}
-                          {index < array.length - 1 && <span className="text-primary mx-1 font-handlee">&</span>}
+                          {index < array.length - 1 && <span className=" mx-1 font-handlee">&</span>}
                         </React.Fragment>
                       ))}
                     </h4>

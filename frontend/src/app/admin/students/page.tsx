@@ -368,8 +368,10 @@ export default function StudentsPage() {
               </div>
             </form>
           </div>
+          </div>
         </div>
       )}
     </div>
   );
 }
+
