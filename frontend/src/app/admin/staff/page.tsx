@@ -270,6 +270,7 @@ export default function StaffPage() {
             </form>
           </div>
         </div>
+        </div>
       )}
 
       {/* Edit Teacher Modal */}
@@ -329,6 +330,7 @@ export default function StaffPage() {
               </Button>
             </form>
           </div>
+        </div>
         </div>
       )}
     </div>
