@@ -6,13 +6,14 @@ import MobileSidebar from "@/components/admin/MobileSidebar";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck } from "lucide-react";
+import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck } from "lucide-react";
 
 const adminMenuItems = [
   { name: 'Dashboard', href: '/admin', icon: BarChart3 },
   { name: 'Students', href: '/admin/students', icon: Users },
+  { name: 'Student Assignment', href: '/admin/assignment', icon: UserCheck },
   { name: 'Staff', href: '/admin/staff', icon: UserSquare2 },
-  { name: 'Staff Assignment', href: '/admin/assignment', icon: Award },
+  { name: 'Staff Assignment', href: '/admin/staff/assignment', icon: Award },
   { name: 'Classes', href: '/admin/classes', icon: BookOpen },
   { name: 'Parents', href: '/admin/parents', icon: Users2 },
   { name: 'Exams', href: '/admin/exams', icon: FileCheck },
