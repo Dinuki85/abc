@@ -19,8 +19,7 @@ export default function Sidebar({ menuItems }: SidebarProps) {
 
   const isActive = (href: string) => {
     if (href === '/admin') return pathname === '/admin';
-    // Exact match for non-root items to avoid "Staff" matching "Staff Assignment"
-    return pathname === href || pathname.startsWith(href + '/');
+    return pathname === href;
   };
 
   return (
