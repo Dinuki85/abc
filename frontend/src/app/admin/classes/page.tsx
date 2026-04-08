@@ -180,7 +180,9 @@ export default function ClassesPage() {
             </CardContent>
           </Card>
         </div>
+      </div>
       )}
     </div>
   );
+}
 
