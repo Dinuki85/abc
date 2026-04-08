@@ -154,8 +154,18 @@ public class AdminService {
         return staffRepository.findAll();
     }
 
-    public List<Student> getUnassignedStudents() {
-        return studentRepository.findUnassignedStudents();
+    public List<StudentResponse> getUnassignedStudents() {
+        List<Student> students = studentRepository.findUnassignedStudents();
+        return students.stream().map(student -> {
+            StudentResponse response = new StudentResponse();
+            response.setId(student.getId());
+            response.setUsername(student.getUser() != null ? student.getUser().getUsername() : "N/A");
+            response.setFullName(student.getFullName());
+            response.setGuardianName(student.getGuardianName());
+            response.setGuardianContact(student.getGuardianContact());
+            response.setProfileCompleted(student.isProfileCompleted());
+            return response;
+        }).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

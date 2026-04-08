@@ -37,6 +37,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
         org.springframework.data.domain.Pageable pageable
     );
 
-    @org.springframework.data.jpa.repository.Query("SELECT s FROM Student s WHERE s.id NOT IN (SELECT sc.student.id FROM StudentClass sc)")
+    @org.springframework.data.jpa.repository.Query("SELECT s FROM Student s JOIN FETCH s.user WHERE s.id NOT IN (SELECT sc.student.id FROM StudentClass sc)")
     java.util.List<Student> findUnassignedStudents();
 }

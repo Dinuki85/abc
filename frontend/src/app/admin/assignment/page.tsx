@@ -95,7 +95,7 @@ export default function StudentAssignmentPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Index Number</TableHead>
-                  <TableHead>Parent Name</TableHead>
+                  <TableHead>Guardian Name</TableHead>
                   <TableHead>Contact</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
@@ -114,17 +114,17 @@ export default function StudentAssignmentPage() {
                     </TableCell>
                   </TableRow>
                 ) : students.map((student) => (
-                  <TableRow key={student.user.username} className={selectedStudent === student.user.username ? 'bg-blue-50/50' : ''}>
-                    <TableCell className="font-medium text-slate-900">{student.user.username}</TableCell>
-                    <TableCell>{student.parentName}</TableCell>
-                    <TableCell>{student.parentContact}</TableCell>
+                  <TableRow key={student.username} className={selectedStudent === student.username ? 'bg-blue-50/50' : ''}>
+                    <TableCell className="font-medium text-slate-900">{student.username}</TableCell>
+                    <TableCell>{student.guardianName || 'N/A'}</TableCell>
+                    <TableCell>{student.guardianContact || 'N/A'}</TableCell>
                     <TableCell className="text-right">
                       <Button 
-                        variant={selectedStudent === student.user.username ? 'primary' : 'outline'} 
+                         variant={selectedStudent === student.username ? 'primary' : 'outline'} 
                         size="sm"
-                        onClick={() => setSelectedStudent(student.user.username)}
+                        onClick={() => setSelectedStudent(student.username)}
                       >
-                        {selectedStudent === student.user.username ? 'Selected' : 'Select'}
+                        {selectedStudent === student.username ? 'Selected' : 'Select'}
                       </Button>
                     </TableCell>
                   </TableRow>
