@@ -121,7 +121,11 @@ public class TeacherController {
 
             com.abc.dto.StudentResponse studentResponse = teacherService.getStudentByUsername(username);
             
-            if (studentResponse.getGradeName() == null || !studentResponse.getGradeName().equals(staff.getAssignedGrade().getName())) {
+            // Allow if student is unassigned OR belongs to the teacher's grade
+            boolean isUnassigned = "Unassigned".equals(studentResponse.getGradeName());
+            boolean isSameGrade = studentResponse.getGradeName() != null && studentResponse.getGradeName().equals(staff.getAssignedGrade().getName());
+            
+            if (!isUnassigned && !isSameGrade) {
                 throw new RuntimeException("Unauthorized: Student does not belong to your assigned grade");
             }
 
