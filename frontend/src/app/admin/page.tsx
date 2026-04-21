@@ -5,7 +5,9 @@ import { api } from '@/lib/api';
 import { 
   Users, UserCheck, Users2, Layers, BookOpen, GraduationCap, 
   ClipboardList, Briefcase, HeartHandshake, Settings, 
-  Calendar, Award, Trophy, Star, FileText, UserCircle, Clock, ExternalLink
+  Calendar, Award, Trophy, Star, FileText, UserCircle, Clock, 
+  ExternalLink, LogOut, LayoutDashboard, PlusCircle, PieChart, 
+  FileSpreadsheet, UserPlus, BookCheck, Medal, CheckCircle2
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -27,232 +29,243 @@ export default function AdminDashboard() {
   const displayName = currentUser?.username || 'User';
 
   return (
-    <div className="bg-white min-h-screen font-sans text-slate-800 p-4">
-      {/* Header Section */}
-      <div className="flex justify-between items-start mb-6 border-b-4 border-blue-800 pb-4">
-        <div className="w-1/4">
-          <h1 className="text-xl font-bold italic">Dash Board</h1>
-        </div>
-        
-        <div className="flex-1 flex flex-col items-center">
-          <div className="flex items-center gap-4">
-            <h2 className="text-3xl font-black text-center uppercase tracking-tighter">
-              Welcome To Andiambalama Maha Vidhyalaya
-            </h2>
-            <button className="bg-blue-600 text-white px-3 py-1 text-xs font-bold rounded-sm">Use</button>
-          </div>
-          <div className="mt-2 w-16 h-16 border-2 border-green-600 flex items-center justify-center text-[10px] text-green-600 font-bold bg-white">
-            <div className="text-center">
-              Sch<br/>Logo
+    <div className="min-h-screen bg-slate-50/50 p-4 md:p-8 animate-in fade-in duration-700">
+      {/* Premium Header */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-600 rounded-xl text-white shadow-lg shadow-blue-200">
+              <LayoutDashboard size={24} />
             </div>
+            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Dashboard</h1>
           </div>
+          <p className="text-slate-500 font-medium ml-12">Welcome back to Andiambalama Maha Vidhyalaya Portal</p>
         </div>
 
-        <div className="w-1/4 flex flex-col items-start pl-8 text-sm font-bold text-slate-800 space-y-0.5 border-l-2 border-dashed border-blue-800">
-          <div className="flex gap-2">
-            <span className="w-32">Loged User Name</span>
-            <span className="text-blue-600 font-black">: {displayName}</span>
+        <div className="flex flex-wrap items-center gap-4">
+          {/* User Profile Info */}
+          <div className="flex items-center gap-4 bg-white p-2 pr-6 rounded-2xl shadow-sm border border-slate-100">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
+              <UserCircle size={28} />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Admin User</span>
+              <span className="text-sm font-black text-slate-800">{displayName}</span>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <span className="w-32">Macine Time</span>
-            <span className="text-blue-600 font-black">: {time}</span>
+
+          {/* Time Card */}
+          <div className="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-100">
+            <Clock size={20} className="text-blue-500" />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">System Time</span>
+              <span className="text-sm font-black text-slate-800 tracking-wider">{time}</span>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <span className="w-32">Log out</span>
-            <button className="text-blue-600 hover:underline font-black">:</button>
-          </div>
+
+          <button className="p-3 bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-100 transition-colors shadow-sm">
+            <LogOut size={22} />
+          </button>
         </div>
       </div>
 
-      {/* DB Counts Row */}
-      <div className="grid grid-cols-5 gap-0 border border-slate-300 mb-8">
+      {/* Modern Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-12">
         {[
-          { label: 'Students', value: stats?.totalStudents || '0' },
-          { label: 'Academic Staff', value: stats?.academicStaffCount || '0' },
-          { label: 'Non Academic Staff', value: stats?.nonAcademicStaffCount || '0' },
-          { label: 'Sections', value: stats?.totalSections || '0' },
-          { label: 'Class Rooms', value: stats?.totalClassRooms || '0' },
+          { label: 'Students', value: stats?.totalStudents || '0', icon: GraduationCap, color: 'text-blue-600', bg: 'bg-blue-50' },
+          { label: 'Academic Staff', value: stats?.academicStaffCount || '0', icon: Briefcase, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+          { label: 'Non Academic', value: stats?.nonAcademicStaffCount || '0', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+          { label: 'Sections', value: stats?.totalSections || '0', icon: Layers, color: 'text-amber-600', bg: 'bg-amber-50' },
+          { label: 'Class Rooms', value: stats?.totalClassRooms || '0', icon: BookOpen, color: 'text-rose-600', bg: 'bg-rose-50' },
         ].map((stat, i) => (
-          <div key={i} className="border-r last:border-r-0 border-slate-300 p-4 text-center">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">db Count</p>
-            <p className="text-lg font-black">{stat.label}</p>
-            <p className="text-xl font-bold text-blue-600">{stat.value}</p>
+          <div key={i} className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all group overflow-hidden relative">
+            <div className="flex items-center justify-between mb-4">
+              <div className={`p-3 rounded-2xl ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
+                <stat.icon size={24} />
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Database</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Count</span>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <h3 className="text-4xl font-black text-slate-800 tracking-tight">{stat.value}</h3>
+              <p className="text-sm font-bold text-slate-500 uppercase tracking-wide mt-1">{stat.label}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Main Sections Grid */}
-      <div className="space-y-4">
-        {/* Administration Section */}
-        <div className="border-2 border-slate-800 rounded-sm relative">
-          <div className="bg-[#d9ead3] p-2 border-b-2 border-slate-800 flex justify-between items-end">
-            <div>
-              <h3 className="text-xl font-black">Administration</h3>
-              <p className="text-sm font-bold italic">Create your School Basic Profiles</p>
+      {/* Main Action Modules */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        {/* Administration Module */}
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+          <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+                <Settings size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Administration</h2>
+                <p className="text-emerald-100 text-sm font-medium mt-1">Manage School Basic Profiles</p>
+              </div>
             </div>
-            <div className="text-4xl font-black text-slate-400/30 select-none">Page 1</div>
-            <div className="text-4xl font-black text-slate-400/30 select-none">Page 3</div>
-            <div className="text-4xl font-black text-slate-400/30 select-none px-4">Page 5</div>
-            <div className="text-4xl font-black text-slate-400/30 select-none">Page 7</div>
+            <span className="text-4xl font-black text-white/10 uppercase italic">Admin</span>
           </div>
-          <div className="bg-[#d9ead3] p-4">
-             <div className="grid grid-cols-5 gap-x-4 gap-y-2 relative z-10">
+          <div className="p-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {[
+                { name: 'Student', href: '/admin/students', icon: UserPlus },
+                { name: 'Staff', href: '/admin/staff', icon: Briefcase },
+                { name: 'Guardian', href: '/admin/parents', icon: HeartHandshake },
+                { name: 'Section', href: '/admin/grades', icon: Layers },
+                { name: 'Subject', href: '/admin/subjects', icon: BookCheck },
+                { name: 'Class', href: '/admin/classes', icon: BookOpen },
+                { name: 'Assessment', href: '#', icon: ClipboardList },
+                { name: 'Co-Curricular', href: '#', icon: Star },
+                { name: 'Sport', href: '#', icon: Trophy },
+                { name: 'User', href: '/admin/users', icon: UserCircle },
+                { name: 'Scholarship', href: '#', icon: GraduationCap },
+                { name: 'Sportmeet', href: '#', icon: Medal },
+                { name: 'Event', href: '#', icon: Calendar },
+              ].map((btn, i) => (
+                <Link 
+                  key={i} 
+                  href={btn.href}
+                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-emerald-50 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100 transition-all group"
+                >
+                  <btn.icon size={22} className="text-slate-400 group-hover:text-emerald-600 mb-2 transition-colors" />
+                  <span className="text-xs font-bold text-slate-700 group-hover:text-emerald-700 transition-colors text-center">{btn.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Registration Module */}
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+          <div className="bg-orange-500 p-6 flex justify-between items-center text-white">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+                <PlusCircle size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Registration</h2>
+                <p className="text-orange-100 text-sm font-medium mt-1">Add Students and Staff Records</p>
+              </div>
+            </div>
+            <span className="text-4xl font-black text-white/10 uppercase italic">Entry</span>
+          </div>
+          <div className="p-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                {[
-                 { name: 'Student', href: '/admin/students' },
-                 { name: 'Staff', href: '/admin/staff' },
-                 { name: 'Guardian', href: '/admin/parents' },
-                 { name: 'Section', href: '/admin/grades' },
-                 { name: 'Subject', href: '/admin/subjects' },
-                 { name: 'Class', href: '/admin/classes' },
-                 { name: 'Assesment', href: '#' },
-                 { name: 'Co-Curriculer', href: '#' },
-                 { name: 'Sport', href: '#' },
-                 { name: 'User', href: '/admin/users' },
-                 { name: 'Scholership', href: '#' },
-                 { name: 'Sportmeet', href: '#' },
-                 { name: 'Event', href: '#' },
+                 { name: 'Add To classes', href: '/admin/assignment', icon: UserCheck },
+                 { name: 'Add To Sport', href: '#', icon: Trophy },
+                 { name: 'Co-Activities', href: '#', icon: Star },
+                 { name: 'Time Table', href: '#', icon: Calendar },
+                 { name: 'Scholarship', href: '#', icon: GraduationCap },
+                 { name: 'Add To Event', href: '#', icon: Calendar },
+                 { name: 'Add To Subject', href: '#', icon: BookCheck },
+                 { name: 'Add To Assessment', href: '#', icon: ClipboardList },
                ].map((btn, i) => (
-                 <Link 
-                   key={i} 
-                   href={btn.href}
-                   className="bg-[#ebf5e9] border border-slate-800 py-1.5 px-2 text-center text-sm font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
-                 >
-                   {btn.name}
-                 </Link>
+                <Link 
+                  key={i} 
+                  href={btn.href}
+                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-orange-50 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-100 transition-all group"
+                >
+                  <btn.icon size={22} className="text-slate-400 group-hover:text-orange-600 mb-2 transition-colors" />
+                  <span className="text-xs font-bold text-slate-700 group-hover:text-orange-700 transition-colors text-center">{btn.name}</span>
+                </Link>
                ))}
              </div>
           </div>
-        </div>
+        </section>
 
-        {/* Registration Section */}
-        <div className="border-2 border-slate-800 rounded-sm">
-          <div className="bg-[#fce5cd] p-2 border-b-2 border-slate-800">
-            <h3 className="text-xl font-black">Registration</h3>
-            <p className="text-sm font-bold italic">Add Students and staff</p>
+        {/* Performance Module */}
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+          <div className="bg-blue-600 p-6 flex justify-between items-center text-white">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+                <PieChart size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Performance</h2>
+                <p className="text-blue-100 text-sm font-medium mt-1">Enter Student & School Achievement Data</p>
+              </div>
+            </div>
+            <span className="text-4xl font-black text-white/10 uppercase italic">Stats</span>
           </div>
-          <div className="bg-[#fce5cd] p-4">
-            <div className="grid grid-cols-5 gap-x-4 gap-y-2">
+          <div className="p-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                {[
-                 { name: 'Add To classes', href: '/admin/assignment' },
-                 { name: 'Add To Sport', href: '#' },
-                 { name: 'Add To Co- Activities', href: '#' },
-                 { name: 'Time Table', href: '#' },
-                 { name: 'Scholership', href: '#' },
-                 { name: 'Add To Event', href: '#' },
-                 { name: 'Add To Subject', href: '#' },
-                 { name: 'Add To Assesment', href: '#' },
+                 { name: 'Exam Results', href: '#', icon: CheckCircle2 },
+                 { name: 'Scholarship Dist.', href: '#', icon: GraduationCap },
+                 { name: 'Sport Places', href: '#', icon: Trophy },
+                 { name: 'Welfare Payment', href: '#', icon: HeartHandshake },
+                 { name: 'S1 Form', href: '#', icon: FileSpreadsheet },
+                 { name: 'Assessment Results', href: '#', icon: ClipboardList },
                ].map((btn, i) => (
-                 <Link 
-                   key={i} 
-                   href={btn.href}
-                   className="bg-[#fff2e2] border border-slate-800 py-1.5 px-2 text-center text-sm font-bold text-red-600 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
-                 >
-                   {btn.name}
-                 </Link>
+                <Link 
+                  key={i} 
+                  href={btn.href}
+                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-blue-50 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-100 transition-all group"
+                >
+                  <btn.icon size={22} className="text-slate-400 group-hover:text-blue-600 mb-2 transition-colors" />
+                  <span className="text-xs font-bold text-slate-700 group-hover:text-blue-700 transition-colors text-center">{btn.name}</span>
+                </Link>
                ))}
              </div>
           </div>
-        </div>
+        </section>
 
-        {/* Performance Section */}
-        <div className="border-2 border-slate-800 rounded-sm">
-          <div className="bg-[#cfe2f3] p-2 border-b-2 border-slate-800">
-            <h3 className="text-xl font-black">Prefomance</h3>
-            <p className="text-sm font-bold italic">Enter profomance</p>
+        {/* Display Module */}
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+          <div className="bg-amber-500 p-6 flex justify-between items-center text-white flex-shrink-0">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+                <FileSpreadsheet size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight leading-none">Display</h2>
+                <p className="text-amber-100 text-sm font-medium mt-1">Generate Reports and Student Lists</p>
+              </div>
+            </div>
+            <span className="text-4xl font-black text-white/10 uppercase italic">Reports</span>
           </div>
-          <div className="bg-[#cfe2f3] p-4">
-            <div className="grid grid-cols-5 gap-x-4 gap-y-2">
-               {[
-                 { name: 'Exam result', href: '#' },
-                 { name: 'Scholership Distribution', href: '#' },
-                 { name: 'Sport Places', href: '#' },
-                 { name: 'Welfair Payment', href: '#' },
-                 { name: 'Welfair Payment', href: '#' },
-                 { name: 'S1 Form', href: '#' },
-                 { name: 'Exam result', href: '#' },
-                 { name: 'Assesment result', href: '#' },
-               ].map((btn, i) => (
-                 <Link 
-                   key={i} 
-                   href={btn.href}
-                   className="bg-[#e7f0f7] border border-slate-800 py-1.5 px-2 text-center text-sm font-bold text-blue-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
-                 >
-                   {btn.name}
-                 </Link>
-               ))}
+          <div className="p-8 flex-1 grid grid-cols-1 md:grid-cols-2 gap-8">
+             <div className="space-y-4">
+               <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest border-l-4 border-amber-500 pl-3">All School & Lists</h4>
+               <ul className="space-y-2">
+                 {[
+                   'All List', 'Welfare Status List', 'Health Reports', 'Skill Matrix', 'Contact Directory', 'Exam Reports',
+                   'Section Based List', 'Sport Based List', 'Scholarship List', 'Nationality/Religion/Gender'
+                 ].map((item, i) => (
+                   <li key={i}>
+                     <Link href="#" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">
+                       <ExternalLink size={14} className="opacity-50" /> {item}
+                     </Link>
+                   </li>
+                 ))}
+               </ul>
+             </div>
+
+             <div className="space-y-4">
+               <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest border-l-4 border-amber-500 pl-3">Teacher & Individual</h4>
+               <ul className="space-y-2">
+                 {[
+                   'Exam Wise Analysis', 'Subject Wise Analysis', 'Grade Wise Comparison', 'Teacher Lists', 'Subject Specialist List',
+                   'Student CV Generator', 'Teacher Professional CV', 'Guardian Contact File', 'Teacher Timetables'
+                 ].map((item, i) => (
+                   <li key={i}>
+                     <Link href="#" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">
+                       <ExternalLink size={14} className="opacity-50" /> {item}
+                     </Link>
+                   </li>
+                 ))}
+               </ul>
              </div>
           </div>
-        </div>
-
-        {/* Display Section */}
-        <div className="border-2 border-slate-800 rounded-sm">
-          <div className="bg-[#fff2cc] p-2 border-b-2 border-slate-800">
-            <h3 className="text-xl font-black">Display</h3>
-          </div>
-          <div className="bg-[#fff2cc] p-0">
-             <div className="grid grid-cols-4 divide-x-2 divide-slate-800">
-               {/* Column 1: All School */}
-               <div className="p-4 relative">
-                 <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">All School</div>
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 2</div>
-                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400 relative z-10">
-                   <li><Link href="#">All List</Link></li>
-                   <li><Link href="#">Welfair paid/not paid List</Link></li>
-                   <li><Link href="#">Health Report</Link></li>
-                   <li><Link href="#">Skill Report</Link></li>
-                   <li><Link href="#">Contact Report</Link></li>
-                   <li><Link href="#">Exam Report</Link></li>
-                 </ul>
-               </div>
-
-               {/* Column 2: Student List */}
-               <div className="p-4 relative">
-                 <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">Student List</div>
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 4</div>
-                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400 relative z-10">
-                   <li><Link href="#">Section Based All Student</Link></li>
-                   <li><Link href="#">Sport Based All Student</Link></li>
-                   <li><Link href="#">Scholership Based All Student</Link></li>
-                   <li><Link href="#">Religeon Based All Student</Link></li>
-                   <li><Link href="#">Nationality Based All Student</Link></li>
-                   <li><Link href="#">Gender Based All Student</Link></li>
-                 </ul>
-               </div>
-
-               {/* Column 3: Teacher */}
-               <div className="p-4 relative">
-                 <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">Teacher</div>
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 6</div>
-                 <div className="grid grid-cols-2 gap-4 relative z-10">
-                    <ul className="space-y-1 text-xs font-bold underline decoration-slate-400">
-                      <li><Link href="#">Exam Wise Report</Link></li>
-                      <li><Link href="#">Subject Wise Report</Link></li>
-                      <li><Link href="#">Mask Wise Report</Link></li>
-                      <li><Link href="#">Grade Wise Report</Link></li>
-                      <li><Link href="#">Sport Wise Report</Link></li>
-                    </ul>
-                    <ul className="space-y-1 text-xs font-bold underline decoration-slate-400">
-                      <li><Link href="#">Class Teacher List</Link></li>
-                      <li><Link href="#">Teacher Incharge List</Link></li>
-                      <li><Link href="#">Subject Wise List</Link></li>
-                    </ul>
-                 </div>
-               </div>
-
-               {/* Column 4: Individual */}
-               <div className="p-4 relative">
-                 <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">Individual</div>
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 8</div>
-                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400 relative z-10">
-                   <li><Link href="#">Student CV</Link></li>
-                   <li><Link href="#">Teacher CV</Link></li>
-                   <li><Link href="#">Guardian CV</Link></li>
-                   <li><Link href="#">Teacher Timetable</Link></li>
-                 </ul>
-               </div>
-             </div>
-          </div>
-        </div>
+        </section>
       </div>
     </div>
   );
