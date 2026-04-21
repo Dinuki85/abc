@@ -3,19 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { LogOut, Menu } from 'lucide-react';
+import { LogOut, Menu, Clock } from 'lucide-react';
 import { api } from '@/lib/api';
 
 export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () => void }) {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [time, setTime] = useState<string>('');
 
   useEffect(() => {
     const currentUser = api.getCurrentUser();
     if (currentUser) {
       setUser(currentUser);
       
-      // Fetch full name for staff/teachers if not present
       if (currentUser.role === 'ROLE_TEACHER' || currentUser.role === 'ROLE_STAFF' || currentUser.role === 'ROLE_ADMIN') {
         api.getStaffProfile().then(profile => {
           if (profile && profile.name) {
@@ -24,6 +24,14 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
         });
       }
     }
+
+    // Update time every second
+    const timer = setInterval(() => {
+      const now = new Date();
+      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const handleLogout = () => {
@@ -58,21 +66,29 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
         </button>
       )}
 
-      {/* Right: User Identity & Action */}
-      <div className="flex items-center gap-8">
-        <div className="hidden md:flex flex-col items-end border-r border-cyan-200 pr-8">
+      {/* Right: User Identity, Machine Time & Action */}
+      <div className="flex items-center gap-6">
+        {/* Machine Time */}
+        <div className="hidden lg:flex items-center gap-2 bg-white/50 px-4 py-2 rounded-xl border border-cyan-100">
+          <Clock size={16} className="text-[#2ab0c5]" />
+          <span className="text-xs font-bold text-slate-600 uppercase tracking-widest whitespace-nowrap">
+            Machine Time: <span className="text-[#2ab0c5]">{time || '--:--:--'}</span>
+          </span>
+        </div>
+
+        <div className="hidden md:flex flex-col items-end border-r border-cyan-200 pr-6">
           <span className="text-base font-black text-slate-800 leading-none">{displayName}</span>
           <span className="text-[11px] font-bold text-[#2ab0c5] uppercase tracking-[0.2em] mt-1.5">
-            Index: {user?.username}
+            {user?.role?.replace('ROLE_', '')}: {user?.username}
           </span>
         </div>
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 bg-[#2ab0c5] hover:bg-[#239fb4] text-white px-8 py-3 rounded-full font-black text-sm transition-all active:scale-95 shadow-lg shadow-cyan-200"
+          className="flex items-center gap-3 bg-[#2ab0c5] hover:bg-[#239fb4] text-white px-6 py-2.5 rounded-full font-black text-sm transition-all active:scale-95 shadow-lg shadow-cyan-200"
         >
-          <LogOut size={18} />
-          <span className="hidden sm:inline uppercase tracking-widest">Logout</span>
+          <LogOut size={16} />
+          <span className="hidden sm:inline uppercase tracking-widest">Log out</span>
         </button>
       </div>
     </header>

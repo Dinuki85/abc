@@ -231,10 +231,24 @@ public class AdminService {
 
     public java.util.Map<String, Object> getAdminStats() {
         java.util.Map<String, Object> stats = new java.util.HashMap<>();
-        stats.put("totalStudents", studentRepository.count());
-        stats.put("totalStaff", staffRepository.count());
-        stats.put("totalClasses", schoolClassRepository.count());
-        stats.put("totalGrades", gradeRepository.count());
+        
+        long totalStudents = studentRepository.count();
+        List<Staff> allStaff = staffRepository.findAll();
+        
+        long nonAcademicCount = allStaff.stream()
+                .filter(s -> s.getDesignations().contains(Designation.OFFICE_STAFF))
+                .count();
+        long academicCount = allStaff.size() - nonAcademicCount;
+        
+        long totalClasses = schoolClassRepository.count();
+        long totalGrades = gradeRepository.count(); // Using Grades as Sections for now
+        
+        stats.put("totalStudents", totalStudents);
+        stats.put("academicStaffCount", academicCount);
+        stats.put("nonAcademicStaffCount", nonAcademicCount);
+        stats.put("totalSections", totalGrades);
+        stats.put("totalClassRooms", totalClasses);
+        
         return stats;
     }
 
