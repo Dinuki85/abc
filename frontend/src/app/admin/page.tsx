@@ -132,7 +132,7 @@ export default function AdminDashboard() {
                 <Link 
                   key={i} 
                   href={btn.href}
-                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-emerald-50 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100 transition-all group"
+                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-emerald-50 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100 transition-all group active:scale-95"
                 >
                   <btn.icon size={22} className="text-slate-400 group-hover:text-emerald-600 mb-2 transition-colors" />
                   <span className="text-xs font-bold text-slate-700 group-hover:text-emerald-700 transition-colors text-center">{btn.name}</span>
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                 <Link 
                   key={i} 
                   href={btn.href}
-                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-orange-50 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-100 transition-all group"
+                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-orange-50 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-100 transition-all group active:scale-95"
                 >
                   <btn.icon size={22} className="text-slate-400 group-hover:text-orange-600 mb-2 transition-colors" />
                   <span className="text-xs font-bold text-slate-700 group-hover:text-orange-700 transition-colors text-center">{btn.name}</span>
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
                 <Link 
                   key={i} 
                   href={btn.href}
-                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-blue-50 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-100 transition-all group"
+                  className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-blue-50 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-100 transition-all group active:scale-95"
                 >
                   <btn.icon size={22} className="text-slate-400 group-hover:text-blue-600 mb-2 transition-colors" />
                   <span className="text-xs font-bold text-slate-700 group-hover:text-blue-700 transition-colors text-center">{btn.name}</span>
