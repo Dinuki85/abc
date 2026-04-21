@@ -55,7 +55,7 @@ export default function AdminLayout({
       <div className="absolute -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none" />
 
       {/* Top Navbar */}
-      <div className="flex-shrink-0 z-50 h-20 bg-[#1e3a8a]">
+      <div className="flex-shrink-0 z-50 h-20 bg-white border-b border-gray-100">
         <DashboardNavbar onMenuToggle={() => setIsMobileMenuOpen(true)} />
       </div>
 
