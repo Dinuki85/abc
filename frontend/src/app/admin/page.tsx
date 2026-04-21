@@ -30,8 +30,15 @@ export default function AdminDashboard() {
   const displayName = currentUser?.username || 'User';
 
   return (
-    <div className="min-h-screen bg-slate-50/50 p-4 md:p-8 animate-in fade-in duration-700">
-      {/* Premium Header */}
+    <div className="min-h-screen bg-slate-50/50 p-4 md:p-8 animate-in fade-in duration-700 relative overflow-hidden">
+      {/* Background patterns */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.03] z-0" 
+           style={{ backgroundImage: 'radial-gradient(#4f46e5 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }} />
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative z-10">
+        {/* Premium Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-10">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
@@ -282,6 +289,7 @@ export default function AdminDashboard() {
              </div>
           </div>
         </section>
+      </div>
       </div>
     </div>
   );
