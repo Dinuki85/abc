@@ -9,7 +9,7 @@ import {
   ExternalLink, LogOut, LayoutDashboard, PlusCircle, PieChart, 
   FileSpreadsheet, UserPlus, BookCheck, Medal, CheckCircle2,
   Activity, Phone, FileCheck, BarChart3, UserSquare2, Contact,
-  ArrowUpRight, Sparkles, Command, Shield
+  School, Landmark, ShieldCheck, ChevronRight
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -22,255 +22,261 @@ export default function AdminDashboard() {
     
     const timer = setInterval(() => {
       const now = new Date();
-      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    }, 10000);
-    
-    const now = new Date();
-    setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    
+      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
   
   const currentUser = api.getCurrentUser();
-  const displayName = currentUser?.username || 'Admin';
+  const displayName = currentUser?.username || 'Administrator';
 
   return (
-    <div className="min-h-screen bg-[#0a0c10] text-slate-200 font-sans selection:bg-blue-500/30 selection:text-blue-200 relative overflow-hidden">
-      {/* Ultra-Premium Mesh Background */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-purple-600/10 rounded-full blur-[100px]" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
-      </div>
-
-      <div className="relative z-10 p-6 md:p-10 max-w-[1600px] mx-auto space-y-12">
-        {/* State-of-the-art Header */}
-        <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 animate-in fade-in slide-in-from-top-4 duration-1000">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 shadow-lg shadow-blue-500/20">
-                <Command size={20} className="text-white" />
-              </div>
-              <h1 className="text-4xl font-black tracking-tight text-white uppercase italic">
-                System <span className="text-blue-500">Core</span>
-              </h1>
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-blue-100">
+      {/* Top Professional Header */}
+      <header className="bg-[#1e3a8a] text-white shadow-lg border-b-4 border-amber-500 relative z-20">
+        <div className="max-w-[1600px] mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-5">
+            <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-[#1e3a8a] shadow-inner border-2 border-white">
+              <School size={36} strokeWidth={2.5} />
             </div>
-            <p className="text-slate-400 font-medium flex items-center gap-2">
-              <Sparkles size={14} className="text-blue-400" />
-              Andiambalama Maha Vidhyalaya Management Portal
-            </p>
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-black uppercase tracking-tight leading-none italic">Andiambalama Maha Vidhyalaya</h1>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="h-[2px] w-8 bg-amber-500 rounded-full" />
+                <p className="text-[10px] font-bold text-blue-200 uppercase tracking-[0.3em]">Institutional Management Portal</p>
+              </div>
+            </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            {/* Real-time Clock Card */}
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-4 shadow-2xl">
-              <Clock size={20} className="text-blue-400" />
-              <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">System Time</span>
-                <span className="text-lg font-black text-white tabular-nums tracking-tighter">{time}</span>
+          <div className="flex items-center gap-8">
+            <div className="hidden lg:flex flex-col items-end border-r border-blue-700/50 pr-8">
+              <span className="text-[10px] font-bold text-blue-300 uppercase tracking-[0.2em]">Real-time Status</span>
+              <div className="flex items-center gap-2 text-lg font-black tabular-nums tracking-wider">
+                <Clock size={16} className="text-amber-500" />
+                {time}
               </div>
             </div>
 
-            {/* Profile Card */}
-            <div className="flex items-center gap-4 bg-white/5 backdrop-blur-xl border border-white/10 p-2 pr-6 rounded-2xl shadow-2xl group hover:border-blue-500/50 transition-all cursor-pointer">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-xl group-hover:scale-105 transition-transform">
-                <UserCircle size={28} />
+            <div className="flex items-center gap-4 bg-white/5 px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group">
+              <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-[#1e3a8a] font-black shadow-lg ring-2 ring-white/20 group-hover:ring-amber-500/50 transition-all">
+                {displayName[0].toUpperCase()}
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <Shield size={10} className="text-blue-400" />
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Authorized Admin</span>
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck size={10} className="text-amber-500" />
+                  <span className="text-[9px] font-bold text-blue-300 uppercase tracking-widest">Active Admin</span>
                 </div>
-                <span className="text-sm font-black text-white">{displayName}</span>
+                <span className="text-sm font-black">{displayName}</span>
               </div>
             </div>
 
-            <button className="p-4 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded-2xl transition-all border border-rose-500/20 hover:border-rose-500/40">
-              <LogOut size={20} />
+            <button className="p-3 hover:bg-rose-500/20 hover:text-rose-400 rounded-xl transition-all text-white/70">
+              <LogOut size={22} />
             </button>
           </div>
-        </header>
+        </div>
+      </header>
 
-        {/* Dynamic Stats Section */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-100">
+      <main className="max-w-[1600px] mx-auto p-6 md:p-10 space-y-10 animate-in fade-in slide-in-from-top-4 duration-700">
+        {/* Dynamic Professional Stats */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {[
-            { label: 'Students', value: stats?.totalStudents || '0', icon: GraduationCap, color: 'from-blue-600 to-cyan-500', shadow: 'shadow-blue-500/20' },
-            { label: 'Academic Staff', value: stats?.academicStaffCount || '0', icon: Briefcase, color: 'from-emerald-600 to-teal-500', shadow: 'shadow-emerald-500/20' },
-            { label: 'Non Academic', value: stats?.nonAcademicStaffCount || '0', icon: Users, color: 'from-indigo-600 to-purple-500', shadow: 'shadow-indigo-500/20' },
-            { label: 'Sections', value: stats?.totalSections || '0', icon: Layers, color: 'from-amber-600 to-orange-500', shadow: 'shadow-amber-500/20' },
-            { label: 'Class Rooms', value: stats?.totalClassRooms || '0', icon: BookOpen, color: 'from-rose-600 to-pink-500', shadow: 'shadow-rose-500/20' },
+            { label: 'Students', value: stats?.totalStudents || '0', icon: GraduationCap, color: 'border-blue-700', bg: 'bg-blue-50', text: 'text-blue-700' },
+            { label: 'Academic Staff', value: stats?.academicStaffCount || '0', icon: Briefcase, color: 'border-emerald-700', bg: 'bg-emerald-50', text: 'text-emerald-700' },
+            { label: 'Non-Academic', value: stats?.nonAcademicStaffCount || '0', icon: Users, color: 'border-indigo-700', bg: 'bg-indigo-50', text: 'text-indigo-700' },
+            { label: 'Sections', value: stats?.totalSections || '0', icon: Layers, color: 'border-amber-500', bg: 'bg-amber-50', text: 'text-amber-600' },
+            { label: 'Class Rooms', value: stats?.totalClassRooms || '0', icon: BookOpen, color: 'border-rose-700', bg: 'bg-rose-50', text: 'text-rose-700' },
           ].map((stat, i) => (
-            <div key={i} className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 hover:bg-white/[0.08] hover:border-white/20 transition-all hover:-translate-y-2">
-              <div className={`absolute top-0 left-0 w-full h-full bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-[0.03] transition-opacity rounded-[2.5rem]`} />
-              <div className="flex justify-between items-start mb-6">
-                <div className={`p-4 rounded-2xl bg-gradient-to-br ${stat.color} ${stat.shadow} text-white`}>
+            <div key={i} className={`bg-white p-6 rounded-2xl shadow-sm border-b-4 ${stat.color} flex flex-col gap-4 hover:shadow-md hover:-translate-y-1 transition-all group`}>
+              <div className="flex justify-between items-center">
+                <div className={`p-3 rounded-xl ${stat.bg} ${stat.text} group-hover:scale-110 transition-transform`}>
                   <stat.icon size={24} />
                 </div>
-                <ArrowUpRight size={16} className="text-slate-600 group-hover:text-white transition-colors" />
+                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Global Stats</span>
               </div>
-              <div className="space-y-1">
-                <h3 className="text-4xl font-black text-white tabular-nums tracking-tighter">{stat.value}</h3>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">{stat.label}</p>
+              <div className="flex flex-col">
+                <span className="text-4xl font-black text-slate-800 tabular-nums tracking-tighter">{stat.value}</span>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide mt-1">{stat.label}</span>
               </div>
             </div>
           ))}
         </section>
 
-        {/* Bento Grid Modules */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Administration - Large Bento Item */}
-          <div className="lg:col-span-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] overflow-hidden group hover:border-emerald-500/30 transition-all animate-in fade-in slide-in-from-left-4 duration-1000 delay-200">
-            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-emerald-500/5">
+        {/* Action Modules Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          {/* Module 01: Administration */}
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+            <div className="bg-[#1e3a8a] px-8 py-5 flex justify-between items-center text-white">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
-                  <Settings size={24} />
+                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10">
+                  <Landmark size={24} className="text-amber-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Administration</h2>
-                  <p className="text-slate-400 text-sm font-medium">Core System Profiles & Infrastructure</p>
+                  <h2 className="text-xl font-black uppercase tracking-tight">Institutional Admin</h2>
+                  <p className="text-blue-200 text-[10px] font-bold uppercase tracking-widest">Base Profiles & Records</p>
                 </div>
               </div>
-              <div className="hidden md:block px-4 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest">Control Panel</div>
+              <span className="text-4xl font-black text-white/5 italic select-none">M-01</span>
             </div>
-            <div className="p-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="p-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
-                { name: 'Student', href: '/admin/students', icon: UserPlus },
-                { name: 'Staff', href: '/admin/staff', icon: Briefcase },
-                { name: 'Guardian', href: '/admin/parents', icon: HeartHandshake },
-                { name: 'Section', href: '/admin/grades', icon: Layers },
-                { name: 'Subject', href: '/admin/subjects', icon: BookCheck },
-                { name: 'Class', href: '/admin/classes', icon: BookOpen },
+                { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
+                { name: 'Staff Profile', href: '/admin/staff', icon: Briefcase },
+                { name: 'Guardian Info', href: '/admin/parents', icon: HeartHandshake },
+                { name: 'Section Matrix', href: '/admin/grades', icon: Layers },
+                { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck },
+                { name: 'Class Matrix', href: '/admin/classes', icon: BookOpen },
                 { name: 'Assessment', href: '#', icon: ClipboardList },
                 { name: 'Co-Curricular', href: '#', icon: Star },
-                { name: 'Sport', href: '#', icon: Trophy },
-                { name: 'User', href: '/admin/users', icon: UserCircle },
+                { name: 'Sport List', href: '#', icon: Trophy },
+                { name: 'User Management', href: '/admin/users', icon: UserCircle },
                 { name: 'Scholarship', href: '#', icon: GraduationCap },
                 { name: 'Sportmeet', href: '#', icon: Medal },
-                { name: 'Event', href: '#', icon: Calendar },
+                { name: 'School Events', href: '#', icon: Calendar },
               ].map((btn, i) => (
-                <Link key={i} href={btn.href} className="group/btn flex flex-col items-center justify-center p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all active:scale-95 shadow-lg">
-                  <btn.icon size={24} className="text-slate-500 group-hover/btn:text-emerald-400 group-hover/btn:scale-110 transition-all mb-3" />
-                  <span className="text-[11px] font-black text-slate-400 group-hover/btn:text-white uppercase tracking-widest text-center transition-colors">{btn.name}</span>
+                <Link 
+                  key={i} 
+                  href={btn.href}
+                  className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl hover:border-blue-600 hover:bg-white hover:shadow-lg hover:shadow-blue-900/5 transition-all group active:scale-95"
+                >
+                  <div className="p-2 bg-white rounded-lg text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                    <btn.icon size={16} />
+                  </div>
+                  <span className="text-[11px] font-black text-slate-600 group-hover:text-blue-700 tracking-tight">{btn.name}</span>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Registration - Small Bento Item */}
-          <div className="lg:col-span-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] overflow-hidden group hover:border-orange-500/30 transition-all animate-in fade-in slide-in-from-right-4 duration-1000 delay-300">
-            <div className="p-8 border-b border-white/5 bg-orange-500/5">
+          {/* Module 02: Registration */}
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+            <div className="bg-orange-600 px-8 py-5 flex justify-between items-center text-white">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400 border border-orange-500/20">
-                  <PlusCircle size={24} />
+                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10">
+                  <PlusCircle size={24} className="text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Entry</h2>
-                  <p className="text-slate-400 text-sm font-medium">Registry & Assignments</p>
+                  <h2 className="text-xl font-black uppercase tracking-tight">Active Registration</h2>
+                  <p className="text-orange-100 text-[10px] font-bold uppercase tracking-widest">Student & Staff Assignments</p>
                 </div>
               </div>
+              <span className="text-4xl font-black text-white/5 italic select-none">M-02</span>
             </div>
-            <div className="p-8 grid grid-cols-2 gap-4">
+            <div className="p-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
                {[
-                 { name: 'Classes', href: '/admin/assignment', icon: UserCheck },
-                 { name: 'Sport', href: '#', icon: Trophy },
-                 { name: 'Co-Acts', href: '#', icon: Star },
-                 { name: 'Schedule', href: '#', icon: Calendar },
-                 { name: 'Grants', href: '#', icon: GraduationCap },
-                 { name: 'Events', href: '#', icon: Calendar },
-                 { name: 'Subjects', href: '#', icon: BookCheck },
-                 { name: 'Assists', href: '#', icon: ClipboardList },
+                 { name: 'Add To Classes', href: '/admin/assignment', icon: UserCheck },
+                 { name: 'Add To Sport', href: '#', icon: Trophy },
+                 { name: 'Co-Activities', href: '#', icon: Star },
+                 { name: 'Time Table', href: '#', icon: Calendar },
+                 { name: 'Scholarship Enr.', href: '#', icon: GraduationCap },
+                 { name: 'Event Registration', href: '#', icon: Calendar },
+                 { name: 'Subject Assign', href: '#', icon: BookCheck },
+                 { name: 'Assessment Assign', href: '#', icon: ClipboardList },
                ].map((btn, i) => (
-                <Link key={i} href={btn.href} className="group/btn flex flex-col items-center justify-center p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all active:scale-95 shadow-lg">
-                  <btn.icon size={24} className="text-slate-500 group-hover/btn:text-orange-400 transition-all mb-3" />
-                  <span className="text-[11px] font-black text-slate-400 group-hover/btn:text-white uppercase tracking-widest text-center transition-colors">{btn.name}</span>
+                <Link 
+                  key={i} 
+                  href={btn.href}
+                  className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl hover:border-orange-600 hover:bg-white hover:shadow-lg hover:shadow-orange-900/5 transition-all group active:scale-95"
+                >
+                  <div className="p-2 bg-white rounded-lg text-slate-400 group-hover:bg-orange-600 group-hover:text-white transition-all shadow-sm">
+                    <btn.icon size={16} />
+                  </div>
+                  <span className="text-[11px] font-black text-slate-600 group-hover:text-orange-700 tracking-tight">{btn.name}</span>
                 </Link>
                ))}
              </div>
           </div>
 
-          {/* Performance - Small Bento Item */}
-          <div className="lg:col-span-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] overflow-hidden group hover:border-blue-500/30 transition-all animate-in fade-in slide-in-from-left-4 duration-1000 delay-400">
-            <div className="p-8 border-b border-white/5 bg-blue-500/5">
+          {/* Module 03: Performance */}
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+            <div className="bg-emerald-700 px-8 py-5 flex justify-between items-center text-white">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400 border border-blue-500/20">
-                  <PieChart size={24} />
+                <div className="p-2.5 bg-white/10 rounded-xl border border-white/10">
+                  <PieChart size={24} className="text-amber-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Analysis</h2>
-                  <p className="text-slate-400 text-sm font-medium">Performance Metrics</p>
+                  <h2 className="text-xl font-black uppercase tracking-tight">Performance Analytics</h2>
+                  <p className="text-emerald-100 text-[10px] font-bold uppercase tracking-widest">Academic & Extracurricular Data</p>
                 </div>
               </div>
+              <span className="text-4xl font-black text-white/5 italic select-none">M-03</span>
             </div>
-            <div className="p-8 space-y-4">
-               {[
-                 { name: 'Exam Results', icon: CheckCircle2 },
-                 { name: 'Scholarship Tracking', icon: GraduationCap },
-                 { name: 'Sport Achievements', icon: Trophy },
-                 { name: 'Welfare Processing', icon: HeartHandshake },
-                 { name: 'S1 Data Entry', icon: FileSpreadsheet },
-               ].map((btn, i) => (
-                <button key={i} className="w-full flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-blue-500/10 hover:border-blue-500/40 transition-all text-left group/row">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover/row:scale-110 transition-transform">
-                    <btn.icon size={18} />
-                  </div>
-                  <span className="text-sm font-bold text-slate-300 group-hover/row:text-white transition-colors">{btn.name}</span>
-                  <ArrowUpRight size={14} className="ml-auto opacity-20 group-hover/row:opacity-100 transition-opacity" />
-                </button>
-               ))}
-             </div>
+            <div className="p-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                 {[
+                   { name: 'Exam Results Entry', icon: CheckCircle2 },
+                   { name: 'Scholarship Dist.', icon: GraduationCap },
+                   { name: 'Sporting Success', icon: Trophy },
+                   { name: 'Welfare Processing', icon: HeartHandshake },
+                   { name: 'S1 Data Reporting', icon: FileSpreadsheet },
+                   { name: 'Assessment Analytics', icon: ClipboardList },
+                 ].map((btn, i) => (
+                  <button key={i} className="flex flex-col items-center gap-4 p-6 bg-slate-50 border border-slate-100 rounded-2xl hover:border-emerald-600 hover:bg-white hover:shadow-xl transition-all group active:scale-95">
+                    <div className="p-3 bg-white rounded-xl shadow-sm group-hover:bg-emerald-700 group-hover:text-white transition-all text-emerald-700">
+                      <btn.icon size={24} />
+                    </div>
+                    <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest text-center">{btn.name}</span>
+                  </button>
+                 ))}
+               </div>
+            </div>
           </div>
 
-          {/* Reports - Large Bento Item */}
-          <div className="lg:col-span-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] overflow-hidden group hover:border-amber-500/30 transition-all animate-in fade-in slide-in-from-right-4 duration-1000 delay-500">
-            <div className="p-8 border-b border-white/5 bg-amber-500/5 flex items-center justify-between">
+          {/* Module 04: Display / Reports */}
+          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+            <div className="bg-amber-500 px-8 py-5 flex justify-between items-center text-[#1e3a8a]">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-400 border border-amber-500/20">
+                <div className="p-2.5 bg-white/20 rounded-xl border border-white/30">
                   <FileSpreadsheet size={24} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Intelligence</h2>
-                  <p className="text-slate-400 text-sm font-medium">Advanced Reporting & Documentation</p>
+                  <h2 className="text-xl font-black uppercase tracking-tight">Reporting Engine</h2>
+                  <p className="text-blue-900/60 text-[10px] font-bold uppercase tracking-widest">School Lists & Personnel Reports</p>
                 </div>
               </div>
+              <span className="text-4xl font-black text-[#1e3a8a]/5 italic select-none">M-04</span>
             </div>
-            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-12">
-               <div className="space-y-6">
-                 <h4 className="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em] flex items-center gap-3">
-                   <div className="w-8 h-[2px] bg-amber-500/30" /> School Records
+            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+               <div className="space-y-5">
+                 <h4 className="text-[10px] font-black text-amber-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                   <div className="w-6 h-[2px] bg-amber-500/30" /> School Records
                  </h4>
-                 <div className="grid grid-cols-1 gap-3">
+                 <div className="grid grid-cols-1 gap-2.5">
                    {[
                      { name: 'Comprehensive All List', icon: Users },
-                     { name: 'Welfare Eligibility File', icon: HeartHandshake },
-                     { name: 'Health & Medical Logs', icon: Activity },
-                     { name: 'Skill Matrix Export', icon: Award },
-                     { name: 'Emergency Contacts', icon: Phone },
-                     { name: 'Official Exam Ledger', icon: FileCheck },
+                     { name: 'Welfare Audit Logs', icon: HeartHandshake },
+                     { name: 'Medical History Logs', icon: Activity },
+                     { name: 'Faculty Skill Matrix', icon: Award },
+                     { name: 'Institutional Directory', icon: Phone },
+                     { name: 'Official Exam Reports', icon: FileCheck },
                    ].map((item, i) => (
-                     <Link key={i} href="#" className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 group/link transition-all border border-transparent hover:border-white/5">
-                       <item.icon size={16} className="text-slate-500 group-hover/link:text-amber-400 transition-colors" />
-                       <span className="text-sm font-medium text-slate-400 group-hover/link:text-slate-200 transition-colors">{item.name}</span>
+                     <Link key={i} href="#" className="flex items-center gap-3 text-xs font-bold text-slate-500 hover:text-blue-700 transition-all group">
+                       <div className="p-1 bg-slate-100 rounded group-hover:bg-amber-100 group-hover:text-amber-700 transition-colors">
+                        <item.icon size={12} />
+                       </div>
+                       {item.name}
                      </Link>
                    ))}
                  </div>
                </div>
 
-               <div className="space-y-6">
-                 <h4 className="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em] flex items-center gap-3">
-                   <div className="w-8 h-[2px] bg-amber-500/30" /> Personnel Data
+               <div className="space-y-5">
+                 <h4 className="text-[10px] font-black text-amber-600 uppercase tracking-[0.2em] flex items-center gap-2">
+                   <div className="w-6 h-[2px] bg-amber-500/30" /> Faculty & Files
                  </h4>
-                 <div className="grid grid-cols-1 gap-3">
+                 <div className="grid grid-cols-1 gap-2.5">
                    {[
-                     { name: 'Teacher Professional Profiles', icon: Briefcase },
-                     { name: 'Subject Allocation Matrix', icon: BookCheck },
-                     { name: 'Student Digital CV Builder', icon: UserSquare2 },
-                     { name: 'Staff Identification Files', icon: Contact },
-                     { name: 'Dynamic Master Timetable', icon: Calendar },
+                     { name: 'Subject-wise Teacher List', icon: Briefcase },
+                     { name: 'Specialist Allocation List', icon: BookCheck },
+                     { name: 'Student Digital Profile CV', icon: UserSquare2 },
+                     { name: 'Staff Identification File', icon: Contact },
+                     { name: 'Dynamic Room Timetable', icon: Calendar },
                    ].map((item, i) => (
-                     <Link key={i} href="#" className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 group/link transition-all border border-transparent hover:border-white/5">
-                       <item.icon size={16} className="text-slate-500 group-hover/link:text-amber-400 transition-colors" />
-                       <span className="text-sm font-medium text-slate-400 group-hover/link:text-slate-200 transition-colors">{item.name}</span>
+                     <Link key={i} href="#" className="flex items-center gap-3 text-xs font-bold text-slate-500 hover:text-blue-700 transition-all group">
+                       <div className="p-1 bg-slate-100 rounded group-hover:bg-amber-100 group-hover:text-amber-700 transition-colors">
+                        <item.icon size={12} />
+                       </div>
+                       {item.name}
                      </Link>
                    ))}
                  </div>
@@ -278,10 +284,28 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
-      {/* Aesthetic Bottom Decor */}
-      <div className="h-24 bg-gradient-to-t from-blue-600/5 to-transparent mt-20" />
+      <footer className="bg-white border-t border-slate-200 mt-20">
+        <div className="max-w-[1600px] mx-auto px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-4">
+            <School size={24} className="text-[#1e3a8a]" />
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-loose">
+              &copy; 2026 Andiambalama Maha Vidhyalaya Institutional Portal.<br/>
+              Developed for Academic Excellence.
+            </span>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+              Server Status <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            </div>
+            <div className="h-4 w-[1px] bg-slate-200" />
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+              Security Protocol <ShieldCheck size={12} className="text-blue-500" />
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
