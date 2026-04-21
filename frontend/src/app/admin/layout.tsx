@@ -49,14 +49,13 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="h-[100dvh] bg-slate-50 flex flex-col font-sans text-slate-900 overflow-hidden relative selection:bg-blue-100 selection:text-blue-900">
-      {/* Background decoration */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 pointer-events-none" />
-      <div className="absolute top-40 -left-20 w-72 h-72 bg-indigo-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 pointer-events-none" />
-      <div className="absolute -bottom-40 left-60 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 pointer-events-none" />
+    <div className="h-[100dvh] bg-[#f8fafc] flex flex-col font-sans text-slate-900 overflow-hidden relative selection:bg-blue-100 selection:text-blue-900">
+      {/* Background decoration - Subtle and professional */}
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-700/5 rounded-full filter blur-[128px] pointer-events-none" />
+      <div className="absolute -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none" />
 
       {/* Top Navbar */}
-      <div className="flex-shrink-0 z-50 h-20 bg-[#e1f5f8]">
+      <div className="flex-shrink-0 z-50 h-20 bg-[#1e3a8a]">
         <DashboardNavbar onMenuToggle={() => setIsMobileMenuOpen(true)} />
       </div>
 
@@ -68,12 +67,12 @@ export default function AdminLayout({
 
       {/* Bottom Area: Sidebar + Content */}
       <div className="flex flex-1 overflow-hidden z-20 w-full relative min-h-0">
-        <div className="hidden md:block flex-shrink-0 z-30 h-full border-r border-slate-200/50">
+        <div className="hidden md:block flex-shrink-0 z-30 h-full border-r border-slate-200 shadow-sm">
           <Sidebar menuItems={adminMenuItems} />
         </div>
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8 bg-transparent scroll-smooth custom-scrollbar relative">
-          <div className="max-w-7xl mx-auto bg-white/40 p-6 rounded-2xl shadow-sm border border-white/40 min-h-full">
+          <div className="max-w-[1600px] mx-auto min-h-full">
             {children}
           </div>
         </main>

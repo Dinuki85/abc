@@ -31,54 +31,8 @@ export default function AdminDashboard() {
   const displayName = currentUser?.username || 'Administrator';
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-blue-100">
-      {/* Top Professional Header */}
-      <header className="bg-[#1e3a8a] text-white shadow-lg border-b-4 border-amber-500 relative z-20">
-        <div className="max-w-[1600px] mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-5">
-            <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-[#1e3a8a] shadow-inner border-2 border-white">
-              <School size={36} strokeWidth={2.5} />
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-2xl font-black uppercase tracking-tight leading-none italic">Andiambalama Maha Vidhyalaya</h1>
-              <div className="flex items-center gap-2 mt-1">
-                <div className="h-[2px] w-8 bg-amber-500 rounded-full" />
-                <p className="text-[10px] font-bold text-blue-200 uppercase tracking-[0.3em]">Institutional Management Portal</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-8">
-            <div className="hidden lg:flex flex-col items-end border-r border-blue-700/50 pr-8">
-              <span className="text-[10px] font-bold text-blue-300 uppercase tracking-[0.2em]">Real-time Status</span>
-              <div className="flex items-center gap-2 text-lg font-black tabular-nums tracking-wider">
-                <Clock size={16} className="text-amber-500" />
-                {time}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 bg-white/5 px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group">
-              <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-[#1e3a8a] font-black shadow-lg ring-2 ring-white/20 group-hover:ring-amber-500/50 transition-all">
-                {displayName[0].toUpperCase()}
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <ShieldCheck size={10} className="text-amber-500" />
-                  <span className="text-[9px] font-bold text-blue-300 uppercase tracking-widest">Active Admin</span>
-                </div>
-                <span className="text-sm font-black">{displayName}</span>
-              </div>
-            </div>
-
-            <button className="p-3 hover:bg-rose-500/20 hover:text-rose-400 rounded-xl transition-all text-white/70">
-              <LogOut size={22} />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-[1600px] mx-auto p-6 md:p-10 space-y-10 animate-in fade-in slide-in-from-top-4 duration-700">
-        {/* Dynamic Professional Stats */}
+    <div className="space-y-10 animate-in fade-in slide-in-from-top-4 duration-700 pb-12">
+      {/* Dynamic Professional Stats */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {[
             { label: 'Students', value: stats?.totalStudents || '0', icon: GraduationCap, color: 'border-blue-700', bg: 'bg-blue-50', text: 'text-blue-700' },
@@ -286,26 +240,6 @@ export default function AdminDashboard() {
         </div>
       </main>
 
-      <footer className="bg-white border-t border-slate-200 mt-20">
-        <div className="max-w-[1600px] mx-auto px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-4">
-            <School size={24} className="text-[#1e3a8a]" />
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-loose">
-              &copy; 2026 Andiambalama Maha Vidhyalaya Institutional Portal.<br/>
-              Developed for Academic Excellence.
-            </span>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-              Server Status <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            </div>
-            <div className="h-4 w-[1px] bg-slate-200" />
-            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-300 uppercase tracking-widest">
-              Security Protocol <ShieldCheck size={12} className="text-blue-500" />
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

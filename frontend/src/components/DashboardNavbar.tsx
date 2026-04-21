@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { LogOut, Menu, Clock } from 'lucide-react';
+import { LogOut, Menu, Clock, ShieldCheck, School } from 'lucide-react';
 import { api } from '@/lib/api';
 
 export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () => void }) {
@@ -25,7 +24,6 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
       }
     }
 
-    // Update time every second
     const timer = setInterval(() => {
       const now = new Date();
       setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
@@ -39,58 +37,67 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
     router.push('/login');
   };
 
-  const displayName = user?.fullName || user?.username || 'User';
+  const displayName = user?.fullName || user?.username || 'Administrator';
 
   return (
-    <header className="h-20 bg-[#e1f5f8] border-b border-cyan-100 shadow-sm flex items-center justify-between px-8 relative z-10">
-      {/* Left: Branding */}
-      <Link href="/" className="flex items-center gap-3">
-        <div className="w-12 h-12 flex-shrink-0">
-          <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain" />
+    <header className="h-20 bg-[#1e3a8a] border-b-4 border-amber-500 shadow-xl flex items-center justify-between px-8 relative z-[60] text-white w-full">
+      {/* Branding */}
+      <div className="flex items-center gap-4">
+        {onMenuToggle && (
+          <button 
+            onClick={onMenuToggle}
+            className="lg:hidden flex items-center justify-center p-2 text-white hover:bg-white/10 rounded-lg transition-colors mr-2"
+          >
+            <Menu size={24} />
+          </button>
+        )}
+        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#1e3a8a] shadow-inner border border-white">
+          <School size={28} strokeWidth={2.5} />
         </div>
         <div className="flex flex-col">
-          <span className="text-2xl font-black text-[#2ab0c5] leading-none tracking-tight uppercase">AMV</span>
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none mt-1">
-            Andiambalama MV
+          <span className="text-xl font-black text-white leading-none tracking-tight uppercase italic">AMV Portal</span>
+          <span className="text-[9px] font-bold text-blue-200 uppercase tracking-[0.2em] mt-1">
+            Andiambalama Maha Vidhyalaya
           </span>
         </div>
-      </Link>
+      </div>
 
-      {/* Hamburger Menu for Mobile */}
-      {onMenuToggle && (
-        <button 
-          onClick={onMenuToggle}
-          className="md:hidden flex items-center justify-center p-2 text-[#2ab0c5] hover:bg-cyan-50 rounded-lg transition-colors"
-        >
-          <Menu size={28} />
-        </button>
-      )}
-
-      {/* Right: User Identity, Machine Time & Action */}
-      <div className="flex items-center gap-6">
-        {/* Machine Time */}
-        <div className="hidden lg:flex items-center gap-2 bg-white/50 px-4 py-2 rounded-xl border border-cyan-100">
-          <Clock size={16} className="text-[#2ab0c5]" />
-          <span className="text-xs font-bold text-slate-600 uppercase tracking-widest whitespace-nowrap">
-            Machine Time: <span className="text-[#2ab0c5]">{time || '--:--:--'}</span>
-          </span>
+      {/* Right Actions */}
+      <div className="flex items-center gap-8">
+        {/* Server Time */}
+        <div className="hidden lg:flex flex-col items-end border-r border-blue-700/50 pr-8">
+          <span className="text-[9px] font-black text-blue-300 uppercase tracking-[0.2em]">Real-time Status</span>
+          <div className="flex items-center gap-2 text-base font-black tabular-nums">
+            <Clock size={14} className="text-amber-500" />
+            {time || '--:--:--'}
+          </div>
         </div>
 
-        <div className="hidden md:flex flex-col items-end border-r border-cyan-200 pr-6">
-          <span className="text-base font-black text-slate-800 leading-none">{displayName}</span>
-          <span className="text-[11px] font-bold text-[#2ab0c5] uppercase tracking-[0.2em] mt-1.5">
-            {user?.role?.replace('ROLE_', '')}: {user?.username}
-          </span>
+        {/* User Identity */}
+        <div className="flex items-center gap-4 bg-white/5 px-4 py-2 rounded-xl border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group">
+          <div className="w-9 h-9 rounded-full bg-amber-500 flex items-center justify-center text-[#1e3a8a] font-black shadow-lg ring-2 ring-white/20 group-hover:ring-amber-500/50 transition-all">
+            {displayName[0].toUpperCase()}
+          </div>
+          <div className="hidden md:flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck size={10} className="text-amber-500" />
+              <span className="text-[9px] font-bold text-blue-200 uppercase tracking-widest leading-none">
+                {user?.role?.replace('ROLE_', '') || 'ADMIN'}
+              </span>
+            </div>
+            <span className="text-sm font-black mt-1 leading-none">{displayName}</span>
+          </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 bg-[#2ab0c5] hover:bg-[#239fb4] text-white px-6 py-2.5 rounded-full font-black text-sm transition-all active:scale-95 shadow-lg shadow-cyan-200"
+          className="flex items-center gap-3 bg-rose-500 hover:bg-rose-600 text-white px-5 py-2.5 rounded-xl font-black text-xs transition-all active:scale-95 shadow-lg shadow-rose-900/20 uppercase tracking-widest"
         >
           <LogOut size={16} />
-          <span className="hidden sm:inline uppercase tracking-widest">Log out</span>
+          <span className="hidden sm:inline">Sign Out</span>
         </button>
       </div>
     </header>
   );
 }
+
