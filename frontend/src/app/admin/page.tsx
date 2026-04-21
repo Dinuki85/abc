@@ -29,30 +29,38 @@ export default function AdminDashboard() {
   return (
     <div className="bg-white min-h-screen font-sans text-slate-800 p-4">
       {/* Header Section */}
-      <div className="flex justify-between items-start mb-6">
-        <div className="flex flex-col">
-          <h1 className="text-xl font-bold">Dash Board</h1>
-          <div className="mt-2">
-             <h2 className="text-2xl font-black text-center px-4">Welcome To Andiambalama Maha Vidhyalaya</h2>
-          </div>
+      <div className="flex justify-between items-start mb-6 border-b-4 border-blue-800 pb-4">
+        <div className="w-1/4">
+          <h1 className="text-xl font-bold italic">Dash Board</h1>
         </div>
         
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 border border-green-600 flex items-center justify-center text-[10px] text-green-600 font-bold mb-1">
-            Sch Logo
+        <div className="flex-1 flex flex-col items-center">
+          <div className="flex items-center gap-4">
+            <h2 className="text-3xl font-black text-center uppercase tracking-tighter">
+              Welcome To Andiambalama Maha Vidhyalaya
+            </h2>
+            <button className="bg-blue-600 text-white px-3 py-1 text-xs font-bold rounded-sm">Use</button>
+          </div>
+          <div className="mt-2 w-16 h-16 border-2 border-green-600 flex items-center justify-center text-[10px] text-green-600 font-bold bg-white">
+            <div className="text-center">
+              Sch<br/>Logo
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-end text-sm font-bold text-slate-700 space-y-1">
+        <div className="w-1/4 flex flex-col items-start pl-8 text-sm font-bold text-slate-800 space-y-0.5 border-l-2 border-dashed border-blue-800">
           <div className="flex gap-2">
-            <span>Loged User Name</span>
-            <span className="text-blue-600">{displayName}</span>
+            <span className="w-32">Loged User Name</span>
+            <span className="text-blue-600 font-black">: {displayName}</span>
           </div>
           <div className="flex gap-2">
-            <span>Macine Time</span>
-            <span className="text-blue-600">{time}</span>
+            <span className="w-32">Macine Time</span>
+            <span className="text-blue-600 font-black">: {time}</span>
           </div>
-          <button className="text-blue-600 hover:underline">Log out</button>
+          <div className="flex gap-2">
+            <span className="w-32">Log out</span>
+            <button className="text-blue-600 hover:underline font-black">:</button>
+          </div>
         </div>
       </div>
 
