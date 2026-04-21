@@ -84,13 +84,19 @@ export default function AdminDashboard() {
       {/* Main Sections Grid */}
       <div className="space-y-4">
         {/* Administration Section */}
-        <div className="border-2 border-slate-800 rounded-sm">
-          <div className="bg-[#d9ead3] p-2 border-b-2 border-slate-800">
-            <h3 className="text-xl font-black">Administration</h3>
-            <p className="text-sm font-bold italic">Create your School Basic Profiles</p>
+        <div className="border-2 border-slate-800 rounded-sm relative">
+          <div className="bg-[#d9ead3] p-2 border-b-2 border-slate-800 flex justify-between items-end">
+            <div>
+              <h3 className="text-xl font-black">Administration</h3>
+              <p className="text-sm font-bold italic">Create your School Basic Profiles</p>
+            </div>
+            <div className="text-4xl font-black text-slate-400/30 select-none">Page 1</div>
+            <div className="text-4xl font-black text-slate-400/30 select-none">Page 3</div>
+            <div className="text-4xl font-black text-slate-400/30 select-none px-4">Page 5</div>
+            <div className="text-4xl font-black text-slate-400/30 select-none">Page 7</div>
           </div>
           <div className="bg-[#d9ead3] p-4">
-             <div className="grid grid-cols-5 gap-x-4 gap-y-2">
+             <div className="grid grid-cols-5 gap-x-4 gap-y-2 relative z-10">
                {[
                  { name: 'Student', href: '/admin/students' },
                  { name: 'Staff', href: '/admin/staff' },
@@ -186,9 +192,10 @@ export default function AdminDashboard() {
           <div className="bg-[#fff2cc] p-0">
              <div className="grid grid-cols-4 divide-x-2 divide-slate-800">
                {/* Column 1: All School */}
-               <div className="p-4">
+               <div className="p-4 relative">
                  <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">All School</div>
-                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400">
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 2</div>
+                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400 relative z-10">
                    <li><Link href="#">All List</Link></li>
                    <li><Link href="#">Welfair paid/not paid List</Link></li>
                    <li><Link href="#">Health Report</Link></li>
@@ -199,9 +206,10 @@ export default function AdminDashboard() {
                </div>
 
                {/* Column 2: Student List */}
-               <div className="p-4">
+               <div className="p-4 relative">
                  <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">Student List</div>
-                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400">
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 4</div>
+                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400 relative z-10">
                    <li><Link href="#">Section Based All Student</Link></li>
                    <li><Link href="#">Sport Based All Student</Link></li>
                    <li><Link href="#">Scholership Based All Student</Link></li>
@@ -212,9 +220,10 @@ export default function AdminDashboard() {
                </div>
 
                {/* Column 3: Teacher */}
-               <div className="p-4">
+               <div className="p-4 relative">
                  <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">Teacher</div>
-                 <div className="grid grid-cols-2 gap-4">
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 6</div>
+                 <div className="grid grid-cols-2 gap-4 relative z-10">
                     <ul className="space-y-1 text-xs font-bold underline decoration-slate-400">
                       <li><Link href="#">Exam Wise Report</Link></li>
                       <li><Link href="#">Subject Wise Report</Link></li>
@@ -231,9 +240,10 @@ export default function AdminDashboard() {
                </div>
 
                {/* Column 4: Individual */}
-               <div className="p-4">
+               <div className="p-4 relative">
                  <div className="bg-[#fff2cc] border-b-2 border-slate-800 -mx-4 -mt-4 p-1 mb-4 text-center font-bold">Individual</div>
-                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400">
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl font-black text-slate-400/20 pointer-events-none">Page 8</div>
+                 <ul className="space-y-1 text-xs font-bold underline decoration-slate-400 relative z-10">
                    <li><Link href="#">Student CV</Link></li>
                    <li><Link href="#">Teacher CV</Link></li>
                    <li><Link href="#">Guardian CV</Link></li>
