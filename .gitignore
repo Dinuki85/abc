@@ -1,0 +1,7 @@
+abc 2.xlsx
+excel_content.json
+scratch/
+node_modules/
+target/
+.next/
+.vscode/
