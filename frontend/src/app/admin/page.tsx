@@ -44,7 +44,7 @@ export default function AdminDashboard() {
 
         <div className="flex flex-wrap items-center gap-4">
           {/* User Profile Info */}
-          <div className="flex items-center gap-4 bg-white p-2 pr-6 rounded-2xl shadow-sm border border-slate-100">
+          <div className="flex items-center gap-4 bg-white/70 backdrop-blur-md p-2 pr-6 rounded-2xl shadow-sm border border-white/50">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
               <UserCircle size={28} />
             </div>
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Time Card */}
-          <div className="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-100">
+          <div className="flex items-center gap-3 bg-white/70 backdrop-blur-md px-5 py-3 rounded-2xl shadow-sm border border-white/50">
             <Clock size={20} className="text-blue-500" />
             <div className="flex flex-col">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">System Time</span>
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <button className="p-3 bg-rose-50 text-rose-600 rounded-2xl hover:bg-rose-100 transition-colors shadow-sm">
+          <button className="p-3 bg-rose-50/50 backdrop-blur-md text-rose-600 rounded-2xl hover:bg-rose-100 transition-colors shadow-sm border border-rose-100/50">
             <LogOut size={22} />
           </button>
         </div>
