@@ -5,30 +5,20 @@ import { api } from '@/lib/api';
 import { 
   Users, UserCheck, Users2, Layers, BookOpen, GraduationCap, 
   ClipboardList, Briefcase, HeartHandshake, Settings, 
-  Calendar, Award, Trophy, Star, FileText, UserCircle, Clock, 
-  ExternalLink, LogOut, LayoutDashboard, PlusCircle, PieChart, 
-  FileSpreadsheet, UserPlus, BookCheck, Medal, CheckCircle2,
-  Activity, Phone, FileCheck, BarChart3, UserSquare2, Contact,
-  School, Landmark, ShieldCheck, ChevronRight
+  Calendar, Award, Trophy, Star, FileText, UserCircle,
+  PlusCircle, PieChart, FileSpreadsheet, UserPlus,
+  BookCheck, Medal, CheckCircle2, Activity, Phone,
+  FileCheck, UserSquare2, Contact, Landmark
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
-  const [time, setTime] = useState<string>('');
 
   useEffect(() => {
     api.getAdminStats().then(setStats);
-    
-    const timer = setInterval(() => {
-      const now = new Date();
-      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    }, 1000);
-    return () => clearInterval(timer);
   }, []);
   
-  const currentUser = api.getCurrentUser();
-  const displayName = currentUser?.username || 'Administrator';
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-top-4 duration-700 pb-12">
@@ -239,7 +229,5 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
-  );
-}
   );
 }
