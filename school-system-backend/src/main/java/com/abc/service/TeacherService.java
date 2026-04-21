@@ -152,10 +152,12 @@ public class TeacherService {
         if (student.getGrade() != null) {
             response.setGradeName(student.getGrade().getName());
             response.setGradeId(student.getGrade().getId());
+        } else {
+            response.setGradeName("Unassigned");
         }
         
         studentClassRepository.findByStudent(student).ifPresent(sc_assigned -> {
-            response.setGradeName(sc_assigned.getSchoolClass().getGrade().getName()); // Fix: Added GradeName for individual lookup
+            response.setGradeName(sc_assigned.getSchoolClass().getGrade().getName());
             response.setClassName(sc_assigned.getSchoolClass().getName());
             response.setClassId(sc_assigned.getSchoolClass().getId());
         });
