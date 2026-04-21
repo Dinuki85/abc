@@ -186,7 +186,7 @@ export default function LoginPage() {
 
           <div className="mt-8 text-center">
             <p className="text-sm font-bold text-slate-500">
-              Do Not Have Password Contact Your School Office
+              Do Not Have Password ? Contact Your School Office
             </p>
           </div>
         </div>
