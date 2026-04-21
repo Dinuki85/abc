@@ -71,6 +71,7 @@ public class AdminService {
         staffRepository.save(staff);
     }
 
+    @Transactional
     public void assignStudentToClass(String username, Long gradeId, Long classId) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
