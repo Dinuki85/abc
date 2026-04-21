@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { 
   Users, UserCheck, Users2, Layers, BookOpen, GraduationCap, 
   ClipboardList, Briefcase, HeartHandshake, Settings, 
-  Calendar, Award, Trophy, Star, FileText, UserCircle, Clock
+  Calendar, Award, Trophy, Star, FileText, UserCircle, Clock, ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
 
