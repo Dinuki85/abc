@@ -99,7 +99,7 @@ export default function AdminDashboard() {
       {/* Main Action Modules */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {/* Administration Module */}
-        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-700 delay-100 fill-mode-both">
           <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
         </section>
 
         {/* Registration Module */}
-        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both">
           <div className="bg-orange-500 p-6 flex justify-between items-center text-white">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
@@ -182,7 +182,7 @@ export default function AdminDashboard() {
         </section>
 
         {/* Performance Module */}
-        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both">
           <div className="bg-blue-600 p-6 flex justify-between items-center text-white">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
@@ -219,7 +219,7 @@ export default function AdminDashboard() {
         </section>
 
         {/* Display Module */}
-        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+        <section className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col animate-in slide-in-from-bottom-4 duration-700 delay-400 fill-mode-both">
           <div className="bg-amber-500 p-6 flex justify-between items-center text-white flex-shrink-0">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
