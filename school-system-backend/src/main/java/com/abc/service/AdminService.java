@@ -102,6 +102,7 @@ public class AdminService {
         studentRepository.save(student);
     }
 
+    @Transactional
     public void assignTeacherToClass(Long staffId, Long classId) {
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new RuntimeException("Staff not found"));
@@ -117,6 +118,7 @@ public class AdminService {
         schoolClassRepository.save(schoolClass);
     }
 
+    @Transactional
     public void assignTeacherToGrade(Long staffId, Long gradeId) {
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new RuntimeException("Staff not found"));
@@ -128,6 +130,7 @@ public class AdminService {
         staffRepository.save(staff);
     }
 
+    @Transactional
     public void createClass(Long gradeId, String className) {
         Grade grade = gradeRepository.findById(gradeId)
                 .orElseThrow(() -> new RuntimeException("Grade not found"));
