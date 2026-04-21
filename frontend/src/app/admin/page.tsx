@@ -7,7 +7,8 @@ import {
   ClipboardList, Briefcase, HeartHandshake, Settings, 
   Calendar, Award, Trophy, Star, FileText, UserCircle, Clock, 
   ExternalLink, LogOut, LayoutDashboard, PlusCircle, PieChart, 
-  FileSpreadsheet, UserPlus, BookCheck, Medal, CheckCircle2
+  FileSpreadsheet, UserPlus, BookCheck, Medal, CheckCircle2,
+  Activity, Phone, FileCheck, BarChart3, UserSquare2, Contact
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -237,12 +238,20 @@ export default function AdminDashboard() {
                <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest border-l-4 border-amber-500 pl-3">All School & Lists</h4>
                <ul className="space-y-2">
                  {[
-                   'All List', 'Welfare Status List', 'Health Reports', 'Skill Matrix', 'Contact Directory', 'Exam Reports',
-                   'Section Based List', 'Sport Based List', 'Scholarship List', 'Nationality/Religion/Gender'
+                   { name: 'All List', icon: Users },
+                   { name: 'Welfare Status List', icon: HeartHandshake },
+                   { name: 'Health Reports', icon: Activity },
+                   { name: 'Skill Matrix', icon: Award },
+                   { name: 'Contact Directory', icon: Phone },
+                   { name: 'Exam Reports', icon: FileCheck },
+                   { name: 'Section Based List', icon: Layers },
+                   { name: 'Sport Based List', icon: Trophy },
+                   { name: 'Scholarship List', icon: GraduationCap },
+                   { name: 'Nationality/Religion/Gender', icon: Users2 }
                  ].map((item, i) => (
                    <li key={i}>
-                     <Link href="#" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">
-                       <ExternalLink size={14} className="opacity-50" /> {item}
+                     <Link href="#" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors group">
+                       <item.icon size={14} className="text-slate-400 group-hover:text-amber-500 transition-colors" /> {item.name}
                      </Link>
                    </li>
                  ))}
@@ -253,12 +262,19 @@ export default function AdminDashboard() {
                <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest border-l-4 border-amber-500 pl-3">Teacher & Individual</h4>
                <ul className="space-y-2">
                  {[
-                   'Exam Wise Analysis', 'Subject Wise Analysis', 'Grade Wise Comparison', 'Teacher Lists', 'Subject Specialist List',
-                   'Student CV Generator', 'Teacher Professional CV', 'Guardian Contact File', 'Teacher Timetables'
+                   { name: 'Exam Wise Analysis', icon: PieChart },
+                   { name: 'Subject Wise Analysis', icon: BookCheck },
+                   { name: 'Grade Wise Comparison', icon: BarChart3 },
+                   { name: 'Teacher Lists', icon: Briefcase },
+                   { name: 'Subject Specialist List', icon: ClipboardList },
+                   { name: 'Student CV Generator', icon: UserSquare2 },
+                   { name: 'Teacher Professional CV', icon: Contact },
+                   { name: 'Guardian Contact File', icon: Users2 },
+                   { name: 'Teacher Timetables', icon: Calendar }
                  ].map((item, i) => (
                    <li key={i}>
-                     <Link href="#" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors">
-                       <ExternalLink size={14} className="opacity-50" /> {item}
+                     <Link href="#" className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-amber-600 transition-colors group">
+                       <item.icon size={14} className="text-slate-400 group-hover:text-amber-500 transition-colors" /> {item.name}
                      </Link>
                    </li>
                  ))}
