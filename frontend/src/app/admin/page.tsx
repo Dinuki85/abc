@@ -25,53 +25,19 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-1000 pb-20">
       
-      {/* Institutional Header */}
-      <div className="bg-white rounded-[3rem] p-10 shadow-2xl border border-white/20 relative overflow-hidden group">
+      {/* Institutional Header - Simplified */}
+      <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-white/20 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -mr-48 -mt-48 blur-3xl transition-all group-hover:bg-primary/10" />
-        <div className="relative flex flex-col md:flex-row justify-between items-center gap-10">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-800 font-handlee leading-tight tracking-tight">
-              Welcome To <span className="text-primary">Andiambalama</span> <br /> 
-              Maha Vidhyalaya
-            </h1>
-            <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-xs mt-4 flex items-center gap-2">
-              <div className="w-8 h-1 bg-secondary rounded-full" />
-              Administrative Intelligence Hub
-            </p>
-          </div>
-          
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-24 h-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center border border-slate-100 p-2 group-hover:scale-110 transition-transform duration-500">
-               {/* Institutional Logo Placeholder */}
-               <div className="w-full h-full rounded-2xl bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center text-white font-black text-3xl italic">
-                 AMV
-               </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-100 min-w-[280px]">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center shadow-lg">
-                <UserCheck size={24} />
-              </div>
-              <div>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Logged User</p>
-                <p className="text-sm font-bold text-slate-800">Administrator</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-slate-500">
-                <Clock size={16} className="text-primary" />
-                <span className="text-xs font-bold tabular-nums">
-                  {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                </span>
-              </div>
-              <button className="w-full h-12 rounded-2xl border border-slate-200 text-slate-600 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all flex items-center justify-center gap-3 text-xs font-black uppercase tracking-widest">
-                <LogOut size={16} />
-                Logout System
-              </button>
-            </div>
-          </div>
+        <div className="relative flex flex-col items-center text-center">
+          <h1 className="text-4xl md:text-6xl font-black text-slate-800 font-handlee leading-tight tracking-tight">
+            Welcome To <span className="text-primary">Andiambalama</span> <br /> 
+            Maha Vidhyalaya
+          </h1>
+          <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px] mt-6 flex items-center gap-3">
+            <div className="w-12 h-1 bg-secondary rounded-full" />
+            Administrative Intelligence Hub
+            <div className="w-12 h-1 bg-secondary rounded-full" />
+          </p>
         </div>
       </div>
 
