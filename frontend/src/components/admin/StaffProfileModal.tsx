@@ -116,20 +116,20 @@ export default function StaffProfileModal({ staff, isOpen, onClose, onSave }: St
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Identification Details" icon={User} color="indigo" />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <Field label="Full Name" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per NIC" />
-                      <Field label="Name with Initials" name="nameWithInitials" value={formData.nameWithInitials} onChange={handleChange} placeholder="e.g. K.A. Saman Perera" />
-                      <Field label="Date of Birth" name="dob" type="date" value={formData.dob} onChange={handleChange} />
+                      <Field label="Full Name" name="fullName" value={formData.fullName || ''} onChange={handleChange} placeholder="As per NIC" />
+                      <Field label="Name with Initials" name="nameWithInitials" value={formData.nameWithInitials || ''} onChange={handleChange} placeholder="e.g. K.A. Saman Perera" />
+                      <Field label="Date of Birth" name="dob" type="date" value={formData.dob || ''} onChange={handleChange} />
                       <SelectField 
                         label="Gender" 
                         name="gender" 
-                        value={formData.gender} 
+                        value={formData.gender || ''} 
                         onChange={handleChange} 
                         options={[{label: 'Male', value: 'MALE'}, {label: 'Female', value: 'FEMALE'}]} 
                       />
                       <SelectField 
                         label="Religion" 
                         name="religion" 
-                        value={formData.religion} 
+                        value={formData.religion || ''} 
                         onChange={handleChange} 
                         options={[
                           {label: 'Buddhist', value: 'BUDDHIST'}, 
@@ -138,9 +138,9 @@ export default function StaffProfileModal({ staff, isOpen, onClose, onSave }: St
                           {label: 'Islam', value: 'ISLAM'}
                         ]} 
                       />
-                      <Field label="NIC Number" name="nic" value={formData.nic} onChange={handleChange} />
-                      <Field label="Race / Ethnicity" name="race" value={formData.race} onChange={handleChange} />
-                      <Field label="Nationality" name="nationality" value={formData.nationality} onChange={handleChange} />
+                      <Field label="NIC Number" name="nic" value={formData.nic || ''} onChange={handleChange} />
+                      <Field label="Race / Ethnicity" name="race" value={formData.race || ''} onChange={handleChange} />
+                      <Field label="Nationality" name="nationality" value={formData.nationality || ''} onChange={handleChange} />
                     </div>
                   </div>
                 )}
@@ -149,11 +149,11 @@ export default function StaffProfileModal({ staff, isOpen, onClose, onSave }: St
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Professional Credentials" icon={GraduationCap} color="indigo" />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <Field label="Joined Date" name="joinedDate" type="date" value={formData.joinedDate} onChange={handleChange} />
+                      <Field label="Joined Date" name="joinedDate" type="date" value={formData.joinedDate || ''} onChange={handleChange} />
                       <SelectField 
                         label="Designation" 
                         name="designation" 
-                        value={formData.designation} 
+                        value={formData.designation || ''} 
                         onChange={handleChange} 
                         options={[
                           {label: 'Class Teacher', value: 'CLASS_TEACHER'},
@@ -165,9 +165,9 @@ export default function StaffProfileModal({ staff, isOpen, onClose, onSave }: St
                           {label: 'Principal', value: 'PRINCIPAL'}
                         ]} 
                       />
-                      <Field label="Subjects Expertise" name="subjects" value={formData.subjects} onChange={handleChange} placeholder="e.g. Mathematics, Science" />
+                      <Field label="Subjects Expertise" name="subjects" value={formData.subjects || ''} onChange={handleChange} placeholder="e.g. Mathematics, Science" />
                     </div>
-                    <TextAreaField label="Educational Qualifications" name="qualifications" value={formData.qualifications} onChange={handleChange} placeholder="Degrees, Diplomas, etc." />
+                    <TextAreaField label="Educational Qualifications" name="qualifications" value={formData.qualifications || ''} onChange={handleChange} placeholder="Degrees, Diplomas, etc." />
                   </div>
                 )}
 
@@ -175,13 +175,13 @@ export default function StaffProfileModal({ staff, isOpen, onClose, onSave }: St
                   <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Residence & Contact" icon={MapPin} color="indigo" />
                     <div className="grid grid-cols-1 gap-8">
-                      <TextAreaField label="Permanent Address" name="address" value={formData.address} onChange={handleChange} />
-                      <TextAreaField label="Mailing Address" name="mailingAddress" value={formData.mailingAddress} onChange={handleChange} />
+                      <TextAreaField label="Permanent Address" name="address" value={formData.address || ''} onChange={handleChange} />
+                      <TextAreaField label="Mailing Address" name="mailingAddress" value={formData.mailingAddress || ''} onChange={handleChange} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                      <Field label="Home Phone" name="contactHome" value={formData.contactHome} onChange={handleChange} />
-                      <Field label="Mobile Phone" name="contactMobile" value={formData.contactMobile} onChange={handleChange} />
-                      <Field label="Institutional Email" name="email" type="email" value={formData.email} onChange={handleChange} />
+                      <Field label="Home Phone" name="contactHome" value={formData.contactHome || ''} onChange={handleChange} />
+                      <Field label="Mobile Phone" name="contactMobile" value={formData.contactMobile || ''} onChange={handleChange} />
+                      <Field label="Institutional Email" name="email" type="email" value={formData.email || ''} onChange={handleChange} />
                     </div>
                   </div>
                 )}
@@ -193,7 +193,7 @@ export default function StaffProfileModal({ staff, isOpen, onClose, onSave }: St
                       <SelectField 
                         label="Blood Group" 
                         name="bloodGroup" 
-                        value={formData.bloodGroup} 
+                        value={formData.bloodGroup || ''} 
                         onChange={handleChange} 
                         options={[
                           {label: 'A+', value: 'A+'}, {label: 'A-', value: 'A-'},
@@ -203,7 +203,7 @@ export default function StaffProfileModal({ staff, isOpen, onClose, onSave }: St
                         ]} 
                       />
                     </div>
-                    <TextAreaField label="Medical History / Allergies" name="medicalHistory" value={formData.medicalHistory} onChange={handleChange} />
+                    <TextAreaField label="Medical History / Allergies" name="medicalHistory" value={formData.medicalHistory || ''} onChange={handleChange} />
                   </div>
                 )}
 

@@ -117,20 +117,20 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Basic Identification" icon={User} />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <Field label="Full Name" name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per Birth Certificate" />
-                      <Field label="Name with Initials" name="nameWithInitials" value={formData.nameWithInitials} onChange={handleChange} placeholder="e.g. A.B.C. Perera" />
-                      <Field label="Date of Birth" name="dob" type="date" value={formData.dob} onChange={handleChange} />
+                      <Field label="Full Name" name="fullName" value={formData.fullName || ''} onChange={handleChange} placeholder="As per Birth Certificate" />
+                      <Field label="Name with Initials" name="nameWithInitials" value={formData.nameWithInitials || ''} onChange={handleChange} placeholder="e.g. A.B.C. Perera" />
+                      <Field label="Date of Birth" name="dob" type="date" value={formData.dob || ''} onChange={handleChange} />
                       <SelectField 
                         label="Gender" 
                         name="gender" 
-                        value={formData.gender} 
+                        value={formData.gender || ''} 
                         onChange={handleChange} 
                         options={[{label: 'Male', value: 'MALE'}, {label: 'Female', value: 'FEMALE'}]} 
                       />
                       <SelectField 
                         label="Religion" 
                         name="religion" 
-                        value={formData.religion} 
+                        value={formData.religion || ''} 
                         onChange={handleChange} 
                         options={[
                           {label: 'Buddhist', value: 'BUDDHIST'}, 
@@ -139,9 +139,9 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                           {label: 'Islam', value: 'ISLAM'}
                         ]} 
                       />
-                      <Field label="Race / Ethnicity" name="race" value={formData.race} onChange={handleChange} placeholder="e.g. Sinhalese" />
-                      <Field label="Nationality" name="nationality" value={formData.nationality} onChange={handleChange} placeholder="e.g. Sri Lankan" />
-                      <Field label="Birth Certificate No." name="birthCertificateNumber" value={formData.birthCertificateNumber} onChange={handleChange} />
+                      <Field label="Race / Ethnicity" name="race" value={formData.race || ''} onChange={handleChange} placeholder="e.g. Sinhalese" />
+                      <Field label="Nationality" name="nationality" value={formData.nationality || ''} onChange={handleChange} placeholder="e.g. Sri Lankan" />
+                      <Field label="Birth Certificate No." name="birthCertificateNumber" value={formData.birthCertificateNumber || ''} onChange={handleChange} />
                     </div>
                   </div>
                 )}
@@ -151,30 +151,30 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                     <div className="space-y-8">
                       <SectionHeader title="Father's Details" icon={Users} />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <Field label="Full Name" name="fatherName" value={formData.fatherName} onChange={handleChange} />
-                        <Field label="NIC Number" name="fatherNic" value={formData.fatherNic} onChange={handleChange} />
-                        <Field label="Occupation" name="fatherOccupation" value={formData.fatherOccupation} onChange={handleChange} />
-                        <Field label="Contact Number" name="fatherContact" value={formData.fatherContact} onChange={handleChange} />
+                        <Field label="Full Name" name="fatherName" value={formData.fatherName || ''} onChange={handleChange} />
+                        <Field label="NIC Number" name="fatherNic" value={formData.fatherNic || ''} onChange={handleChange} />
+                        <Field label="Occupation" name="fatherOccupation" value={formData.fatherOccupation || ''} onChange={handleChange} />
+                        <Field label="Contact Number" name="fatherContact" value={formData.fatherContact || ''} onChange={handleChange} />
                       </div>
                     </div>
 
                     <div className="space-y-8">
                       <SectionHeader title="Mother's Details" icon={Users} />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <Field label="Full Name" name="motherName" value={formData.motherName} onChange={handleChange} />
-                        <Field label="NIC Number" name="motherNic" value={formData.motherNic} onChange={handleChange} />
-                        <Field label="Occupation" name="motherOccupation" value={formData.motherOccupation} onChange={handleChange} />
-                        <Field label="Contact Number" name="motherContact" value={formData.motherContact} onChange={handleChange} />
+                        <Field label="Full Name" name="motherName" value={formData.motherName || ''} onChange={handleChange} />
+                        <Field label="NIC Number" name="motherNic" value={formData.motherNic || ''} onChange={handleChange} />
+                        <Field label="Occupation" name="motherOccupation" value={formData.motherOccupation || ''} onChange={handleChange} />
+                        <Field label="Contact Number" name="motherContact" value={formData.motherContact || ''} onChange={handleChange} />
                       </div>
                     </div>
 
                     <div className="space-y-8">
                       <SectionHeader title="Guardian Details (If Applicable)" icon={ShieldCheck} />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <Field label="Guardian Name" name="guardianName" value={formData.guardianName} onChange={handleChange} />
-                        <Field label="Relation to Student" name="guardianRelation" value={formData.guardianRelation} onChange={handleChange} />
-                        <Field label="Guardian Contact" name="guardianContact" value={formData.guardianContact} onChange={handleChange} />
-                        <Field label="Guardian Occupation" name="guardianOccupation" value={formData.guardianOccupation} onChange={handleChange} />
+                        <Field label="Guardian Name" name="guardianName" value={formData.guardianName || ''} onChange={handleChange} />
+                        <Field label="Relation to Student" name="guardianRelation" value={formData.guardianRelation || ''} onChange={handleChange} />
+                        <Field label="Guardian Contact" name="guardianContact" value={formData.guardianContact || ''} onChange={handleChange} />
+                        <Field label="Guardian Occupation" name="guardianOccupation" value={formData.guardianOccupation || ''} onChange={handleChange} />
                       </div>
                     </div>
                   </div>
@@ -184,13 +184,13 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                   <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Address & Communication" icon={MapPin} />
                     <div className="grid grid-cols-1 gap-8">
-                      <TextAreaField label="Permanent Address" name="address" value={formData.address} onChange={handleChange} />
-                      <TextAreaField label="Mailing Address" name="mailingAddress" value={formData.mailingAddress} onChange={handleChange} />
+                      <TextAreaField label="Permanent Address" name="address" value={formData.address || ''} onChange={handleChange} />
+                      <TextAreaField label="Mailing Address" name="mailingAddress" value={formData.mailingAddress || ''} onChange={handleChange} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                      <Field label="Home Phone" name="contactHome" value={formData.contactHome} onChange={handleChange} />
-                      <Field label="Mobile Phone" name="contactMobile" value={formData.contactMobile} onChange={handleChange} />
-                      <Field label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} />
+                      <Field label="Home Phone" name="contactHome" value={formData.contactHome || ''} onChange={handleChange} />
+                      <Field label="Mobile Phone" name="contactMobile" value={formData.contactMobile || ''} onChange={handleChange} />
+                      <Field label="Email Address" name="email" type="email" value={formData.email || ''} onChange={handleChange} />
                     </div>
                   </div>
                 )}
@@ -199,13 +199,13 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                   <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Institutional Metadata" icon={BookOpen} />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <Field label="Admission Date" name="admissionDate" type="date" value={formData.admissionDate} onChange={handleChange} />
-                      <Field label="Distance to School (km)" name="distanceToSchool" value={formData.distanceToSchool} onChange={handleChange} />
-                      <Field label="Mode of Transport" name="transportMode" value={formData.transportMode} onChange={handleChange} />
+                      <Field label="Admission Date" name="admissionDate" type="date" value={formData.admissionDate || ''} onChange={handleChange} />
+                      <Field label="Distance to School (km)" name="distanceToSchool" value={formData.distanceToSchool || ''} onChange={handleChange} />
+                      <Field label="Mode of Transport" name="transportMode" value={formData.transportMode || ''} onChange={handleChange} />
                       <SelectField 
                         label="Blood Group" 
                         name="bloodGroup" 
-                        value={formData.bloodGroup} 
+                        value={formData.bloodGroup || ''} 
                         onChange={handleChange} 
                         options={[
                           {label: 'A+', value: 'A+'}, {label: 'A-', value: 'A-'},
@@ -215,7 +215,7 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                         ]} 
                       />
                     </div>
-                    <TextAreaField label="Medical History / Allergies" name="medicalHistory" value={formData.medicalHistory} onChange={handleChange} />
+                    <TextAreaField label="Medical History / Allergies" name="medicalHistory" value={formData.medicalHistory || ''} onChange={handleChange} />
                   </div>
                 )}
 

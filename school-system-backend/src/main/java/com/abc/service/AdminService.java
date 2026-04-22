@@ -368,4 +368,33 @@ public class AdminService {
             userRepository.delete(user);
         }
     }
+    @Transactional
+    public void saveStaffProfile(Long staffId, Staff profile) {
+        Staff staff = staffRepository.findById(staffId)
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
+        
+        staff.setName(profile.getName());
+        staff.setFullName(profile.getFullName());
+        staff.setInitials(profile.getInitials());
+        staff.setNameWithInitials(profile.getNameWithInitials());
+        staff.setDob(profile.getDob());
+        staff.setGender(profile.getGender());
+        staff.setReligion(profile.getReligion());
+        staff.setRace(profile.getRace());
+        staff.setNationality(profile.getNationality());
+        staff.setNic(profile.getNic());
+        staff.setDesignation(profile.getDesignation());
+        staff.setAddress(profile.getAddress());
+        staff.setMailingAddress(profile.getMailingAddress());
+        staff.setContactHome(profile.getContactHome());
+        staff.setContactMobile(profile.getContactMobile());
+        staff.setEmail(profile.getEmail());
+        staff.setJoinedDate(profile.getJoinedDate());
+        staff.setQualifications(profile.getQualifications());
+        staff.setSubjects(profile.getSubjects());
+        staff.setBloodGroup(profile.getBloodGroup());
+        staff.setMedicalHistory(profile.getMedicalHistory());
+        
+        staffRepository.save(staff);
+    }
 }

@@ -166,4 +166,13 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @PostMapping("/teachers/{id}/profile")
+    public ResponseEntity<?> saveStaffProfile(@PathVariable Long id, @RequestBody Staff profile) {
+        try {
+            adminService.saveStaffProfile(id, profile);
+            return ResponseEntity.ok("Staff profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
