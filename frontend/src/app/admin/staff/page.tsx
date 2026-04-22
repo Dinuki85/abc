@@ -6,10 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Plus, Edit2, Trash2, X, CheckCircle2, AlertCircle, ShieldUser, User, Search, UserPlus, Eye, Briefcase, GraduationCap, ChevronRight, Filter, FileSpreadsheet } from 'lucide-react';
-import { api } from '@/lib/api';
+import { api, Teacher } from '@/lib/api';
+import StaffProfileModal from '@/components/admin/StaffProfileModal';
 
 export default function StaffPage() {
-  const [staffMembers, setStaffMembers] = useState<any[]>([]);
+  const [staffMembers, setStaffMembers] = useState<Teacher[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
@@ -18,9 +19,13 @@ export default function StaffPage() {
   const [designation, setDesignation] = useState('CLASS_TEACHER');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
-  const [editingStaff, setEditingStaff] = useState<any | null>(null);
+  const [editingStaff, setEditingStaff] = useState<Teacher | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Detailed Profile Modal State
+  const [selectedStaff, setSelectedStaff] = useState<Teacher | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     fetchStaff();
@@ -76,6 +81,22 @@ export default function StaffPage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSaveProfile = async (updatedProfile: Teacher) => {
+    try {
+      await api.saveStaffProfile(updatedProfile.id, updatedProfile);
+      setMessage({ type: 'success', text: 'Personnel record updated successfully!' });
+      fetchStaff();
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message || 'Failed to update personnel file' });
+      throw error;
+    }
+  };
+
+  const openProfile = (staff: Teacher) => {
+    setSelectedStaff(staff);
+    setIsProfileModalOpen(true);
   };
 
   const handleDelete = async (id: number) => {
@@ -240,11 +261,14 @@ export default function StaffPage() {
                     </TableCell>
                     <TableCell className="px-8 py-5 text-right">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90">
+                        <button 
+                          onClick={() => openProfile(staff)}
+                          className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90"
+                        >
                           <Eye size={16} />
                         </button>
                         <button 
-                          onClick={() => openEditModal(staff)}
+                          onClick={() => openProfile(staff)}
                           className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90"
                         >
                           <Edit2 size={16} />
@@ -427,6 +451,15 @@ export default function StaffPage() {
             </div>
           </div>
         </div>
+      )}
+      {/* Detailed Staff Profile Modal */}
+      {selectedStaff && (
+        <StaffProfileModal 
+          staff={selectedStaff}
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          onSave={handleSaveProfile}
+        />
       )}
     </div>
   );

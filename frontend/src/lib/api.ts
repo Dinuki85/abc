@@ -73,8 +73,36 @@ export interface Grade {
 
 export interface Teacher {
   id: number;
-  name: string;
-  user: User;
+  username: string; // Employee ID / Index
+  fullName: string;
+  initials: string;
+  nameWithInitials: string;
+  dob: string;
+  gender: string;
+  religion: string;
+  race?: string;
+  nationality?: string;
+  nic?: string;
+  designation?: string;
+  
+  // Contacts & Addresses
+  address?: string; // Permanent
+  mailingAddress?: string;
+  contactHome?: string;
+  contactMobile?: string;
+  email?: string;
+
+  // Professional Metadata
+  joinedDate?: string;
+  qualifications?: string;
+  subjects?: string; // Comma separated list
+  bloodGroup?: string;
+  medicalHistory?: string;
+
+  // Account Mapping
+  user?: User;
+  gradeName?: string;
+  classes?: any[];
 }
 
 class ApiService {
@@ -232,6 +260,20 @@ class ApiService {
     });
     if (!response.ok) throw new Error(await response.text());
     return true;
+  }
+
+  async saveStaffProfile(id: number, profile: Teacher) {
+    const response = await fetch(`${API_BASE_URL}/admin/teachers/${id}/profile`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(profile),
+    });
+    if (!response.ok) {
+      const errorMsg = await response.text();
+      console.error('Staff profile save failed:', errorMsg);
+      throw new Error(errorMsg || 'Failed to save profile');
+    }
+    return response.json();
   }
 
   async getTeachers(): Promise<any[]> {
