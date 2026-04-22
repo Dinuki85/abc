@@ -33,11 +33,11 @@ export default function AdminDashboard() {
             Welcome To <span className="text-primary">Andiambalama</span> <br /> 
             Maha Vidhyalaya
           </h1>
-          <p className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px] mt-6 flex items-center gap-3">
+          <div className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px] mt-6 flex items-center gap-3">
             <div className="w-12 h-1 bg-secondary rounded-full" />
             Administrative Intelligence Hub
             <div className="w-12 h-1 bg-secondary rounded-full" />
-          </p>
+          </div>
         </div>
       </div>
 
