@@ -11,26 +11,56 @@ export interface User {
 
 export interface StudentProfile {
   id?: number;
-  username: string;
+  username: string; // Admission Number
   fullName: string;
   initials: string;
   nameWithInitials: string;
   dob: string;
   gender: string;
   religion: string;
+  race?: string;
   nationality?: string;
   birthCertificateNumber?: string;
   nic?: string;
-  address?: string;
+  
+  // Contacts & Addresses
+  address?: string; // Permanent
+  mailingAddress?: string;
+  contactHome?: string;
+  contactMobile?: string;
+  email?: string;
+
+  // Medical & Misc
   bloodGroup?: string;
   medicalHistory?: string;
+  distanceToSchool?: string;
+  transportMode?: string;
+  admissionDate?: string;
+
+  // Family Details
+  fatherName?: string;
+  fatherNic?: string;
+  fatherOccupation?: string;
+  fatherContact?: string;
+  
+  motherName?: string;
+  motherNic?: string;
+  motherOccupation?: string;
+  motherContact?: string;
+
   guardianName?: string;
   guardianNic?: string;
+  guardianRelation?: string;
+  guardianOccupation?: string;
   guardianContact?: string;
+
+  // Academic Mapping
   gradeId?: number;
   classId?: number;
   gradeName?: string;
   className?: string;
+  
+  // Status
   profileCompleted?: boolean;
   verificationStatus?: string;
   verificationComment?: string;

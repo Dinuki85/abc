@@ -4,15 +4,20 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Button } from '@/components/ui/Button';
-import { Plus, Edit2, Trash2, Search, X, ShieldCheck, GraduationCap, School, CheckCircle2, AlertCircle, Lock, Filter, UserPlus, Eye, FileSpreadsheet } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, ShieldCheck, GraduationCap, School, CheckCircle2, AlertCircle, Lock, Filter, UserPlus, Eye, FileSpreadsheet, ChevronRight } from 'lucide-react';
 import { api, StudentProfile, Grade } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
+import StudentProfileModal from '@/components/admin/StudentProfileModal';
 
 export default function StudentsPage() {
   const [students, setStudents] = useState<StudentProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   
+  // Detailed Profile Modal State
+  const [selectedStudent, setSelectedStudent] = useState<StudentProfile | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
   // Pagination State
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -108,6 +113,22 @@ export default function StudentsPage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSaveProfile = async (updatedProfile: StudentProfile) => {
+    try {
+      await api.saveStudentProfile(updatedProfile.username, updatedProfile);
+      setMessage({ type: 'success', text: 'Student profile updated successfully!' });
+      fetchStudents(currentPage);
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message || 'Failed to update profile' });
+      throw error;
+    }
+  };
+
+  const openProfile = (student: StudentProfile) => {
+    setSelectedStudent(student);
+    setIsProfileModalOpen(true);
   };
 
   return (
@@ -304,10 +325,16 @@ export default function StudentsPage() {
                     </TableCell>
                     <TableCell className="px-8 py-5 text-right">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90">
+                        <button 
+                          onClick={() => openProfile(st)}
+                          className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90"
+                        >
                           <Eye size={16} />
                         </button>
-                        <button className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90">
+                        <button 
+                          onClick={() => openProfile(st)}
+                          className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90"
+                        >
                           <Edit2 size={16} />
                         </button>
                         <button className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm active:scale-90">
@@ -433,6 +460,15 @@ export default function StudentsPage() {
             </div>
           </div>
         </div>
+      )}
+      {/* Detailed Profile Modal */}
+      {selectedStudent && (
+        <StudentProfileModal 
+          student={selectedStudent}
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          onSave={handleSaveProfile}
+        />
       )}
     </div>
   );
