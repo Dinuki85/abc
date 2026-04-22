@@ -71,6 +71,9 @@ public class Student {
     @Column(name = "verification_comment", columnDefinition = "TEXT")
     private String verificationComment;
 
+    @Column(name = "additional_data", columnDefinition = "TEXT")
+    private String additionalData;
+
     public Student() {}
 
     public Long getId() { return id; }
@@ -135,4 +138,7 @@ public class Student {
 
     public String getVerificationComment() { return verificationComment; }
     public void setVerificationComment(String verificationComment) { this.verificationComment = verificationComment; }
+
+    public String getAdditionalData() { return additionalData; }
+    public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
 }

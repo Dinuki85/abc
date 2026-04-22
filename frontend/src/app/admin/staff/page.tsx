@@ -118,7 +118,7 @@ export default function StaffPage() {
   };
 
   const filteredStaff = staffMembers.filter(s => 
-    s.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    (s.name || s.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
     s.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -455,7 +455,7 @@ export default function StaffPage() {
       {/* Detailed Staff Profile Modal */}
       {selectedStaff && (
         <StaffProfileModal 
-          staff={selectedStaff}
+          teacher={selectedStaff}
           isOpen={isProfileModalOpen}
           onClose={() => setIsProfileModalOpen(false)}
           onSave={handleSaveProfile}

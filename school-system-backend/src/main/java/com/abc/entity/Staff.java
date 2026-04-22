@@ -63,6 +63,9 @@ public class Staff {
     @JoinColumn(name = "assigned_grade_id")
     private Grade assignedGrade;
 
+    @Column(name = "additional_data", columnDefinition = "TEXT")
+    private String additionalData;
+
     public Staff() {}
 
     public Long getId() { return id; }
@@ -139,4 +142,8 @@ public class Staff {
 
     public Grade getAssignedGrade() { return assignedGrade; }
     public void setAssignedGrade(Grade assignedGrade) { this.assignedGrade = assignedGrade; }
+
+    public String getAdditionalData() { return additionalData; }
+    public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
 }
+

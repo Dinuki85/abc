@@ -27,7 +27,7 @@ export default function SectionHeadPage() {
       if (section) {
         // Find all classes for this grade
         const allClasses = await api.getClasses();
-        const sectionClasses = allClassesLink.filter((c: any) => c.grade?.id === section.id);
+        const sectionClasses = allClasses.filter((c: any) => c.grade?.id === section.id);
         
         setGradeData({
           ...section,

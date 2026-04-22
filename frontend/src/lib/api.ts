@@ -64,6 +64,7 @@ export interface StudentProfile {
   profileCompleted?: boolean;
   verificationStatus?: string;
   verificationComment?: string;
+  additionalData?: string;
 }
 
 export interface Grade {
@@ -74,6 +75,7 @@ export interface Grade {
 export interface Teacher {
   id: number;
   username: string; // Employee ID / Index
+  name?: string;
   fullName: string;
   initials: string;
   nameWithInitials: string;
@@ -103,6 +105,24 @@ export interface Teacher {
   user?: User;
   gradeName?: string;
   classes?: any[];
+  additionalData?: string;
+}
+
+export interface Guardian {
+  id?: number;
+  fullName: string;
+  nameWithInitials?: string;
+  dob?: string;
+  nic?: string;
+  gender?: string;
+  religion?: string;
+  district?: string;
+  address?: string;
+  designation?: string;
+  homePhone?: string;
+  mobilePhone?: string;
+  personalEmail?: string;
+  additionalData?: string;
 }
 
 class ApiService {
