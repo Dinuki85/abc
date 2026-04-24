@@ -289,3 +289,4 @@ export default function StudentDashboard() {
     </div>
   );
 }
+// Step 9-1 - Implement Tab 1 UI for Student Profile
