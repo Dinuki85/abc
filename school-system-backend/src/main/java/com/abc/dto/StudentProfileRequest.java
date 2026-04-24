@@ -19,6 +19,13 @@ public class StudentProfileRequest {
     private String guardianName;
     private String guardianNic;
     private String guardianContact;
+    private String nameSinhala;
+    private String nameWithInitialSinhala;
+    private String motherName;
+    private String fatherName;
+    private String guardianIdRef;
+    private String interSchoolHouse;
+    private String siblings;
     private Long gradeId;
     private Long classId;
 
@@ -75,4 +82,25 @@ public class StudentProfileRequest {
 
     public Long getClassId() { return classId; }
     public void setClassId(Long classId) { this.classId = classId; }
+
+    public String getNameSinhala() { return nameSinhala; }
+    public void setNameSinhala(String nameSinhala) { this.nameSinhala = nameSinhala; }
+
+    public String getNameWithInitialSinhala() { return nameWithInitialSinhala; }
+    public void setNameWithInitialSinhala(String nameWithInitialSinhala) { this.nameWithInitialSinhala = nameWithInitialSinhala; }
+
+    public String getMotherName() { return motherName; }
+    public void setMotherName(String motherName) { this.motherName = motherName; }
+
+    public String getFatherName() { return fatherName; }
+    public void setFatherName(String fatherName) { this.fatherName = fatherName; }
+
+    public String getGuardianIdRef() { return guardianIdRef; }
+    public void setGuardianIdRef(String guardianIdRef) { this.guardianIdRef = guardianIdRef; }
+
+    public String getInterSchoolHouse() { return interSchoolHouse; }
+    public void setInterSchoolHouse(String interSchoolHouse) { this.interSchoolHouse = interSchoolHouse; }
+
+    public String getSiblings() { return siblings; }
+    public void setSiblings(String siblings) { this.siblings = siblings; }
 }
