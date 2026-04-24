@@ -82,3 +82,4 @@ export default function AdminLayout({
 // Step 8-7 - Add performance tab to adminMenuItems in layout.tsx
 // Step 8-10 - Add active indicator line to Sidebar items
 // Step 8-13 - Add showNewButton state to AdminLayout
+// Step 8-16 - Add custom scrollbar styles to globals.css
