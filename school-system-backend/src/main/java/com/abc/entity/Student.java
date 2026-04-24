@@ -228,4 +228,5 @@ public class Student {
     private String achievementSchool;
     private String talentAgri;
     private String talentIct;
+    private String talentAesthetic;
 }
