@@ -52,3 +52,5 @@ public class IntakeService {
         return createdStats;
     }
 }
+
+// Granular commit 2 for Step 4 (Admin & Dashboard Logic)
