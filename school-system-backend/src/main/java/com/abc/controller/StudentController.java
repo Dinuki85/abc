@@ -69,3 +69,5 @@ public class StudentController {
 }
 
 // Granular commit 3 for Step 2 (Student Management)
+
+// Granular commit 7 for Step 2 (Student Management)
