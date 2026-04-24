@@ -361,3 +361,4 @@ function PlusCircle(props: any) {
 // Step 10-3 - Final integration check of Teacher verification process
 // Step 10-6 - Add transition animations between portal views
 // Step 10-9 - Verify NIC login for staff with test data
+// Step 10-12 - Test verification status updates across roles
