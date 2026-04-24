@@ -144,3 +144,5 @@ public class Student {
 }
 
 // Granular commit 4 for Step 2 (Student Management)
+
+// Granular commit 8 for Step 2 (Student Management)
