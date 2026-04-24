@@ -290,3 +290,4 @@ export default function StudentDashboard() {
   );
 }
 // Step 9-1 - Implement Tab 1 UI for Student Profile
+// Step 9-2 - Implement Tab 2 UI for Student Profile
