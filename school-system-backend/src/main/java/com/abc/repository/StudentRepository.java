@@ -40,3 +40,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @org.springframework.data.jpa.repository.Query("SELECT s FROM Student s JOIN FETCH s.user WHERE s.id NOT IN (SELECT sc.student.id FROM StudentClass sc)")
     java.util.List<Student> findUnassignedStudents();
 }
+
+// Granular commit 1 for Step 2 (Student Management)
