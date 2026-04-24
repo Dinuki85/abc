@@ -359,3 +359,4 @@ function PlusCircle(props: any) {
 // Step 9-29 - Add multi-language support (English/Sinhala) placeholders
 // Step 9-30 - Final cleanup of Role Specific Portals for Step 9
 // Step 10-3 - Final integration check of Teacher verification process
+// Step 10-6 - Add transition animations between portal views
