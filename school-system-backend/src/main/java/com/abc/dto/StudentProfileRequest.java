@@ -26,6 +26,13 @@ public class StudentProfileRequest {
     private String guardianIdRef;
     private String interSchoolHouse;
     private String siblings;
+    private String height;
+    private String weight;
+    private String bloodType;
+    private String specialPhysicalCondition;
+    private String specialIllness;
+    private String longTermDisease;
+    private String specialNeed;
     private Long gradeId;
     private Long classId;
 
@@ -103,4 +110,25 @@ public class StudentProfileRequest {
 
     public String getSiblings() { return siblings; }
     public void setSiblings(String siblings) { this.siblings = siblings; }
+
+    public String getHeight() { return height; }
+    public void setHeight(String height) { this.height = height; }
+
+    public String getWeight() { return weight; }
+    public void setWeight(String weight) { this.weight = weight; }
+
+    public String getBloodType() { return bloodType; }
+    public void setBloodType(String bloodType) { this.bloodType = bloodType; }
+
+    public String getSpecialPhysicalCondition() { return specialPhysicalCondition; }
+    public void setSpecialPhysicalCondition(String specialPhysicalCondition) { this.specialPhysicalCondition = specialPhysicalCondition; }
+
+    public String getSpecialIllness() { return specialIllness; }
+    public void setSpecialIllness(String specialIllness) { this.specialIllness = specialIllness; }
+
+    public String getLongTermDisease() { return longTermDisease; }
+    public void setLongTermDisease(String longTermDisease) { this.longTermDisease = longTermDisease; }
+
+    public String getSpecialNeed() { return specialNeed; }
+    public void setSpecialNeed(String specialNeed) { this.specialNeed = specialNeed; }
 }
