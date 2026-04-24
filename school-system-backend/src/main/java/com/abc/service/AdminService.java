@@ -419,3 +419,4 @@ public class AdminService {
 // Step 7-15 - Add searchStaff method to AdminService
 // Step 7-18 - Add getStudentDashboardStats to StudentService
 // Step 7-21 - Add findByIndexNumber to StudentRepository
+// Step 7-24 - Add isVerified check to StaffService
