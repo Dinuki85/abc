@@ -170,3 +170,5 @@ function ArrowRight({ size, className }: { size: number, className?: string }) {
     </svg>
   );
 }
+
+// Granular commit 1 for Step 5 (Frontend Integration)
