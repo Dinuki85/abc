@@ -421,3 +421,4 @@ public class AdminService {
 // Step 7-21 - Add findByIndexNumber to StudentRepository
 // Step 7-24 - Add isVerified check to StaffService
 // Step 7-27 - Add updateGuardianDetails to StudentService
+// Step 7-30 - Final cleanup of Backend logic for Step 7
