@@ -359,3 +359,5 @@ export default function StudentDashboard() {
 
 // Step 10-25 - Final security audit of administrative actions
 
+// Step 10-26 - Verify Student 'Resolve Now' button redirection
+
