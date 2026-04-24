@@ -338,3 +338,5 @@ function TextAreaField({ label, name, value, onChange }: any) {
 
 // Step 9-19 - Add personalized welcome message to Admin Portal
 
+// Step 9-20 - Update Admin sidebar with new Institutional categories
+
