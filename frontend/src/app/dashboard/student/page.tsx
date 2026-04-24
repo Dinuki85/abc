@@ -323,3 +323,5 @@ export default function StudentDashboard() {
 
 // Step 10-7 - Polish glassmorphism effects for better contrast
 
+// Step 10-8 - Test password update workflow for new users
+
