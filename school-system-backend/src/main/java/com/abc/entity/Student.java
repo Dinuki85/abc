@@ -40,6 +40,44 @@ public class Student {
 
     private String nic;
 
+    @Column(name = "name_sinhala")
+    private String nameSinhala;
+
+    @Column(name = "name_with_initial_sinhala")
+    private String nameWithInitialSinhala;
+
+    @Column(name = "mother_name")
+    private String motherName;
+
+    @Column(name = "father_name")
+    private String fatherName;
+
+    @Column(name = "guardian_id_ref")
+    private String guardianIdRef;
+
+    @Column(name = "inter_school_house")
+    private String interSchoolHouse;
+
+    private String siblings;
+
+    private String height;
+    private String weight;
+    
+    @Column(name = "blood_type")
+    private String bloodType;
+    
+    @Column(name = "special_physical_condition", columnDefinition = "TEXT")
+    private String specialPhysicalCondition;
+    
+    @Column(name = "special_illness", columnDefinition = "TEXT")
+    private String specialIllness;
+    
+    @Column(name = "long_term_disease", columnDefinition = "TEXT")
+    private String longTermDisease;
+    
+    @Column(name = "special_need", columnDefinition = "TEXT")
+    private String specialNeed;
+
     private String address;
 
     @Column(name = "blood_group")
@@ -141,18 +179,46 @@ public class Student {
 
     public String getAdditionalData() { return additionalData; }
     public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
+
+    public String getNameSinhala() { return nameSinhala; }
+    public void setNameSinhala(String nameSinhala) { this.nameSinhala = nameSinhala; }
+
+    public String getNameWithInitialSinhala() { return nameWithInitialSinhala; }
+    public void setNameWithInitialSinhala(String nameWithInitialSinhala) { this.nameWithInitialSinhala = nameWithInitialSinhala; }
+
+    public String getMotherName() { return motherName; }
+    public void setMotherName(String motherName) { this.motherName = motherName; }
+
+    public String getFatherName() { return fatherName; }
+    public void setFatherName(String fatherName) { this.fatherName = fatherName; }
+
+    public String getGuardianIdRef() { return guardianIdRef; }
+    public void setGuardianIdRef(String guardianIdRef) { this.guardianIdRef = guardianIdRef; }
+
+    public String getInterSchoolHouse() { return interSchoolHouse; }
+    public void setInterSchoolHouse(String interSchoolHouse) { this.interSchoolHouse = interSchoolHouse; }
+
+    public String getSiblings() { return siblings; }
+    public void setSiblings(String siblings) { this.siblings = siblings; }
+    public String getHeight() { return height; }
+    public void setHeight(String height) { this.height = height; }
+
+    public String getWeight() { return weight; }
+    public void setWeight(String weight) { this.weight = weight; }
+
+    public String getBloodType() { return bloodType; }
+    public void setBloodType(String bloodType) { this.bloodType = bloodType; }
+
+    public String getSpecialPhysicalCondition() { return specialPhysicalCondition; }
+    public void setSpecialPhysicalCondition(String specialPhysicalCondition) { this.specialPhysicalCondition = specialPhysicalCondition; }
+
+    public String getSpecialIllness() { return specialIllness; }
+    public void setSpecialIllness(String specialIllness) { this.specialIllness = specialIllness; }
+
+    public String getLongTermDisease() { return longTermDisease; }
+    public void setLongTermDisease(String longTermDisease) { this.longTermDisease = longTermDisease; }
+
+    public String getSpecialNeed() { return specialNeed; }
+    public void setSpecialNeed(String specialNeed) { this.specialNeed = specialNeed; }
+    private String achievementInternational;
 }
-
-// Granular commit 4 for Step 2 (Student Management)
-
-// Granular commit 8 for Step 2 (Student Management)
-
-// Granular commit 12 for Step 2 (Student Management)
-
-// Granular commit 16 for Step 2 (Student Management)
-
-// Granular commit 20 for Step 2 (Student Management)
-
-// Granular commit 24 for Step 2 (Student Management)
-
-// Granular commit 28 for Step 2 (Student Management)
