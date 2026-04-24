@@ -61,3 +61,4 @@ export default function Sidebar({ menuItems }: SidebarProps) {
 // Step 8-3 - Add group-hover animations to Sidebar icons
 // Step 8-6 - Add registration tab to adminMenuItems in layout.tsx
 // Step 8-9 - Refine Sidebar width and padding for better readability
+// Step 8-12 - Add showSaveButton state to AdminLayout
