@@ -232,4 +232,5 @@ public class Student {
     private String talentMedia;
     private String talentSport;
     private String talentInnovation;
+    private String talentCinematography;
 }
