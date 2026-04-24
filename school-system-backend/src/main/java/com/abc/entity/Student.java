@@ -222,4 +222,5 @@ public class Student {
     public void setSpecialNeed(String specialNeed) { this.specialNeed = specialNeed; }
     private String achievementInternational;
     private String achievementNational;
+    private String achievementProvincial;
 }
