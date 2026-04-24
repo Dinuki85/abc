@@ -230,4 +230,5 @@ public class Student {
     private String talentIct;
     private String talentAesthetic;
     private String talentMedia;
+    private String talentSport;
 }
