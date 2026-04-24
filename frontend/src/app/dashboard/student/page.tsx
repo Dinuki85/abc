@@ -353,3 +353,5 @@ export default function StudentDashboard() {
 
 // Step 10-22 - Test Grade/Class assignment synchronization
 
+// Step 10-23 - Verify Teacher assigned classes list update
+
