@@ -414,3 +414,4 @@ public class AdminService {
 // Granular commit 28 for Step 4 (Admin & Dashboard Logic)
 // Step 7-3 - Add changePassword method to StaffService
 // Step 7-6 - Add assignTeacherToClass method refinement in AdminService
+// Step 7-9 - Add batchVerifyStudents to TeacherService
