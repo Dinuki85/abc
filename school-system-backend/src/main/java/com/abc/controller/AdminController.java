@@ -178,3 +178,5 @@ public class AdminController {
 }
 
 // Granular commit 1 for Step 4 (Admin & Dashboard Logic)
+
+// Granular commit 5 for Step 4 (Admin & Dashboard Logic)
