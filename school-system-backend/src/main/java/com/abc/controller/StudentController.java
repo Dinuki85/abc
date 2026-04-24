@@ -67,3 +67,5 @@ public class StudentController {
         return response;
     }
 }
+
+// Granular commit 3 for Step 2 (Student Management)
