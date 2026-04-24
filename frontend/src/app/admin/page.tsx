@@ -334,3 +334,5 @@ function PlusCircle(props: any) {
     </svg>
   )
 }
+
+// Granular commit 4 for Step 5 (Frontend Integration)
