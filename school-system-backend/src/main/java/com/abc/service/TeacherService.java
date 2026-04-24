@@ -210,3 +210,4 @@ public class TeacherService {
 // Step 7-20 - Add findByNic method to UserRepository
 // Step 7-23 - Add isVerified check to StudentService
 // Step 7-26 - Refine AdminService to view all pending verifications
+// Step 7-29 - Add getGradeTimetable placeholder to StudentService
