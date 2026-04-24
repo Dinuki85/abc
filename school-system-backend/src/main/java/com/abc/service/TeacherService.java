@@ -185,3 +185,5 @@ public class TeacherService {
         return savedVerification;
     }
 }
+
+// Granular commit 2 for Step 3 (Teacher Management)
