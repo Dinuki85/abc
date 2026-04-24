@@ -148,5 +148,6 @@ public class Staff {
     private String resultGceOl;
     private boolean isActiveStudent = true;
     private String verificationStatusDetail;
+    private String appointmentDate1st;
 }
 
