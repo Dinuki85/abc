@@ -104,3 +104,5 @@ public class StudentService {
                 .orElseThrow(() -> new RuntimeException("Student profile not found"));
     }
 }
+
+// Granular commit 2 for Step 2 (Student Management)
