@@ -314,3 +314,5 @@ function TextAreaField({ label, name, value, onChange }: any) {
 
 // Step 9-7 - Refine Student Profile save logic with toast notifications
 
+// Step 9-8 - Add auto-calculate age logic to Student Profile
+
