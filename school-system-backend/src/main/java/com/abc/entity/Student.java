@@ -233,4 +233,5 @@ public class Student {
     private String talentSport;
     private String talentInnovation;
     private String talentCinematography;
+    private String addressPermanent;
 }
