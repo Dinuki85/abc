@@ -412,3 +412,4 @@ public class AdminService {
 // Granular commit 24 for Step 4 (Admin & Dashboard Logic)
 
 // Granular commit 28 for Step 4 (Admin & Dashboard Logic)
+// Step 7-3 - Add changePassword method to StaffService
