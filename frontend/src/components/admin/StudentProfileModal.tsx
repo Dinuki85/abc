@@ -100,7 +100,8 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
     { id: 'skills', name: 'Tab 3 - Skills', icon: Star },
     { id: 'contact', name: 'Tab 4 - Contact Information', icon: MapPin },
     { id: 'exams', name: 'Tab 5 - Exam Result', icon: FileCheck },
-    { id: 'visibility', name: 'Tab 6 - Visibility', icon: Eye },
+    { id: 'verification', name: 'Tab 6 - Verification Audit', icon: ShieldCheck },
+    { id: 'visibility', name: 'Tab 7 - Visibility', icon: Eye },
   ];
 
   return (
@@ -305,6 +306,58 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                   </div>
                 )}
 
+                {activeTab === 'verification' && (
+                  <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                    <SectionHeader title="Teacher Verification Audit" icon={ShieldCheck} color="emerald" />
+                    <div className="p-8 bg-slate-50 border border-slate-200 rounded-[2.5rem] space-y-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Current Status</span>
+                          <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+                            formData.verificationStatus === 'VERIFIED' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' :
+                            formData.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-100 text-rose-700 border-rose-200' :
+                            'bg-blue-100 text-primary border-blue-200'
+                          }`}>
+                            {formData.verificationStatus || 'PENDING'}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Audit Completed by Class Teacher</span>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Teacher's Comment / Audit Note</label>
+                        <div className="w-full p-6 bg-white border border-slate-200 rounded-2xl min-h-[120px] shadow-inner">
+                          <p className="text-slate-600 font-bold italic leading-relaxed">
+                            {formData.verificationComment ? `"${formData.verificationComment}"` : "No audit notes available yet."}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 bg-white border border-slate-100 rounded-2xl">
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Profile Integrity</p>
+                          <p className="text-sm font-bold text-slate-700">{formData.profileCompleted ? 'COMPLETED' : 'INCOMPLETE'}</p>
+                        </div>
+                        <div className="p-4 bg-white border border-slate-100 rounded-2xl">
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Last Audit Sync</p>
+                          <p className="text-sm font-bold text-slate-700">Live DB Stream</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-amber-50 border border-amber-100 p-6 rounded-2xl flex items-start gap-4">
+                      <div className="p-3 bg-amber-500 rounded-xl text-white">
+                        <Info size={20} />
+                      </div>
+                      <div>
+                        <h5 className="text-sm font-black text-amber-900 uppercase tracking-widest mb-1">Administrative Note</h5>
+                        <p className="text-xs font-medium text-amber-800 leading-relaxed">
+                          Verification is primarily handled by Class Teachers. Administrators can override status during exceptional cases by updating the base profile.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 {activeTab === 'visibility' && (
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="System Visibility" icon={Eye} color="slate" />

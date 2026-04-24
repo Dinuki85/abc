@@ -14,9 +14,13 @@ import Link from 'next/link';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState('administration');
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
+    const user = api.getCurrentUser();
+    setCurrentUser(user);
     api.getAdminStats().then(setStats);
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
@@ -29,15 +33,18 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-white/20 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -mr-48 -mt-48 blur-3xl transition-all group-hover:bg-primary/10" />
         <div className="relative flex flex-col items-center text-center">
-          <h1 className="text-4xl md:text-6xl font-black text-slate-800 font-handlee leading-tight tracking-tight">
-            Welcome To <span className="text-primary">Andiambalama</span> <br /> 
-            Maha Vidhyalaya
-          </h1>
-          <div className="text-slate-400 font-bold uppercase tracking-[0.4em] text-[10px] mt-6 flex items-center gap-3">
-            <div className="w-12 h-1 bg-secondary rounded-full" />
-            Administrative Intelligence Hub
-            <div className="w-12 h-1 bg-secondary rounded-full" />
+          <div className="flex items-center gap-3 mb-6">
+            <span className="w-12 h-1 bg-primary rounded-full" />
+            <span className="text-primary font-black uppercase tracking-[0.3em] text-[10px]">Portal Administrator</span>
+            <span className="w-12 h-1 bg-primary rounded-full" />
           </div>
+          <h1 className="text-4xl md:text-6xl font-black text-slate-800 font-handlee leading-tight tracking-tight">
+            Welcome, <span className="text-primary">{currentUser?.name || 'Administrator'}</span> <br /> 
+            To Andiambalama Maha Vidhyalaya
+          </h1>
+          <p className="mt-6 text-slate-500 font-medium max-w-2xl mx-auto">
+            Manage institutional profiles, registrations, and performance analytics from your unified administrative hub.
+          </p>
         </div>
       </div>
 
@@ -68,163 +75,157 @@ export default function AdminDashboard() {
         ))}
       </section>
 
-      {/* Main Control Center */}
-      <div className="space-y-12">
+      {/* Dashboard Tabs Navigation */}
+      <div className="flex flex-wrap gap-4 justify-center bg-slate-100/50 p-2 rounded-[2rem] border border-slate-200/50 backdrop-blur-md">
+        {[
+          { id: 'administration', label: 'Administration', icon: Landmark },
+          { id: 'registration', label: 'Registration', icon: UserPlus },
+          { id: 'performance', label: 'Performance', icon: Activity },
+          { id: 'display', label: 'Display', icon: FileSpreadsheet },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex items-center gap-3 px-8 py-4 rounded-[1.5rem] font-bold transition-all ${
+              activeTab === tab.id 
+                ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' 
+                : 'text-slate-500 hover:bg-white hover:text-primary'
+            }`}
+          >
+            <tab.icon size={20} />
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
         
-        {/* Module: Administration */}
-        <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-primary to-primary-hover p-10 text-white flex justify-between items-center">
-            <div className="flex items-center gap-6">
-              <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
-                <Landmark size={32} className="text-secondary" />
-              </div>
-              <div>
-                <h2 className="text-3xl font-bold font-handlee tracking-tight">Institutional Administration</h2>
-                <p className="text-white/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Core Institutional Profile Management</p>
-              </div>
-            </div>
-            <div className="hidden md:block text-7xl font-black text-white/5 italic font-handlee">M-01</div>
-          </div>
-          <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 bg-slate-50/50">
-            {[
-              { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
-              { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
-              { name: 'Guardian Info', href: '/admin/parents', icon: Heart },
-              { name: 'Section Matrix', href: '/admin/grades', icon: Layers },
-              { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck },
-              { name: 'Class Matrix', href: '/admin/classes', icon: Presentation },
-              { name: 'Assessment', href: '#', icon: ClipboardList },
-              { name: 'Co-Curricular', href: '#', icon: Star },
-              { name: 'Sport List', href: '#', icon: Trophy },
-              { name: 'User Access', href: '/admin/users', icon: ShieldUser },
-              { name: 'Scholarships', href: '#', icon: GraduationCap },
-              { name: 'Sportmeet', href: '#', icon: Medal },
-              { name: 'School Events', href: '#', icon: Calendar },
-            ].map((btn, i) => (
-              <DashboardButton key={i} {...btn} color="primary" />
-            ))}
-          </div>
-        </div>
-
-        {/* Module: Registration */}
-        <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-10 text-white flex justify-between items-center">
-            <div className="flex items-center gap-6">
-              <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
-                <PlusCircle size={32} />
-              </div>
-              <div>
-                <h2 className="text-3xl font-bold font-handlee tracking-tight">Enrollment & Registration</h2>
-                <p className="text-orange-100/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Student & Faculty Dynamic Assignments</p>
+        {activeTab === 'administration' && (
+          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-primary to-primary-hover p-10 text-white flex justify-between items-center">
+              <div className="flex items-center gap-6">
+                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
+                  <Landmark size={32} className="text-secondary" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Institutional Administration</h2>
+                  <p className="text-white/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Core Institutional Profile Management</p>
+                </div>
               </div>
             </div>
-            <div className="hidden md:block text-7xl font-black text-white/5 italic font-handlee">M-02</div>
+            <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 bg-slate-50/50">
+              {[
+                { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
+                { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
+                { name: 'Guardian Info', href: '/admin/parents', icon: Heart },
+                { name: 'Section Matrix', href: '/admin/grades', icon: Layers },
+                { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck },
+                { name: 'Class Matrix', href: '/admin/classes', icon: Presentation },
+                { name: 'User Access', href: '/admin/users', icon: ShieldUser },
+              ].map((btn, i) => (
+                <DashboardButton key={i} {...btn} color="primary" />
+              ))}
+            </div>
           </div>
-          <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 bg-slate-50/50">
-            {[
-              { name: 'Add To Classes', href: '/admin/assignment', icon: UserCheck },
-              { name: 'Add To Sport', href: '#', icon: Trophy },
-              { name: 'Co-Activities', href: '#', icon: Star },
-              { name: 'Time Table', href: '#', icon: Calendar },
-              { name: 'Scholarship Enr.', href: '#', icon: GraduationCap },
-              { name: 'Event Registration', href: '#', icon: Calendar },
-              { name: 'Subject Assign', href: '#', icon: BookCheck },
-              { name: 'Assessment Assign', href: '#', icon: ClipboardList },
-            ].map((btn, i) => (
-              <DashboardButton key={i} {...btn} color="orange" />
-            ))}
-          </div>
-        </div>
+        )}
 
-        {/* Module: Performance */}
-        <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 p-10 text-white flex justify-between items-center">
-            <div className="flex items-center gap-6">
-              <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
-                <Activity size={32} className="text-secondary" />
-              </div>
-              <div>
-                <h2 className="text-3xl font-bold font-handlee tracking-tight">Performance Analytics</h2>
-                <p className="text-emerald-100/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Academic Records & Merit Reporting</p>
+        {activeTab === 'registration' && (
+          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-10 text-white flex justify-between items-center">
+              <div className="flex items-center gap-6">
+                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
+                  <PlusCircle size={32} />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Enrollment & Registration</h2>
+                  <p className="text-orange-100/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Student & Faculty Dynamic Assignments</p>
+                </div>
               </div>
             </div>
-            <div className="hidden md:block text-7xl font-black text-white/5 italic font-handlee">M-03</div>
+            <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 bg-slate-50/50">
+              {[
+                { name: 'Add To Classes', href: '/admin/assignment', icon: UserCheck },
+                { name: 'Student Enrollment', href: '/admin/registration', icon: UserPlus },
+                { name: 'Subject Assign', href: '#', icon: BookCheck },
+                { name: 'Assessment Assign', href: '#', icon: ClipboardList },
+              ].map((btn, i) => (
+                <DashboardButton key={i} {...btn} color="orange" />
+              ))}
+            </div>
           </div>
-          <div className="p-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-slate-50/50">
-            {[
-              { name: 'Exam Results', href: '#', icon: CheckCircle2 },
-              { name: 'Scholarship Dist.', href: '#', icon: GraduationCap },
-              { name: 'Sporting Success', href: '#', icon: Trophy },
-              { name: 'Welfare Processing', href: '#', icon: HeartHandshake },
-              { name: 'S1 Data Forms', href: '#', icon: FileSpreadsheet },
-              { name: 'Assessment Analytics', href: '#', icon: ClipboardList },
-            ].map((btn, i) => (
-              <DashboardButton key={i} {...btn} color="emerald" />
-            ))}
-          </div>
-        </div>
+        )}
 
-        {/* Module: Reporting Grid */}
-        <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-          <div className="bg-slate-800 p-10 text-white flex justify-between items-center">
-            <div className="flex items-center gap-6">
-              <div className="p-4 bg-white/10 rounded-[2rem] border border-white/10 backdrop-blur-xl">
-                <FileSpreadsheet size={32} />
-              </div>
-              <div>
-                <h2 className="text-3xl font-bold font-handlee tracking-tight">Advanced Reporting Engine</h2>
-                <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mt-1">Cross-Reference Institutional Intelligence</p>
+        {activeTab === 'performance' && (
+          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 p-10 text-white flex justify-between items-center">
+              <div className="flex items-center gap-6">
+                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
+                  <Activity size={32} className="text-secondary" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Performance Analytics</h2>
+                  <p className="text-emerald-100/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Academic Records & Merit Reporting</p>
+                </div>
               </div>
             </div>
-            <div className="hidden md:block text-7xl font-black text-white/5 italic font-handlee">M-04</div>
+            <div className="p-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-slate-50/50">
+              {[
+                { name: 'Exam Results', href: '#', icon: CheckCircle2 },
+                { name: 'Scholarship Dist.', href: '#', icon: GraduationCap },
+                { name: 'Assessment Analytics', href: '#', icon: ClipboardList },
+              ].map((btn, i) => (
+                <DashboardButton key={i} {...btn} color="emerald" />
+              ))}
+            </div>
           </div>
-          <div className="p-10 grid grid-cols-1 md:grid-cols-4 gap-12 bg-slate-50/50">
-             
-             <ReportColumn 
-               title="All School" 
-               items={[
-                 { name: 'All List', icon: Users },
-                 { name: 'Welfare Paid/Not Paid', icon: HeartHandshake },
-                 { name: 'Health Report', icon: Activity },
-                 { name: 'Skill Report', icon: Award },
-                 { name: 'Contact Report', icon: Phone },
-                 { name: 'Exam Report', icon: FileCheck },
-               ]} 
-             />
+        )}
 
-             <ReportColumn 
-               title="Student List" 
-               items={[
-                 { name: 'Section Based', icon: Layers },
-                 { name: 'Subject Based', icon: BookCheck },
-                 { name: 'Scholarship Based', icon: GraduationCap },
-                 { name: 'Religion Based', icon: Heart },
-                 { name: 'Nationality Based', icon: Landmark },
-                 { name: 'Gender Based', icon: Users2 },
-               ]} 
-             />
-
-             <ReportColumn 
-               title="Teacher" 
-               items={[
-                 { name: 'Class Teacher List', icon: UserCheck },
-                 { name: 'Teacher Incharge List', icon: ShieldCheck },
-                 { name: 'Subject Wise List', icon: BookOpen },
-               ]} 
-             />
-
-             <ReportColumn 
-               title="Individual" 
-               items={[
-                 { name: 'Student CV', icon: Contact },
-                 { name: 'Teacher CV', icon: Briefcase },
-                 { name: 'Guardian CV', icon: Heart },
-                 { name: 'Teacher Timetable', icon: Calendar },
-               ]} 
-             />
-
+        {activeTab === 'display' && (
+          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
+            <div className="bg-slate-800 p-10 text-white flex justify-between items-center">
+              <div className="flex items-center gap-6">
+                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/10 backdrop-blur-xl">
+                  <FileSpreadsheet size={32} />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Advanced Reporting Engine</h2>
+                  <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mt-1">Cross-Reference Institutional Intelligence</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-10 grid grid-cols-1 md:grid-cols-4 gap-12 bg-slate-50/50">
+               <ReportColumn 
+                 title="All School" 
+                 items={[
+                   { name: 'All List', icon: Users },
+                   { name: 'Health Report', icon: Activity },
+                   { name: 'Exam Report', icon: FileCheck },
+                 ]} 
+               />
+               <ReportColumn 
+                 title="Student List" 
+                 items={[
+                   { name: 'Section Based', icon: Layers },
+                   { name: 'Subject Based', icon: BookCheck },
+                 ]} 
+               />
+               <ReportColumn 
+                 title="Teacher" 
+                 items={[
+                   { name: 'Class Teacher List', icon: UserCheck },
+                 ]} 
+               />
+               <ReportColumn 
+                 title="Individual" 
+                 items={[
+                   { name: 'Student CV', icon: Contact },
+                   { name: 'Teacher CV', icon: Briefcase },
+                 ]} 
+               />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
