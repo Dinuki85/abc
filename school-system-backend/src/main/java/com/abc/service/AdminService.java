@@ -398,3 +398,5 @@ public class AdminService {
         staffRepository.save(staff);
     }
 }
+
+// Granular commit 4 for Step 4 (Admin & Dashboard Logic)
