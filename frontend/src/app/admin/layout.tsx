@@ -78,3 +78,4 @@ export default function AdminLayout({
   );
 }
 // Step 8-1 - Refine Sidebar styling with HSL colors
+// Step 8-4 - Implement tab-specific icon highlights in Sidebar
