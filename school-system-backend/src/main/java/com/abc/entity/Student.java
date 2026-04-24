@@ -142,3 +142,5 @@ public class Student {
     public String getAdditionalData() { return additionalData; }
     public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
 }
+
+// Granular commit 4 for Step 2 (Student Management)
