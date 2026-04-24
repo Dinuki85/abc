@@ -45,3 +45,5 @@ public class AuthService {
         throw new RuntimeException("User not found");
     }
 }
+
+// Granular commit 3 for Step 1
