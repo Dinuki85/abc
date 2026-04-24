@@ -43,3 +43,5 @@ public class User {
     public boolean isFirstLogin() { return isFirstLogin; }
     public void setFirstLogin(boolean firstLogin) { isFirstLogin = firstLogin; }
 }
+
+// Granular commit 5 for Step 1
