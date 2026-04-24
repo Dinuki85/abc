@@ -67,3 +67,4 @@ export default function Sidebar({ menuItems }: SidebarProps) {
 // Step 8-21 - Add micro-animations for button transitions
 // Step 8-24 - Implement hover-dependent shadow on sidebar items
 // Step 8-27 - Refine border colors for dark mode compatibility
+// Step 8-30 - Final cleanup of Frontend Layout & Sidebar for Step 8
