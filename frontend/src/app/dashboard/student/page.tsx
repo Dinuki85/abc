@@ -319,3 +319,5 @@ export default function StudentDashboard() {
 
 // Step 10-5 - Optimize bundle size with dynamic imports
 
+// Step 10-6 - Implement session timeout warning logic
+
