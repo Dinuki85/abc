@@ -223,4 +223,5 @@ public class Student {
     private String achievementInternational;
     private String achievementNational;
     private String achievementProvincial;
+    private String achievementZonal;
 }
