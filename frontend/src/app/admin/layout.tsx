@@ -83,3 +83,4 @@ export default function AdminLayout({
 // Step 8-10 - Add active indicator line to Sidebar items
 // Step 8-13 - Add showNewButton state to AdminLayout
 // Step 8-16 - Add custom scrollbar styles to globals.css
+// Step 8-19 - Add responsive toggle logic for sidebar
