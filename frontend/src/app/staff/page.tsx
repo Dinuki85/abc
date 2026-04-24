@@ -174,3 +174,5 @@ function ArrowRight({ size, className }: { size: number, className?: string }) {
 // Granular commit 1 for Step 5 (Frontend Integration)
 
 // Granular commit 5 for Step 5 (Frontend Integration)
+
+// Granular commit 9 for Step 5 (Frontend Integration)
