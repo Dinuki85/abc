@@ -311,3 +311,5 @@ export default function StudentDashboard() {
 // Step 10-28 - Final review of administrative statistics
 // Step 10-1 - Final integration check of Teacher verification process
 
+// Step 10-2 - Add transition animations between portal views
+
