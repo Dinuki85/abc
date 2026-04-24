@@ -128,3 +128,4 @@ public class StudentService {
 // Step 7-19 - Refine User entity for NIC login support
 // Step 7-22 - Refine AuthService for role-based login logic
 // Step 7-25 - Refine AdminService to view all verified students
+// Step 7-28 - Add getClassTimetable placeholder to StudentService
