@@ -235,4 +235,5 @@ public class Student {
     private String talentCinematography;
     private String addressPermanent;
     private String addressTemporary;
+    private String contactEmergency;
 }
