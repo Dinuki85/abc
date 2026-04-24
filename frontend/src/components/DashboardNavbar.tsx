@@ -10,7 +10,10 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
   const [user, setUser] = useState<any>(null);
   const [time, setTime] = useState<string>('');
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     const currentUser = api.getCurrentUser();
     if (currentUser) {
       setUser(currentUser);
@@ -20,13 +23,16 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
           if (profile && profile.name) {
             setUser((prev: any) => ({ ...prev, fullName: profile.name }));
           }
-        });
+        }).catch(err => console.error("Could not fetch staff profile for navbar", err));
       }
     }
 
+    const now = new Date();
+    setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+
     const timer = setInterval(() => {
-      const now = new Date();
-      setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      const currentTime = new Date();
+      setTime(currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     }, 1000);
 
     return () => clearInterval(timer);
@@ -69,7 +75,7 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">System Status</span>
           <div className="flex items-center gap-2 text-base font-black text-slate-800 tabular-nums">
             <Clock size={14} className="text-primary" />
-            {time || '--:--:--'}
+            {mounted && time ? time : '--:--:--'}
           </div>
         </div>
 
@@ -102,3 +108,5 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
 }
 
 
+
+// Granular commit 3 for Step 5 (Frontend Integration)
