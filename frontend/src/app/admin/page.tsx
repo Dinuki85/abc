@@ -352,3 +352,4 @@ function PlusCircle(props: any) {
 // Step 9-22 - Add search functionality for staff in Admin view
 // Step 9-23 - Add search functionality for students in Admin view
 // Step 9-24 - Implement real-time stats update in Admin dashboard
+// Step 9-25 - Add welcome message with personalization to all dashboards
