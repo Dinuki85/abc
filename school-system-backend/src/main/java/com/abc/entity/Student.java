@@ -240,4 +240,5 @@ public class Student {
     private String contactHome;
     private String contactMobile;
     private String contactEmail;
+    private String distanceToSchool;
 }
