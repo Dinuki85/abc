@@ -227,4 +227,5 @@ public class Student {
     private String achievementDivisional;
     private String achievementSchool;
     private String talentAgri;
+    private String talentIct;
 }
