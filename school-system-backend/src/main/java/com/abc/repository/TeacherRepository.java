@@ -13,3 +13,5 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 }
 
 // Granular commit 1 for Step 3 (Teacher Management)
+
+// Granular commit 5 for Step 3 (Teacher Management)
