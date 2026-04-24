@@ -351,3 +351,5 @@ export default function StudentDashboard() {
 
 // Step 10-21 - Refine error messages for login failures
 
+// Step 10-22 - Test Grade/Class assignment synchronization
+
