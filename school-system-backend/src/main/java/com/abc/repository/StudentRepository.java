@@ -42,3 +42,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 }
 
 // Granular commit 1 for Step 2 (Student Management)
+
+// Granular commit 5 for Step 2 (Student Management)
