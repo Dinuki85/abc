@@ -317,3 +317,5 @@ export default function StudentDashboard() {
 
 // Step 10-4 - Test verification status updates across roles
 
+// Step 10-5 - Optimize bundle size with dynamic imports
+
