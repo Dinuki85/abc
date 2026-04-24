@@ -120,3 +120,4 @@ public class StudentService {
 // Granular commit 26 for Step 2 (Student Management)
 
 // Granular commit 30 for Step 2 (Student Management)
+// Step 7-4 - Refine AdminService enrollStudent to handle new fields
