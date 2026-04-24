@@ -361,3 +361,5 @@ export default function StudentDashboard() {
 
 // Step 10-26 - Verify Student 'Resolve Now' button redirection
 
+// Step 10-27 - Test multi-tab state persistence in profile forms
+
