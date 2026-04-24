@@ -56,3 +56,5 @@ public class AuthController {
         public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
     }
 }
+
+// Granular commit 4 for Step 1
