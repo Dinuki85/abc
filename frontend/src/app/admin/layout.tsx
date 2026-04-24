@@ -77,3 +77,4 @@ export default function AdminLayout({
     </div>
   );
 }
+// Step 8-1 - Refine Sidebar styling with HSL colors
