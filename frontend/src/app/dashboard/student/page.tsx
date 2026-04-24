@@ -307,3 +307,4 @@ export default function StudentDashboard() {
 // Step 10-16 - Refine typography consistency across portals
 // Step 10-19 - Refine breadcrumb navigation for deep links
 // Step 10-22 - Add skeleton loaders for data-heavy views
+// Step 10-25 - Refine accessibility (ARIA labels) for sidebar
