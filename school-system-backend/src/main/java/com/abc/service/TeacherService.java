@@ -201,3 +201,4 @@ public class TeacherService {
 // Granular commit 26 for Step 3 (Teacher Management)
 
 // Granular commit 30 for Step 3 (Teacher Management)
+// Step 7-2 - Add updateProfile method to StaffService
