@@ -147,5 +147,6 @@ public class Staff {
     public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
     private String resultGceOl;
     private boolean isActiveStudent = true;
+    private String verificationStatusDetail;
 }
 
