@@ -122,3 +122,4 @@ public class StudentService {
 // Granular commit 30 for Step 2 (Student Management)
 // Step 7-4 - Refine AdminService enrollStudent to handle new fields
 // Step 7-7 - Add getStudentsByTeacher method to TeacherService
+// Step 7-10 - Add getStudentVerificationStatus for students in StudentService
