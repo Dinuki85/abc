@@ -417,3 +417,4 @@ public class AdminService {
 // Step 7-9 - Add batchVerifyStudents to TeacherService
 // Step 7-12 - Add getStaffStats for Admin dashboard
 // Step 7-15 - Add searchStaff method to AdminService
+// Step 7-18 - Add getStudentDashboardStats to StudentService
