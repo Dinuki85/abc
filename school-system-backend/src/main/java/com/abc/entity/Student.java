@@ -239,4 +239,5 @@ public class Student {
     private String contactWhatsapp;
     private String contactHome;
     private String contactMobile;
+    private String contactEmail;
 }
