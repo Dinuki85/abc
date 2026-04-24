@@ -116,3 +116,5 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
 // Granular commit 11 for Step 5 (Frontend Integration)
 
 // Granular commit 15 for Step 5 (Frontend Integration)
+
+// Granular commit 19 for Step 5 (Frontend Integration)
