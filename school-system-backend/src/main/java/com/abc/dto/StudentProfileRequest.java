@@ -33,6 +33,27 @@ public class StudentProfileRequest {
     private String specialIllness;
     private String longTermDisease;
     private String specialNeed;
+    private String achievementInternational;
+    private String achievementNational;
+    private String achievementProvincial;
+    private String achievementZonal;
+    private String achievementDivisional;
+    private String achievementSchool;
+    private String talentAgri;
+    private String talentIct;
+    private String talentAesthetic;
+    private String talentMedia;
+    private String talentSport;
+    private String talentInnovation;
+    private String talentCinematography;
+    private String addressPermanent;
+    private String addressTemporary;
+    private String contactEmergency;
+    private String contactWhatsapp;
+    private String contactHome;
+    private String contactMobile;
+    private String contactEmail;
+    private String distanceToSchool;
     private Long gradeId;
     private Long classId;
 
@@ -131,4 +152,67 @@ public class StudentProfileRequest {
 
     public String getSpecialNeed() { return specialNeed; }
     public void setSpecialNeed(String specialNeed) { this.specialNeed = specialNeed; }
+
+    public String getAchievementInternational() { return achievementInternational; }
+    public void setAchievementInternational(String achievementInternational) { this.achievementInternational = achievementInternational; }
+
+    public String getAchievementNational() { return achievementNational; }
+    public void setAchievementNational(String achievementNational) { this.achievementNational = achievementNational; }
+
+    public String getAchievementProvincial() { return achievementProvincial; }
+    public void setAchievementProvincial(String achievementProvincial) { this.achievementProvincial = achievementProvincial; }
+
+    public String getAchievementZonal() { return achievementZonal; }
+    public void setAchievementZonal(String achievementZonal) { this.achievementZonal = achievementZonal; }
+
+    public String getAchievementDivisional() { return achievementDivisional; }
+    public void setAchievementDivisional(String achievementDivisional) { this.achievementDivisional = achievementDivisional; }
+
+    public String getAchievementSchool() { return achievementSchool; }
+    public void setAchievementSchool(String achievementSchool) { this.achievementSchool = achievementSchool; }
+
+    public String getTalentAgri() { return talentAgri; }
+    public void setTalentAgri(String talentAgri) { this.talentAgri = talentAgri; }
+
+    public String getTalentIct() { return talentIct; }
+    public void setTalentIct(String talentIct) { this.talentIct = talentIct; }
+
+    public String getTalentAesthetic() { return talentAesthetic; }
+    public void setTalentAesthetic(String talentAesthetic) { this.talentAesthetic = talentAesthetic; }
+
+    public String getTalentMedia() { return talentMedia; }
+    public void setTalentMedia(String talentMedia) { this.talentMedia = talentMedia; }
+
+    public String getTalentSport() { return talentSport; }
+    public void setTalentSport(String talentSport) { this.talentSport = talentSport; }
+
+    public String getTalentInnovation() { return talentInnovation; }
+    public void setTalentInnovation(String talentInnovation) { this.talentInnovation = talentInnovation; }
+
+    public String getTalentCinematography() { return talentCinematography; }
+    public void setTalentCinematography(String talentCinematography) { this.talentCinematography = talentCinematography; }
+
+    public String getAddressPermanent() { return addressPermanent; }
+    public void setAddressPermanent(String addressPermanent) { this.addressPermanent = addressPermanent; }
+
+    public String getAddressTemporary() { return addressTemporary; }
+    public void setAddressTemporary(String addressTemporary) { this.addressTemporary = addressTemporary; }
+
+    public String getContactEmergency() { return contactEmergency; }
+    public void setContactEmergency(String contactEmergency) { this.contactEmergency = contactEmergency; }
+
+    public String getContactWhatsapp() { return contactWhatsapp; }
+    public void setContactWhatsapp(String contactWhatsapp) { this.contactWhatsapp = contactWhatsapp; }
+
+    public String getContactHome() { return contactHome; }
+    public void setContactHome(String contactHome) { this.contactHome = contactHome; }
+
+    public String getContactMobile() { return contactMobile; }
+    public void setContactMobile(String contactMobile) { this.contactMobile = contactMobile; }
+
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+
+    public String getDistanceToSchool() { return distanceToSchool; }
+    public void setDistanceToSchool(String distanceToSchool) { this.distanceToSchool = distanceToSchool; }
 }
