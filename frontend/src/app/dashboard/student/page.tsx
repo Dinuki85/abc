@@ -315,3 +315,5 @@ export default function StudentDashboard() {
 
 // Step 10-3 - Verify NIC login for staff with test data
 
+// Step 10-4 - Test verification status updates across roles
+
