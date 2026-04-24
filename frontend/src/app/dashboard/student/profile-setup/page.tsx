@@ -312,3 +312,5 @@ function TextAreaField({ label, name, value, onChange }: any) {
 
 // Step 9-6 - Add verification status badge to Student Dashboard
 
+// Step 9-7 - Refine Student Profile save logic with toast notifications
+
