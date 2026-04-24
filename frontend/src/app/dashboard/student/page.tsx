@@ -296,3 +296,4 @@ export default function StudentDashboard() {
 // Step 9-5 - Implement Tab 5 UI for Student Profile
 // Step 9-6 - Add verification status badge to Student Dashboard
 // Step 9-7 - Refine Student Profile save logic with toast notifications
+// Step 9-8 - Add auto-calculate age logic to Student Profile
