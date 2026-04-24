@@ -430,3 +430,5 @@ export default function TeacherDashboard() {
     </div>
   );
 }
+
+// Granular commit 2 for Step 5 (Frontend Integration)
