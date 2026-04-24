@@ -62,3 +62,5 @@ public class IntakeService {
 // Granular commit 14 for Step 4 (Admin & Dashboard Logic)
 
 // Granular commit 18 for Step 4 (Admin & Dashboard Logic)
+
+// Granular commit 22 for Step 4 (Admin & Dashboard Logic)
