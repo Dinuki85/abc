@@ -234,4 +234,5 @@ public class Student {
     private String talentInnovation;
     private String talentCinematography;
     private String addressPermanent;
+    private String addressTemporary;
 }
