@@ -149,5 +149,6 @@ public class Staff {
     private boolean isActiveStudent = true;
     private String verificationStatusDetail;
     private String appointmentDate1st;
+    private String appointmentDistrict1st;
 }
 
