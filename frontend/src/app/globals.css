@@ -59,3 +59,4 @@ h1, h2, h3, h4, .font-handlee {
     @apply bg-white/80 backdrop-blur-md border border-white/20;
   }
 }
+// Step 8-2 - Add transition effects to Sidebar items
