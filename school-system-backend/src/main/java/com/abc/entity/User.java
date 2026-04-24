@@ -1,4 +1,5 @@
 package com.abc.entity;
+// User entity for authentication
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
