@@ -355,3 +355,5 @@ export default function StudentDashboard() {
 
 // Step 10-23 - Verify Teacher assigned classes list update
 
+// Step 10-24 - Polish typography and spacing in Admin Portal
+
