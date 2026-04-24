@@ -347,3 +347,5 @@ export default function StudentDashboard() {
 
 // Step 10-19 - Test logout and session cleanup workflow
 
+// Step 10-20 - Verify cross-browser compatibility for dashboards
+
