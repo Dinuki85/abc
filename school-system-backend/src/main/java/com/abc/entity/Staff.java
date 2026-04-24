@@ -145,5 +145,6 @@ public class Staff {
 
     public String getAdditionalData() { return additionalData; }
     public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
+    private String resultGceOl;
 }
 
