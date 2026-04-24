@@ -322,3 +322,5 @@ function TextAreaField({ label, name, value, onChange }: any) {
 
 // Step 9-11 - Implement Tab 3 UI for Staff Profile
 
+// Step 9-12 - Add NIC-based login support for Staff
+
