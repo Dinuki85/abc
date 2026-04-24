@@ -27,3 +27,5 @@ public class Teacher {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 }
+
+// Granular commit 4 for Step 3 (Teacher Management)
