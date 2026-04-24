@@ -66,3 +66,4 @@ export default function Sidebar({ menuItems }: SidebarProps) {
 // Step 8-18 - Add tooltips placeholder for sidebar collapsed state
 // Step 8-21 - Add micro-animations for button transitions
 // Step 8-24 - Implement hover-dependent shadow on sidebar items
+// Step 8-27 - Refine border colors for dark mode compatibility
