@@ -241,4 +241,5 @@ public class Student {
     private String contactMobile;
     private String contactEmail;
     private String distanceToSchool;
+    private String resultGrade05;
 }
