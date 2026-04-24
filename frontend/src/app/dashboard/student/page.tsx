@@ -341,3 +341,5 @@ export default function StudentDashboard() {
 
 // Step 10-16 - Verify Admin stats dashboard data accuracy
 
+// Step 10-17 - Add tooltips to complex form fields
+
