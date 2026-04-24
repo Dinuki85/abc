@@ -415,3 +415,4 @@ public class AdminService {
 // Step 7-3 - Add changePassword method to StaffService
 // Step 7-6 - Add assignTeacherToClass method refinement in AdminService
 // Step 7-9 - Add batchVerifyStudents to TeacherService
+// Step 7-12 - Add getStaffStats for Admin dashboard
