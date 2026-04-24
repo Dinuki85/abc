@@ -209,3 +209,4 @@ public class TeacherService {
 // Step 7-17 - Add getTeacherDashboardStats to TeacherService
 // Step 7-20 - Add findByNic method to UserRepository
 // Step 7-23 - Add isVerified check to StudentService
+// Step 7-26 - Refine AdminService to view all pending verifications
