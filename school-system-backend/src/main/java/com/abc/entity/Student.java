@@ -237,4 +237,5 @@ public class Student {
     private String addressTemporary;
     private String contactEmergency;
     private String contactWhatsapp;
+    private String contactHome;
 }
