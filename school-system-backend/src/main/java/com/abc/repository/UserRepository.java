@@ -16,3 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 // Granular commit 12 for Step 1
 
 // Granular commit 17 for Step 1
+
+// Granular commit 22 for Step 1
