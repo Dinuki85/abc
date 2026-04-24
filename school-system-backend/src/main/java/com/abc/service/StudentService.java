@@ -125,3 +125,4 @@ public class StudentService {
 // Step 7-10 - Add getStudentVerificationStatus for students in StudentService
 // Step 7-13 - Add getStudentStats for Admin dashboard
 // Step 7-16 - Add filterStudentsByVerificationStatus to AdminService
+// Step 7-19 - Refine User entity for NIC login support
