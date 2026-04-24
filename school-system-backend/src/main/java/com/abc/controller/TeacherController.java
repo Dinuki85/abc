@@ -160,3 +160,5 @@ public class TeacherController {
         }
     }
 }
+
+// Granular commit 3 for Step 3 (Teacher Management)
