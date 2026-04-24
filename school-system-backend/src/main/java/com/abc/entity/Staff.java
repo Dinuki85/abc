@@ -151,5 +151,6 @@ public class Staff {
     private String appointmentDate1st;
     private String appointmentDistrict1st;
     private String appointmentInstitute1st;
+    private String hierarchyCarder;
 }
 
