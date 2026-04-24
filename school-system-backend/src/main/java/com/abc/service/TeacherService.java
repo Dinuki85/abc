@@ -207,3 +207,4 @@ public class TeacherService {
 // Step 7-11 - Refine saveStudentProfile in StudentService for Tab 3-5
 // Step 7-14 - Refine deleteTeacher to handle all relations
 // Step 7-17 - Add getTeacherDashboardStats to TeacherService
+// Step 7-20 - Add findByNic method to UserRepository
