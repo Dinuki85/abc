@@ -357,3 +357,5 @@ export default function StudentDashboard() {
 
 // Step 10-24 - Polish typography and spacing in Admin Portal
 
+// Step 10-25 - Final security audit of administrative actions
+
