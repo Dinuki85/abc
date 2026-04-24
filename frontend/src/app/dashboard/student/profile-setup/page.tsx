@@ -350,3 +350,5 @@ function TextAreaField({ label, name, value, onChange }: any) {
 
 // Step 9-25 - Refine enrollment modal with Grade/Class pre-selection
 
+// Step 9-26 - Add loading states to all profile forms
+
