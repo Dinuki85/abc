@@ -58,3 +58,4 @@ export default function Sidebar({ menuItems }: SidebarProps) {
     </aside>
   );
 }
+// Step 8-3 - Add group-hover animations to Sidebar icons
