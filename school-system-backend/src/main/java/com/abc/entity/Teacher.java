@@ -29,3 +29,5 @@ public class Teacher {
 }
 
 // Granular commit 4 for Step 3 (Teacher Management)
+
+// Granular commit 8 for Step 3 (Teacher Management)
