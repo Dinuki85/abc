@@ -331,3 +331,5 @@ export default function StudentDashboard() {
 
 // Step 10-11 - Verify Student Dashboard onboarding progress bar
 
+// Step 10-12 - Test Admin 'New Enrollment' with temporary password
+
