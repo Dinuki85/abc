@@ -106,3 +106,5 @@ public class StudentService {
 }
 
 // Granular commit 2 for Step 2 (Student Management)
+
+// Granular commit 6 for Step 2 (Student Management)
