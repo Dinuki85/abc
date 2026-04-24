@@ -339,3 +339,5 @@ export default function StudentDashboard() {
 
 // Step 10-15 - Test Staff Profile save with service history
 
+// Step 10-16 - Verify Admin stats dashboard data accuracy
+
