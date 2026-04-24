@@ -64,3 +64,4 @@ export default function Sidebar({ menuItems }: SidebarProps) {
 // Step 8-12 - Add showSaveButton state to AdminLayout
 // Step 8-15 - Implement logic to show/hide buttons based on pathname
 // Step 8-18 - Add tooltips placeholder for sidebar collapsed state
+// Step 8-21 - Add micro-animations for button transitions
