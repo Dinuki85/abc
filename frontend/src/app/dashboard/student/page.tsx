@@ -304,3 +304,4 @@ export default function StudentDashboard() {
 // Step 10-7 - Polish sidebar responsiveness for tablet devices
 // Step 10-10 - Verify Index No login for students with test data
 // Step 10-13 - Refine Admin stats visualization with better charts
+// Step 10-16 - Refine typography consistency across portals
