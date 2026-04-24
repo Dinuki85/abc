@@ -333,3 +333,5 @@ export default function StudentDashboard() {
 
 // Step 10-12 - Test Admin 'New Enrollment' with temporary password
 
+// Step 10-13 - Verify Teacher 'Audit Profile' button functionality
+
