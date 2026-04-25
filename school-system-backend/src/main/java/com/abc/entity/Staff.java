@@ -153,6 +153,8 @@ public class Staff {
     private String appointmentInstitute1st;
     private String hierarchyCarder;
     private boolean isAcademicStaff;
+    private String appointmentLetterNumber;
+    private String grade;
 
     public String getResultGceOl() { return resultGceOl; }
     public void setResultGceOl(String resultGceOl) { this.resultGceOl = resultGceOl; }
@@ -166,6 +168,9 @@ public class Staff {
     public String getAppointmentDate1st() { return appointmentDate1st; }
     public void setAppointmentDate1st(String appointmentDate1st) { this.appointmentDate1st = appointmentDate1st; }
 
+    public String getFirstAppointmentDate() { return appointmentDate1st; }
+    public void setFirstAppointmentDate(String firstAppointmentDate) { this.appointmentDate1st = firstAppointmentDate; }
+
     public String getAppointmentDistrict1st() { return appointmentDistrict1st; }
     public void setAppointmentDistrict1st(String appointmentDistrict1st) { this.appointmentDistrict1st = appointmentDistrict1st; }
 
@@ -175,7 +180,19 @@ public class Staff {
     public String getHierarchyCarder() { return hierarchyCarder; }
     public void setHierarchyCarder(String hierarchyCarder) { this.hierarchyCarder = hierarchyCarder; }
 
+    public String getCarder() { return hierarchyCarder; }
+    public void setCarder(String carder) { this.hierarchyCarder = carder; }
+
     public boolean isAcademicStaff() { return isAcademicStaff; }
     public void setAcademicStaff(boolean academicStaff) { isAcademicStaff = academicStaff; }
+
+    public String getContactEmail() { return this.getEmail(); }
+    public void setContactEmail(String contactEmail) { this.setEmail(contactEmail); }
+
+    public String getAppointmentLetterNumber() { return appointmentLetterNumber; }
+    public void setAppointmentLetterNumber(String appointmentLetterNumber) { this.appointmentLetterNumber = appointmentLetterNumber; }
+
+    public String getGrade() { return grade; }
+    public void setGrade(String grade) { this.grade = grade; }
 }
 
