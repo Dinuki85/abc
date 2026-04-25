@@ -9,13 +9,11 @@ import { api } from "@/lib/api";
 import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck, Landmark, UserPlus, Activity, FileSpreadsheet } from "lucide-react";
 
 const adminMenuItems = [
-  { name: 'Control Dashboard', href: '/admin', icon: BarChart3 },
-  { name: 'Institutional Admin', href: '/admin/institutional', icon: Landmark },
-  { name: 'Enrollment & Registration', href: '/admin/registration', icon: UserPlus },
-  { name: 'Performance Analytics', href: '/admin/performance', icon: Activity },
-  { name: 'Reporting Engine', href: '/admin/reporting', icon: FileSpreadsheet },
+  { name: 'Administration', href: '/admin', icon: Landmark },
+  { name: 'Registration', href: '/admin/registration', icon: UserPlus },
+  { name: 'Performance', href: '/admin/performance', icon: Activity },
+  { name: 'Display', href: '/admin/display', icon: FileSpreadsheet },
   { name: 'User Management', href: '/admin/users', icon: Settings },
-  { name: 'Security & Profile', href: '/admin/profile', icon: ShieldCheck },
 ];
 
 export default function AdminLayout({

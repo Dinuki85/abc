@@ -287,21 +287,21 @@ public class AdminService {
             throw new RuntimeException("Student with this index number already exists");
         }
 
-        // 1. Create User
+        // 1. Create User with temporary password
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.ROLE_STUDENT);
-        user.setFirstLogin(true);
+        user.setFirstLogin(true); // Mandatory first login workflow
         userRepository.save(user);
 
         // 2. Create Student
         Student student = new Student();
         student.setUser(user);
+        student.setFullName(request.getFullName()); // Added to EnrollStudentRequest
         student.setProfileCompleted(false);
         student.setVerificationStatus(VerificationStatus.PENDING);
         
-        // Pre-assign Grade if provided
         if (request.getGradeId() != null) {
             Grade grade = gradeRepository.findById(request.getGradeId())
                     .orElseThrow(() -> new RuntimeException("Grade not found"));
@@ -396,6 +396,29 @@ public class AdminService {
         staff.setMedicalHistory(profile.getMedicalHistory());
         
         staffRepository.save(staff);
+    }
+
+    public java.util.Map<String, Object> getStaffStats() {
+        java.util.Map<String, Object> stats = new java.util.HashMap<>();
+        List<Staff> allStaff = staffRepository.findAll();
+        
+        long academicCount = allStaff.stream().filter(s -> s.getDesignations().contains(Designation.CLASS_TEACHER) || s.getDesignations().contains(Designation.SUBJECT_TEACHER)).count();
+        long nonAcademicCount = allStaff.size() - academicCount;
+        
+        stats.put("totalStaff", allStaff.size());
+        stats.put("academicStaff", academicCount);
+        stats.put("nonAcademicStaff", nonAcademicCount);
+        return stats;
+    }
+
+    public List<Staff> searchStaff(String searchTerm) {
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return staffRepository.findAll();
+        }
+        return staffRepository.findAll().stream()
+                .filter(s -> s.getName().toLowerCase().contains(searchTerm.toLowerCase()) || 
+                            (s.getUser() != null && s.getUser().getUsername().toLowerCase().contains(searchTerm.toLowerCase())))
+                .collect(Collectors.toList());
     }
 }
 

@@ -39,6 +39,7 @@ public class Student {
     private String birthCertificateNumber;
 
     private String nic;
+    private String district;
 
     @Column(name = "name_sinhala")
     private String nameSinhala;
@@ -147,6 +148,9 @@ public class Student {
     public String getNic() { return nic; }
     public void setNic(String nic) { this.nic = nic; }
 
+    public String getDistrict() { return district; }
+    public void setDistrict(String district) { this.district = district; }
+
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
@@ -242,4 +246,74 @@ public class Student {
     private String contactEmail;
     private String distanceToSchool;
     private String resultGrade05;
+    private String resultGceOl;
+
+    public String getAchievementInternational() { return achievementInternational; }
+    public void setAchievementInternational(String achievementInternational) { this.achievementInternational = achievementInternational; }
+
+    public String getAchievementNational() { return achievementNational; }
+    public void setAchievementNational(String achievementNational) { this.achievementNational = achievementNational; }
+
+    public String getAchievementProvincial() { return achievementProvincial; }
+    public void setAchievementProvincial(String achievementProvincial) { this.achievementProvincial = achievementProvincial; }
+
+    public String getAchievementZonal() { return achievementZonal; }
+    public void setAchievementZonal(String achievementZonal) { this.achievementZonal = achievementZonal; }
+
+    public String getAchievementDivisional() { return achievementDivisional; }
+    public void setAchievementDivisional(String achievementDivisional) { this.achievementDivisional = achievementDivisional; }
+
+    public String getAchievementSchool() { return achievementSchool; }
+    public void setAchievementSchool(String achievementSchool) { this.achievementSchool = achievementSchool; }
+
+    public String getTalentAgri() { return talentAgri; }
+    public void setTalentAgri(String talentAgri) { this.talentAgri = talentAgri; }
+
+    public String getTalentIct() { return talentIct; }
+    public void setTalentIct(String talentIct) { this.talentIct = talentIct; }
+
+    public String getTalentAesthetic() { return talentAesthetic; }
+    public void setTalentAesthetic(String talentAesthetic) { this.talentAesthetic = talentAesthetic; }
+
+    public String getTalentMedia() { return talentMedia; }
+    public void setTalentMedia(String talentMedia) { this.talentMedia = talentMedia; }
+
+    public String getTalentSport() { return talentSport; }
+    public void setTalentSport(String talentSport) { this.talentSport = talentSport; }
+
+    public String getTalentInnovation() { return talentInnovation; }
+    public void setTalentInnovation(String talentInnovation) { this.talentInnovation = talentInnovation; }
+
+    public String getTalentCinematography() { return talentCinematography; }
+    public void setTalentCinematography(String talentCinematography) { this.talentCinematography = talentCinematography; }
+
+    public String getAddressPermanent() { return addressPermanent; }
+    public void setAddressPermanent(String addressPermanent) { this.addressPermanent = addressPermanent; }
+
+    public String getAddressTemporary() { return addressTemporary; }
+    public void setAddressTemporary(String addressTemporary) { this.addressTemporary = addressTemporary; }
+
+    public String getContactEmergency() { return contactEmergency; }
+    public void setContactEmergency(String contactEmergency) { this.contactEmergency = contactEmergency; }
+
+    public String getContactWhatsapp() { return contactWhatsapp; }
+    public void setContactWhatsapp(String contactWhatsapp) { this.contactWhatsapp = contactWhatsapp; }
+
+    public String getContactHome() { return contactHome; }
+    public void setContactHome(String contactHome) { this.contactHome = contactHome; }
+
+    public String getContactMobile() { return contactMobile; }
+    public void setContactMobile(String contactMobile) { this.contactMobile = contactMobile; }
+
+    public String getContactEmail() { return contactEmail; }
+    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
+
+    public String getDistanceToSchool() { return distanceToSchool; }
+    public void setDistanceToSchool(String distanceToSchool) { this.distanceToSchool = distanceToSchool; }
+
+    public String getResultGrade05() { return resultGrade05; }
+    public void setResultGrade05(String resultGrade05) { this.resultGrade05 = resultGrade05; }
+
+    public String getResultGceOl() { return resultGceOl; }
+    public void setResultGceOl(String resultGceOl) { this.resultGceOl = resultGceOl; }
 }

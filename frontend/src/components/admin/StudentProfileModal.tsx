@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   X, Save, User, HeartPulse, Star, MapPin, 
-  FileCheck, Eye, Info, GraduationCap 
+  FileCheck, Eye, Info, GraduationCap, ShieldCheck 
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -17,7 +17,7 @@ interface StudentProfileModalProps {
 }
 
 export default function StudentProfileModal({ student, isOpen, onClose, onSave }: StudentProfileModalProps) {
-  const [activeTab, setActiveTab] = useState<'basic' | 'health' | 'skills' | 'contact' | 'exams' | 'visibility'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'health' | 'skills' | 'contact' | 'exams' | 'verification' | 'visibility'>('basic');
   const [formData, setFormData] = useState<any>(student);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -69,23 +69,8 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
     e.preventDefault();
     setIsSaving(true);
     
-    // Package all extra fields into additionalData before saving
-    const baseKeys = ['id', 'username', 'fullName', 'nameWithInitials', 'dob', 'nic', 'gender', 'religion', 'nationality', 'birthCertificateNumber', 'address', 'bloodGroup', 'medicalHistory', 'guardianName', 'guardianNic', 'guardianContact', 'verificationStatus', 'verificationComment'];
-    
-    const extraData: any = {};
-    for (const key in formData) {
-      if (!baseKeys.includes(key)) {
-        extraData[key] = formData[key];
-      }
-    }
-
-    const payload = {
-      ...formData,
-      additionalData: JSON.stringify(extraData)
-    };
-
     try {
-      await onSave(payload);
+      await onSave(formData);
       onClose();
     } catch (error) {
       console.error(error);
@@ -181,9 +166,9 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                       <Field label="Index No" name="username" value={formData.username || ''} onChange={handleChange} disabled />
                       <Field label="Full Name" name="fullName" value={formData.fullName || ''} onChange={handleChange} />
-                      <Field label="Name in Sinhala as birth certificate" name="nameInSinhala" value={formData.nameInSinhala || ''} onChange={handleChange} />
+                      <Field label="Name in Sinhala as birth certificate" name="nameSinhala" value={formData.nameSinhala || ''} onChange={handleChange} />
                       <Field label="Name with Initial" name="nameWithInitials" value={formData.nameWithInitials || ''} onChange={handleChange} />
-                      <Field label="Name with Initial Sinhala" name="nameWithInitialsSinhala" value={formData.nameWithInitialsSinhala || ''} onChange={handleChange} />
+                      <Field label="Name with Initial Sinhala" name="nameWithInitialSinhala" value={formData.nameWithInitialSinhala || ''} onChange={handleChange} />
                       <Field label="Date Of Birth" name="dob" type="date" value={formData.dob || ''} onChange={handleChange} />
                       <Field label="NIC" name="nic" value={formData.nic || ''} onChange={handleChange} />
                       <Field label="Birth Certificate No" name="birthCertificateNumber" value={formData.birthCertificateNumber || ''} onChange={handleChange} />
@@ -198,10 +183,10 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                       />
                       <Field label="Mother Name" name="motherName" value={formData.motherName || ''} onChange={handleChange} />
                       <Field label="Father Name" name="fatherName" value={formData.fatherName || ''} onChange={handleChange} />
-                      <Field label="Guardian ID" name="guardianId" value={formData.guardianId || ''} onChange={handleChange} />
+                      <Field label="Guardian ID" name="guardianIdRef" value={formData.guardianIdRef || ''} onChange={handleChange} />
                       <Field label="Age - Auto Calculate" name="age" type="number" value={formData.age || ''} onChange={handleChange} disabled placeholder="Auto-calculated" />
-                      <Field label="Inter School House" name="house" value={formData.house || ''} onChange={handleChange} />
-                      <Field label="Siblings" name="siblingsCount" type="number" value={formData.siblingsCount || ''} onChange={handleChange} />
+                      <Field label="Inter School House" name="interSchoolHouse" value={formData.interSchoolHouse || ''} onChange={handleChange} />
+                      <Field label="Siblings" name="siblings" type="number" value={formData.siblings || ''} onChange={handleChange} />
                     </div>
                   </div>
                 )}
@@ -240,12 +225,20 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                     <div className="bg-amber-50/50 p-6 rounded-3xl border border-amber-100 space-y-6">
                       <h4 className="text-[11px] font-black uppercase tracking-widest text-amber-700">Achievements (3" Combo Box)</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {['international', 'national', 'provincial', 'zonal', 'divisional', 'school'].map((level) => (
-                          <div key={level} className="space-y-2">
-                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">{level} Level</label>
+                        {[
+                          {id: 'international', name: 'achievementInternational'},
+                          {id: 'national', name: 'achievementNational'},
+                          {id: 'provincial', name: 'achievementProvincial'},
+                          {id: 'zonal', name: 'achievementZonal'},
+                          {id: 'divisional', name: 'achievementDivisional'},
+                          {id: 'school', name: 'achievementSchool'}
+                        ].map((level) => (
+                          <div key={level.id} className="space-y-2">
+                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">{level.id} Level</label>
                              <select 
-                               value={formData.achievements?.[level] || ''}
-                               onChange={(e) => handleAchievementChange(level, e.target.value)}
+                               name={level.name}
+                               value={formData[level.name] || ''}
+                               onChange={handleChange}
                                className="w-full h-12 bg-white border border-amber-200 rounded-xl px-4 focus:ring-2 focus:ring-amber-500/20 text-sm font-bold text-slate-700"
                              >
                                <option value="">None</option>
@@ -263,16 +256,24 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                     <div className="bg-slate-50/50 p-6 rounded-3xl border border-slate-100 space-y-4">
                       <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-600 mb-4">Additional Talent Areas (Check Box)</h4>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {['Agree culture', 'ICT', 'District', 'Aesthetic', 'Media & Announcing', 'Sport & Athletic', 'Innovation', 'Cinematography'].map((talent) => (
-                          <label key={talent} className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-primary transition-all">
+                        {[
+                          {label: 'Agree culture', name: 'talentAgri'},
+                          {label: 'ICT', name: 'talentIct'},
+                          {label: 'Aesthetic', name: 'talentAesthetic'},
+                          {label: 'Media & Announcing', name: 'talentMedia'},
+                          {label: 'Sport & Athletic', name: 'talentSport'},
+                          {label: 'Innovation', name: 'talentInnovation'},
+                          {label: 'Cinematography', name: 'talentCinematography'}
+                        ].map((talent) => (
+                          <label key={talent.name} className="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-primary transition-all">
                             <input 
                               type="checkbox" 
-                              name={talent}
-                              checked={(formData.talents || []).includes(talent)}
-                              onChange={handleChange}
+                              name={talent.name}
+                              checked={formData[talent.name] === 'true' || formData[talent.name] === true}
+                              onChange={(e) => setFormData((prev:any) => ({...prev, [talent.name]: e.target.checked}))}
                               className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
                             />
-                            <span className="text-xs font-bold text-slate-600">{talent}</span>
+                            <span className="text-xs font-bold text-slate-600">{talent.label}</span>
                           </label>
                         ))}
                       </div>
@@ -284,13 +285,13 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Contact Information" icon={MapPin} color="indigo" />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                      <TextAreaField label="Permanent Address" name="address" value={formData.address || ''} onChange={handleChange} />
-                      <TextAreaField label="Temporary Address" name="temporaryAddress" value={formData.temporaryAddress || ''} onChange={handleChange} />
-                      <Field label="Emergency Contact No" name="emergencyContact" value={formData.emergencyContact || ''} onChange={handleChange} />
-                      <Field label="Whatsapp No" name="whatsappNo" value={formData.whatsappNo || ''} onChange={handleChange} />
+                      <TextAreaField label="Permanent Address" name="addressPermanent" value={formData.addressPermanent || ''} onChange={handleChange} />
+                      <TextAreaField label="Temporary Address" name="addressTemporary" value={formData.addressTemporary || ''} onChange={handleChange} />
+                      <Field label="Emergency Contact No" name="contactEmergency" value={formData.contactEmergency || ''} onChange={handleChange} />
+                      <Field label="Whatsapp No" name="contactWhatsapp" value={formData.contactWhatsapp || ''} onChange={handleChange} />
                       <Field label="Home No" name="contactHome" value={formData.contactHome || ''} onChange={handleChange} />
                       <Field label="Mobile No" name="contactMobile" value={formData.contactMobile || ''} onChange={handleChange} />
-                      <Field label="Email" name="email" type="email" value={formData.email || ''} onChange={handleChange} />
+                      <Field label="Email" name="contactEmail" type="email" value={formData.contactEmail || ''} onChange={handleChange} />
                       <Field label="Distance to school" name="distanceToSchool" value={formData.distanceToSchool || ''} onChange={handleChange} />
                     </div>
                   </div>
@@ -300,8 +301,8 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                   <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                     <SectionHeader title="Exam Results" icon={FileCheck} color="emerald" />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <Field label="Grade 05" name="grade5Result" value={formData.grade5Result || ''} onChange={handleChange} placeholder="Score / Result" />
-                      <Field label="GCE OL" name="gceOlResult" value={formData.gceOlResult || ''} onChange={handleChange} placeholder="Summary of results" />
+                      <Field label="Grade 05" name="resultGrade05" value={formData.resultGrade05 || ''} onChange={handleChange} placeholder="Score / Result" />
+                      <Field label="GCE OL" name="resultGceOl" value={formData.resultGceOl || ''} onChange={handleChange} placeholder="Summary of results" />
                     </div>
                   </div>
                 )}

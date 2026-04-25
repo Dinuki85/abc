@@ -153,5 +153,29 @@ public class Staff {
     private String appointmentInstitute1st;
     private String hierarchyCarder;
     private boolean isAcademicStaff;
+
+    public String getResultGceOl() { return resultGceOl; }
+    public void setResultGceOl(String resultGceOl) { this.resultGceOl = resultGceOl; }
+
+    public boolean isActiveStudent() { return isActiveStudent; }
+    public void setActiveStudent(boolean activeStudent) { isActiveStudent = activeStudent; }
+
+    public String getVerificationStatusDetail() { return verificationStatusDetail; }
+    public void setVerificationStatusDetail(String verificationStatusDetail) { this.verificationStatusDetail = verificationStatusDetail; }
+
+    public String getAppointmentDate1st() { return appointmentDate1st; }
+    public void setAppointmentDate1st(String appointmentDate1st) { this.appointmentDate1st = appointmentDate1st; }
+
+    public String getAppointmentDistrict1st() { return appointmentDistrict1st; }
+    public void setAppointmentDistrict1st(String appointmentDistrict1st) { this.appointmentDistrict1st = appointmentDistrict1st; }
+
+    public String getAppointmentInstitute1st() { return appointmentInstitute1st; }
+    public void setAppointmentInstitute1st(String appointmentInstitute1st) { this.appointmentInstitute1st = appointmentInstitute1st; }
+
+    public String getHierarchyCarder() { return hierarchyCarder; }
+    public void setHierarchyCarder(String hierarchyCarder) { this.hierarchyCarder = hierarchyCarder; }
+
+    public boolean isAcademicStaff() { return isAcademicStaff; }
+    public void setAcademicStaff(boolean academicStaff) { isAcademicStaff = academicStaff; }
 }
 

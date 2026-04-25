@@ -13,6 +13,7 @@ public class StudentProfileRequest {
     private String nationality;
     private String birthCertificateNumber;
     private String nic;
+    private String district;
     private String address;
     private String bloodGroup;
     private String medicalHistory;
@@ -86,6 +87,9 @@ public class StudentProfileRequest {
 
     public String getNic() { return nic; }
     public void setNic(String nic) { this.nic = nic; }
+
+    public String getDistrict() { return district; }
+    public void setDistrict(String district) { this.district = district; }
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
@@ -213,6 +217,15 @@ public class StudentProfileRequest {
     public String getContactEmail() { return contactEmail; }
     public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
 
+    private String resultGrade05;
+    private String resultGceOl;
+
     public String getDistanceToSchool() { return distanceToSchool; }
     public void setDistanceToSchool(String distanceToSchool) { this.distanceToSchool = distanceToSchool; }
+
+    public String getResultGrade05() { return resultGrade05; }
+    public void setResultGrade05(String resultGrade05) { this.resultGrade05 = resultGrade05; }
+
+    public String getResultGceOl() { return resultGceOl; }
+    public void setResultGceOl(String resultGceOl) { this.resultGceOl = resultGceOl; }
 }

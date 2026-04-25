@@ -45,12 +45,58 @@ public class StudentService {
         student.setNationality(request.getNationality());
         student.setBirthCertificateNumber(request.getBirthCertificateNumber());
         student.setNic(request.getNic());
+        student.setDistrict(request.getDistrict());
         student.setAddress(request.getAddress());
         student.setBloodGroup(request.getBloodGroup());
         student.setMedicalHistory(request.getMedicalHistory());
         student.setGuardianName(request.getGuardianName());
         student.setGuardianNic(request.getGuardianNic());
         student.setGuardianContact(request.getGuardianContact());
+        
+        // Tab 1
+        student.setNameSinhala(request.getNameSinhala());
+        student.setNameWithInitialSinhala(request.getNameWithInitialSinhala());
+        student.setMotherName(request.getMotherName());
+        student.setFatherName(request.getFatherName());
+        student.setGuardianIdRef(request.getGuardianIdRef());
+        student.setInterSchoolHouse(request.getInterSchoolHouse());
+        student.setSiblings(request.getSiblings());
+
+        // Tab 2
+        student.setHeight(request.getHeight());
+        student.setWeight(request.getWeight());
+        student.setBloodType(request.getBloodType());
+        student.setSpecialPhysicalCondition(request.getSpecialPhysicalCondition());
+        student.setSpecialIllness(request.getSpecialIllness());
+        student.setLongTermDisease(request.getLongTermDisease());
+        student.setSpecialNeed(request.getSpecialNeed());
+
+        // Tab 3
+        student.setAchievementInternational(request.getAchievementInternational());
+        student.setAchievementNational(request.getAchievementNational());
+        student.setAchievementProvincial(request.getAchievementProvincial());
+        student.setAchievementZonal(request.getAchievementZonal());
+        student.setAchievementDivisional(request.getAchievementDivisional());
+        student.setAchievementSchool(request.getAchievementSchool());
+        student.setTalentAgri(request.getTalentAgri());
+        student.setTalentIct(request.getTalentIct());
+        student.setTalentAesthetic(request.getTalentAesthetic());
+        student.setTalentMedia(request.getTalentMedia());
+        student.setTalentSport(request.getTalentSport());
+        student.setTalentInnovation(request.getTalentInnovation());
+        student.setTalentCinematography(request.getTalentCinematography());
+
+        // Tab 4
+        student.setAddressPermanent(request.getAddressPermanent());
+        student.setAddressTemporary(request.getAddressTemporary());
+        student.setContactEmergency(request.getContactEmergency());
+        student.setContactWhatsapp(request.getContactWhatsapp());
+        student.setContactHome(request.getContactHome());
+        student.setContactMobile(request.getContactMobile());
+        student.setContactEmail(request.getContactEmail());
+        student.setDistanceToSchool(request.getDistanceToSchool());
+        student.setResultGrade05(request.getResultGrade05());
+        student.setResultGceOl(request.getResultGceOl());
         
         if (request.getClassId() != null) {
             com.abc.entity.SchoolClass schoolClass = schoolClassRepository.findById(request.getClassId())
@@ -102,6 +148,44 @@ public class StudentService {
 
         return studentRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("Student profile not found"));
+    }
+
+    public com.abc.entity.VerificationStatus getStudentVerificationStatus(String username) {
+        Student student = getStudentByUsername(username);
+        return student.getVerificationStatus();
+    }
+
+    public java.util.Map<String, Object> getStudentStats(String username) {
+        Student student = getStudentByUsername(username);
+        java.util.Map<String, Object> stats = new java.util.HashMap<>();
+        stats.put("profileCompleted", student.isProfileCompleted());
+        stats.put("verificationStatus", student.getVerificationStatus());
+        stats.put("grade", student.getGrade() != null ? student.getGrade().getName() : "N/A");
+        return stats;
+    }
+
+    public java.util.Map<String, Object> getStudentDashboardStats(String username) {
+        // Mock dashboard stats for now
+        java.util.Map<String, Object> stats = new java.util.HashMap<>();
+        stats.put("attendance", "95%");
+        stats.put("assignments", 12);
+        stats.put("upcomingExams", 2);
+        stats.put("notifications", 5);
+        return stats;
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public void updateGuardianDetails(String username, String name, String contact, String nic) {
+        Student student = getStudentByUsername(username);
+        student.setGuardianName(name);
+        student.setGuardianContact(contact);
+        student.setGuardianNic(nic);
+        studentRepository.save(student);
+    }
+
+    public List<Object> getClassTimetable(String username) {
+        // Placeholder for timetable logic
+        return new java.util.ArrayList<>();
     }
 }
 

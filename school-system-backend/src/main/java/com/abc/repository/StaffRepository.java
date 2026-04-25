@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Long> {
     Optional<Staff> findByUser(User user);
+    Optional<Staff> findByUser_Username(String username);
 
     @org.springframework.data.jpa.repository.Query("SELECT s FROM Staff s JOIN FETCH s.user LEFT JOIN FETCH s.assignedGrade")
     java.util.List<Staff> findAllWithUserAndGrade();
