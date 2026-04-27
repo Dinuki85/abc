@@ -145,7 +145,7 @@ export default function AdminDashboard() {
             </div>
             <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 bg-slate-50/50">
               {[
-                { name: 'Add To Classes', href: '/admin/assignment', icon: UserCheck },
+                { name: 'Add To Classes', href: '/admin/bulk-assign', icon: UserCheck },
                 { name: 'Student Enrollment', href: '/admin/registration', icon: UserPlus },
                 { name: 'Subject Assign', href: '#', icon: BookCheck },
                 { name: 'Assessment Assign', href: '#', icon: ClipboardList },
