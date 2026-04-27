@@ -43,7 +43,7 @@ public class TeacherService {
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(Role.ROLE_TEACHER);
-        user.setFirstLogin(false);
+        user.setFirstLogin(true);
 
         Staff staff = new Staff();
         staff.setUser(user);
@@ -78,6 +78,13 @@ public class TeacherService {
 
             response.setVerificationStatus(s.getVerificationStatus() != null ? s.getVerificationStatus().name() : "PENDING");
             response.setVerificationComment(s.getVerificationComment());
+            
+            if (s.getVerifiedBy() != null) {
+                response.setVerifiedByName(s.getVerifiedBy().getUsername());
+            }
+            if (s.getVerifiedAt() != null) {
+                response.setVerifiedAt(s.getVerifiedAt().toString());
+            }
 
             // Use pre-fetched data
             StudentClass sc_assigned = studentClassMap.get(s.getId());
@@ -110,9 +117,15 @@ public class TeacherService {
             response.setGuardianName(s.getGuardianName());
             response.setGuardianContact(s.getGuardianContact());
             response.setProfileCompleted(s.isProfileCompleted());
-
             response.setVerificationStatus(s.getVerificationStatus() != null ? s.getVerificationStatus().name() : "PENDING");
             response.setVerificationComment(s.getVerificationComment());
+            
+            if (s.getVerifiedBy() != null) {
+                response.setVerifiedByName(s.getVerifiedBy().getUsername());
+            }
+            if (s.getVerifiedAt() != null) {
+                response.setVerifiedAt(s.getVerifiedAt().toString());
+            }
 
             if (s.getGrade() != null) {
                 response.setGradeName(s.getGrade().getName());
@@ -148,6 +161,13 @@ public class TeacherService {
         
         response.setVerificationStatus(student.getVerificationStatus() != null ? student.getVerificationStatus().name() : "PENDING");
         response.setVerificationComment(student.getVerificationComment());
+        
+        if (student.getVerifiedBy() != null) {
+            response.setVerifiedByName(student.getVerifiedBy().getUsername());
+        }
+        if (student.getVerifiedAt() != null) {
+            response.setVerifiedAt(student.getVerifiedAt().toString());
+        }
 
         if (student.getGrade() != null) {
             response.setGradeName(student.getGrade().getName());
@@ -165,7 +185,7 @@ public class TeacherService {
         return response;
     }
 
-    public Verification verifyStudent(Long studentId, VerificationStatus status, String comment) {
+    public Verification verifyStudent(Long studentId, VerificationStatus status, String comment, User verifier) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
@@ -175,11 +195,15 @@ public class TeacherService {
         verification.setStudent(student);
         verification.setStatus(status);
         verification.setComment(comment);
+        verification.setVerifiedBy(verifier);
+        verification.setVerifiedAt(java.time.LocalDateTime.now());
         Verification savedVerification = verificationRepository.save(verification);
 
         // SYNC to Student entity for easy access in dashboard
         student.setVerificationStatus(status);
         student.setVerificationComment(comment);
+        student.setVerifiedBy(verifier);
+        student.setVerifiedAt(java.time.LocalDateTime.now());
         studentRepository.save(student);
 
         return savedVerification;

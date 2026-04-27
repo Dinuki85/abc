@@ -67,4 +67,16 @@ public class StaffController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @Autowired
+    private com.abc.service.StaffService staffService;
+
+    @PostMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody com.abc.dto.StaffProfileRequest request) {
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            return ResponseEntity.ok(staffService.saveStaffProfile(username, request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

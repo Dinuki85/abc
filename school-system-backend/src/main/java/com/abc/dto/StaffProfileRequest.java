@@ -5,56 +5,219 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StaffProfileRequest {
     private String name;
+    private String fullName;
     private String nameWithInitials;
-    private String nic;
-    private String gender;
     private String dob;
+    private String gender;
+    private String religion;
+    private String race;
+    private String nationality;
+    private String nic;
     private String address;
     private String contactMobile;
-    private String contactEmail;
+    private String email;
+
+    // Tab 1
+    private String nameSinhala;
+    private String nameWithInitialSinhala;
+    private String birthCertificateNo;
+    private String district;
+    private String motherName;
+    private String fatherName;
+    private String guardianId;
+    private String civilState;
+    private String maritalState;
     
-    // Service History
+    // Tab 2
+    private String height;
+    private String weight;
+    private String bloodGroup;
+    private String specialPhysicalCondition;
+    private String longTermDiseases;
+    private String healthDescription;
+
+    // Tab 3
     private String firstAppointmentDate;
-    private String appointmentLetterNumber;
+    private String firstAppointmentDistrict;
+    private String firstAppointmentInstitute;
+    private String hierarchyCarder;
+    private String position;
+    private String incrementDate;
+    private String servicePeriod;
+    private String salaryCode;
+    private String holdingPosition;
     private String grade;
-    private String carder;
-    
+    private String appointmentMedium;
+
+    // Tab 4
+    private String temporaryAddress;
+    private String emergencyContactNo;
+    private String whatsappNo;
+    private String homeNo;
+    private String distanceToSchool;
+
+    // Tab 5
+    private String gceOl;
+    private String gceAl;
+    private String diploma;
+    private String degree;
+    private String postGraduate;
+    private String master;
+    private String phd;
+    private String otherQual1;
+    private String otherQual2;
+    private String otherQual3;
+    private String otherQual4;
+    private String otherQual5;
+
+    // Tab 6
+    private String spouseName;
+    private String spouseDesignation;
+    private String spouseWorkingAddress;
+    private String spouseTempAddress;
+    private String spouseOfficeContact;
+    private String spouseEmergencyContact;
+    private String spouseEmergencyEmail;
+    private String spouseWorkingCompany;
+    private String childrenDetails;
+
     public StaffProfileRequest() {}
 
-    // Getters and Setters
+    // Getters and Setters (Auto-generated style)
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
     public String getNameWithInitials() { return nameWithInitials; }
     public void setNameWithInitials(String nameWithInitials) { this.nameWithInitials = nameWithInitials; }
-
-    public String getNic() { return nic; }
-    public void setNic(String nic) { this.nic = nic; }
-
-    public String getGender() { return gender; }
-    public void setGender(String gender) { this.gender = gender; }
-
     public String getDob() { return dob; }
     public void setDob(String dob) { this.dob = dob; }
-
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+    public String getReligion() { return religion; }
+    public void setReligion(String religion) { this.religion = religion; }
+    public String getRace() { return race; }
+    public void setRace(String race) { this.race = race; }
+    public String getNationality() { return nationality; }
+    public void setNationality(String nationality) { this.nationality = nationality; }
+    public String getNic() { return nic; }
+    public void setNic(String nic) { this.nic = nic; }
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
-
     public String getContactMobile() { return contactMobile; }
     public void setContactMobile(String contactMobile) { this.contactMobile = contactMobile; }
-
-    public String getContactEmail() { return contactEmail; }
-    public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
-
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getNameSinhala() { return nameSinhala; }
+    public void setNameSinhala(String nameSinhala) { this.nameSinhala = nameSinhala; }
+    public String getNameWithInitialSinhala() { return nameWithInitialSinhala; }
+    public void setNameWithInitialSinhala(String nameWithInitialSinhala) { this.nameWithInitialSinhala = nameWithInitialSinhala; }
+    public String getBirthCertificateNo() { return birthCertificateNo; }
+    public void setBirthCertificateNo(String birthCertificateNo) { this.birthCertificateNo = birthCertificateNo; }
+    public String getDistrict() { return district; }
+    public void setDistrict(String district) { this.district = district; }
+    public String getMotherName() { return motherName; }
+    public void setMotherName(String motherName) { this.motherName = motherName; }
+    public String getFatherName() { return fatherName; }
+    public void setFatherName(String fatherName) { this.fatherName = fatherName; }
+    public String getGuardianId() { return guardianId; }
+    public void setGuardianId(String guardianId) { this.guardianId = guardianId; }
+    public String getCivilState() { return civilState; }
+    public void setCivilState(String civilState) { this.civilState = civilState; }
+    public String getMaritalState() { return maritalState; }
+    public void setMaritalState(String maritalState) { this.maritalState = maritalState; }
+    public String getHeight() { return height; }
+    public void setHeight(String height) { this.height = height; }
+    public String getWeight() { return weight; }
+    public void setWeight(String weight) { this.weight = weight; }
+    public String getBloodGroup() { return bloodGroup; }
+    public void setBloodGroup(String bloodGroup) { this.bloodGroup = bloodGroup; }
+    public String getSpecialPhysicalCondition() { return specialPhysicalCondition; }
+    public void setSpecialPhysicalCondition(String specialPhysicalCondition) { this.specialPhysicalCondition = specialPhysicalCondition; }
+    public String getLongTermDiseases() { return longTermDiseases; }
+    public void setLongTermDiseases(String longTermDiseases) { this.longTermDiseases = longTermDiseases; }
+    public String getHealthDescription() { return healthDescription; }
+    public void setHealthDescription(String healthDescription) { this.healthDescription = healthDescription; }
     public String getFirstAppointmentDate() { return firstAppointmentDate; }
     public void setFirstAppointmentDate(String firstAppointmentDate) { this.firstAppointmentDate = firstAppointmentDate; }
-
-    public String getAppointmentLetterNumber() { return appointmentLetterNumber; }
-    public void setAppointmentLetterNumber(String appointmentLetterNumber) { this.appointmentLetterNumber = appointmentLetterNumber; }
-
+    public String getFirstAppointmentDistrict() { return firstAppointmentDistrict; }
+    public void setFirstAppointmentDistrict(String firstAppointmentDistrict) { this.firstAppointmentDistrict = firstAppointmentDistrict; }
+    public String getFirstAppointmentInstitute() { return firstAppointmentInstitute; }
+    public void setFirstAppointmentInstitute(String firstAppointmentInstitute) { this.firstAppointmentInstitute = firstAppointmentInstitute; }
+    public String getHierarchyCarder() { return hierarchyCarder; }
+    public void setHierarchyCarder(String hierarchyCarder) { this.hierarchyCarder = hierarchyCarder; }
+    public String getPosition() { return position; }
+    public void setPosition(String position) { this.position = position; }
+    public String getIncrementDate() { return incrementDate; }
+    public void setIncrementDate(String incrementDate) { this.incrementDate = incrementDate; }
+    public String getServicePeriod() { return servicePeriod; }
+    public void setServicePeriod(String servicePeriod) { this.servicePeriod = servicePeriod; }
+    public String getSalaryCode() { return salaryCode; }
+    public void setSalaryCode(String salaryCode) { this.salaryCode = salaryCode; }
+    public String getHoldingPosition() { return holdingPosition; }
+    public void setHoldingPosition(String holdingPosition) { this.holdingPosition = holdingPosition; }
     public String getGrade() { return grade; }
     public void setGrade(String grade) { this.grade = grade; }
+    public String getAppointmentMedium() { return appointmentMedium; }
+    public void setAppointmentMedium(String appointmentMedium) { this.appointmentMedium = appointmentMedium; }
+    public String getTemporaryAddress() { return temporaryAddress; }
+    public void setTemporaryAddress(String temporaryAddress) { this.temporaryAddress = temporaryAddress; }
+    public String getEmergencyContactNo() { return emergencyContactNo; }
+    public void setEmergencyContactNo(String emergencyContactNo) { this.emergencyContactNo = emergencyContactNo; }
+    public String getWhatsappNo() { return whatsappNo; }
+    public void setWhatsappNo(String whatsappNo) { this.whatsappNo = whatsappNo; }
+    public String getHomeNo() { return homeNo; }
+    public void setHomeNo(String homeNo) { this.homeNo = homeNo; }
+    public String getDistanceToSchool() { return distanceToSchool; }
+    public void setDistanceToSchool(String distanceToSchool) { this.distanceToSchool = distanceToSchool; }
+    public String getGceOl() { return gceOl; }
+    public void setGceOl(String gceOl) { this.gceOl = gceOl; }
+    public String getGceAl() { return gceAl; }
+    public void setGceAl(String gceAl) { this.gceAl = gceAl; }
+    public String getDiploma() { return diploma; }
+    public void setDiploma(String diploma) { this.diploma = diploma; }
+    public String getDegree() { return degree; }
+    public void setDegree(String degree) { this.degree = degree; }
+    public String getPostGraduate() { return postGraduate; }
+    public void setPostGraduate(String postGraduate) { this.postGraduate = postGraduate; }
+    public String getMaster() { return master; }
+    public void setMaster(String master) { this.master = master; }
+    public String getPhd() { return phd; }
+    public void setPhd(String phd) { this.phd = phd; }
+    public String getOtherQual1() { return otherQual1; }
+    public void setOtherQual1(String otherQual1) { this.otherQual1 = otherQual1; }
+    public String getOtherQual2() { return otherQual2; }
+    public void setOtherQual2(String otherQual2) { this.otherQual2 = otherQual2; }
+    public String getOtherQual3() { return otherQual3; }
+    public void setOtherQual3(String otherQual3) { this.otherQual3 = otherQual3; }
+    public String getOtherQual4() { return otherQual4; }
+    public void setOtherQual4(String otherQual4) { this.otherQual4 = otherQual4; }
+    public String getOtherQual5() { return otherQual5; }
+    public void setOtherQual5(String otherQual5) { this.otherQual5 = otherQual5; }
+    public String getSpouseName() { return spouseName; }
+    public void setSpouseName(String spouseName) { this.spouseName = spouseName; }
+    public String getSpouseDesignation() { return spouseDesignation; }
+    public void setSpouseDesignation(String spouseDesignation) { this.spouseDesignation = spouseDesignation; }
+    public String getSpouseWorkingAddress() { return spouseWorkingAddress; }
+    public void setSpouseWorkingAddress(String spouseWorkingAddress) { this.spouseWorkingAddress = spouseWorkingAddress; }
+    public String getSpouseTempAddress() { return spouseTempAddress; }
+    public void setSpouseTempAddress(String spouseTempAddress) { this.spouseTempAddress = spouseTempAddress; }
+    public String getSpouseOfficeContact() { return spouseOfficeContact; }
+    public void setSpouseOfficeContact(String spouseOfficeContact) { this.spouseOfficeContact = spouseOfficeContact; }
+    public String getSpouseEmergencyContact() { return spouseEmergencyContact; }
+    public void setSpouseEmergencyContact(String spouseEmergencyContact) { this.spouseEmergencyContact = spouseEmergencyContact; }
+    public String getSpouseEmergencyEmail() { return spouseEmergencyEmail; }
+    public void setSpouseEmergencyEmail(String spouseEmergencyEmail) { this.spouseEmergencyEmail = spouseEmergencyEmail; }
+    public String getSpouseWorkingCompany() { return spouseWorkingCompany; }
+    public void setSpouseWorkingCompany(String spouseWorkingCompany) { this.spouseWorkingCompany = spouseWorkingCompany; }
+    public String getChildrenDetails() { return childrenDetails; }
+    public void setChildrenDetails(String childrenDetails) { this.childrenDetails = childrenDetails; }
 
-    public String getCarder() { return carder; }
-    public void setCarder(String carder) { this.carder = carder; }
+    // Aliases
+    public String getContactEmail() { return email; }
+    public void setContactEmail(String contactEmail) { this.email = contactEmail; }
+    public String getCarder() { return hierarchyCarder; }
+    public void setCarder(String carder) { this.hierarchyCarder = carder; }
+    public String getAppointmentLetterNumber() { return ""; } // Not in new wireframe
+    public void setAppointmentLetterNumber(String n) {}
 }

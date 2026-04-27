@@ -152,7 +152,8 @@ public class TeacherController {
             teacherService.verifyStudent(
                     request.getStudentId(),
                     request.getStatus(),
-                    request.getComment()
+                    request.getComment(),
+                    user
             );
             return ResponseEntity.ok("Student verification updated successfully");
         } catch (Exception e) {
