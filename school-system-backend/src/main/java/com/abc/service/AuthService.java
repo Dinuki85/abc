@@ -1,6 +1,9 @@
 package com.abc.service;
 
 import com.abc.entity.User;
+import com.abc.entity.Role;
+import com.abc.entity.Staff;
+import com.abc.repository.StaffRepository;
 import com.abc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +16,9 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StaffRepository staffRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,12 +40,28 @@ public class AuthService {
         throw new RuntimeException("User not found");
     }
 
-    public User changePassword(String username, String newPassword) {
+    public User changePassword(String username, String newPassword, String newUsername) {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             user.setPassword(passwordEncoder.encode(newPassword));
             user.setFirstLogin(false);
+            
+            // If it's a teacher/staff and a new username (NIC) is provided
+            if (newUsername != null && !newUsername.isEmpty() && 
+               (user.getRole() == Role.ROLE_TEACHER || user.getRole() == Role.ROLE_STAFF)) {
+                
+                // Update Staff NIC
+                Optional<Staff> staffOpt = staffRepository.findByUser(user);
+                if (staffOpt.isPresent()) {
+                    Staff staff = staffOpt.get();
+                    staff.setNic(newUsername);
+                    staffRepository.save(staff);
+                }
+                
+                user.setUsername(newUsername);
+            }
+            
             return userRepository.save(user);
         }
         throw new RuntimeException("User not found");

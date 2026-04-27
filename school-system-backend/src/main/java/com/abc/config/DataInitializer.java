@@ -37,7 +37,6 @@ public class DataInitializer {
         initAdmin();
         initTeachers();
         initTestStudent();
-        repairStudentPasswords();
         // initStudents(); // Disabled at user request to allow manual database insertion
     }
 
@@ -168,19 +167,6 @@ public class DataInitializer {
             student.setProfileCompleted(true);
             studentRepository.save(student);
             System.out.println(">>> Init: Test student creation complete.");
-        } else {
         }
-    }
-    private void repairStudentPasswords() {
-        System.out.println(">>> Init: Checking for students requiring password repair...");
-        String tempHash = passwordEncoder.encode("temp123");
-        userRepository.findAll().stream()
-            .filter(u -> u.getRole() == Role.ROLE_STUDENT && u.isFirstLogin())
-            .forEach(user -> {
-                user.setPassword(tempHash);
-                userRepository.save(user);
-                System.out.println(">>> Init: Repaired password for student: " + user.getUsername());
-            });
-        System.out.println(">>> Init: Password repair complete.");
     }
 }

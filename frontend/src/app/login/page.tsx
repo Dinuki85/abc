@@ -25,24 +25,29 @@ export default function LoginPage() {
 
       if (user) {
         // Handle redirection based on role and status
-        if (user.firstLogin) {
-          router.push('/change-password');
-          return;
-        }
-
         if (user.role === 'ROLE_STUDENT') {
+          if (user.firstLogin) {
+            router.push('/change-password');
+            return;
+          }
           const profile = await api.getStudentProfile(username);
           if (!profile || !profile.profileCompleted) {
             router.push('/dashboard/student/profile-setup');
           } else {
             router.push('/dashboard/student');
           }
-        } else if (user.role === 'ROLE_TEACHER') {
-          router.push('/teacher');
+        } else if (user.role === 'ROLE_TEACHER' || user.role === 'ROLE_STAFF') {
+          // Staff workflow: Profile Setup -> Then Password Change
+          const profile = await api.getTeacherProfile(user.username);
+          if (!profile || !profile.profileCompleted) {
+            router.push('/dashboard/teacher/profile-setup');
+          } else if (user.firstLogin) {
+            router.push('/change-password');
+          } else {
+            router.push(user.role === 'ROLE_TEACHER' ? '/teacher' : '/staff');
+          }
         } else if (user.role === 'ROLE_ADMIN') {
           router.push('/admin');
-        } else if (user.role === 'ROLE_STAFF') {
-          router.push('/staff');
         } else {
           router.push('/dashboard');
         }

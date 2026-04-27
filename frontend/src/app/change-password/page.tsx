@@ -6,11 +6,12 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { api, User as ApiUser } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
-import { Lock, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Lock, ShieldCheck, AlertCircle, User as UserIcon } from 'lucide-react';
 
 export default function ChangePasswordPage() {
   const router = useRouter();
   const [newPassword, setNewPassword] = useState('');
+  const [newUsername, setNewUsername] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +23,9 @@ export default function ChangePasswordPage() {
       router.push('/login');
     } else {
       setUser(currentUser);
+      if (currentUser.role === 'ROLE_TEACHER' || currentUser.role === 'ROLE_STAFF') {
+        setNewUsername(currentUser.username);
+      }
     }
   }, [router]);
 
@@ -42,15 +46,23 @@ export default function ChangePasswordPage() {
       return;
     }
 
+    if ((user.role === 'ROLE_TEACHER' || user.role === 'ROLE_STAFF') && !newUsername && !user.username) {
+      setError('NIC Number is required for staff account activation.');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       if (!user) throw new Error('User not found');
-      const success = await api.changePassword(user.username, newPassword);
+      // If newUsername is empty, use the current username
+      const finalUsername = newUsername || user.username;
+      const success = await api.changePassword(user.username, newPassword, finalUsername);
       if (success) {
         // Redirect based on role
         if (user.role === 'ROLE_STUDENT') {
           router.push('/dashboard/student/profile-setup');
         } else if (user.role === 'ROLE_TEACHER') {
-          router.push('/dashboard/teacher/classes');
+          router.push('/teacher');
         } else if (user.role === 'ROLE_ADMIN') {
           router.push('/admin');
         } else {
@@ -93,6 +105,25 @@ export default function ChangePasswordPage() {
             )}
 
             <div className="space-y-4">
+              {(user.role === 'ROLE_TEACHER' || user.role === 'ROLE_STAFF') && (
+                <div className="relative">
+                  <Input 
+                    label="New Username (NIC Number)" 
+                    type="text" 
+                    placeholder="Enter your NIC" 
+                    id="new-username" 
+                    className="pl-10 h-11"
+                    required
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    disabled={isLoading}
+                  />
+                  <div className="absolute inset-y-0 left-0 pl-3 top-[32px] flex items-center pointer-events-none">
+                    <UserIcon size={18} className="text-slate-400" />
+                  </div>
+                </div>
+              )}
+
               <div className="relative">
                 <Input 
                   label="New Password" 

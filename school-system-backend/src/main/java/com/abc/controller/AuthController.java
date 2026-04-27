@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
         try {
-            User user = authService.changePassword(request.getUsername(), request.getNewPassword());
+            User user = authService.changePassword(request.getUsername(), request.getNewPassword(), request.getNewUsername());
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -49,11 +49,14 @@ public class AuthController {
     public static class ChangePasswordRequest {
         private String username;
         private String newPassword;
+        private String newUsername; // Optional, for Staff updating to NIC
 
         public String getUsername() { return username; }
         public void setUsername(String username) { this.username = username; }
         public String getNewPassword() { return newPassword; }
         public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
+        public String getNewUsername() { return newUsername; }
+        public void setNewUsername(String newUsername) { this.newUsername = newUsername; }
     }
 }
 

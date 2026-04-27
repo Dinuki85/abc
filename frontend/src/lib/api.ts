@@ -65,6 +65,50 @@ export interface StudentProfile {
   verificationStatus?: string;
   verificationComment?: string;
   additionalData?: string;
+  
+  // Extended UI Fields
+  nameSinhala?: string;
+  nameWithInitialSinhala?: string;
+  guardianIdRef?: string;
+  interSchoolHouse?: string;
+  siblings?: string;
+  
+  height?: string;
+  weight?: string;
+  bloodType?: string;
+  specialPhysicalCondition?: string;
+  specialIllness?: string;
+  longTermDisease?: string;
+  specialNeed?: string;
+  
+  achievementInternational?: string;
+  achievementNational?: string;
+  achievementProvincial?: string;
+  achievementZonal?: string;
+  achievementDivisional?: string;
+  achievementSchool?: string;
+  
+  contactWhatsapp?: string;
+  contactEmail?: string;
+  resultGrade05?: string;
+  resultGceOl?: string;
+  addressPermanent?: string;
+  addressTemporary?: string;
+  contactEmergency?: string;
+  contactHome?: string;
+  contactMobile?: string;
+  distanceToSchool?: string;
+  
+  talentAgri?: boolean;
+  talentIct?: boolean;
+  talentAesthetic?: boolean;
+  talentMedia?: boolean;
+  talentSport?: boolean;
+  talentInnovation?: boolean;
+  talentCinematography?: boolean;
+  verifiedByName?: string;
+  verifiedAt?: string;
+  isActiveStudent?: boolean;
 }
 
 export interface Grade {
@@ -106,6 +150,7 @@ export interface Teacher {
   gradeName?: string;
   classes?: any[];
   additionalData?: string;
+  profileCompleted?: boolean;
 }
 
 export interface Guardian {
@@ -122,6 +167,7 @@ export interface Guardian {
   homePhone?: string;
   mobilePhone?: string;
   personalEmail?: string;
+  assignedGrade?: Grade;
   additionalData?: string;
 }
 
@@ -263,6 +309,14 @@ class ApiService {
     return true;
   }
 
+  async getTeachers(): Promise<any[]> {
+    const response = await fetch(`${API_BASE_URL}/admin/teachers`, {
+      headers: this.getHeaders()
+    });
+    if (response.ok) return await response.json();
+    return [];
+  }
+
   async updateTeacher(id: number, name: string, designation: string) {
     const response = await fetch(`${API_BASE_URL}/admin/teachers/${id}`, {
       method: 'PUT',
@@ -294,6 +348,31 @@ class ApiService {
       throw new Error(errorMsg || 'Failed to save profile');
     }
     return response.json();
+  }
+
+  async updateMyStaffProfile(profile: any) {
+    const response = await fetch(`${API_BASE_URL}/staff/profile`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(profile),
+    });
+    if (!response.ok) {
+      const errorMsg = await response.text();
+      console.error('Profile save failed:', errorMsg);
+      throw new Error(errorMsg || 'Failed to save profile');
+    }
+    return response.json();
+  }
+
+  async getTeacherProfile(username: string): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/staff/me`, {
+      headers: this.getHeaders()
+    });
+    if (response.ok) {
+        const data = await response.json();
+        return data.staff || null;
+    }
+    return null;
   }
 
   async getTeachers(): Promise<any[]> {
@@ -357,6 +436,24 @@ class ApiService {
     return [];
   }
 
+  async searchAdminStudent(username: string): Promise<StudentProfile | null> {
+    const response = await fetch(`${API_BASE_URL}/admin/students/search/${username}`, {
+      headers: this.getHeaders()
+    });
+    if (response.ok) return await response.json();
+    return null;
+  }
+
+  async bulkAssignStudents(data: { classId: number, teacherNic?: string, assignments: { indexNo: string, classPosition: string }[] }) {
+    const response = await fetch(`${API_BASE_URL}/admin/bulk-assign`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return true;
+  }
+
   async getMyClass() {
     const response = await fetch(`${API_BASE_URL}/teacher/my-class`, {
       headers: this.getHeaders(),
@@ -415,20 +512,22 @@ class ApiService {
     return true;
   }
 
-  async changePassword(username: string, newPassword: string): Promise<boolean> {
+  async changePassword(username: string, newPassword: string, newUsername?: string): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/auth/change-password`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, newPassword })
+      body: JSON.stringify({ username, newPassword, newUsername })
     });
     if (response.ok) {
       // Update local storage user if needed
       const user = this.getCurrentUser();
+      const finalUsername = newUsername || username;
       if (user && user.username === username) {
         user.firstLogin = false;
+        user.username = finalUsername;
         localStorage.setItem('school_user', JSON.stringify(user));
         // Update credentials for Basic Auth
-        const newAuth = btoa(`${username}:${newPassword}`);
+        const newAuth = btoa(`${finalUsername}:${newPassword}`);
         localStorage.setItem('school_auth', newAuth);
       }
       return true;
@@ -442,6 +541,16 @@ class ApiService {
     });
     if (response.ok) return await response.json();
     return null;
+  }
+
+  async updateStaffProfile(profile: any) {
+    const response = await fetch(`${API_BASE_URL}/staff/profile`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(profile),
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return await response.json();
   }
 
   getCurrentUser(): User | null {
