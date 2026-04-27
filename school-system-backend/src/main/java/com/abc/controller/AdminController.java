@@ -147,15 +147,6 @@ public class AdminController {
         }
     }
 
-    @PutMapping("/teachers/{id}")
-    public ResponseEntity<?> updateTeacher(@PathVariable Long id, @RequestBody TeacherRegistrationRequest request) {
-        try {
-            adminService.updateTeacher(id, request.getName(), request.getDesignation());
-            return ResponseEntity.ok("Teacher updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
     @DeleteMapping("/teachers/{id}")
     public ResponseEntity<?> deleteTeacher(@PathVariable Long id) {
@@ -166,11 +157,21 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PostMapping("/teachers/{id}/profile")
-    public ResponseEntity<?> saveStaffProfile(@PathVariable Long id, @RequestBody Staff profile) {
+
+    @GetMapping("/students/search/{username}")
+    public ResponseEntity<?> getStudentByUsername(@PathVariable String username) {
         try {
-            adminService.saveStaffProfile(id, profile);
-            return ResponseEntity.ok("Staff profile updated successfully");
+            return ResponseEntity.ok(adminService.getStudentByUsername(username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/bulk-assign")
+    public ResponseEntity<?> bulkAssign(@RequestBody BulkAssignmentRequest request) {
+        try {
+            adminService.bulkAssignStudents(request);
+            return ResponseEntity.ok("Students assigned successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

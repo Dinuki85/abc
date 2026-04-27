@@ -2,6 +2,7 @@ package com.abc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "students", indexes = {
@@ -56,6 +57,13 @@ public class Student {
     @Column(name = "guardian_id_ref")
     private String guardianIdRef;
 
+    @ManyToOne
+    @JoinColumn(name = "verified_by")
+    private User verifiedBy;
+
+    @Column(name = "verified_at")
+    private LocalDateTime verifiedAt;
+
     @Column(name = "inter_school_house")
     private String interSchoolHouse;
 
@@ -102,6 +110,15 @@ public class Student {
 
     @Column(name = "profile_completed")
     private boolean profileCompleted = false;
+
+    @Column(name = "is_active_student", columnDefinition = "boolean default true")
+    private boolean isActiveStudent = true;
+
+    @Column(name = "is_active_staff", columnDefinition = "boolean default true")
+    private boolean isActiveStaff = true;
+
+    @Column(name = "is_academic_staff", columnDefinition = "boolean default true")
+    private boolean isAcademicStaff = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "verification_status", nullable = false)
@@ -174,6 +191,15 @@ public class Student {
 
     public boolean isProfileCompleted() { return profileCompleted; }
     public void setProfileCompleted(boolean profileCompleted) { this.profileCompleted = profileCompleted; }
+
+    public boolean isActiveStudent() { return isActiveStudent; }
+    public void setActiveStudent(boolean isActiveStudent) { this.isActiveStudent = isActiveStudent; }
+
+    public boolean isActiveStaff() { return isActiveStaff; }
+    public void setActiveStaff(boolean isActiveStaff) { this.isActiveStaff = isActiveStaff; }
+
+    public boolean isAcademicStaff() { return isAcademicStaff; }
+    public void setAcademicStaff(boolean isAcademicStaff) { this.isAcademicStaff = isAcademicStaff; }
 
     public VerificationStatus getVerificationStatus() { return verificationStatus; }
     public void setVerificationStatus(VerificationStatus verificationStatus) { this.verificationStatus = verificationStatus; }
@@ -316,4 +342,10 @@ public class Student {
 
     public String getResultGceOl() { return resultGceOl; }
     public void setResultGceOl(String resultGceOl) { this.resultGceOl = resultGceOl; }
+
+    public User getVerifiedBy() { return verifiedBy; }
+    public void setVerifiedBy(User verifiedBy) { this.verifiedBy = verifiedBy; }
+
+    public LocalDateTime getVerifiedAt() { return verifiedAt; }
+    public void setVerifiedAt(LocalDateTime verifiedAt) { this.verifiedAt = verifiedAt; }
 }

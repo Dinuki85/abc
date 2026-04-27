@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 interface AssignmentEntry {
   indexNo: string;
@@ -20,11 +21,21 @@ export default function AddToClassPage() {
   const [classId, setClassId] = useState('');
   const [teacherId, setTeacherId] = useState('');
   
+  const [teacherSearch, setTeacherSearch] = useState('');
+  const [showTeacherDropdown, setShowTeacherDropdown] = useState(false);
+  const [teachers, setTeachers] = useState<any[]>([]);
+
   const [studentIndex, setStudentIndex] = useState('');
   const [classPosition, setClassPosition] = useState('');
   
   const [assignments, setAssignments] = useState<AssignmentEntry[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  React.useEffect(() => {
+    api.getTeachers().then(data => {
+      setTeachers(data);
+    }).catch(err => console.error("Failed to fetch teachers", err));
+  }, []);
 
   // Mock function to simulate fetching a student's name
   const fetchStudentName = (index: string) => {
@@ -37,7 +48,7 @@ export default function AddToClassPage() {
     if (!studentIndex) return;
     
     if (assignments.some(a => a.indexNo === studentIndex)) {
-      alert("Student is already in the queue.");
+      toast.error("Student is already in the queue.");
       return;
     }
     
@@ -61,16 +72,23 @@ export default function AddToClassPage() {
     
     setIsSubmitting(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const payload = {
+        classId: parseInt(classId), // Assuming classId is numeric ID, might need a dropdown actually
+        teacherNic: teacherId,
+        assignments: assignments.map(a => ({
+          indexNo: a.indexNo,
+          classPosition: a.classPosition
+        }))
+      };
+      await api.bulkAssignStudents(payload);
       
-      alert('Assignments saved successfully!');
+      toast.success('Assignments saved successfully!');
       setAssignments([]);
       setClassId('');
       setTeacherId('');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Failed to save assignments.');
+      toast.error(error.message || 'Failed to save assignments.');
     } finally {
       setIsSubmitting(false);
     }
@@ -111,28 +129,61 @@ export default function AddToClassPage() {
                
                <div className="space-y-4">
                  <div className="space-y-2">
-                   <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Class ID</label>
+                   <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Class ID (Numeric)</label>
                    <div className="relative">
                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                      <Input 
                        value={classId}
                        onChange={(e) => setClassId(e.target.value)}
-                       placeholder="e.g. CLA-10-A" 
+                       placeholder="e.g. 1" 
+                       type="number"
                        className="pl-10 h-12 rounded-xl border-gray-200 bg-slate-50/50" 
                      />
                    </div>
                  </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Teacher ID</label>
+                  <div className="space-y-2 relative">
+                   <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">Teacher Search (Name or NIC)</label>
                    <div className="relative">
-                     <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                      <Input 
-                       value={teacherId}
-                       onChange={(e) => setTeacherId(e.target.value)}
-                       placeholder="e.g. TEA-2024" 
+                       value={teacherSearch}
+                       onChange={(e) => {
+                         setTeacherSearch(e.target.value);
+                         setShowTeacherDropdown(true);
+                       }}
+                       onFocus={() => setShowTeacherDropdown(true)}
+                       placeholder="Search teacher name..." 
                        className="pl-10 h-12 rounded-xl border-gray-200 bg-slate-50/50" 
                      />
                    </div>
+                   
+                   {showTeacherDropdown && teacherSearch && (
+                     <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-60 overflow-y-auto">
+                       {teachers.filter(t => t.name?.toLowerCase().includes(teacherSearch.toLowerCase()) || t.username?.includes(teacherSearch) || t.nic?.includes(teacherSearch)).length > 0 ? (
+                         teachers.filter(t => t.name?.toLowerCase().includes(teacherSearch.toLowerCase()) || t.username?.includes(teacherSearch) || t.nic?.includes(teacherSearch)).map(t => (
+                           <div 
+                             key={t.id} 
+                             className="p-3 hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0"
+                             onClick={() => {
+                               setTeacherId(t.nic || t.username || '');
+                               setTeacherSearch(t.name || t.nic || t.username || '');
+                               setShowTeacherDropdown(false);
+                             }}
+                           >
+                             <div className="font-bold text-slate-800 text-sm">{t.name}</div>
+                             <div className="text-xs text-slate-500">NIC: {t.nic || t.username}</div>
+                           </div>
+                         ))
+                       ) : (
+                         <div className="p-4 text-center text-sm text-slate-500">No teachers found</div>
+                       )}
+                     </div>
+                   )}
+                   {teacherId && !showTeacherDropdown && (
+                     <p className="text-[10px] font-bold text-emerald-600 ml-2 mt-1 flex items-center gap-1">
+                       <ShieldCheck size={12} /> Selected NIC: {teacherId}
+                     </p>
+                   )}
                  </div>
                </div>
             </div>

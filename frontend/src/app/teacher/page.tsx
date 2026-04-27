@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/Table';
 import { PageHeader } from '@/components/ui/PageHeader';
+import { useRouter } from 'next/navigation';
 import { 
   Users, 
   Search,
@@ -15,11 +16,14 @@ import {
   HeartPulse,
   ShieldCheck,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Star,
+  MapPin
 } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 
 export default function TeacherDashboard() {
+  const router = useRouter();
   const [myGrade, setMyGrade] = useState<any>(null);
   const [classes, setClasses] = useState<any[]>([]);
   const [students, setStudents] = useState<StudentProfile[]>([]);
@@ -36,10 +40,10 @@ export default function TeacherDashboard() {
   // Verification states
   const [auditComment, setAuditComment] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
+  const [studentTab, setStudentTab] = useState<'basic' | 'health' | 'skills' | 'contact' | 'exams'>('basic');
+  const [teacherProfile, setTeacherProfile] = useState<any>(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
 
   useEffect(() => {
     // If we have an active student but the user changes the search or class filter, 
@@ -63,8 +67,8 @@ export default function TeacherDashboard() {
     }
   }, [searchQuery, selectedClassId, students]);
 
-  const fetchData = async () => {
-    setIsLoading(true);
+  const fetchData = async (hideLoadingState = false) => {
+    if (!hideLoadingState) setIsLoading(true);
     try {
       const gradeData = await api.getMyGrade();
       setMyGrade(gradeData);
@@ -86,9 +90,27 @@ export default function TeacherDashboard() {
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
-      setIsLoading(false);
+      if (!hideLoadingState) setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+    
+    // Set up polling for real-time updates every 5 seconds
+    const interval = setInterval(() => {
+      fetchData(true);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const user = api.getCurrentUser();
+    if (user) {
+      api.getTeacherProfile(user.username).then(setTeacherProfile);
+    }
+  }, []);
 
   const handleVerify = async (status: 'VERIFIED' | 'NEEDS_CORRECTION') => {
     if (!activeStudent || !activeStudent.id) return;
@@ -217,6 +239,27 @@ export default function TeacherDashboard() {
         </div>
       </Card>
 
+      {/* Incomplete Profile Alert Banner */}
+      {teacherProfile && !teacherProfile.profileCompleted && (
+        <div className="mt-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-[2rem] p-8 text-white shadow-xl shadow-orange-200/50 flex flex-col md:flex-row items-center justify-between gap-6 animate-in slide-in-from-top-4 duration-500">
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+               <ShieldCheck size={32} />
+            </div>
+            <div>
+              <h4 className="text-xl font-black tracking-tight">Your Staff Profile is Incomplete</h4>
+              <p className="text-white/80 text-sm font-medium">Please complete your registration to access all institutional features.</p>
+            </div>
+          </div>
+          <Button 
+            onClick={() => router.push('/dashboard/teacher/profile-setup')}
+            className="bg-slate-900 text-white hover:bg-slate-800 px-10 h-14 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-black/20 active:scale-95 transition-all"
+          >
+            Set up Profile Now
+          </Button>
+        </div>
+      )}
+
       {/* Main Content Area */}
       {!activeStudent ? (
           /* Student List View */
@@ -280,13 +323,13 @@ export default function TeacherDashboard() {
               )}
           </div>
       ) : (
-          /* Massive Profile Card Verification View */
+          /* Massive Profile Card Verification View - Enhanced with Tabs */
           <div className="bg-white rounded-[3rem] w-full shadow-2xl shadow-slate-200/50 flex flex-col animate-in slide-in-from-bottom-8 fade-in duration-700 relative border border-slate-100 overflow-hidden mt-8">
               
               <div className="p-8 md:p-12 bg-gradient-to-br from-[#e1f5f8]/50 to-white flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative border-b border-slate-100">
                  <button 
                    onClick={() => setActiveStudent(null)}
-                   className="absolute top-6 right-6 p-2 bg-white rounded-full border border-slate-100 hover:bg-slate-50 text-slate-400 z-20"
+                   className="absolute top-6 right-6 p-2 bg-white rounded-full border border-slate-100 hover:bg-slate-50 text-slate-400 z-20 shadow-sm"
                  >
                      <AlertCircle className="rotate-45" size={20} />
                  </button>
@@ -313,80 +356,98 @@ export default function TeacherDashboard() {
                      {getStatusBadge(activeStudent)}
                  </div>
               </div>
-              
-              <div className="p-8 md:p-12 bg-white">
-                 <div className="w-full overflow-hidden border border-slate-200 rounded-2xl shadow-sm">
-                   <Table className="bg-white">
-                      <TableBody>
-                        {/* Identity Section */}
-                        <TableRow className="bg-slate-50 hover:bg-slate-50">
-                          <TableCell colSpan={2} className="py-4 px-6 border-b border-slate-200">
-                             <div className="flex items-center gap-3 text-slate-800">
-                                 <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-500 shadow-sm">
-                                     <UserIcon size={16} />
-                                 </div>
-                                 <h4 className="font-black text-sm uppercase tracking-widest font-fredoka">Essential Identity</h4>
-                             </div>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50">Date of Birth</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800">{activeStudent.dob || 'Not provided'}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50">Gender</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800">{activeStudent.gender || 'Not provided'}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50">Religion</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800">{activeStudent.religion || 'Not provided'}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50">NIC Number</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800">{activeStudent.nic || 'N/A'}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50">Birth Certificate</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800">{activeStudent.birthCertificateNumber || 'Not provided'}</TableCell>
-                        </TableRow>
 
-                        {/* Health & Contact Section */}
-                        <TableRow className="bg-rose-50/50 hover:bg-rose-50/50 border-t-2 border-slate-100">
-                          <TableCell colSpan={2} className="py-4 px-6 border-b border-rose-100/50">
-                             <div className="flex items-center gap-3 text-rose-800">
-                                 <div className="w-8 h-8 rounded-lg bg-white border border-rose-200 flex items-center justify-center text-rose-500 shadow-sm">
-                                     <HeartPulse size={16} />
-                                 </div>
-                                 <h4 className="font-black text-sm uppercase tracking-widest font-fredoka">Health & Contact</h4>
-                             </div>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-rose-400 uppercase tracking-widest bg-rose-50/30">Medical & Allergies</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-rose-900">{activeStudent.medicalHistory || 'None reported.'}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-rose-400 uppercase tracking-widest bg-rose-50/30">Blood Group</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-rose-900">
-                             <span className="inline-flex items-center px-3 py-1 bg-white text-rose-600 rounded-lg border border-rose-100 text-xs font-black shadow-sm">
-                                {activeStudent.bloodGroup || 'Unknown'}
-                             </span>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50">Primary Guardian</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800">{activeStudent.guardianName || 'Not provided'}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50">Contact Number</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800">{activeStudent.guardianContact || 'No contact'}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="w-1/3 py-4 px-6 font-bold text-xs text-slate-400 uppercase tracking-widest bg-slate-50/50 align-top">Residential Address</TableCell>
-                          <TableCell className="py-4 px-6 font-bold text-slate-800 whitespace-normal leading-relaxed">{activeStudent.address || 'Not provided'}</TableCell>
-                        </TableRow>
-                      </TableBody>
-                   </Table>
+              {/* Tab Selector for Student Profile */}
+              <div className="bg-slate-50 p-2 flex gap-1 overflow-x-auto scrollbar-hide border-b border-slate-100">
+                {[
+                  { id: 'basic', label: 'Tab 1 - Basic', icon: UserIcon },
+                  { id: 'health', label: 'Tab 2 - Health', icon: HeartPulse },
+                  { id: 'skills', label: 'Tab 3 - Skills', icon: Star },
+                  { id: 'contact', label: 'Tab 4 - Contact', icon: MapPin },
+                  { id: 'exams', label: 'Tab 5 - Exams', icon: ShieldCheck },
+                ].map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setStudentTab(t.id as any)}
+                    className={`flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                      studentTab === t.id 
+                        ? 'bg-white text-[#2ab0c5] shadow-md border border-cyan-100' 
+                        : 'text-slate-400 hover:text-slate-600'
+                    }`}
+                  >
+                    <t.icon size={14} />
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              
+              <div className="p-8 md:p-12 bg-white min-h-[400px]">
+                 <div className="w-full overflow-hidden border border-slate-100 rounded-2xl shadow-sm">
+                    <Table>
+                       <TableBody>
+                         {studentTab === 'basic' && (
+                           <>
+                             <VerificationRow label="Full Name" value={activeStudent.fullName} />
+                             <VerificationRow label="Name in Sinhala" value={activeStudent.nameSinhala} />
+                             <VerificationRow label="Name With Initials" value={activeStudent.nameWithInitials} />
+                             <VerificationRow label="Date Of Birth" value={activeStudent.dob} />
+                             <VerificationRow label="Gender" value={activeStudent.gender} />
+                             <VerificationRow label="Religion" value={activeStudent.religion} />
+                             <VerificationRow label="NIC Number" value={activeStudent.nic} />
+                             <VerificationRow label="Birth Certificate" value={activeStudent.birthCertificateNumber} />
+                             <VerificationRow label="Mother Name" value={activeStudent.motherName} />
+                             <VerificationRow label="Father Name" value={activeStudent.fatherName} />
+                             <VerificationRow label="Guardian ID" value={activeStudent.guardianIdRef} />
+                           </>
+                         )}
+                         {studentTab === 'health' && (
+                           <>
+                             <VerificationRow label="Height" value={activeStudent.height} />
+                             <VerificationRow label="Weight" value={activeStudent.weight} />
+                             <VerificationRow label="Blood Group" value={activeStudent.bloodGroup} highlight />
+                             <VerificationRow label="Physical Condition" value={activeStudent.specialPhysicalCondition} />
+                             <VerificationRow label="Special Illness" value={activeStudent.specialIllness} />
+                             <VerificationRow label="Long term diseases" value={activeStudent.longTermDiseases} />
+                             <VerificationRow label="Special Need" value={activeStudent.specialNeed} />
+                             <VerificationRow label="Medical Description" value={activeStudent.medicalDescription} />
+                           </>
+                         )}
+                         {studentTab === 'skills' && (
+                           <>
+                             <VerificationRow label="Int. Achievements" value={activeStudent.achievementInternational} />
+                             <VerificationRow label="Nat. Achievements" value={activeStudent.achievementNational} />
+                             <VerificationRow label="Zonal Achievements" value={activeStudent.achievementZonal} />
+                             <VerificationRow label="Talent Description" value={activeStudent.talentDescription} />
+                             <VerificationRow label="Talent Areas" value={[
+                               activeStudent.talentAgri && 'Agriculture',
+                               activeStudent.talentIct && 'ICT',
+                               activeStudent.talentAesthetic && 'Aesthetic',
+                               activeStudent.talentMedia && 'Media',
+                               activeStudent.talentSport && 'Sport',
+                               activeStudent.talentInnovation && 'Innovation'
+                             ].filter(Boolean).join(', ') || 'None Selected'} />
+                           </>
+                         )}
+                         {studentTab === 'contact' && (
+                           <>
+                             <VerificationRow label="Permanent Address" value={activeStudent.addressPermanent} />
+                             <VerificationRow label="Temporary Address" value={activeStudent.addressTemporary} />
+                             <VerificationRow label="Emergency Contact" value={activeStudent.contactEmergency} highlight />
+                             <VerificationRow label="Whatsapp No" value={activeStudent.contactWhatsapp} />
+                             <VerificationRow label="Home No" value={activeStudent.contactHome} />
+                             <VerificationRow label="Mobile No" value={activeStudent.contactMobile} highlight />
+                             <VerificationRow label="Email" value={activeStudent.contactEmail} />
+                             <VerificationRow label="Distance to School" value={activeStudent.distanceToSchool} />
+                           </>
+                         )}
+                         {studentTab === 'exams' && (
+                           <>
+                             <VerificationRow label="Grade 05 Score" value={activeStudent.resultGrade05} />
+                             <VerificationRow label="GCE OL Result" value={activeStudent.resultGceOl} />
+                           </>
+                         )}
+                       </TableBody>
+                    </Table>
                  </div>
               </div>
               
@@ -428,6 +489,17 @@ export default function TeacherDashboard() {
           </div>
       )}
     </div>
+  );
+}
+
+function VerificationRow({ label, value, highlight = false }: { label: string, value: any, highlight?: boolean }) {
+  return (
+    <TableRow>
+      <TableCell className="w-1/3 py-4 px-6 font-bold text-[10px] text-slate-400 uppercase tracking-widest bg-slate-50/50">{label}</TableCell>
+      <TableCell className={`py-4 px-6 font-bold text-sm ${highlight ? 'text-indigo-600' : 'text-slate-800'}`}>
+        {value || <span className="text-rose-300 italic font-normal">Not Provided</span>}
+      </TableCell>
+    </TableRow>
   );
 }
 

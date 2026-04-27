@@ -67,6 +67,7 @@ public class AdminService {
         Staff staff = new Staff();
         staff.setName(name);
         staff.setUser(user);
+        staff.setNic(username); // Using username as NIC as requested
         staff.setDesignations(new java.util.HashSet<>(java.util.Collections.singletonList(designation)));
         staffRepository.save(staff);
     }
@@ -168,6 +169,14 @@ public class AdminService {
             response.setGuardianName(student.getGuardianName());
             response.setGuardianContact(student.getGuardianContact());
             response.setProfileCompleted(student.isProfileCompleted());
+            response.setVerificationStatus(student.getVerificationStatus() != null ? student.getVerificationStatus().toString() : "PENDING");
+            
+            if (student.getVerifiedBy() != null) {
+                response.setVerifiedByName(student.getVerifiedBy().getUsername());
+            }
+            if (student.getVerifiedAt() != null) {
+                response.setVerifiedAt(student.getVerifiedAt().toString());
+            }
             return response;
         }).collect(Collectors.toList());
     }
@@ -195,38 +204,103 @@ public class AdminService {
                 .filter(sc -> studentIds.contains(sc.getStudent().getId()))
                 .collect(Collectors.toMap(sc -> sc.getStudent().getId(), sc -> sc, (sc1, sc2) -> sc1));
 
-        List<StudentResponse> content = studentPage.getContent().stream().map(student -> {
-            StudentResponse response = new StudentResponse();
-            response.setId(student.getId());
-            
-            if (student.getUser() != null) {
-                response.setUsername(student.getUser().getUsername());
-            } else {
-                response.setUsername("N/A");
-            }
-
-            response.setFullName(student.getFullName());
-            response.setProfileCompleted(student.isProfileCompleted());
-            response.setVerificationStatus(student.getVerificationStatus() != null ? student.getVerificationStatus().toString() : "PENDING");
-            response.setVerificationComment(student.getVerificationComment());
-            
-            if (student.getGrade() != null) {
-                response.setGradeName(student.getGrade().getName());
-                response.setGradeId(student.getGrade().getId());
-            } else {
-                response.setGradeName("Unassigned");
-            }
-
-            StudentClass sc = studentClassMap.get(student.getId());
-            if (sc != null && sc.getSchoolClass() != null) {
-                response.setClassName(sc.getSchoolClass().getName());
-                response.setClassId(sc.getSchoolClass().getId());
-            }
-
-            return response;
-        }).collect(Collectors.toList());
+        List<StudentResponse> content = studentPage.getContent().stream()
+                .map(student -> mapToResponse(student, studentClassMap.get(student.getId())))
+                .collect(Collectors.toList());
 
         return new org.springframework.data.domain.PageImpl<>(content, pageable, studentPage.getTotalElements());
+    }
+
+    private StudentResponse mapToResponse(Student student, StudentClass studentClass) {
+        StudentResponse response = new StudentResponse();
+        response.setId(student.getId());
+        
+        if (student.getUser() != null) {
+            response.setUsername(student.getUser().getUsername());
+        } else {
+            response.setUsername("N/A");
+        }
+
+        response.setFullName(student.getFullName());
+        response.setInitials(student.getInitials());
+        response.setNameWithInitials(student.getNameWithInitials());
+        response.setDob(student.getDob());
+        response.setGender(student.getGender());
+        response.setReligion(student.getReligion());
+        response.setNationality(student.getNationality());
+        response.setBirthCertificateNumber(student.getBirthCertificateNumber());
+        response.setNic(student.getNic());
+        response.setDistrict(student.getDistrict());
+        response.setAddress(student.getAddress());
+        response.setBloodGroup(student.getBloodGroup());
+        response.setMedicalHistory(student.getMedicalHistory());
+        response.setGuardianName(student.getGuardianName());
+        response.setGuardianNic(student.getGuardianNic());
+        response.setGuardianContact(student.getGuardianContact());
+        response.setProfileCompleted(student.isProfileCompleted());
+        response.setVerificationStatus(student.getVerificationStatus() != null ? student.getVerificationStatus().toString() : "PENDING");
+        response.setVerificationComment(student.getVerificationComment());
+        
+        if (student.getVerifiedBy() != null) {
+            response.setVerifiedByName(student.getVerifiedBy().getUsername());
+        }
+        if (student.getVerifiedAt() != null) {
+            response.setVerifiedAt(student.getVerifiedAt().toString());
+        }
+        
+        if (student.getGrade() != null) {
+            response.setGradeName(student.getGrade().getName());
+            response.setGradeId(student.getGrade().getId());
+        } else {
+            response.setGradeName("Unassigned");
+        }
+
+        if (studentClass != null && studentClass.getSchoolClass() != null) {
+            response.setClassName(studentClass.getSchoolClass().getName());
+            response.setClassId(studentClass.getSchoolClass().getId());
+        }
+
+        // Mapping newly added fields
+        response.setNameSinhala(student.getNameSinhala());
+        response.setNameWithInitialSinhala(student.getNameWithInitialSinhala());
+        response.setMotherName(student.getMotherName());
+        response.setFatherName(student.getFatherName());
+        response.setGuardianIdRef(student.getGuardianIdRef());
+        response.setInterSchoolHouse(student.getInterSchoolHouse());
+        response.setSiblings(student.getSiblings());
+        response.setHeight(student.getHeight());
+        response.setWeight(student.getWeight());
+        response.setBloodType(student.getBloodType());
+        response.setSpecialPhysicalCondition(student.getSpecialPhysicalCondition());
+        response.setSpecialIllness(student.getSpecialIllness());
+        response.setLongTermDisease(student.getLongTermDisease());
+        response.setSpecialNeed(student.getSpecialNeed());
+        response.setAchievementInternational(student.getAchievementInternational());
+        response.setAchievementNational(student.getAchievementNational());
+        response.setAchievementProvincial(student.getAchievementProvincial());
+        response.setAchievementZonal(student.getAchievementZonal());
+        response.setAchievementDivisional(student.getAchievementDivisional());
+        response.setAchievementSchool(student.getAchievementSchool());
+        response.setTalentAgri(student.getTalentAgri());
+        response.setTalentIct(student.getTalentIct());
+        response.setTalentAesthetic(student.getTalentAesthetic());
+        response.setTalentMedia(student.getTalentMedia());
+        response.setTalentSport(student.getTalentSport());
+        response.setTalentInnovation(student.getTalentInnovation());
+        response.setTalentCinematography(student.getTalentCinematography());
+        response.setAddressPermanent(student.getAddressPermanent());
+        response.setAddressTemporary(student.getAddressTemporary());
+        response.setContactEmergency(student.getContactEmergency());
+        response.setContactWhatsapp(student.getContactWhatsapp());
+        response.setContactHome(student.getContactHome());
+        response.setContactMobile(student.getContactMobile());
+        response.setContactEmail(student.getContactEmail());
+        response.setDistanceToSchool(student.getDistanceToSchool());
+        response.setResultGrade05(student.getResultGrade05());
+        response.setResultGceOl(student.getResultGceOl());
+        response.setActiveStudent(student.isActiveStudent());
+
+        return response;
     }
 
     public java.util.Map<String, Object> getAdminStats() {
@@ -316,35 +390,6 @@ public class AdminService {
         }
     }
 
-    @Transactional
-    public void updateTeacher(Long staffId, String name, String designationStr) {
-        Staff staff = staffRepository.findById(staffId)
-                .orElseThrow(() -> new RuntimeException("Staff not found"));
-        
-        staff.setName(name);
-        
-        if (designationStr != null && !designationStr.isEmpty()) {
-            try {
-                Designation designation = Designation.valueOf(designationStr);
-                staff.setDesignations(new java.util.HashSet<>(java.util.Collections.singletonList(designation)));
-                
-                // Update Role if needed
-                User user = staff.getUser();
-                if (user != null) {
-                    if (designation == Designation.OFFICE_STAFF || designation == Designation.PRINCIPAL) {
-                        user.setRole(Role.ROLE_STAFF);
-                    } else {
-                        user.setRole(Role.ROLE_TEACHER);
-                    }
-                    userRepository.save(user);
-                }
-            } catch (IllegalArgumentException e) {
-                // skip invalid designation
-            }
-        }
-        
-        staffRepository.save(staff);
-    }
 
     @Transactional
     public void deleteTeacher(Long staffId) {
@@ -368,35 +413,6 @@ public class AdminService {
             userRepository.delete(user);
         }
     }
-    @Transactional
-    public void saveStaffProfile(Long staffId, Staff profile) {
-        Staff staff = staffRepository.findById(staffId)
-                .orElseThrow(() -> new RuntimeException("Staff not found"));
-        
-        staff.setName(profile.getName());
-        staff.setFullName(profile.getFullName());
-        staff.setInitials(profile.getInitials());
-        staff.setNameWithInitials(profile.getNameWithInitials());
-        staff.setDob(profile.getDob());
-        staff.setGender(profile.getGender());
-        staff.setReligion(profile.getReligion());
-        staff.setRace(profile.getRace());
-        staff.setNationality(profile.getNationality());
-        staff.setNic(profile.getNic());
-        staff.setDesignation(profile.getDesignation());
-        staff.setAddress(profile.getAddress());
-        staff.setMailingAddress(profile.getMailingAddress());
-        staff.setContactHome(profile.getContactHome());
-        staff.setContactMobile(profile.getContactMobile());
-        staff.setEmail(profile.getEmail());
-        staff.setJoinedDate(profile.getJoinedDate());
-        staff.setQualifications(profile.getQualifications());
-        staff.setSubjects(profile.getSubjects());
-        staff.setBloodGroup(profile.getBloodGroup());
-        staff.setMedicalHistory(profile.getMedicalHistory());
-        
-        staffRepository.save(staff);
-    }
 
     public java.util.Map<String, Object> getStaffStats() {
         java.util.Map<String, Object> stats = new java.util.HashMap<>();
@@ -417,8 +433,52 @@ public class AdminService {
         }
         return staffRepository.findAll().stream()
                 .filter(s -> s.getName().toLowerCase().contains(searchTerm.toLowerCase()) || 
-                            (s.getUser() != null && s.getUser().getUsername().toLowerCase().contains(searchTerm.toLowerCase())))
+                            (s.getUser() != null && s.getUser().getUsername().toLowerCase().contains(searchTerm.toLowerCase())) ||
+                            (s.getNic() != null && s.getNic().toLowerCase().contains(searchTerm.toLowerCase())))
                 .collect(Collectors.toList());
+    }
+
+    public StudentResponse getStudentByUsername(String username) {
+        Student student = studentRepository.findByUser_Username(username)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        
+        StudentClass sc = studentClassRepository.findByStudent(student).orElse(null);
+        return mapToResponse(student, sc);
+    }
+
+    @Transactional
+    public void bulkAssignStudents(BulkAssignmentRequest request) {
+        SchoolClass schoolClass = schoolClassRepository.findById(request.getClassId())
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+
+        if (request.getTeacherNic() != null && !request.getTeacherNic().trim().isEmpty()) {
+            Staff teacher = staffRepository.findByNic(request.getTeacherNic().trim())
+                    .orElseThrow(() -> new RuntimeException("Teacher with NIC " + request.getTeacherNic() + " not found"));
+            
+            if (!teacher.getDesignations().contains(Designation.CLASS_TEACHER)) {
+                throw new RuntimeException("Staff " + request.getTeacherNic() + " is not a class teacher");
+            }
+            
+            schoolClass.setClassTeacher(teacher);
+            schoolClassRepository.save(schoolClass);
+        }
+
+        for (BulkAssignmentRequest.StudentAssignment assignment : request.getAssignments()) {
+            Student student = studentRepository.findByUser_Username(assignment.getIndexNo())
+                    .orElseThrow(() -> new RuntimeException("Student " + assignment.getIndexNo() + " not found"));
+            
+            // Update Student Grade (from Class)
+            student.setGrade(schoolClass.getGrade());
+            studentRepository.save(student);
+
+            // Create or update StudentClass assignment
+            StudentClass sc = studentClassRepository.findByStudent(student)
+                    .orElse(new StudentClass());
+            sc.setStudent(student);
+            sc.setSchoolClass(schoolClass);
+            sc.setClassPosition(assignment.getClassPosition()); // Setting the class position
+            studentClassRepository.save(sc);
+        }
     }
 }
 

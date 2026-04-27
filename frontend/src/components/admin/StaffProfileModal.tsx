@@ -405,19 +405,10 @@ export default function StaffProfileModal({ teacher, isOpen, onClose, onSave }: 
             </div>
           </div>
           
-          {/* Footer Save Area */}
+          {/* Footer Area - Read Only View */}
           <div className="p-6 border-t border-gray-100 flex justify-end gap-4 bg-slate-50/50 flex-shrink-0">
              <Button type="button" variant="ghost" onClick={onClose} className="h-12 px-8 rounded-xl font-bold text-slate-500 hover:text-slate-700">
-               Cancel
-             </Button>
-             <Button 
-               type="submit" 
-               form="staff-profile-form"
-               className="h-12 px-12 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold shadow-xl shadow-indigo-500/30 flex items-center gap-2"
-               isLoading={isSaving}
-             >
-               <Save size={18} />
-               Save Profile
+               Close Profile
              </Button>
           </div>
         </div>
@@ -451,7 +442,9 @@ function Field({ label, ...props }: any) {
       <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">{label}</label>
       <Input 
         {...props} 
-        className="h-12 rounded-xl border-gray-200 bg-slate-50/50 focus:bg-white transition-all shadow-inner font-bold text-slate-700 text-sm" 
+        disabled
+        readOnly
+        className="h-12 rounded-xl border-gray-200 bg-slate-50/50 cursor-not-allowed font-bold text-slate-700 text-sm" 
       />
     </div>
   );
@@ -464,7 +457,9 @@ function TextAreaField({ label, ...props }: any) {
       <textarea 
         {...props} 
         rows={3}
-        className="w-full p-4 rounded-xl border border-gray-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all shadow-inner font-bold text-slate-700 text-sm custom-scrollbar"
+        disabled
+        readOnly
+        className="w-full p-4 rounded-xl border border-gray-200 bg-slate-50/50 cursor-not-allowed focus:outline-none transition-all shadow-inner font-bold text-slate-700 text-sm custom-scrollbar"
       />
     </div>
   );
@@ -476,9 +471,10 @@ function SelectField({ label, options, ...props }: any) {
       <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-2">{label}</label>
       <select 
         {...props} 
-        className="w-full h-12 bg-slate-50/50 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold text-slate-700 shadow-inner appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_1rem_center] bg-no-repeat"
+        disabled
+        className="w-full h-12 bg-slate-50/50 border border-gray-200 rounded-xl px-4 focus:outline-none transition-all text-sm font-bold text-slate-700 shadow-inner appearance-none cursor-not-allowed"
       >
-        <option value="">Select {label}</option>
+        <option value="">{props.value || 'Not Set'}</option>
         {options.map((opt: any) => (
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}

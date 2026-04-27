@@ -115,13 +115,11 @@ public class StudentService {
         student.setProfileCompleted(true);
         // Reset verification status to PENDING if it was NEEDS_CORRECTION 
         // to alert the teacher that new data is available for review
-        if (student.getVerificationStatus() == null) {
+        if (student.getVerificationStatus() == null || student.getVerificationStatus() == com.abc.entity.VerificationStatus.NEEDS_CORRECTION) {
             student.setVerificationStatus(com.abc.entity.VerificationStatus.PENDING);
-        }
-        
-        if (student.getVerificationStatus() == com.abc.entity.VerificationStatus.NEEDS_CORRECTION) {
-            student.setVerificationStatus(com.abc.entity.VerificationStatus.PENDING);
-            student.setVerificationComment("Updated by student");
+            student.setVerificationComment("Profile updated by student - pending re-verification");
+            student.setVerifiedBy(null);
+            student.setVerifiedAt(null);
         }
         
         com.abc.entity.Student savedStudent = studentRepository.save(student);

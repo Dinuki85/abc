@@ -51,8 +51,8 @@ export default function StudentsPage() {
     return () => clearTimeout(timer);
   }, [searchTerm, filterGradeId, filterClassId]);
 
-  const fetchStudents = async (page = 0) => {
-    setIsLoading(true);
+  const fetchStudents = async (page = 0, hideLoadingState = false) => {
+    if (!hideLoadingState) setIsLoading(true);
     try {
       const response = await api.getPaginatedStudents(page, pageSize, searchTerm, filterGradeId, filterClassId);
       setStudents(response.content);
@@ -62,9 +62,21 @@ export default function StudentsPage() {
     } catch (error) {
       console.error(error);
     } finally {
-      setIsLoading(false);
+      if (!hideLoadingState) setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Initial fetch
+    fetchStudents(currentPage);
+
+    // Set up polling for real-time updates every 5 seconds
+    const interval = setInterval(() => {
+      fetchStudents(currentPage, true);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentPage, searchTerm, filterGradeId, filterClassId]);
 
   const fetchGrades = async () => {
     try {
@@ -265,13 +277,12 @@ export default function StudentsPage() {
                   <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Student Identity</TableHead>
                   <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">Grade / Class</TableHead>
                   <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">Verification</TableHead>
-                  <TableHead className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading && Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={`loading-${i}`}>
-                    <TableCell colSpan={5} className="px-8 py-8 animate-pulse">
+                    <TableCell colSpan={4} className="px-8 py-8 animate-pulse">
                       <div className="h-4 bg-slate-100 rounded-full w-full" />
                     </TableCell>
                   </TableRow>
@@ -279,7 +290,7 @@ export default function StudentsPage() {
 
                 {!isLoading && students.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} className="py-32 text-center">
+                    <TableCell colSpan={4} className="py-32 text-center">
                       <div className="flex flex-col items-center gap-4">
                         <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
                           <Search size={40} />
@@ -292,12 +303,18 @@ export default function StudentsPage() {
 
                 {!isLoading && students.map((st) => (
                   <TableRow key={st.id || st.username} className="hover:bg-slate-50/50 transition-colors group">
-                    <TableCell className="px-8 py-5 font-black text-primary font-mono tracking-tighter text-base">
+                    <TableCell 
+                      className="px-8 py-5 font-black text-primary font-mono tracking-tighter text-base cursor-pointer hover:underline"
+                      onClick={() => openProfile(st)}
+                    >
                       {st.username}
                     </TableCell>
-                    <TableCell className="py-5">
-                      <div className="flex flex-col">
-                        <span className="text-sm font-bold text-slate-800">
+                    <TableCell 
+                      className="py-5 cursor-pointer group-hover:bg-slate-100 transition-colors rounded-xl"
+                      onClick={() => openProfile(st)}
+                    >
+                      <div className="flex flex-col px-2">
+                        <span className="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">
                           {st.fullName || <span className="text-slate-300 italic font-medium">Pending Completion</span>}
                         </span>
                         <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-0.5">
@@ -321,25 +338,6 @@ export default function StudentsPage() {
                           st.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
                         <div className={`w-1.5 h-1.5 rounded-full ${st.verificationStatus === 'VERIFIED' ? 'bg-emerald-500' : 'bg-blue-500'} animate-pulse`} />
                         {st.verificationStatus || 'PENDING'}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-8 py-5 text-right">
-                      <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button 
-                          onClick={() => openProfile(st)}
-                          className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90"
-                        >
-                          <Eye size={16} />
-                        </button>
-                        <button 
-                          onClick={() => openProfile(st)}
-                          className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm active:scale-90">
-                          <Trash2 size={16} />
-                        </button>
                       </div>
                     </TableCell>
                   </TableRow>

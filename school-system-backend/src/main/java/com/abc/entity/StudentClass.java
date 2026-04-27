@@ -20,6 +20,9 @@ public class StudentClass {
     @JoinColumn(name = "class_id", nullable = false)
     private SchoolClass schoolClass;
 
+    @Column(name = "class_position")
+    private String classPosition;
+
     public StudentClass() {}
 
     public Long getId() { return id; }
@@ -30,4 +33,7 @@ public class StudentClass {
 
     public SchoolClass getSchoolClass() { return schoolClass; }
     public void setSchoolClass(SchoolClass schoolClass) { this.schoolClass = schoolClass; }
+
+    public String getClassPosition() { return classPosition; }
+    public void setClassPosition(String classPosition) { this.classPosition = classPosition; }
 }

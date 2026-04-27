@@ -1,6 +1,7 @@
 package com.abc.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "verification")
@@ -20,6 +21,12 @@ public class Verification {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "verified_by")
+    private User verifiedBy;
+
+    private LocalDateTime verifiedAt;
+
     public Verification() {}
 
     public Long getId() { return id; }
@@ -33,4 +40,10 @@ public class Verification {
 
     public String getComment() { return comment; }
     public void setComment(String comment) { this.comment = comment; }
+
+    public User getVerifiedBy() { return verifiedBy; }
+    public void setVerifiedBy(User verifiedBy) { this.verifiedBy = verifiedBy; }
+
+    public LocalDateTime getVerifiedAt() { return verifiedAt; }
+    public void setVerifiedAt(LocalDateTime verifiedAt) { this.verifiedAt = verifiedAt; }
 }

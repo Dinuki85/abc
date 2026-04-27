@@ -89,7 +89,7 @@ export default function StudentDashboard() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <h1 className="text-5xl font-black tracking-tight mb-4">Hello, <span className="text-indigo-400">{user.fullName.split(' ')[0]}</span>!</h1>
+              <h1 className="text-5xl font-black tracking-tight mb-4">Hello, <span className="text-indigo-400">{(user.fullName || user.username || '').split(' ')[0]}</span>!</h1>
               <p className="text-slate-400 text-lg leading-relaxed font-medium">
                 Your digital student identity is being processed. Complete all steps below to unlock full access to your classroom resources.
               </p>
