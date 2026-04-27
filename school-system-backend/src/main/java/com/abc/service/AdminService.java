@@ -156,7 +156,7 @@ public class AdminService {
     }
 
     public List<Staff> getTeachers() {
-        return staffRepository.findAll();
+        return staffRepository.findAllOptimized();
     }
 
     public List<StudentResponse> getUnassignedStudents() {
@@ -429,9 +429,9 @@ public class AdminService {
 
     public List<Staff> searchStaff(String searchTerm) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
-            return staffRepository.findAll();
+            return staffRepository.findAllOptimized();
         }
-        return staffRepository.findAll().stream()
+        return staffRepository.findAllOptimized().stream()
                 .filter(s -> s.getName().toLowerCase().contains(searchTerm.toLowerCase()) || 
                             (s.getUser() != null && s.getUser().getUsername().toLowerCase().contains(searchTerm.toLowerCase())) ||
                             (s.getNic() != null && s.getNic().toLowerCase().contains(searchTerm.toLowerCase())))

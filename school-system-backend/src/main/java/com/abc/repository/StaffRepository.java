@@ -13,6 +13,9 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     Optional<Staff> findByUser_Username(String username);
     Optional<Staff> findByNic(String nic);
 
+    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT s FROM Staff s LEFT JOIN FETCH s.user LEFT JOIN FETCH s.assignedGrade LEFT JOIN FETCH s.designations")
+    java.util.List<Staff> findAllOptimized();
+
     @org.springframework.data.jpa.repository.Query("SELECT s FROM Staff s JOIN FETCH s.user LEFT JOIN FETCH s.assignedGrade")
     java.util.List<Staff> findAllWithUserAndGrade();
 }
