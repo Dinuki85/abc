@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 
 export default function StudentProfileSetup() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('identity');
+  const [activeTab, setActiveTab] = useState('basic');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState<any>({});
@@ -49,7 +49,7 @@ export default function StudentProfileSetup() {
       
       await api.saveStudentProfile(targetUsername, formData);
       toast.success("Profile updated successfully!");
-      // If profile is now complete, we might want to redirect
+      
       if (formData.verificationStatus === 'NEEDS_CORRECTION') {
          toast.success("Status reset to PENDING for re-verification");
       }
@@ -57,8 +57,10 @@ export default function StudentProfileSetup() {
       if (redirect) {
         router.push('/dashboard/student');
       }
+      return true;
     } catch (err: any) {
       toast.error(err.message || "Failed to update profile");
+      return false;
     } finally {
       setSaving(false);
     }
@@ -66,13 +68,15 @@ export default function StudentProfileSetup() {
 
   const handleSaveAndNext = async () => {
     const currentIndex = tabs.findIndex(t => t.id === activeTab);
-    if (currentIndex < tabs.length - 1) {
-      await handleSave(false);
-      if (!saving) { // Only advance if save initiated successfully
+    const success = await handleSave(false);
+    
+    if (success) {
+      if (currentIndex < tabs.length - 1) {
         setActiveTab(tabs[currentIndex + 1].id);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        router.push('/dashboard/student');
       }
-    } else {
-      await handleSave(true); // Last tab finishes and redirects
     }
   };
 

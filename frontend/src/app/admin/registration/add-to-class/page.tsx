@@ -512,9 +512,20 @@ export default function BulkAssignPage() {
                          </p>
                       </td>
                       <td className="px-10 py-6">
-                         <span className="px-4 py-2 bg-primary/5 text-primary rounded-xl text-xs font-black italic border border-primary/10 shadow-sm">
-                            #{row.classPosition || 'N/A'}
-                         </span>
+                         <div className="flex items-center gap-1">
+                           <span className="text-primary font-black italic">#</span>
+                           <input 
+                             type="text" 
+                             value={row.classPosition}
+                             onChange={(e) => {
+                               const newAssignments = [...assignments];
+                               newAssignments[i].classPosition = e.target.value;
+                               setAssignments(newAssignments);
+                             }}
+                             className="w-16 bg-primary/5 text-primary rounded-xl px-2 py-1 text-xs font-black italic border border-primary/10 shadow-sm focus:outline-none focus:border-primary transition-all text-center"
+                             placeholder="N/A"
+                           />
+                         </div>
                       </td>
                       <td className="px-10 py-6 text-right">
                         <button 

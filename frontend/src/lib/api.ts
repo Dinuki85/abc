@@ -59,6 +59,7 @@ export interface StudentProfile {
   classId?: number;
   gradeName?: string;
   className?: string;
+  classPosition?: string;
   
   // Status
   profileCompleted?: boolean;
@@ -441,6 +442,10 @@ class ApiService {
       headers: this.getHeaders()
     });
     if (response.ok) return await response.json();
+    if (response.status === 400) {
+      const msg = await response.text();
+      throw new Error(msg || "Student not found");
+    }
     return null;
   }
 
