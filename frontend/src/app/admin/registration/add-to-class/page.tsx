@@ -15,6 +15,7 @@ interface AssignmentEntry {
   indexNo: string;
   fullName: string;
   classPosition: string;
+  isExisting?: boolean;
 }
 
 export default function BulkAssignPage() {
@@ -55,8 +56,7 @@ export default function BulkAssignPage() {
   useEffect(() => {
     if (selectedGradeId !== '') {
       api.getClassesByGrade(Number(selectedGradeId)).then(setClasses);
-      setSelectedClassId('');
-      setSelectedClass(null);
+      // We don't clear selectedClassId here to allow atomic updates from teacher selection
     } else {
       setClasses([]);
     }
@@ -83,6 +83,32 @@ export default function BulkAssignPage() {
       setTeacherSearch('');
     }
   }, [selectedClassId, classes]);
+
+  // Fetch existing assignments when class changes
+  useEffect(() => {
+    if (selectedClassId !== '') {
+      const loadExisting = async () => {
+        try {
+          const data = await api.getPaginatedStudents(0, 500, '', '', Number(selectedClassId));
+          if (data && data.content) {
+            const existing = data.content.map((s: any) => ({
+              indexNo: s.username,
+              fullName: s.fullName,
+              classPosition: s.classPosition || '',
+              isExisting: true
+            }));
+            setAssignments(existing);
+          }
+        } catch (err) {
+          console.error("Failed to load existing students", err);
+          setAssignments([]);
+        }
+      };
+      loadExisting();
+    } else {
+      setAssignments([]);
+    }
+  }, [selectedClassId]);
 
   // Real-time student validation
   useEffect(() => {
@@ -338,6 +364,19 @@ export default function BulkAssignPage() {
                                  setSelectedTeacherNic(t.user?.username || '');
                                  setSelectedTeacherName(t.name || t.user?.username || '');
                                  setTeacherSearch(t.name || t.user?.username || '');
+                                 
+                                 // Auto-select class if teacher is already assigned
+                                 if (t.classes && t.classes.length > 0) {
+                                   const assignedClass = t.classes[0];
+                                   if (assignedClass.grade?.id) {
+                                     setSelectedGradeId(assignedClass.grade.id);
+                                     // We need to wait for classes to be fetched for the new grade
+                                     // But setSelectedClassId will be handled by the class list effect
+                                     // or we can set it directly if we have the class object
+                                     setSelectedClassId(assignedClass.id);
+                                   }
+                                 }
+                                 
                                  setShowTeacherDropdown(false);
                                }}
                              >
@@ -468,7 +507,9 @@ export default function BulkAssignPage() {
                       <td className="px-10 py-6 font-mono font-black text-primary text-lg tracking-tight">{row.indexNo}</td>
                       <td className="px-10 py-6">
                          <p className="font-black text-slate-700 uppercase text-sm leading-none mb-1">{row.fullName}</p>
-                         <p className="text-[10px] font-bold text-slate-400 tracking-widest">VERIFIED IDENTITY</p>
+                         <p className={`text-[10px] font-bold tracking-widest ${row.isExisting ? 'text-primary' : 'text-slate-400'}`}>
+                           {row.isExisting ? 'CURRENTLY ASSIGNED' : 'VERIFIED IDENTITY'}
+                         </p>
                       </td>
                       <td className="px-10 py-6">
                          <span className="px-4 py-2 bg-primary/5 text-primary rounded-xl text-xs font-black italic border border-primary/10 shadow-sm">
