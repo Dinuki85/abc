@@ -32,6 +32,7 @@ export default function BulkAssignPage() {
   const [classPosition, setClassPosition] = useState('');
   const [currentStudent, setCurrentStudent] = useState<StudentProfile | null>(null);
   const [validating, setValidating] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
   
   // Queue State
   const [assignments, setAssignments] = useState<AssignmentEntry[]>([]);
@@ -88,16 +89,39 @@ export default function BulkAssignPage() {
     const lookup = async () => {
       if (indexNo.length >= 2) {
         setValidating(true);
+        setValidationError(null);
         try {
           const student = await api.searchAdminStudent(indexNo);
+          
+          if (!selectedGradeId) {
+            setValidationError("Please select a target grade level first.");
+            setCurrentStudent(null);
+            return;
+          }
+
+          if (!student?.gradeId) {
+            setValidationError("Student is not yet assigned to any grade in the registry.");
+            setCurrentStudent(null);
+            return;
+          }
+
+          if (student.gradeId !== Number(selectedGradeId)) {
+            setValidationError(`Student belongs to ${student.gradeName || 'another grade'}. Cannot add to this class.`);
+            setCurrentStudent(null);
+            return;
+          }
+
+          setValidationError(null);
           setCurrentStudent(student);
-        } catch (err) {
+        } catch (err: any) {
+          setValidationError(err.message || "Student not found in registry");
           setCurrentStudent(null);
         } finally {
           setValidating(false);
         }
       } else {
         setCurrentStudent(null);
+        setValidationError(null);
       }
     };
 
@@ -110,8 +134,25 @@ export default function BulkAssignPage() {
     
     if (!studentToAssign && indexNo.length >= 2) {
       setValidating(true);
+      setValidationError(null);
       try {
         studentToAssign = await api.searchAdminStudent(indexNo);
+        
+        if (!selectedGradeId) {
+          toast.error("Please select a target grade level first.");
+          return;
+        }
+
+        if (!studentToAssign?.gradeId) {
+          toast.error("Student is not yet assigned to any grade.");
+          return;
+        }
+
+        if (studentToAssign.gradeId !== Number(selectedGradeId)) {
+          toast.error(`Student belongs to ${studentToAssign.gradeName}. Cannot add to this class.`);
+          return;
+        }
+
         setCurrentStudent(studentToAssign);
       } catch (err: any) {
         toast.error(err.message || "Student not found in registry");
@@ -122,7 +163,7 @@ export default function BulkAssignPage() {
     }
 
     if (!studentToAssign) {
-      toast.error("Please enter a valid Student Index No first");
+      toast.error(validationError || "Please enter a valid Student Index No first");
       return;
     }
     
@@ -370,6 +411,11 @@ export default function BulkAssignPage() {
               {currentStudent && (
                 <div className="px-2 py-1 bg-emerald-50 text-emerald-700 rounded-lg inline-flex items-center gap-2 text-xs font-black uppercase tracking-tight animate-in fade-in slide-in-from-top-2">
                   <Info size={14} /> Identified: {currentStudent.fullName}
+                </div>
+              )}
+              {validationError && (
+                <div className="px-2 py-1 bg-rose-50 text-rose-600 rounded-lg inline-flex items-center gap-2 text-xs font-black uppercase tracking-tight animate-in fade-in slide-in-from-top-2">
+                  <Info size={14} className="text-rose-400" /> {validationError}
                 </div>
               )}
             </div>
