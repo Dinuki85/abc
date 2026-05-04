@@ -23,8 +23,8 @@ export default function Sidebar({ menuItems }: SidebarProps) {
   };
 
   return (
-    <aside className="h-full w-64 bg-white/40 backdrop-blur-xl border-r border-slate-200/50 shadow-2xl flex flex-col pt-4">
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+    <aside className="h-full w-64 bg-white/40 backdrop-blur-xl border-r border-slate-200/50 shadow-2xl flex flex-col pt-8">
+      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
         {menuItems.map((item) => {
           const active = isActive(item.href);
           const Icon = item.icon;
@@ -33,27 +33,20 @@ export default function Sidebar({ menuItems }: SidebarProps) {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center px-3 py-3 rounded-xl transition-all duration-200 group ${
+              className={`flex items-center px-3 py-3 rounded-xl transition-all duration-300 group relative ${
                 active 
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30' 
-                  : 'text-slate-600 hover:bg-white/60 hover:text-blue-600'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40 font-bold' 
+                  : 'text-slate-500 hover:bg-white/80 hover:text-blue-600'
               }`}
             >
-              <Icon size={20} className={`mr-3 ${active ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-colors`} />
-              <span className="font-medium">{item.name}</span>
+              {active && (
+                <div className="absolute left-0 w-1 h-6 bg-white rounded-r-full" />
+              )}
+              <Icon size={18} className={`mr-3 ${active ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-all duration-300 group-hover:scale-110`} />
+              <span className="text-[13px] tracking-tight">{item.name}</span>
             </Link>
           );
         })}
-      </div>
-
-      <div className="p-4 border-t border-white/20">
-        <Link
-          href="/"
-          className="flex items-center px-3 py-3 rounded-xl text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-colors group"
-        >
-          <LogOut size={20} className="mr-3 text-slate-400 group-hover:text-rose-600 transition-colors" />
-          <span className="font-medium">Logout</span>
-        </Link>
       </div>
     </aside>
   );
