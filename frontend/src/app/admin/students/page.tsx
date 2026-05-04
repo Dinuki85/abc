@@ -143,36 +143,36 @@ export default function StudentsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
-      {/* Premium Compact Header */}
-      <div className="sticky top-[80px] z-40 -mx-4 px-4 py-3 bg-slate-50/80 backdrop-blur-md border-b border-slate-200/50">
-        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row items-center justify-between gap-4 bg-white/70 p-4 rounded-[2rem] border border-white shadow-xl shadow-slate-200/40">
+      {/* Premium Compact Header - Snap-to-Top Perfection */}
+      <div className="sticky top-0 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-4 bg-slate-50/95 backdrop-blur-xl border-b border-slate-200/60 shadow-sm mb-8">
+        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row items-center justify-between gap-6 bg-white p-5 rounded-[2.5rem] border border-white shadow-2xl shadow-slate-200/50">
           
-          <div className="flex items-center gap-4 px-2">
-            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shadow-inner">
-              <GraduationCap size={24} />
+          <div className="flex items-center gap-5 px-3">
+            <div className="w-14 h-14 bg-primary/10 rounded-[1.5rem] flex items-center justify-center text-primary shadow-inner">
+              <GraduationCap size={28} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-800 tracking-tight font-handlee leading-none">
+              <h1 className="text-2xl font-bold text-slate-800 tracking-tighter font-handlee leading-none">
                 Student Register
               </h1>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+              <p className="text-[11px] text-slate-400 font-black uppercase tracking-[0.2em] mt-2">
                 AMV Institutional Directory
               </p>
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+          <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto">
             <div className="relative flex-1 lg:min-w-[300px]">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <Input 
                 placeholder="Search index or name..." 
-                className="pl-11 h-12 w-full rounded-xl border-gray-200/60 bg-white/50 focus:bg-white focus:ring-primary/20 focus:border-primary shadow-sm transition-all"
+                className="pl-14 h-14 w-full rounded-2xl border-gray-100 bg-slate-50/50 focus:bg-white focus:ring-primary/20 focus:border-primary shadow-inner transition-all text-sm font-medium"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            <div className="flex items-center gap-2 bg-slate-100/50 p-1 rounded-xl border border-slate-200/50 shadow-inner">
+            <div className="flex items-center gap-2 bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 shadow-inner">
               <select 
                 value={filterGradeId} 
                 onChange={(e) => {
@@ -182,7 +182,7 @@ export default function StudentsPage() {
                   if (gId !== '') fetchClassesForGrade(gId, true);
                   else setFilterClasses([]);
                 }}
-                className="h-10 px-4 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-[10px] font-black text-slate-600 min-w-[110px] shadow-sm appearance-none cursor-pointer hover:bg-slate-50 transition-colors"
+                className="h-11 px-5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 text-[10px] font-black text-slate-600 min-w-[120px] shadow-sm appearance-none cursor-pointer hover:bg-slate-50 transition-colors"
               >
                 <option value="">All Grades</option>
                 {grades.map(g => (
@@ -194,7 +194,7 @@ export default function StudentsPage() {
                 value={filterClassId} 
                 onChange={(e) => setFilterClassId(e.target.value === '' ? '' : parseInt(e.target.value))}
                 disabled={filterGradeId === ''}
-                className="h-10 px-4 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-[10px] font-black text-slate-600 min-w-[110px] disabled:opacity-50 shadow-sm appearance-none cursor-pointer hover:bg-slate-50 transition-colors"
+                className="h-11 px-5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 text-[10px] font-black text-slate-600 min-w-[120px] disabled:opacity-50 shadow-sm appearance-none cursor-pointer hover:bg-slate-50 transition-colors"
               >
                 <option value="">All Classes</option>
                 {filterClasses.map(c => (
@@ -204,10 +204,10 @@ export default function StudentsPage() {
             </div>
 
             <Button 
-              className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold shadow-lg shadow-primary/20 group active:scale-95 transition-all text-xs"
+              className="h-14 px-8 rounded-2xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest shadow-xl shadow-primary/20 group active:scale-95 transition-all text-xs"
               onClick={() => setShowModal(true)}
             >
-              <UserPlus size={18} className="mr-2 group-hover:scale-110 transition-transform" />
+              <UserPlus size={20} className="mr-3 group-hover:scale-110 transition-transform" />
               Enroll
             </Button>
           </div>
