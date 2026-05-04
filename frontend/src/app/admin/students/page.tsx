@@ -40,16 +40,14 @@ export default function StudentsPage() {
   const [filterClassId, setFilterClassId] = useState<number | ''>('');
   const [filterClasses, setFilterClasses] = useState<any[]>([]);
 
-  useEffect(() => {
-    fetchGrades();
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchStudents(0);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchTerm, filterGradeId, filterClassId]);
+  const fetchGrades = async () => {
+    try {
+      const data = await api.getGrades();
+      setGrades(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchStudents = async (page = 0, hideLoadingState = false) => {
     if (!hideLoadingState) setIsLoading(true);
@@ -67,25 +65,25 @@ export default function StudentsPage() {
   };
 
   useEffect(() => {
-    // Initial fetch
-    fetchStudents(currentPage);
+    fetchGrades();
+  }, []);
 
-    // Set up polling for real-time updates every 5 seconds
+  useEffect(() => {
+    // Initial fetch and debounce for filters
+    const timer = setTimeout(() => {
+      fetchStudents(currentPage, currentPage !== 0);
+    }, 300);
+
+    // Set up polling for real-time updates every 10 seconds (silent)
     const interval = setInterval(() => {
       fetchStudents(currentPage, true);
-    }, 5000);
+    }, 10000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
   }, [currentPage, searchTerm, filterGradeId, filterClassId]);
-
-  const fetchGrades = async () => {
-    try {
-      const data = await api.getGrades();
-      setGrades(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const fetchClassesForGrade = async (gradeId: number, isFilter = false) => {
     try {
@@ -144,72 +142,75 @@ export default function StudentsPage() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      {/* Page Header */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-              <GraduationCap size={28} />
+    <div className="space-y-6 animate-in fade-in duration-700 pb-20">
+      {/* Premium Compact Header */}
+      <div className="sticky top-[80px] z-40 -mx-4 px-4 py-3 bg-slate-50/80 backdrop-blur-md border-b border-slate-200/50">
+        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row items-center justify-between gap-4 bg-white/70 p-4 rounded-[2rem] border border-white shadow-xl shadow-slate-200/40">
+          
+          <div className="flex items-center gap-4 px-2">
+            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shadow-inner">
+              <GraduationCap size={24} />
             </div>
-            <h1 className="text-4xl font-bold text-slate-800 tracking-tight font-handlee">
-              Student Register
-            </h1>
+            <div>
+              <h1 className="text-xl font-bold text-slate-800 tracking-tight font-handlee leading-none">
+                Student Register
+              </h1>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                AMV Institutional Directory
+              </p>
+            </div>
           </div>
-          <p className="text-slate-500 font-medium ml-15">
-            Centralized enrollment management for Andiambalama Maha Vidhyalaya
-          </p>
-        </div>
-        
-        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-          <div className="relative flex-1 lg:flex-none">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <Input 
-              placeholder="Search index or name..." 
-              className="pl-12 h-14 w-full lg:w-72 rounded-2xl border-gray-200 focus:ring-primary/20 focus:border-primary shadow-sm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          
+          <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+            <div className="relative flex-1 lg:min-w-[300px]">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+              <Input 
+                placeholder="Search index or name..." 
+                className="pl-11 h-12 w-full rounded-xl border-gray-200/60 bg-white/50 focus:bg-white focus:ring-primary/20 focus:border-primary shadow-sm transition-all"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-          <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-gray-100 shadow-inner">
-            <select 
-              value={filterGradeId} 
-              onChange={(e) => {
-                const gId = e.target.value === '' ? '' : parseInt(e.target.value);
-                setFilterGradeId(gId);
-                setFilterClassId('');
-                if (gId !== '') fetchClassesForGrade(gId, true);
-                else setFilterClasses([]);
-              }}
-              className="h-11 px-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs font-bold text-slate-600 min-w-[120px] shadow-sm appearance-none"
+            <div className="flex items-center gap-2 bg-slate-100/50 p-1 rounded-xl border border-slate-200/50 shadow-inner">
+              <select 
+                value={filterGradeId} 
+                onChange={(e) => {
+                  const gId = e.target.value === '' ? '' : parseInt(e.target.value);
+                  setFilterGradeId(gId);
+                  setFilterClassId('');
+                  if (gId !== '') fetchClassesForGrade(gId, true);
+                  else setFilterClasses([]);
+                }}
+                className="h-10 px-4 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-[10px] font-black text-slate-600 min-w-[110px] shadow-sm appearance-none cursor-pointer hover:bg-slate-50 transition-colors"
+              >
+                <option value="">All Grades</option>
+                {grades.map(g => (
+                  <option key={g.id} value={g.id}>{g.name}</option>
+                ))}
+              </select>
+
+              <select 
+                value={filterClassId} 
+                onChange={(e) => setFilterClassId(e.target.value === '' ? '' : parseInt(e.target.value))}
+                disabled={filterGradeId === ''}
+                className="h-10 px-4 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-[10px] font-black text-slate-600 min-w-[110px] disabled:opacity-50 shadow-sm appearance-none cursor-pointer hover:bg-slate-50 transition-colors"
+              >
+                <option value="">All Classes</option>
+                {filterClasses.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <Button 
+              className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold shadow-lg shadow-primary/20 group active:scale-95 transition-all text-xs"
+              onClick={() => setShowModal(true)}
             >
-              <option value="">All Grades</option>
-              {grades.map(g => (
-                <option key={g.id} value={g.id}>{g.name}</option>
-              ))}
-            </select>
-
-            <select 
-              value={filterClassId} 
-              onChange={(e) => setFilterClassId(e.target.value === '' ? '' : parseInt(e.target.value))}
-              disabled={filterGradeId === ''}
-              className="h-11 px-4 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 text-xs font-bold text-slate-600 min-w-[120px] disabled:opacity-50 shadow-sm appearance-none"
-            >
-              <option value="">All Classes</option>
-              {filterClasses.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
+              <UserPlus size={18} className="mr-2 group-hover:scale-110 transition-transform" />
+              Enroll
+            </Button>
           </div>
-
-          <Button 
-            className="h-14 px-8 rounded-2xl bg-primary hover:bg-primary-hover text-white font-bold shadow-lg shadow-primary/20 group active:scale-95 transition-all"
-            onClick={() => setShowModal(true)}
-          >
-            <UserPlus size={20} className="mr-2 group-hover:scale-110 transition-transform" />
-            New Enrollment
-          </Button>
         </div>
       </div>
 
@@ -231,7 +232,7 @@ export default function StudentsPage() {
       )}
 
       {/* Main Content Table */}
-      <Card className="rounded-[2.5rem] border-gray-100 shadow-xl overflow-hidden bg-white">
+      <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl shadow-slate-200/50 overflow-hidden bg-white/80 backdrop-blur-sm relative">
         <CardHeader className="px-8 py-6 flex flex-row items-center justify-between border-b border-gray-50">
           <div className="flex items-center gap-3">
             <div className="w-2 h-8 bg-secondary rounded-full" />
@@ -271,12 +272,12 @@ export default function StudentsPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50/50">
-                <TableRow>
-                  <TableHead className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Admission No</TableHead>
-                  <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Student Identity</TableHead>
-                  <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">Grade / Class</TableHead>
-                  <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">Verification</TableHead>
+              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-0 z-10">
+                <TableRow className="border-none">
+                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 w-[180px]">Admission No</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Student Identity</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-center w-[150px]">Grade / Class</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-center w-[150px]">Verification</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -325,7 +326,7 @@ export default function StudentsPage() {
                     <TableCell className="py-5 text-center">
                       <div className="flex flex-col items-center gap-1.5">
                         <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-widest border border-slate-200">
-                          Grade {st.gradeName || 'N/A'}
+                          {st.gradeName || 'N/A'}
                         </span>
                         <span className="px-3 py-1 rounded-full bg-primary/5 text-primary text-[9px] font-black uppercase tracking-widest border border-primary/10">
                           Class {st.className || 'N/A'}
