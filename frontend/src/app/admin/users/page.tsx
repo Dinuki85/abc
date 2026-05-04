@@ -1,8 +1,9 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Button } from '@/components/ui/Button';
-import { Plus, Edit2, Trash2, ShieldCog } from 'lucide-react';
-import { Plus, Edit2, Trash2, ShieldCog, Search, UserPlus } from 'lucide-react';
+import { Plus, Edit2, Trash2, ShieldCog, Search, UserPlus, ShieldCheck } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { useState } from 'react';
 
