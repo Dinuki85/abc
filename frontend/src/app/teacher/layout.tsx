@@ -27,7 +27,10 @@ export default function TeacherLayout({
       <div className="fixed -bottom-40 left-60 w-96 h-96 bg-indigo-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 pointer-events-none z-0" />
 
       <div className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200">
-        <DashboardNavbar onMenuToggle={() => setIsMobileMenuOpen(true)} />
+        <DashboardNavbar 
+          onMenuToggle={() => setIsMobileMenuOpen(true)} 
+          brandName="AMV TEACHER"
+        />
       </div>
 
       <MobileSidebar 

@@ -77,7 +77,7 @@ export default function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <DashboardNavbar />
+      <DashboardNavbar brandName="AMV STUDENT" />
 
       <main className="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10">
         

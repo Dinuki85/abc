@@ -51,13 +51,17 @@ export default function AdminLayout({
 
       {/* Top Navbar */}
       <div className="flex-shrink-0 z-50 h-20 bg-white border-b border-gray-100">
-        <DashboardNavbar onMenuToggle={() => setIsMobileMenuOpen(true)} />
+        <DashboardNavbar 
+          onMenuToggle={() => setIsMobileMenuOpen(true)} 
+          brandName="AMV ADMIN"
+        />
       </div>
 
       <MobileSidebar 
         isOpen={isMobileMenuOpen} 
         onClose={() => setIsMobileMenuOpen(false)} 
         menuItems={adminMenuItems}
+        brandName="AMV ADMIN"
       />
 
       {/* Bottom Area: Sidebar + Content */}
