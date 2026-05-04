@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { api, User as ApiUser } from '@/lib/api';
-import DashboardNavbar from '@/components/DashboardNavbar';
 
 export default function StudentDashboard() {
   const router = useRouter();
@@ -76,8 +75,7 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <DashboardNavbar brandName="AMV STUDENT" />
+    <div className="flex flex-col font-sans">
 
       <main className="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10">
         
