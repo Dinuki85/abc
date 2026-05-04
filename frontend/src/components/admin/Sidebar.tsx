@@ -25,28 +25,35 @@ export default function Sidebar({ menuItems }: SidebarProps) {
   return (
     <aside className="h-full w-64 bg-white/40 backdrop-blur-xl border-r border-slate-200/50 shadow-2xl flex flex-col pt-8">
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
-        {menuItems.map((item) => {
-          const active = isActive(item.href);
-          const Icon = item.icon;
-          
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`flex items-center px-3 py-3 rounded-xl transition-all duration-300 group relative ${
-                active 
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40 font-bold' 
-                  : 'text-slate-500 hover:bg-white/80 hover:text-blue-600'
-              }`}
-            >
-              {active && (
-                <div className="absolute left-0 w-1 h-6 bg-white rounded-r-full" />
-              )}
-              <Icon size={18} className={`mr-3 ${active ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-all duration-300 group-hover:scale-110`} />
-              <span className="text-[13px] tracking-tight">{item.name}</span>
-            </Link>
-          );
-        })}
+        {menuItems
+          .filter(item => {
+            // Hide Dashboard link when on students or registration pages
+            const isRegistrationPath = pathname.startsWith('/admin/students') || pathname.startsWith('/admin/registration');
+            if (item.name === 'Dashboard' && isRegistrationPath) return false;
+            return true;
+          })
+          .map((item) => {
+            const active = isActive(item.href);
+            const Icon = item.icon;
+            
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`flex items-center px-3 py-3 rounded-xl transition-all duration-300 group relative ${
+                  active 
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40 font-bold' 
+                    : 'text-slate-500 hover:bg-white/80 hover:text-blue-600'
+                }`}
+              >
+                {active && (
+                  <div className="absolute left-0 w-1 h-6 bg-white rounded-r-full" />
+                )}
+                <Icon size={18} className={`mr-3 ${active ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-all duration-300 group-hover:scale-110`} />
+                <span className="text-[13px] tracking-tight">{item.name}</span>
+              </Link>
+            );
+          })}
       </div>
     </aside>
   );
