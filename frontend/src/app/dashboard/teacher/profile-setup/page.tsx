@@ -86,7 +86,7 @@ export default function StaffProfileSetup() {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 font-sans">
-      <div className="bg-white border-b sticky top-0 z-30">
+      <div className="bg-white border-b sticky top-[80px] z-30">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" onClick={() => router.push('/teacher')} className="rounded-full w-12 h-12 p-0">
