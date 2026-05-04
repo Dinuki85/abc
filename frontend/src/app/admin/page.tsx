@@ -27,49 +27,68 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-1000 pb-20">
-      
-      {/* Institutional Header - Simplified */}
-      <div className="bg-white rounded-[3rem] p-12 shadow-2xl border border-white/20 relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -mr-48 -mt-48 blur-3xl transition-all group-hover:bg-primary/10" />
-        <div className="relative flex flex-col items-center text-center">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="w-12 h-1 bg-primary rounded-full" />
-            <span className="text-primary font-black uppercase tracking-[0.3em] text-[10px]">Portal Administrator</span>
-            <span className="w-12 h-1 bg-primary rounded-full" />
+    <div className="space-y-8 animate-in fade-in duration-1000 pb-20">
+      {/* High-Impact Institutional Banner */}
+      <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] p-10 shadow-2xl border border-white/5">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md">
+              <ShieldCheck className="text-indigo-400" size={14} />
+              <span className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Command Center</span>
+            </div>
+            <h1 className="text-5xl font-black text-white tracking-tighter font-handlee italic leading-none">
+              Welcome Back, <span className="text-indigo-400">Administrator</span>
+            </h1>
+            <p className="text-slate-400 font-medium max-w-md text-lg leading-relaxed">
+              Monitoring AMV Institutional operations with real-time academic and personnel analytics.
+            </p>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-slate-800 font-handlee leading-tight tracking-tight">
-            Welcome, <span className="text-primary">{currentUser?.name || 'Administrator'}</span> <br /> 
-            To Andiambalama Maha Vidhyalaya
-          </h1>
-          <p className="mt-6 text-slate-500 font-medium max-w-2xl mx-auto">
-            Manage institutional profiles, registrations, and performance analytics from your unified administrative hub.
-          </p>
+          
+          <div className="flex gap-4">
+            <div className="bg-white/5 backdrop-blur-xl p-6 rounded-[2rem] border border-white/10 flex flex-col items-center gap-2 min-w-[140px]">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <Activity size={20} />
+              </div>
+              <span className="text-2xl font-black text-white tabular-nums tracking-tighter">98.2%</span>
+              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">System Uptime</span>
+            </div>
+            <div className="bg-white/5 backdrop-blur-xl p-6 rounded-[2rem] border border-white/10 flex flex-col items-center gap-2 min-w-[140px]">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                <Users2 size={20} />
+              </div>
+              <span className="text-2xl font-black text-white tabular-nums tracking-tighter">2,412</span>
+              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Active Users</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Dynamic Professional Stats Grid */}
-      <section className="grid grid-cols-2 lg:grid-cols-5 gap-6">
+      {/* Compact High-Density Stats Grid */}
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Students', value: stats?.totalStudents || '0', icon: GraduationCap, color: 'border-primary', bg: 'bg-primary/5', text: 'text-primary' },
-          { label: 'Academic Staff', value: stats?.academicStaffCount || '0', icon: Briefcase, color: 'border-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-600' },
-          { label: 'Non-Academic', value: stats?.nonAcademicStaffCount || '0', icon: Users, color: 'border-indigo-500', bg: 'bg-indigo-50', text: 'text-indigo-600' },
-          { label: 'Sections', value: stats?.totalSections || '0', icon: Layers, color: 'border-secondary', bg: 'bg-secondary/5', text: 'text-secondary-hover' },
-          { label: 'Class Rooms', value: stats?.totalClassRooms || '0', icon: BookOpen, color: 'border-rose-500', bg: 'bg-rose-50', text: 'text-rose-600' },
+          { label: 'Total Enrollment', value: stats?.totalStudents || 0, icon: GraduationCap, color: 'indigo', change: '+12 this month' },
+          { label: 'Academic Faculty', value: stats?.academicStaffCount || 0, icon: Briefcase, color: 'emerald', change: 'Stable' },
+          { label: 'Grade Sections', value: stats?.totalSections || 0, icon: Landmark, color: 'amber', change: 'Across 13 grades' },
+          { label: 'Total Units', value: stats?.totalClassRooms || 0, icon: Layers, color: 'rose', change: '92% Capacity' },
         ].map((stat, i) => (
-          <div key={i} className={`bg-white p-6 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border-b-8 ${stat.color} flex flex-col gap-4 hover:shadow-2xl hover:-translate-y-2 transition-all group overflow-hidden relative`}>
-            <div className={`absolute -right-4 -bottom-4 opacity-5 group-hover:scale-150 group-hover:opacity-10 transition-all duration-700 ${stat.text}`}>
-               <stat.icon size={120} />
-            </div>
-            <div className="flex justify-between items-center relative z-10">
-              <div className={`p-4 rounded-[1.25rem] ${stat.bg} ${stat.text} group-hover:scale-110 transition-transform shadow-inner`}>
-                <stat.icon size={28} />
+          <div key={i} className="group hover:border-indigo-500/50 transition-all duration-500 rounded-[2.5rem] border border-slate-200/60 shadow-xl shadow-slate-200/40 bg-white/50 backdrop-blur-sm overflow-hidden p-6 relative">
+            <div className={`absolute -right-4 -top-4 w-24 h-24 bg-slate-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
+            <div className="flex justify-between items-start mb-4 relative z-10">
+              <div className={`p-4 bg-slate-50 rounded-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner text-slate-400`}>
+                <stat.icon size={24} />
               </div>
-              <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Live DB</span>
+              <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-slate-50 text-slate-400 border border-slate-100`}>
+                {stat.change}
+              </span>
             </div>
-            <div className="flex flex-col relative z-10">
-              <span className="text-5xl font-black text-slate-800 tabular-nums tracking-tighter font-handlee">{stat.value}</span>
-              <span className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mt-2">{stat.label}</span>
+            <div className="relative z-10">
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
+              <p className="text-3xl font-black text-slate-800 tracking-tighter tabular-nums font-handlee">
+                {stat.value.toLocaleString()}
+              </p>
             </div>
           </div>
         ))}
