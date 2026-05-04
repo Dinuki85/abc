@@ -71,7 +71,7 @@ export default function AdminLayout({
           <Sidebar menuItems={adminMenuItems} />
         </div>
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8 bg-transparent scroll-smooth custom-scrollbar relative">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8 pt-0 bg-transparent scroll-smooth custom-scrollbar relative">
           <div className="max-w-[1600px] mx-auto min-h-full">
             {children}
           </div>
