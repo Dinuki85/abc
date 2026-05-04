@@ -11,8 +11,6 @@ import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Sett
 const adminMenuItems = [
   { name: 'Dashboard', href: '/admin', icon: Landmark },
   { name: 'Student Register', href: '/admin/students', icon: GraduationCap },
-  { name: 'Staff Directory', href: '/admin/staff', icon: Users },
-  { name: 'Registration', href: '/admin/registration', icon: UserPlus },
   { name: 'Performance', href: '/admin/performance', icon: Activity },
   { name: 'User Management', href: '/admin/users', icon: Settings },
 ];
