@@ -21,7 +21,7 @@ export default function StaffSidebar() {
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
-    api.getStaffProfile().then(setProfile);
+    api.getStaffProfile().then(setProfile).catch(err => console.error("Could not fetch staff profile", err));
   }, []);
 
   const handleLogout = () => {
@@ -49,14 +49,7 @@ export default function StaffSidebar() {
   menuItems.push({ name: 'Settings', href: '/staff/settings', icon: Settings });
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 transition-transform translate-x-0 bg-white/40 backdrop-blur-xl border-r border-white/20 shadow-2xl flex flex-col font-nunito">
-      <div className="h-20 flex flex-col justify-center px-6 border-b border-white/20">
-        <Link href="/staff" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-          Andiambalama MV
-        </Link>
-        <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Staff Portal</span>
-      </div>
-
+    <aside className="h-full w-64 bg-white/40 backdrop-blur-xl border-r border-slate-200/50 shadow-2xl flex flex-col font-nunito">
       <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
         {menuItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/staff' && pathname.startsWith(item.href));
@@ -79,15 +72,15 @@ export default function StaffSidebar() {
         })}
       </div>
 
-      {profile && (
+      {profile?.staff && (
         <div className="p-4 mx-4 mb-4 rounded-3xl bg-white/50 border border-white/40 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-600 font-bold">
-              {profile.staff.name[0]}
+              {profile.staff.name?.[0] || 'S'}
             </div>
             <div className="flex-1 min-w-0">
                <p className="text-xs font-bold text-slate-800 truncate">{profile.staff.name}</p>
-               <p className="text-[10px] text-slate-400 truncate">{designations[0]}</p>
+               <p className="text-[10px] text-slate-400 truncate">{designations[0] || 'Staff Member'}</p>
             </div>
           </div>
           <button
