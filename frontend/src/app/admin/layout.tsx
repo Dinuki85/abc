@@ -50,7 +50,7 @@ export default function AdminLayout({
       <div className="absolute -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none" />
 
       {/* Top Navbar */}
-      <div className="flex-shrink-0 z-50 h-20 bg-white border-b border-gray-100">
+      <div className="flex-shrink-0 z-50 h-20 bg-white border-b border-gray-100 sticky top-0">
         <DashboardNavbar 
           onMenuToggle={() => setIsMobileMenuOpen(true)} 
           brandName="AMV ADMIN"
