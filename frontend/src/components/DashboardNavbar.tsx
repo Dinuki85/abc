@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation';
 import { LogOut, Menu, Clock, ShieldCheck } from 'lucide-react';
 import { api } from '@/lib/api';
 
-export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () => void }) {
+export default function DashboardNavbar({ 
+  onMenuToggle,
+  brandName = "AMV" 
+}: { 
+  onMenuToggle?: () => void,
+  brandName?: string
+}) {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [time, setTime] = useState<string>('');
@@ -61,7 +67,7 @@ export default function DashboardNavbar({ onMenuToggle }: { onMenuToggle?: () =>
           <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain" />
         </div>
         <div className="flex flex-col">
-          <span className="text-2xl font-bold text-primary font-handlee leading-tight uppercase">AMV</span>
+          <span className="text-2xl font-bold text-primary font-handlee leading-tight uppercase">{brandName}</span>
           <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase mt-0.5">
             Andiambalama MV
           </span>
