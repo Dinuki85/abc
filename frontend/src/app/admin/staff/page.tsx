@@ -123,41 +123,44 @@ export default function StaffPage() {
   );
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      {/* Page Header */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-              <Briefcase size={28} />
+    <div className="space-y-6 animate-in fade-in duration-700 pb-20">
+      {/* Premium Compact Header */}
+      <div className="sticky top-[80px] z-40 -mx-4 px-4 py-3 bg-slate-50/80 backdrop-blur-md border-b border-slate-200/50">
+        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row items-center justify-between gap-4 bg-white/70 p-4 rounded-[2rem] border border-white shadow-xl shadow-slate-200/40">
+          
+          <div className="flex items-center gap-4 px-2">
+            <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-600 shadow-inner">
+              <Briefcase size={24} />
             </div>
-            <h1 className="text-4xl font-bold text-slate-800 tracking-tight font-handlee">
-              Staff Registry
-            </h1>
+            <div>
+              <h1 className="text-xl font-bold text-slate-800 tracking-tight font-handlee leading-none">
+                Staff Registry
+              </h1>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                Faculty & Personnel Management
+              </p>
+            </div>
           </div>
-          <p className="text-slate-500 font-medium ml-15">
-            Institutional personnel and faculty management hub
-          </p>
-        </div>
-        
-        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-          <div className="relative flex-1 lg:flex-none">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <Input 
-              placeholder="Search by name or ID..." 
-              className="pl-12 h-14 w-full lg:w-72 rounded-2xl border-gray-200 focus:ring-primary/20 focus:border-primary shadow-sm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          
+          <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+            <div className="relative flex-1 lg:min-w-[300px]">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+              <Input 
+                placeholder="Search by name or ID..." 
+                className="pl-11 h-12 w-full rounded-xl border-gray-200/60 bg-white/50 focus:bg-white focus:ring-indigo-500/20 focus:border-indigo-600 shadow-sm transition-all"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-          <Button 
-            className="h-14 px-8 rounded-2xl bg-primary hover:bg-primary-hover text-white font-bold shadow-lg shadow-primary/20 group active:scale-95 transition-all"
-            onClick={() => setShowModal(true)}
-          >
-            <UserPlus size={20} className="mr-2 group-hover:scale-110 transition-transform" />
-            Add New Staff
-          </Button>
+            <Button 
+              className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold shadow-lg shadow-primary/20 group active:scale-95 transition-all text-xs"
+              onClick={() => setShowModal(true)}
+            >
+              <UserPlus size={18} className="mr-2 group-hover:scale-110 transition-transform" />
+              Add Staff
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -179,7 +182,7 @@ export default function StaffPage() {
       )}
 
       {/* Main Content Table */}
-      <Card className="rounded-[2.5rem] border-gray-100 shadow-xl overflow-hidden bg-white">
+      <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl shadow-slate-200/50 overflow-hidden bg-white/80 backdrop-blur-sm relative">
         <CardHeader className="px-8 py-6 flex flex-row items-center justify-between border-b border-gray-50">
           <div className="flex items-center gap-3">
             <div className="w-2 h-8 bg-secondary rounded-full" />
@@ -195,13 +198,13 @@ export default function StaffPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50/50">
-                <TableRow>
-                  <TableHead className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Teacher ID</TableHead>
-                  <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Name & Designation</TableHead>
-                  <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-center">Grade Focus</TableHead>
-                  <TableHead className="py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Class Assignments</TableHead>
-                  <TableHead className="px-8 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-right">Actions</TableHead>
+              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-0 z-10">
+                <TableRow className="border-none">
+                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 w-[180px]">Teacher ID</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Name & Designation</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-center w-[150px]">Grade Focus</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 w-[200px]">Class Assignments</TableHead>
+                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-right w-[150px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
