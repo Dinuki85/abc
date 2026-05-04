@@ -27,7 +27,7 @@ export default function UsersPage() {
               <ShieldCog size={28} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tighter leading-none">
+              <h1 className="text-2xl font-bold text-slate-800 tracking-tighter leading-none font-handlee">
                 User Access
               </h1>
               <p className="text-[11px] text-slate-400 font-black uppercase tracking-[0.2em] mt-2">
