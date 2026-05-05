@@ -26,7 +26,7 @@ public class SchoolSystemBackendApplication {
 				User admin = new User();
 				admin.setUsername("admin");
 				admin.setPassword(passwordEncoder.encode("admin"));
-				admin.setRole("ROLE_ADMIN");
+				admin.setRole(com.abc.entity.Role.ROLE_ADMIN);
 				admin.setFirstLogin(false);
 				userRepository.save(admin);
 			}
@@ -34,7 +34,7 @@ public class SchoolSystemBackendApplication {
 				User teacher = new User();
 				teacher.setUsername("teacher");
 				teacher.setPassword(passwordEncoder.encode("teacher"));
-				teacher.setRole("ROLE_TEACHER");
+				teacher.setRole(com.abc.entity.Role.ROLE_TEACHER);
 				teacher.setFirstLogin(false);
 				teacher = userRepository.save(teacher);
 
@@ -48,7 +48,7 @@ public class SchoolSystemBackendApplication {
 				User studentUser = new User();
 				studentUser.setUsername("student");
 				studentUser.setPassword(passwordEncoder.encode("student"));
-				studentUser.setRole("ROLE_STUDENT");
+				studentUser.setRole(com.abc.entity.Role.ROLE_STUDENT);
 				studentUser.setFirstLogin(false);
 				studentUser = userRepository.save(studentUser);
 
