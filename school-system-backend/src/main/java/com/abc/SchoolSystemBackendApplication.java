@@ -54,7 +54,7 @@ public class SchoolSystemBackendApplication {
 
 				Student student = new Student();
 				student.setUser(studentUser);
-				student.setVerificationStatus("VERIFIED");
+				student.setVerificationStatus(com.abc.entity.VerificationStatus.VERIFIED);
 				student.setProfileCompleted(true);
 				studentRepository.save(student);
 			}
