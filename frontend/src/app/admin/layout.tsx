@@ -10,7 +10,9 @@ import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Sett
 
 const adminMenuItems = [
   { name: 'Dashboard', href: '/admin', icon: Landmark },
+  { name: 'Registration', href: '/admin/registration', icon: UserPlus },
   { name: 'Performance', href: '/admin/performance', icon: Activity },
+  { name: 'Display', href: '/admin/reporting', icon: FileSpreadsheet },
   { name: 'User Management', href: '/admin/users', icon: Settings },
 ];
 
@@ -42,18 +44,18 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="h-[100dvh] bg-[#f8fafc] flex flex-col font-sans text-slate-900 overflow-hidden relative selection:bg-blue-100 selection:text-blue-900">
-      {/* Background decoration - Subtle and professional */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-700/5 rounded-full filter blur-[128px] pointer-events-none" />
-      <div className="absolute -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none" />
+    <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900 selection:bg-blue-100 selection:text-blue-900">
+      {/* Background decoration */}
+      <div className="fixed -top-40 -right-40 w-96 h-96 bg-blue-700/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
+      <div className="fixed -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
 
-      {/* Top Navbar */}
-      <div className="flex-shrink-0 z-50 h-20 bg-white border-b border-gray-100 sticky top-0">
+      {/* Top Navbar - Fixed */}
+      <header className="fixed top-0 left-0 right-0 z-50 h-20 bg-white border-b border-gray-100">
         <DashboardNavbar 
           onMenuToggle={() => setIsMobileMenuOpen(true)} 
           brandName="AMV ADMIN"
         />
-      </div>
+      </header>
 
       <MobileSidebar 
         isOpen={isMobileMenuOpen} 
@@ -62,14 +64,15 @@ export default function AdminLayout({
         brandName="AMV ADMIN"
       />
 
-      {/* Bottom Area: Sidebar + Content */}
-      <div className="flex flex-1 overflow-hidden z-20 w-full relative min-h-0">
-        <div className="hidden md:block flex-shrink-0 z-30 h-full border-r border-slate-200 shadow-sm">
+      <div className="flex pt-20">
+        {/* Sidebar - Fixed/Static Column */}
+        <aside className="hidden md:block w-64 fixed top-20 bottom-0 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar">
           <Sidebar menuItems={adminMenuItems} />
-        </div>
+        </aside>
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8 pt-0 bg-transparent scroll-smooth custom-scrollbar relative">
-          <div className="max-w-[1600px] mx-auto min-h-full">
+        {/* Main Content - Scrollable */}
+        <main className="flex-1 md:ml-64 min-h-[calc(100vh-80px)] p-4 md:p-8 relative z-10">
+          <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
         </main>

@@ -144,7 +144,7 @@ export default function StudentsPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
       {/* Premium Compact Header - Snap-to-Top Perfection */}
-      <div className="sticky top-0 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-4 bg-slate-50/95 backdrop-blur-xl border-b border-slate-200/60 shadow-sm mb-8">
+      <div className="sticky top-[80px] z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-4 bg-slate-50/95 backdrop-blur-xl border-b border-slate-200/60 shadow-sm mb-8">
         <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row items-center justify-between gap-6 bg-white p-5 rounded-[2.5rem] border border-white shadow-2xl shadow-slate-200/50">
           
           <div className="flex items-center gap-5 px-3">
@@ -272,7 +272,7 @@ export default function StudentsPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-0 z-10">
+              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-[210px] z-10">
                 <TableRow className="border-none">
                   <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 w-[180px]">Admission No</TableHead>
                   <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Student Identity</TableHead>

@@ -15,7 +15,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState('administration');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
       {/* Dashboard Tabs Navigation */}
       <div className="flex flex-wrap gap-4 justify-center bg-slate-100/50 p-2 rounded-[2rem] border border-slate-200/50 backdrop-blur-md">
         {[
-          { id: 'administration', label: 'Administration', icon: Landmark },
+          { id: 'dashboard', label: 'Dashboard', icon: Landmark },
           { id: 'registration', label: 'Registration', icon: UserPlus },
           { id: 'performance', label: 'Performance', icon: Activity },
           { id: 'display', label: 'Display', icon: FileSpreadsheet },
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
       {/* Tab Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
         
-        {activeTab === 'administration' && (
+        {activeTab === 'dashboard' && (
           <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
             <div className="bg-gradient-to-r from-primary to-primary-hover p-10 text-white flex justify-between items-center">
               <div className="flex items-center gap-6">
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
                   <Landmark size={32} className="text-secondary" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Institutional Administration</h2>
+                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Institutional Dashboard</h2>
                   <p className="text-white/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Core Institutional Profile Management</p>
                 </div>
               </div>

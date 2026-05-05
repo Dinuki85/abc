@@ -26,12 +26,6 @@ export default function Sidebar({ menuItems }: SidebarProps) {
     <aside className="h-full w-64 bg-white/40 backdrop-blur-xl border-r border-slate-200/50 shadow-2xl flex flex-col pt-8">
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
         {menuItems
-          .filter(item => {
-            // Hide Dashboard link when on students or registration pages
-            const isRegistrationPath = pathname.startsWith('/admin/students') || pathname.startsWith('/admin/registration');
-            if (item.name === 'Dashboard' && isRegistrationPath) return false;
-            return true;
-          })
           .map((item) => {
             const active = isActive(item.href);
             const Icon = item.icon;
