@@ -53,8 +53,9 @@ public class SchoolSystemBackendApplication {
 			studentUser.setPassword(passwordEncoder.encode("student"));
 			if (studentUser.getId() == null) {
 				studentUser.setRole(com.abc.entity.Role.ROLE_STUDENT);
-				studentUser.setFirstLogin(false);
 			}
+			// Set firstLogin to true to simulate a fresh student account
+			studentUser.setFirstLogin(true);
 			studentUser = userRepository.save(studentUser);
 
 			if (studentRepository.findByUser(studentUser).isEmpty()) {

@@ -142,7 +142,7 @@ export default function LoginPage() {
                     type={showPassword ? "text" : "password"} 
                     placeholder="••••••••" 
                     id="password" 
-                    className="pl-11 pr-11 h-12 border-slate-200 bg-slate-50/50 focus:bg-white transition-all text-base font-medium"
+                    className="pl-11 pr-11 h-12 border-slate-200 bg-slate-50/50 focus:bg-white transition-all text-base font-medium [&::-ms-reveal]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
