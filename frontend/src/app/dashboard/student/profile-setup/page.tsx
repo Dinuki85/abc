@@ -98,7 +98,7 @@ export default function StudentProfileSetup() {
     <div className="min-h-screen bg-slate-50 pb-20">
       {/* Header */}
       <div className="bg-white border-b sticky top-[80px] z-30">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" onClick={() => router.push('/dashboard/student')} className="rounded-full w-12 h-12 p-0">
               <ArrowLeft size={24} />
@@ -111,7 +111,7 @@ export default function StudentProfileSetup() {
           <Button 
             onClick={() => handleSave(false)} 
             disabled={saving}
-            className="bg-primary hover:bg-primary-hover text-white rounded-2xl px-8 h-12 font-bold shadow-lg shadow-primary/20 flex items-center gap-2"
+            className="bg-primary hover:bg-primary-hover text-white rounded-2xl px-4 sm:px-8 h-12 font-bold shadow-lg shadow-primary/20 flex items-center gap-2"
           >
             {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
             Save Profile
@@ -119,7 +119,7 @@ export default function StudentProfileSetup() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-6 sm:mt-10">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
           
           {/* Sidebar Tabs */}
@@ -158,7 +158,7 @@ export default function StudentProfileSetup() {
 
           {/* Form Content */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-[3rem] p-10 md:p-16 shadow-2xl border border-slate-100 animate-in fade-in slide-in-from-right-4 duration-500">
+            <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 md:p-16 shadow-2xl border border-slate-100 animate-in fade-in slide-in-from-right-4 duration-500">
               
               {activeTab === 'basic' && (
                 <div className="space-y-10">
@@ -215,7 +215,7 @@ export default function StudentProfileSetup() {
                     </div>
                     
                     <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest pt-6 border-t border-slate-100">Additional Talent Areas</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                       <CheckboxField label="Agri culture" name="talentAgri" checked={formData.talentAgri} onChange={handleChange} />
                       <CheckboxField label="ICT" name="talentIct" checked={formData.talentIct} onChange={handleChange} />
                       <CheckboxField label="Aesthetic" name="talentAesthetic" checked={formData.talentAesthetic} onChange={handleChange} />
@@ -255,7 +255,7 @@ export default function StudentProfileSetup() {
               )}
 
               {/* Form Footer */}
-              <div className="mt-12 pt-8 border-t border-slate-100 flex justify-end gap-4">
+              <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row justify-end gap-4">
                 <Button 
                   onClick={() => handleSave(true)} 
                   variant="outline"

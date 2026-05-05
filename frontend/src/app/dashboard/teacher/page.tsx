@@ -51,10 +51,10 @@ export default function TeacherDashboard() {
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       <DashboardNavbar />
 
-      <main className="flex-grow p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10">
+      <main className="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl mx-auto w-full space-y-6 sm:space-y-10">
         
         {/* Welcome Header */}
-        <div className="relative overflow-hidden bg-slate-900 rounded-[3rem] p-10 md:p-16 text-white shadow-2xl">
+        <div className="relative overflow-hidden bg-slate-900 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 md:p-16 text-white shadow-2xl">
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
@@ -66,7 +66,7 @@ export default function TeacherDashboard() {
               </p>
             </motion.div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-white/5 border border-white/10 rounded-[2rem] p-6 text-center">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">My Students</p>
                 <p className="text-4xl font-black text-emerald-400 font-handlee">{stats.totalStudents}</p>
@@ -81,7 +81,7 @@ export default function TeacherDashboard() {
         </div>
 
         {/* Dashboard Navigation Tabs */}
-        <div className="flex gap-4 p-2 bg-white/50 backdrop-blur-sm rounded-[2rem] border border-slate-200 self-center mx-auto">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 p-2 bg-white/50 backdrop-blur-sm rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200 self-center mx-auto w-full sm:w-auto">
           {[
             { id: 'classes', label: 'My Classes', icon: Presentation },
             { id: 'verification', label: 'Student Verification', icon: ClipboardCheck },
@@ -107,7 +107,7 @@ export default function TeacherDashboard() {
           
           {activeTab === 'classes' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <div className="bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-2xl transition-all">
+               <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-2xl transition-all">
                  <div>
                    <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
                      <Users size={32} />
@@ -128,7 +128,7 @@ export default function TeacherDashboard() {
                  </Button>
                </div>
 
-               <div className="bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100 flex flex-col justify-between opacity-60 hover:opacity-100 transition-all">
+               <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-sm border border-slate-100 flex flex-col justify-between opacity-60 hover:opacity-100 transition-all">
                  <div>
                    <div className="w-16 h-16 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center mb-6">
                      <Presentation size={32} />
@@ -144,8 +144,8 @@ export default function TeacherDashboard() {
           )}
 
           {activeTab === 'verification' && (
-            <div className="bg-white rounded-[3rem] p-10 shadow-sm border border-slate-100 overflow-hidden">
-              <div className="flex items-center justify-between mb-10">
+            <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-sm border border-slate-100 overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-10 gap-4">
                 <h3 className="text-2xl font-black text-slate-900 flex items-center gap-4">
                   <ClipboardCheck className="text-emerald-500" size={32} />
                   Pending Verifications
@@ -155,7 +155,7 @@ export default function TeacherDashboard() {
               
               <div className="space-y-4">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="flex items-center justify-between p-6 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl transition-all cursor-pointer group">
+                  <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 bg-slate-50 rounded-[1.5rem] sm:rounded-[2rem] border border-slate-100 hover:bg-white hover:shadow-xl transition-all gap-4 group">
                     <div className="flex items-center gap-6">
                       <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-400 font-black shadow-sm group-hover:bg-primary group-hover:text-white transition-all">
                         {i}
@@ -183,7 +183,7 @@ export default function TeacherDashboard() {
                 <h3 className="text-4xl font-black text-slate-900 mb-2">{user.name}</h3>
                 <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-xs">Professional Staff Member</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 text-left">
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Primary NIC</p>
                   <p className="text-xl font-bold text-slate-800">{user.username || user.nic}</p>

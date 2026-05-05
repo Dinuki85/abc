@@ -33,7 +33,7 @@ export default function AdminDashboard() {
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
         
-        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-8">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md">
               <ShieldCheck className="text-indigo-400" size={14} />
@@ -47,7 +47,7 @@ export default function AdminDashboard() {
             </p>
           </div>
           
-          <div className="flex gap-4">
+          <div className="flex flex-wrap sm:flex-nowrap gap-4 w-full lg:w-auto">
             <div className="bg-white/5 backdrop-blur-xl p-6 rounded-[2rem] border border-white/10 flex flex-col items-center gap-2 min-w-[140px]">
               <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <Activity size={20} />
@@ -122,7 +122,7 @@ export default function AdminDashboard() {
         
         {activeTab === 'dashboard' && (
           <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-primary to-primary-hover p-10 text-white flex justify-between items-center">
+            <div className="bg-gradient-to-r from-primary to-primary-hover p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-6">
                 <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
                   <Landmark size={32} className="text-secondary" />
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </div>
-            <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 bg-slate-50/50">
+            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 bg-slate-50/50">
               {[
                 { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
                 { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
 
         {activeTab === 'registration' && (
           <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-10 text-white flex justify-between items-center">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-6">
                 <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
                   <PlusCircle size={32} />
@@ -162,7 +162,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </div>
-            <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 bg-slate-50/50">
+            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 bg-slate-50/50">
               {[
                 { name: 'Add To Classes', href: '/admin/bulk-assign', icon: UserCheck },
                 { name: 'Student Enrollment', href: '/admin/registration', icon: UserPlus },
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
 
         {activeTab === 'performance' && (
           <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 p-10 text-white flex justify-between items-center">
+            <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-6">
                 <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
                   <Activity size={32} className="text-secondary" />
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </div>
-            <div className="p-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-slate-50/50">
+            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-slate-50/50">
               {[
                 { name: 'Exam Results', href: '#', icon: CheckCircle2 },
                 { name: 'Scholarship Dist.', href: '#', icon: GraduationCap },
@@ -202,7 +202,7 @@ export default function AdminDashboard() {
 
         {activeTab === 'display' && (
           <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-slate-800 p-10 text-white flex justify-between items-center">
+            <div className="bg-slate-800 p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-6">
                 <div className="p-4 bg-white/10 rounded-[2rem] border border-white/10 backdrop-blur-xl">
                   <FileSpreadsheet size={32} />
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </div>
-            <div className="p-10 grid grid-cols-1 md:grid-cols-4 gap-12 bg-slate-50/50">
+            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 bg-slate-50/50">
                <ReportColumn 
                  title="All School" 
                  items={[

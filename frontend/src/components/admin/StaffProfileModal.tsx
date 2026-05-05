@@ -120,10 +120,10 @@ export default function StaffProfileModal({ teacher, isOpen, onClose, onSave }: 
   return (
     <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-500 overflow-y-auto py-10 px-4">
       <div className="flex min-h-full items-center justify-center">
-        <div className="bg-white rounded-[3rem] w-full max-w-6xl shadow-2xl border border-white/20 overflow-hidden animate-in zoom-in-95 duration-500 flex flex-col h-[85vh]">
+        <div className="bg-white rounded-[2rem] sm:rounded-[3rem] w-full max-w-6xl shadow-2xl border border-white/20 overflow-hidden animate-in zoom-in-95 duration-500 flex flex-col h-[90vh] sm:h-[85vh]">
           
           {/* Modal Header */}
-          <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-slate-50/30 flex-shrink-0">
+          <div className="p-4 sm:p-8 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50/30 flex-shrink-0 gap-4">
             <div className="flex items-center gap-6">
               <div className="w-16 h-16 rounded-[1.5rem] bg-indigo-500 text-white flex items-center justify-center shadow-xl shadow-indigo-500/20">
                 <Briefcase size={32} />
@@ -147,7 +147,7 @@ export default function StaffProfileModal({ teacher, isOpen, onClose, onSave }: 
                  <Input className="h-12 w-64 rounded-xl border-gray-200" placeholder=": Search" />
                </div>
                <span className="text-emerald-500 font-bold text-sm">All List</span>
-               <button onClick={onClose} className="w-12 h-12 rounded-[1.25rem] flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all border border-gray-100 shadow-sm ml-4">
+               <button onClick={onClose} className="w-12 h-12 rounded-[1.25rem] flex flex-shrink-0 items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all border border-gray-100 shadow-sm ml-auto sm:ml-4">
                  <X size={24} />
                </button>
             </div>
@@ -155,7 +155,7 @@ export default function StaffProfileModal({ teacher, isOpen, onClose, onSave }: 
 
           <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
             {/* Sidebar Tabs */}
-            <div className="w-full lg:w-72 bg-slate-50/50 border-r border-gray-100 p-6 space-y-2 overflow-y-auto">
+            <div className="w-full lg:w-72 bg-slate-50/50 border-r border-gray-100 p-4 sm:p-6 flex lg:block gap-2 overflow-x-auto lg:overflow-y-auto space-x-2 lg:space-x-0 lg:space-y-2 whitespace-nowrap lg:whitespace-normal border-b lg:border-b-0 flex-shrink-0 hide-scrollbar">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -185,7 +185,7 @@ export default function StaffProfileModal({ teacher, isOpen, onClose, onSave }: 
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto bg-white p-10 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto bg-white p-4 sm:p-6 lg:p-10 custom-scrollbar">
               <form id="staff-profile-form" onSubmit={handleSave} className="space-y-10 max-w-4xl">
                 
                 {activeTab === 'basic' && (
@@ -371,7 +371,7 @@ export default function StaffProfileModal({ teacher, isOpen, onClose, onSave }: 
                          </div>
                          <div className="space-y-3">
                            {[0, 1, 2].map((i) => (
-                             <div key={i} className="grid grid-cols-2 gap-4">
+                             <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                <Input 
                                  placeholder="Name" 
                                  value={formData.children?.[i]?.name || ''} 
