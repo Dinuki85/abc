@@ -6,3 +6,4 @@ target/
 .next/
 .vscode/
 output.mp4
+*.sql

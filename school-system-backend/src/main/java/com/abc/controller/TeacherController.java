@@ -115,18 +115,21 @@ public class TeacherController {
             Staff staff = staffRepository.findByUser(user)
                     .orElseThrow(() -> new RuntimeException("Staff profile not found"));
             
-            if (staff.getAssignedGrade() == null) {
-                throw new RuntimeException("No grade assigned to this teacher");
+            SchoolClass assignedClass = schoolClassRepository.findByClassTeacher(staff).orElse(null);
+            
+            if (staff.getAssignedGrade() == null && assignedClass == null) {
+                throw new RuntimeException("No grade or class assigned to this teacher");
             }
 
             com.abc.dto.StudentResponse studentResponse = teacherService.getStudentByUsername(username);
             
-            // Allow if student is unassigned OR belongs to the teacher's grade
+            // Allow if student is unassigned OR belongs to the teacher's grade OR belongs to the teacher's class
             boolean isUnassigned = "Unassigned".equals(studentResponse.getGradeName());
-            boolean isSameGrade = studentResponse.getGradeName() != null && studentResponse.getGradeName().equals(staff.getAssignedGrade().getName());
+            boolean isSameGrade = staff.getAssignedGrade() != null && studentResponse.getGradeName() != null && studentResponse.getGradeName().equals(staff.getAssignedGrade().getName());
+            boolean isSameClass = assignedClass != null && studentResponse.getClassName() != null && studentResponse.getClassName().equals(assignedClass.getName());
             
-            if (!isUnassigned && !isSameGrade) {
-                throw new RuntimeException("Unauthorized: Student does not belong to your assigned grade");
+            if (!isUnassigned && !isSameGrade && !isSameClass) {
+                throw new RuntimeException("Unauthorized: Student does not belong to your assigned grade or class");
             }
 
             return ResponseEntity.ok(studentResponse);
@@ -145,8 +148,10 @@ public class TeacherController {
             Staff staff = staffRepository.findByUser(user)
                     .orElseThrow(() -> new RuntimeException("Staff profile not found"));
             
-            if (staff.getAssignedGrade() == null) {
-                throw new RuntimeException("No grade assigned to this teacher");
+            SchoolClass assignedClass = schoolClassRepository.findByClassTeacher(staff).orElse(null);
+            
+            if (staff.getAssignedGrade() == null && assignedClass == null) {
+                throw new RuntimeException("No grade or class assigned to this teacher");
             }
 
             teacherService.verifyStudent(

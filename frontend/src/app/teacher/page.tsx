@@ -39,50 +39,65 @@ export default function TeacherDashboard() {
   
   // Verification states
   const [auditComment, setAuditComment] = useState('');
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [verifyingAction, setVerifyingAction] = useState<'VERIFIED' | 'NEEDS_CORRECTION' | null>(null);
   const [studentTab, setStudentTab] = useState<'basic' | 'health' | 'skills' | 'contact' | 'exams'>('basic');
   const [teacherProfile, setTeacherProfile] = useState<any>(null);
 
 
 
   useEffect(() => {
-    // If we have an active student but the user changes the search or class filter, 
-    // we want to clear the active student to show the list/empty state again
-    // UNLESS the search specifically found this student
-    
-    if (searchQuery.trim() === '') {
-       if (activeStudent && activeStudent.username !== searchQuery) {
-           setActiveStudent(null);
-       }
-    } else {
+    if (searchQuery.trim() !== '') {
         const exactMatch = students.find(s => 
           s.username.toLowerCase() === searchQuery.trim().toLowerCase() ||
           (s.username.toLowerCase().includes(searchQuery.trim().toLowerCase()) && searchQuery.length >= 4)
         );
         if (exactMatch) {
           setActiveStudent(exactMatch);
-        } else {
+        } else if (activeStudent && !activeStudent.username.toLowerCase().includes(searchQuery.trim().toLowerCase())) {
           setActiveStudent(null);
         }
     }
   }, [searchQuery, selectedClassId, students]);
 
-  const fetchData = async (hideLoadingState = false) => {
+  const fetchData = async (hideLoadingState = false, keepActiveStudent = true) => {
     if (!hideLoadingState) setIsLoading(true);
     try {
-      const gradeData = await api.getMyGrade();
+      let gradeData = await api.getMyGrade();
+      let classData = null;
+
+      if (!gradeData || !gradeData.id) {
+        classData = await api.getMyClass();
+        if (classData && classData.grade) {
+          gradeData = classData.grade;
+        }
+      }
+
       setMyGrade(gradeData);
       
       if (gradeData && gradeData.id) {
-        const [studentData, classesData] = await Promise.all([
-          api.getStudentsByGrade(gradeData.id),
-          api.getTeacherClassesByGrade(gradeData.id)
-        ]);
+        let studentData = [];
+        let classesData = [];
+
+        if (classData && classData.id) {
+          studentData = await api.getStudentsByClass(classData.id);
+          classesData = [classData];
+          if (selectedClassId === '') {
+            setSelectedClassId(classData.id);
+          }
+        } else {
+          const [sData, cData] = await Promise.all([
+            api.getStudentsByGrade(gradeData.id),
+            api.getTeacherClassesByGrade(gradeData.id)
+          ]);
+          studentData = sData;
+          classesData = cData;
+        }
+
         setStudents(studentData);
         setClasses(classesData);
         
         // Refresh active student if open
-        if (activeStudent) {
+        if (keepActiveStudent && activeStudent) {
             const updated = studentData.find((s: StudentProfile) => s.id === activeStudent.id);
             if (updated) setActiveStudent(updated);
         }
@@ -114,15 +129,16 @@ export default function TeacherDashboard() {
 
   const handleVerify = async (status: 'VERIFIED' | 'NEEDS_CORRECTION') => {
     if (!activeStudent || !activeStudent.id) return;
-    setIsVerifying(true);
+    setVerifyingAction(status);
     try {
       await api.verifyStudent(activeStudent.id, status, auditComment);
       setAuditComment('');
-      fetchData(); 
+      setActiveStudent(null); // Return to the dashboard list view
+      fetchData(true, false); // Don't show full loading, and explicitly don't keep active student open
     } catch (error) {
       console.error('Verification failed', error);
     } finally {
-      setIsVerifying(false);
+      setVerifyingAction(null);
     }
   };
 
@@ -470,7 +486,8 @@ export default function TeacherDashboard() {
                           variant="outline" 
                           className="h-14 px-8 rounded-2xl border-rose-200 text-rose-500 hover:bg-rose-50 font-black uppercase tracking-widest text-xs transition-all bg-white"
                           onClick={() => handleVerify('NEEDS_CORRECTION')}
-                          isLoading={isVerifying}
+                          isLoading={verifyingAction === 'NEEDS_CORRECTION'}
+                          disabled={verifyingAction !== null}
                         >
                           <AlertCircle size={16} className="mr-2" />
                           Flag & Reject
@@ -478,7 +495,8 @@ export default function TeacherDashboard() {
                         <Button 
                           className="h-14 px-8 rounded-2xl bg-[#2ab0c5] hover:bg-[#239fb4] text-white shadow-xl shadow-cyan-200 font-black uppercase tracking-widest text-xs transition-all active:scale-[0.98]"
                           onClick={() => handleVerify('VERIFIED')}
-                          isLoading={isVerifying}
+                          isLoading={verifyingAction === 'VERIFIED'}
+                          disabled={verifyingAction !== null}
                         >
                           <CheckCircle2 size={16} className="mr-2" />
                           Verify Credentials
