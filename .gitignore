@@ -7,3 +7,5 @@ target/
 .vscode/
 output.mp4
 *.sql
+*.xlsx
+*.bat
