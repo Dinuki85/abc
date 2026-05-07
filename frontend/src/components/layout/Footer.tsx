@@ -129,7 +129,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest">
             <span>Powered by</span>
-            <span className="text-primary">BIT Infortech</span>
+            <span className="text-primary">IT Mind</span>
           </div>
         </div>
       </div>
