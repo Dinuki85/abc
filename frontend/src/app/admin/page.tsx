@@ -73,20 +73,20 @@ export default function AdminDashboard() {
           { label: 'Grade Sections', value: stats?.totalSections || 0, icon: Landmark, color: 'amber', change: 'Across 13 grades' },
           { label: 'Total Units', value: stats?.totalClassRooms || 0, icon: Layers, color: 'rose', change: '92% Capacity' },
         ].map((stat, i) => (
-          <div key={i} className="group hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all duration-500 rounded-[2rem] border border-white/10 shadow-2xl bg-slate-900/60 backdrop-blur-md overflow-hidden p-4 relative">
-            <div className={`absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
+          <div key={i} className="group hover:border-indigo-500/50 transition-all duration-500 rounded-[2rem] border border-slate-200/60 shadow-xl shadow-slate-200/40 bg-white/50 backdrop-blur-sm overflow-hidden p-4 relative">
+            <div className={`absolute -right-4 -top-4 w-24 h-24 bg-slate-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
             <div className="flex justify-center mb-4 relative z-10">
-              <div className={`p-4 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner text-indigo-400`}>
+              <div className={`p-4 bg-slate-50 rounded-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner text-slate-400`}>
                 <stat.icon size={28} />
               </div>
             </div>
             <div className="relative z-10 flex flex-col items-center text-center">
-              <h3 className="text-[10px] font-black text-slate-400 group-hover:text-indigo-400 transition-colors uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
-              <p className="text-3xl font-black text-white group-hover:scale-110 transition-transform tracking-tighter tabular-nums font-handlee">
+              <h3 className="text-[10px] font-black text-slate-400 group-hover:text-indigo-600 transition-colors uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
+              <p className="text-3xl font-black text-slate-800 group-hover:scale-110 transition-transform tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
               <div className="mt-1">
-                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-white/5 text-slate-500 border border-white/10`}>
+                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-50 text-slate-400 border border-slate-100`}>
                   {stat.change}
                 </span>
               </div>
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
 
       {/* Dashboard Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="bg-slate-900/80 rounded-[2.5rem] shadow-2xl border border-white/5 overflow-hidden">
+        <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden">
           <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 p-4 sm:p-6 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/10 rounded-[1.5rem] border border-white/20 backdrop-blur-xl">
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
-          <div className="p-3 sm:p-4 lg:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-slate-950/50">
+          <div className="p-3 sm:p-4 lg:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-slate-50/50">
             {[
               { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
               { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },

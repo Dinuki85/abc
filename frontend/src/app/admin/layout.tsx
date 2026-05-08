@@ -37,20 +37,20 @@ export default function AdminLayout({
   // Keep the shell visible while checking auth so it never flashes blank
   if (!isAuthorized) {
     return (
-      <div className="h-[100dvh] bg-slate-950 flex items-center justify-center">
+      <div className="h-[100dvh] bg-slate-50 flex items-center justify-center">
         <div className="w-8 h-8 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 selection:bg-indigo-500/30 selection:text-white">
+    <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900">
       {/* Background decoration */}
-      <div className="fixed -top-40 -right-40 w-96 h-96 bg-indigo-600/10 rounded-full filter blur-[128px] pointer-events-none z-0" />
-      <div className="fixed -bottom-40 -left-20 w-72 h-72 bg-indigo-500/10 rounded-full filter blur-[128px] pointer-events-none z-0" />
+      <div className="fixed -top-40 -right-40 w-96 h-96 bg-indigo-700/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
+      <div className="fixed -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
 
       {/* Top Navbar - Fixed */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-20 bg-slate-900 border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 h-20 bg-white border-b border-gray-100">
         <DashboardNavbar 
           onMenuToggle={() => setIsMobileMenuOpen(true)} 
           brandName="AMV ADMIN"
@@ -66,7 +66,7 @@ export default function AdminLayout({
 
       <div className="flex pt-20">
         {/* Sidebar - Fixed/Static Column */}
-        <aside className="hidden md:block w-64 fixed top-20 bottom-0 border-r border-white/10 bg-slate-900 z-30 overflow-y-auto custom-scrollbar">
+        <aside className="hidden md:block w-64 fixed top-20 bottom-0 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar">
           <Sidebar menuItems={adminMenuItems} />
         </aside>
 
