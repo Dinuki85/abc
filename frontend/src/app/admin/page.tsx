@@ -41,8 +41,8 @@ export default function AdminDashboard() {
             <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter font-handlee italic leading-none">
               Welcome Back, <span className="text-indigo-400">Administrator</span>
             </h1>
-            <p className="text-slate-400 font-medium max-w-md text-[10px] leading-relaxed">
-              Monitoring AMV Institutional operations with real-time academic and personnel analytics.
+            <p className="text-slate-300 font-bold max-w-md text-[10px] leading-relaxed uppercase tracking-widest">
+              Real-time Institutional Data Analytics
             </p>
           </div>
           
@@ -52,14 +52,14 @@ export default function AdminDashboard() {
                 <Activity size={14} />
               </div>
               <span className="text-lg font-black text-white tabular-nums tracking-tighter">98.2%</span>
-              <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest text-center">System Uptime</span>
+              <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest text-center">System Uptime</span>
             </div>
             <div className="bg-white/5 backdrop-blur-xl p-2 sm:p-3 rounded-xl border border-white/10 flex flex-col items-center gap-1 min-w-[100px] flex-1 sm:flex-none">
               <div className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
                 <Users2 size={14} />
               </div>
               <span className="text-lg font-black text-white tabular-nums tracking-tighter">2,412</span>
-              <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest text-center">Active Users</span>
+              <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest text-center">Active Users</span>
             </div>
           </div>
         </div>
@@ -75,16 +75,16 @@ export default function AdminDashboard() {
         ].map((stat, i) => (
           <div key={i} className="group hover:bg-indigo-600 hover:border-indigo-600 hover:shadow-lg transition-all duration-300 rounded-2xl border border-slate-100 shadow-sm bg-white/80 overflow-hidden p-3 relative">
             <div className="flex justify-between items-start mb-2 relative z-10">
-              <div className={`p-2 bg-slate-50 rounded-lg group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-slate-400`}>
+              <div className={`p-2 bg-slate-100 rounded-lg group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-slate-600`}>
                 <stat.icon size={18} />
               </div>
-              <span className={`text-[7px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white/80`}>
+              <span className={`text-[7px] font-black uppercase tracking-widest text-slate-600 group-hover:text-white/80`}>
                 {stat.change}
               </span>
             </div>
             <div className="relative z-10 text-left">
-              <h3 className="text-[8px] font-black text-slate-400 group-hover:text-white/80 transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
-              <p className="text-xl font-black text-slate-800 group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
+              <h3 className="text-[8px] font-black text-slate-600 group-hover:text-white/80 transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
+              <p className="text-xl font-black text-slate-900 group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
             </div>
@@ -122,8 +122,8 @@ export default function AdminDashboard() {
 
 function DashboardButton({ name, href, icon: Icon, color }: any) {
   const colorMap: any = {
-    teal: 'text-teal-500 bg-white border-slate-100 hover:border-teal-500 hover:bg-teal-50',
-    indigo: 'text-indigo-500 bg-white border-slate-100 hover:border-indigo-500 hover:bg-indigo-50',
+    teal: 'text-teal-600 bg-white border-slate-200 hover:border-teal-600 hover:bg-teal-50',
+    indigo: 'text-indigo-600 bg-white border-slate-200 hover:border-indigo-600 hover:bg-indigo-50',
   };
 
   return (
@@ -131,10 +131,10 @@ function DashboardButton({ name, href, icon: Icon, color }: any) {
       href={href}
       className={`flex flex-col items-center gap-2 p-3 border rounded-xl transition-all group active:scale-95 shadow-sm ${colorMap[color] || colorMap.teal}`}
     >
-      <div className="p-2 bg-slate-50 rounded-lg group-hover:bg-white transition-all">
+      <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-white transition-all text-slate-600 group-hover:text-teal-600">
         <Icon size={18} />
       </div>
-      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center group-hover:text-slate-800 transition-colors">
+      <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest text-center group-hover:text-slate-900 transition-colors">
         {name}
       </span>
     </Link>
