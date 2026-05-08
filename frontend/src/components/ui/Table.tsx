@@ -33,7 +33,7 @@ export function TableRow({ children, className = '', ...props }: React.HTMLAttri
 
 export function TableHead({ children, className = '', ...props }: React.ThHTMLAttributes<HTMLTableCellElement> & { children: React.ReactNode }) {
   return (
-    <th className={`px-6 py-4 font-semibold text-slate-700 whitespace-nowrap ${className}`} {...props}>
+    <th className={`px-3 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 font-semibold text-slate-700 whitespace-nowrap text-xs md:text-sm ${className}`} {...props}>
       {children}
     </th>
   );
@@ -49,7 +49,7 @@ export function TableBody({ children, className = '', ...props }: React.HTMLAttr
 
 export function TableCell({ children, className = '', colSpan, ...props }: React.TdHTMLAttributes<HTMLTableCellElement> & { children: React.ReactNode }) {
   return (
-    <td className={`px-6 py-4 whitespace-nowrap ${className}`} colSpan={colSpan} {...props}>
+    <td className={`px-3 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 whitespace-nowrap text-xs md:text-sm ${className}`} colSpan={colSpan} {...props}>
       {children}
     </td>
   );
