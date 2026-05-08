@@ -26,9 +26,9 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="space-y-5 animate-in fade-in duration-1000 pb-10">
+    <div className="space-y-4 animate-in fade-in duration-1000 pb-4">
       {/* High-Impact Institutional Banner */}
-      <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] p-6 md:p-8 shadow-2xl border border-white/5">
+      <div className="relative overflow-hidden bg-slate-900 rounded-[2rem] p-4 md:p-6 shadow-2xl border border-white/5">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
         
@@ -73,7 +73,7 @@ export default function AdminDashboard() {
           { label: 'Grade Sections', value: stats?.totalSections || 0, icon: Landmark, color: 'amber', change: 'Across 13 grades' },
           { label: 'Total Units', value: stats?.totalClassRooms || 0, icon: Layers, color: 'rose', change: '92% Capacity' },
         ].map((stat, i) => (
-          <div key={i} className="group hover:border-indigo-500/50 transition-all duration-500 rounded-[2.5rem] border border-white/10 shadow-2xl bg-slate-900/60 backdrop-blur-md overflow-hidden p-6 relative">
+          <div key={i} className="group hover:border-indigo-500/50 hover:bg-slate-800/80 transition-all duration-500 rounded-[2rem] border border-white/10 shadow-2xl bg-slate-900/60 backdrop-blur-md overflow-hidden p-4 relative">
             <div className={`absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
             <div className="flex justify-center mb-4 relative z-10">
               <div className={`p-4 bg-white/5 rounded-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner text-indigo-400`}>
@@ -81,12 +81,12 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="relative z-10 flex flex-col items-center text-center">
-              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">{stat.label}</h3>
-              <p className="text-4xl font-black text-white tracking-tighter tabular-nums font-handlee">
+              <h3 className="text-[10px] font-black text-slate-400 group-hover:text-indigo-400 transition-colors uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
+              <p className="text-3xl font-black text-white group-hover:scale-110 transition-transform tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
-              <div className="mt-2">
-                <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-white/5 text-slate-400 border border-white/10`}>
+              <div className="mt-1">
+                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-white/5 text-slate-500 border border-white/10`}>
                   {stat.change}
                 </span>
               </div>
@@ -97,19 +97,19 @@ export default function AdminDashboard() {
 
       {/* Dashboard Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="bg-slate-900/80 rounded-[3.5rem] shadow-2xl border border-white/5 overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 p-6 sm:p-8 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex items-center gap-6">
-              <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
-                <Landmark size={32} className="text-indigo-300" />
+        <div className="bg-slate-900/80 rounded-[2.5rem] shadow-2xl border border-white/5 overflow-hidden">
+          <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 p-4 sm:p-6 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/10 rounded-[1.5rem] border border-white/20 backdrop-blur-xl">
+                <Landmark size={24} className="text-indigo-300" />
               </div>
               <div>
-                <h2 className="text-3xl font-bold font-handlee tracking-tight">Institutional Dashboard</h2>
-                <p className="text-white/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Core Institutional Profile Management</p>
+                <h2 className="text-2xl font-bold font-handlee tracking-tight">Institutional Dashboard</h2>
+                <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] mt-0.5">Core Institutional Profile Management</p>
               </div>
             </div>
           </div>
-          <div className="p-4 sm:p-6 lg:p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-slate-950/50">
+          <div className="p-3 sm:p-4 lg:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-slate-950/50">
             {[
               { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
               { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
