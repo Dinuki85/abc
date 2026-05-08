@@ -16,7 +16,7 @@ export default function PerformancePage() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md">
               <Activity className="text-emerald-400" size={14} />
-              <span className="text-[9px] font-black text-emerald-300 uppercase tracking-[0.2em]">Institutional Merit Matrix</span>
+              <span className="text-[12px] font-black text-emerald-300 uppercase tracking-[0.2em]">Institutional Merit Matrix</span>
             </div>
             <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
               Performance & <span className="text-emerald-400">Analytics</span>
@@ -40,9 +40,9 @@ export default function PerformancePage() {
                 <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600 group-hover:bg-white/20 group-hover:text-white transition-all">
                   <btn.icon size={18} />
                 </div>
-                <h3 className="text-[10px] font-black text-black group-hover:text-white uppercase tracking-widest">{btn.name}</h3>
+                <h3 className="text-[12px] font-black text-black group-hover:text-white uppercase tracking-widest">{btn.name}</h3>
               </div>
-              <p className="text-[9px] font-bold text-slate-800 group-hover:text-white/80 leading-tight">{btn.desc}</p>
+              <p className="text-[11px] font-bold text-slate-800 group-hover:text-white/80 leading-tight">{btn.desc}</p>
             </div>
           </Link>
         ))}
