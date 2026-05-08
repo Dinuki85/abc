@@ -71,7 +71,7 @@ export default function AdminLayout({
         </aside>
 
         {/* Main Content - Scrollable */}
-        <main className="flex-1 md:ml-64 min-h-[calc(100vh-80px)] p-4 md:p-8 relative z-10">
+        <main className="flex-1 md:ml-64 min-h-[calc(100vh-80px)] p-4 md:p-8 relative">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
