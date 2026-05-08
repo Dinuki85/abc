@@ -37,14 +37,14 @@ export default function Sidebar({ menuItems }: SidebarProps) {
                 className={`flex items-center px-3 py-3 rounded-xl transition-all duration-300 group relative ${
                   active 
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40 font-bold' 
-                    : 'text-slate-500 hover:bg-white/80 hover:text-blue-600'
+                    : 'text-slate-700 hover:bg-white/80 hover:text-blue-600 hover:font-bold'
                 }`}
               >
                 {active && (
                   <div className="absolute left-0 w-1 h-6 bg-white rounded-r-full" />
                 )}
-                <Icon size={18} className={`mr-3 ${active ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-all duration-300 group-hover:scale-110`} />
-                <span className="text-[13px] tracking-tight">{item.name}</span>
+                <Icon size={20} className={`mr-3 ${active ? 'text-white' : 'text-slate-500 group-hover:text-blue-600'} transition-all duration-300 group-hover:scale-110`} />
+                <span className="text-[15px] font-medium tracking-tight">{item.name}</span>
               </Link>
             );
           })}
