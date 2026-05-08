@@ -44,7 +44,7 @@ export default function Sidebar({ menuItems }: SidebarProps) {
                   <div className="absolute left-0 w-1 h-6 bg-white rounded-r-full" />
                 )}
                 <Icon size={22} className={`mr-4 ${active ? 'text-white' : 'text-slate-600 group-hover:text-indigo-600'} transition-all duration-300 group-hover:scale-110`} />
-                <span className="text-[16px] font-bold tracking-tight">{item.name}</span>
+                <span className="text-[17px] font-black tracking-tight">{item.name}</span>
               </Link>
             );
           })}

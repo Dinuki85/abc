@@ -68,7 +68,7 @@ export default function DashboardNavbar({
         </div>
         <div className="flex flex-col">
           <span className="text-2xl font-bold text-primary font-handlee leading-tight uppercase">{brandName}</span>
-          <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase mt-0.5">
+          <span className="text-[12px] text-black font-black tracking-widest uppercase mt-0.5">
             Andiambalama MV
           </span>
         </div>
@@ -78,7 +78,7 @@ export default function DashboardNavbar({
       <div className="flex items-center gap-4 md:gap-8">
         {/* Machine Time */}
         <div className="hidden lg:flex flex-col items-end border-r border-gray-200 pr-8">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">System Status</span>
+          <span className="text-[11px] font-black text-black uppercase tracking-[0.2em]">System Status</span>
           <div className="flex items-center gap-2 text-base font-black text-slate-800 tabular-nums">
             <Clock size={14} className="text-primary" />
             {mounted && time ? time : '--:--:--'}
@@ -93,7 +93,7 @@ export default function DashboardNavbar({
           <div className="hidden md:flex flex-col">
             <div className="flex items-center gap-1.5">
               <ShieldCheck size={10} className="text-primary" />
-              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none">
+              <span className="text-[11px] font-black text-black uppercase tracking-widest leading-none">
                 {user?.role?.replace('ROLE_', '') || 'ADMIN'}
               </span>
             </div>

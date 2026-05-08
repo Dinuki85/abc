@@ -157,42 +157,42 @@ export default function AcademicsPage() {
                   <table className="w-full text-xs text-left border-collapse">
                     <tbody>
                       <tr className="border-b border-gray-100">
-                        <td className="p-4 font-bold text-gray-700 bg-gray-50 w-[45%] uppercase tracking-wider text-[10px]">Medium</td>
+                        <td className="p-4 font-bold text-gray-700 bg-gray-50 w-[45%] uppercase tracking-wider text-[12px] shadow-sm">Medium</td>
                         <td className="p-4 font-medium text-gray-600">{prog.medium}</td>
                       </tr>
                       {prog.parallel && (
                         <tr className="border-b border-gray-100">
-                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">Parallel Class</td>
+                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[12px] shadow-sm">Parallel Class</td>
                           <td className="p-4 font-medium text-gray-600">{prog.parallel}</td>
                         </tr>
                       )}
                       {prog.altSubject && (
                         <tr className="border-b border-gray-100">
-                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">Alt. Subject</td>
+                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[12px] shadow-sm">Alt. Subject</td>
                           <td className="p-4 font-medium text-gray-600">{prog.altSubject}</td>
                         </tr>
                       )}
                       {prog.continues && (
                         <tr className="border-b border-gray-100">
-                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">Continues</td>
+                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[12px] shadow-sm">Continues</td>
                           <td className="p-4 font-medium text-gray-600">{prog.continues}</td>
                         </tr>
                       )}
                       {prog.vocational && (
                         <tr className="border-b border-gray-100">
-                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">Vocational</td>
+                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[12px] shadow-sm">Vocational</td>
                           <td className="p-4 font-medium text-gray-600">{prog.vocational}</td>
                         </tr>
                       )}
                       {prog.periods && (
                         <tr className="border-b border-gray-100">
-                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">Daily Periods</td>
+                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[12px] shadow-sm">Daily Periods</td>
                           <td className="p-4 font-medium text-gray-600">{prog.periods}</td>
                         </tr>
                       )}
                       {prog.nvq && (
                         <tr className="border-b border-gray-100">
-                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">NVQ</td>
+                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[12px] shadow-sm">NVQ</td>
                           <td className="p-4 font-medium text-primary font-bold">{prog.nvq}</td>
                         </tr>
                       )}
