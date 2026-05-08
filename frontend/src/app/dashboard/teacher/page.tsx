@@ -68,11 +68,11 @@ export default function TeacherDashboard() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-white/5 border border-white/10 rounded-[2rem] p-6 text-center">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">My Students</p>
+                <p className="text-[12px] font-black uppercase tracking-widest text-black mb-2">My Students</p>
                 <p className="text-4xl font-black text-emerald-400 font-handlee">{stats.totalStudents}</p>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-[2rem] p-6 text-center">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Pending Tasks</p>
+                <p className="text-[12px] font-black uppercase tracking-widest text-black mb-2">Pending Tasks</p>
                 <p className="text-4xl font-black text-amber-400 font-handlee">{stats.pendingVerifications}</p>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function TeacherDashboard() {
                      <Users size={32} />
                    </div>
                    <h3 className="text-3xl font-black text-slate-900 mb-2">Grade 10 - A</h3>
-                   <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-6">Primary Assigned Class</p>
+                   <p className="text-black font-black uppercase tracking-widest text-[12px] mb-6">Primary Assigned Class</p>
                    <div className="flex items-center gap-4 text-slate-500 font-medium mb-10">
                      <div className="flex items-center gap-2">
                        <GraduationCap size={18} />
@@ -134,7 +134,7 @@ export default function TeacherDashboard() {
                      <Presentation size={32} />
                    </div>
                    <h3 className="text-3xl font-black text-slate-400 mb-2">Add New Class</h3>
-                   <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-6">Request additional assignment</p>
+                   <p className="text-black font-black uppercase tracking-widest text-[12px] mb-6">Request additional assignment</p>
                  </div>
                  <Button variant="ghost" className="w-full h-14 rounded-2xl border-2 border-dashed border-slate-200 text-slate-400 font-bold">
                    Contact Admin
@@ -185,11 +185,11 @@ export default function TeacherDashboard() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 text-left">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Primary NIC</p>
+                  <p className="text-[12px] font-black text-black uppercase tracking-widest mb-4">Primary NIC</p>
                   <p className="text-xl font-bold text-slate-800">{user.username || user.nic}</p>
                 </div>
                 <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 text-left">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Designation</p>
+                  <p className="text-[12px] font-black text-black uppercase tracking-widest mb-4">Designation</p>
                   <p className="text-xl font-bold text-slate-800">{user.designation || 'Class Teacher'}</p>
                 </div>
               </div>
