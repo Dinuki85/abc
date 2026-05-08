@@ -141,7 +141,7 @@ export default function StudentProfileSetup() {
             
             {/* Verification Status Card */}
             <div className="mt-10 bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm">
-              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Verification Status</h4>
+              <h4 className="text-[12px] font-black text-black uppercase tracking-widest mb-4">Verification Status</h4>
               <div className={`flex items-center gap-3 p-4 rounded-2xl ${
                 formData.verificationStatus === 'VERIFIED' ? 'bg-emerald-50 text-emerald-600' :
                 formData.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-50 text-rose-600' :
@@ -151,7 +151,7 @@ export default function StudentProfileSetup() {
                 <span className="font-black italic">{formData.verificationStatus || 'PENDING'}</span>
               </div>
               {formData.verificationComment && (
-                <p className="mt-4 text-xs font-medium text-slate-500 italic">"{formData.verificationComment}"</p>
+                <p className="mt-4 text-sm font-black text-slate-500 italic">"{formData.verificationComment}"</p>
               )}
             </div>
           </div>
@@ -296,7 +296,7 @@ function SectionTitle({ title, icon: Icon, color }: any) {
 function InputField({ label, name, type = 'text', value, onChange, readonly }: any) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">{label}</label>
+      <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-1">{label}</label>
       <input
         type={type}
         name={name}
@@ -312,7 +312,7 @@ function InputField({ label, name, type = 'text', value, onChange, readonly }: a
 function SelectField({ label, name, value, onChange, options }: any) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">{label}</label>
+      <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-1">{label}</label>
       <select
         name={name}
         value={value || ''}
@@ -331,7 +331,7 @@ function SelectField({ label, name, value, onChange, options }: any) {
 function TextAreaField({ label, name, value, onChange }: any) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">{label}</label>
+      <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-1">{label}</label>
       <textarea
         name={name}
         value={value || ''}
