@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Button } from '@/components/ui/Button';
-import { Plus, Edit2, Trash2, Mail, Phone } from 'lucide-react';
+import { Plus, Edit2, Trash2, Mail, Phone, Users } from 'lucide-react';
 
 export default function ParentsPage() {
   const parents = [
@@ -11,53 +11,62 @@ export default function ParentsPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700">
-            Parents Directory
-          </h1>
-          <p className="text-slate-500 mt-1">
-            Guardian contact info and linked student accounts
-          </p>
+      <div className="max-w-[1600px] mx-auto bg-white p-4 rounded-[2rem] border border-slate-100 shadow-xl flex flex-col xl:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4 px-2">
+          <div className="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600">
+            <Users size={24} />
+          </div>
+          <div>
+            <h1 className="text-xl font-black text-black tracking-tighter leading-none">
+              Parents Directory
+            </h1>
+            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+              Guardian Contact & Student Links
+            </p>
+          </div>
         </div>
-        <Button className="shrink-0 group">
-          <Plus size={18} className="mr-2 group-hover:rotate-90 transition-transform" />
-          Add Guardian
-        </Button>
+        
+        <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+          <Button 
+            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+          >
+            <Plus size={16} className="mr-2" />
+            Add Guardian
+          </Button>
+        </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Registered Guardians</CardTitle>
+          <CardTitle className="text-black font-black">Registered Guardians</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Parent ID</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Relation</TableHead>
-                <TableHead>Linked Students</TableHead>
-                <TableHead>Contact</TableHead>
-                <TableHead className="text-right">Manage</TableHead>
+            <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
+              <TableRow className="border-none">
+                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Parent ID</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Name</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Relation</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Linked Students</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Contact</TableHead>
+                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-right">Manage</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {parents.map((p) => (
                 <TableRow key={p.id}>
-                  <TableCell className="font-medium text-slate-700">{p.id}</TableCell>
-                  <TableCell>{p.name}</TableCell>
+                  <TableCell className="px-8 font-black text-black">{p.id}</TableCell>
+                  <TableCell className="font-bold text-black">{p.name}</TableCell>
                   <TableCell>
-                    <span className="inline-flex items-center px-2 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm border border-slate-200">
+                    <span className="inline-flex items-center px-2 py-1 bg-slate-100 text-black font-black rounded-lg text-[10px] border border-slate-200 uppercase tracking-widest">
                       {p.relation}
                     </span>
                   </TableCell>
-                  <TableCell className="font-medium text-blue-600">{p.students}</TableCell>
+                  <TableCell className="font-black text-primary uppercase text-[11px]">{p.students}</TableCell>
                   <TableCell>
-                    <div className="flex flex-col space-y-1 text-sm text-slate-500 text-xs">
-                      <span className="flex items-center"><Mail size={12} className="mr-1"/> {p.email}</span>
-                      <span className="flex items-center"><Phone size={12} className="mr-1"/> {p.phone}</span>
+                    <div className="flex flex-col space-y-1 text-black font-black text-[10px]">
+                      <span className="flex items-center uppercase tracking-tighter"><Mail size={12} className="mr-1 text-primary"/> {p.email}</span>
+                      <span className="flex items-center uppercase tracking-tighter"><Phone size={12} className="mr-1 text-primary"/> {p.phone}</span>
                     </div>
                   </TableCell>
                   <TableCell className="text-right space-x-2">
