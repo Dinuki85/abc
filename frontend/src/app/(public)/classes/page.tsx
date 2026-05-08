@@ -103,7 +103,7 @@ export default function AcademicsPage() {
       ]
     },
     { 
-      title: 'Professional Studies (After A/Ls)', 
+      title: 'Continuing Studies (After A/Ls)', 
       img: 'class-6.jpg', 
       desc: 'Specialized programs and vocational training for students after their Advanced Level examinations.',
       medium: 'Sinhala',
@@ -282,7 +282,7 @@ export default function AcademicsPage() {
                     {[
                       'Grade 06 Enrollment', 
                       'Advanced Level Enrollment', 
-                      'Post-A/L Professional Studies'
+                      'Post-A/L Continuing Studies'
                     ].map(item => (
                       <li key={item} className="flex items-center gap-4 text-dark font-bold">
                         <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
