@@ -15,7 +15,6 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState('dashboard');
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -94,157 +93,34 @@ export default function AdminDashboard() {
         ))}
       </section>
 
-      {/* Dashboard Tabs Navigation */}
-      <div className="flex flex-wrap gap-4 justify-center bg-slate-100/50 p-2 rounded-[2rem] border border-slate-200/50 backdrop-blur-md">
-        {[
-          { id: 'dashboard', label: 'Dashboard', icon: Landmark },
-          { id: 'registration', label: 'Registration', icon: UserPlus },
-          { id: 'performance', label: 'Performance', icon: Activity },
-          { id: 'display', label: 'Display', icon: FileSpreadsheet },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-3 px-8 py-4 rounded-[1.5rem] font-bold transition-all ${
-              activeTab === tab.id 
-                ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' 
-                : 'text-slate-500 hover:bg-white hover:text-primary'
-            }`}
-          >
-            <tab.icon size={20} />
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab Content */}
+      {/* Dashboard Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        
-        {activeTab === 'dashboard' && (
-          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-primary to-primary-hover p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="flex items-center gap-6">
-                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
-                  <Landmark size={32} className="text-secondary" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Institutional Dashboard</h2>
-                  <p className="text-white/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Core Institutional Profile Management</p>
-                </div>
+        <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
+          <div className="bg-gradient-to-r from-primary to-primary-hover p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
+                <Landmark size={32} className="text-secondary" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold font-handlee tracking-tight">Institutional Dashboard</h2>
+                <p className="text-white/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Core Institutional Profile Management</p>
               </div>
             </div>
-            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 bg-slate-50/50">
-              {[
-                { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
-                { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
-                { name: 'Guardian Info', href: '/admin/parents', icon: Heart },
-                { name: 'Section Matrix', href: '/admin/grades', icon: Layers },
-                { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck },
-                { name: 'Class Matrix', href: '/admin/classes', icon: Presentation },
-                { name: 'User Access', href: '/admin/users', icon: ShieldUser },
-              ].map((btn, i) => (
-                <DashboardButton key={i} {...btn} color="primary" />
-              ))}
-            </div>
           </div>
-        )}
-
-        {activeTab === 'registration' && (
-          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="flex items-center gap-6">
-                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
-                  <PlusCircle size={32} />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Enrollment & Registration</h2>
-                  <p className="text-orange-100/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Student & Faculty Dynamic Assignments</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 bg-slate-50/50">
-              {[
-                { name: 'Add To Classes', href: '/admin/bulk-assign', icon: UserCheck },
-                { name: 'Student Enrollment', href: '/admin/registration', icon: UserPlus },
-                { name: 'Subject Assign', href: '#', icon: BookCheck },
-                { name: 'Assessment Assign', href: '#', icon: ClipboardList },
-              ].map((btn, i) => (
-                <DashboardButton key={i} {...btn} color="orange" />
-              ))}
-            </div>
+          <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 bg-slate-50/50">
+            {[
+              { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
+              { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
+              { name: 'Guardian Info', href: '/admin/parents', icon: Heart },
+              { name: 'Section Matrix', href: '/admin/grades', icon: Layers },
+              { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck },
+              { name: 'Class Matrix', href: '/admin/classes', icon: Presentation },
+              { name: 'User Access', href: '/admin/users', icon: ShieldUser },
+            ].map((btn, i) => (
+              <DashboardButton key={i} {...btn} color="primary" />
+            ))}
           </div>
-        )}
-
-        {activeTab === 'performance' && (
-          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="flex items-center gap-6">
-                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/20 backdrop-blur-xl">
-                  <Activity size={32} className="text-secondary" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Performance Analytics</h2>
-                  <p className="text-emerald-100/60 text-xs font-black uppercase tracking-[0.3em] mt-1">Academic Records & Merit Reporting</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-slate-50/50">
-              {[
-                { name: 'Exam Results', href: '#', icon: CheckCircle2 },
-                { name: 'Scholarship Dist.', href: '#', icon: GraduationCap },
-                { name: 'Assessment Analytics', href: '#', icon: ClipboardList },
-              ].map((btn, i) => (
-                <DashboardButton key={i} {...btn} color="emerald" />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'display' && (
-          <div className="bg-white rounded-[3.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-slate-800 p-6 sm:p-10 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="flex items-center gap-6">
-                <div className="p-4 bg-white/10 rounded-[2rem] border border-white/10 backdrop-blur-xl">
-                  <FileSpreadsheet size={32} />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold font-handlee tracking-tight">Advanced Reporting Engine</h2>
-                  <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mt-1">Cross-Reference Institutional Intelligence</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 bg-slate-50/50">
-               <ReportColumn 
-                 title="All School" 
-                 items={[
-                   { name: 'All List', icon: Users },
-                   { name: 'Health Report', icon: Activity },
-                   { name: 'Exam Report', icon: FileCheck },
-                 ]} 
-               />
-               <ReportColumn 
-                 title="Student List" 
-                 items={[
-                   { name: 'Section Based', icon: Layers },
-                   { name: 'Subject Based', icon: BookCheck },
-                 ]} 
-               />
-               <ReportColumn 
-                 title="Teacher" 
-                 items={[
-                   { name: 'Class Teacher List', icon: UserCheck },
-                 ]} 
-               />
-               <ReportColumn 
-                 title="Individual" 
-                 items={[
-                   { name: 'Student CV', icon: Contact },
-                   { name: 'Teacher CV', icon: Briefcase },
-                 ]} 
-               />
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );
