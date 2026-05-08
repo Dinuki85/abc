@@ -44,13 +44,13 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-[#f8fafc] font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 flex flex-col">
+    <div className="h-[100dvh] overflow-hidden bg-[#f8fafc] font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 flex flex-col">
       {/* Background decoration */}
       <div className="fixed -top-40 -right-40 w-96 h-96 bg-indigo-700/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
       <div className="fixed -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
 
       {/* Top Navbar - Fixed */}
-      <header className="h-20 bg-white border-b border-gray-100 flex-shrink-0">
+      <header className="h-20 bg-white border-b border-gray-100 flex-shrink-0 relative z-50">
         <DashboardNavbar 
           onMenuToggle={() => setIsMobileMenuOpen(true)} 
           brandName="AMV ADMIN"
@@ -64,13 +64,13 @@ export default function AdminLayout({
         brandName="AMV ADMIN"
       />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - Fixed/Static Column */}
         <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
           <Sidebar menuItems={adminMenuItems} />
         </aside>
 
-        {/* Main Content - Scrollable */}
+        {/* Main Content - No Scroll */}
         <main className="flex-1 overflow-hidden p-4 md:p-6 relative">
           <div className="max-w-[1600px] mx-auto h-full overflow-hidden">
             {children}
