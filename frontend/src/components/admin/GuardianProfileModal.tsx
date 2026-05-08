@@ -82,7 +82,7 @@ export default function GuardianProfileModal({ guardian, isOpen, onClose, onSave
         <div className="bg-white rounded-[3rem] w-full max-w-6xl shadow-2xl border border-white/20 overflow-hidden animate-in zoom-in-95 duration-500 flex flex-col h-[80vh]">
           
           {/* Modal Header */}
-          <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-slate-50/30 flex-shrink-0">
+          <div className="p-4 sm:p-8 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50/30 flex-shrink-0 gap-4">
             <div className="flex items-center gap-6">
               <div className="w-16 h-16 rounded-[1.5rem] bg-pink-500 text-white flex items-center justify-center shadow-xl shadow-pink-500/20">
                 <Heart size={32} />
@@ -101,12 +101,12 @@ export default function GuardianProfileModal({ guardian, isOpen, onClose, onSave
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-               <div className="relative">
-                 <Input className="h-12 w-64 rounded-xl border-gray-200" placeholder=": Search" />
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 w-full sm:w-auto mt-4 sm:mt-0">
+               <div className="relative flex-1 sm:flex-none">
+                 <Input className="h-12 w-full sm:w-64 rounded-xl border-gray-200" placeholder=": Search" />
                </div>
-               <span className="text-emerald-500 font-bold text-sm">All List</span>
-               <button onClick={onClose} className="w-12 h-12 rounded-[1.25rem] flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all border border-gray-100 shadow-sm ml-4">
+               <span className="text-emerald-500 font-bold text-sm hidden sm:inline">All List</span>
+               <button onClick={onClose} className="w-12 h-12 rounded-[1.25rem] flex flex-shrink-0 items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all border border-gray-100 shadow-sm ml-auto sm:ml-4">
                  <X size={24} />
                </button>
             </div>
