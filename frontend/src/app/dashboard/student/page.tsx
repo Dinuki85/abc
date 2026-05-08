@@ -107,8 +107,8 @@ export default function StudentDashboard() {
                 {user.verificationStatus === 'VERIFIED' ? <ShieldCheck size={40} /> : <Clock size={40} />}
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500">Global Verification</p>
-                <p className="text-2xl font-black mt-1 italic">{user.verificationStatus}</p>
+                <p className="text-[12px] font-black uppercase tracking-[0.2em] text-black">Global Verification</p>
+                <p className="text-3xl font-black mt-1 italic">{user.verificationStatus}</p>
               </div>
             </motion.div>
           </div>
@@ -185,7 +185,7 @@ export default function StudentDashboard() {
                   <GraduationCap size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Placement</p>
+                  <p className="text-[12px] font-black text-black uppercase tracking-widest mb-1">Placement</p>
                   <p className="text-slate-800 font-bold leading-tight">
                     {user.gradeName ? `${user.gradeName} — ${user.className}` : 'Awaiting Assignment'}
                   </p>
@@ -197,7 +197,7 @@ export default function StudentDashboard() {
                   <MapPin size={20} />
                 </div>
                 <div className="overflow-hidden">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Home Address</p>
+                  <p className="text-[12px] font-black text-black uppercase tracking-widest mb-1">Home Address</p>
                   <p className="text-slate-800 font-bold leading-tight truncate">{user.address || 'Not Provided'}</p>
                 </div>
               </div>
@@ -207,7 +207,7 @@ export default function StudentDashboard() {
                   <Phone size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Emergency Contact</p>
+                  <p className="text-[12px] font-black text-black uppercase tracking-widest mb-1">Emergency Contact</p>
                   <p className="text-slate-800 font-bold leading-tight">{user.guardianContact || 'Not Provided'}</p>
                 </div>
               </div>
