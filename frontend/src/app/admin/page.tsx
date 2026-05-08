@@ -78,7 +78,7 @@ export default function AdminDashboard() {
                 {stat.change}
               </span>
             </div>
-            <div className="relative z-10 text-left mt-1">
+            <div className="relative z-10 text-center mt-1">
               <h3 className="text-[7px] font-black text-black group-hover:text-white transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
               <p className="text-lg font-black text-black group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
