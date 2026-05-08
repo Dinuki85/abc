@@ -38,28 +38,28 @@ export default function AdminDashboard() {
               <ShieldCheck className="text-indigo-400" size={14} />
               <span className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Command Center</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter font-handlee italic leading-none">
+            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tighter font-handlee italic leading-none">
               Welcome Back, <span className="text-indigo-400">Administrator</span>
             </h1>
-            <p className="text-slate-400 font-medium max-w-md text-lg leading-relaxed">
-              Monitoring AMV Institutional operations with real-time academic and personnel analytics.
+            <p className="text-slate-400 font-medium max-w-md text-sm leading-relaxed">
+              Real-time academic and personnel analytics.
             </p>
           </div>
           
-          <div className="flex flex-wrap sm:flex-nowrap gap-4 w-full lg:w-auto">
-            <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-6 rounded-[2rem] border border-white/10 flex flex-col items-center gap-2 min-w-[140px] flex-1 sm:flex-none">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <Activity size={20} />
+          <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full lg:w-auto">
+            <div className="bg-white/5 backdrop-blur-xl p-3 sm:p-4 rounded-[1.5rem] border border-white/10 flex flex-col items-center gap-1 min-w-[120px] flex-1 sm:flex-none">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <Activity size={16} />
               </div>
-              <span className="text-2xl font-black text-white tabular-nums tracking-tighter">98.2%</span>
-              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest text-center">System Uptime</span>
+              <span className="text-xl font-black text-white tabular-nums tracking-tighter">98.2%</span>
+              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center">Uptime</span>
             </div>
-            <div className="bg-white/5 backdrop-blur-xl p-4 sm:p-6 rounded-[2rem] border border-white/10 flex flex-col items-center gap-2 min-w-[140px] flex-1 sm:flex-none">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
-                <Users2 size={20} />
+            <div className="bg-white/5 backdrop-blur-xl p-3 sm:p-4 rounded-[1.5rem] border border-white/10 flex flex-col items-center gap-1 min-w-[120px] flex-1 sm:flex-none">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                <Users2 size={16} />
               </div>
-              <span className="text-2xl font-black text-white tabular-nums tracking-tighter">2,412</span>
-              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Active Users</span>
+              <span className="text-xl font-black text-white tabular-nums tracking-tighter">2,412</span>
+              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Users</span>
             </div>
           </div>
         </div>
@@ -138,12 +138,12 @@ function DashboardButton({ name, href, icon: Icon, color }: any) {
   return (
     <Link 
       href={href}
-      className={`flex flex-col items-center gap-4 p-6 bg-white border border-slate-100 rounded-[2rem] transition-all group hover:shadow-2xl hover:-translate-y-1 active:scale-95 shadow-sm`}
+      className={`flex flex-col items-center gap-2 p-4 bg-white border border-slate-100 rounded-[1.5rem] transition-all group hover:shadow-2xl hover:-translate-y-1 active:scale-95 shadow-sm`}
     >
-      <div className={`p-4 rounded-2xl shadow-inner transition-all duration-500 ${colorMap[color].split(' ').slice(1,4).join(' ')} ${colorMap[color].split(' ').slice(4,6).join(' ')}`}>
-        <Icon size={24} />
+      <div className={`p-3 rounded-xl shadow-inner transition-all duration-500 ${colorMap[color].split(' ').slice(1,4).join(' ')} ${colorMap[color].split(' ').slice(4,6).join(' ')}`}>
+        <Icon size={20} />
       </div>
-      <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest text-center group-hover:text-slate-800 transition-colors">
+      <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest text-center group-hover:text-slate-800 transition-colors">
         {name}
       </span>
     </Link>
