@@ -38,28 +38,28 @@ export default function AdminDashboard() {
               <ShieldCheck className="text-indigo-400" size={14} />
               <span className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Command Center</span>
             </div>
-            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tighter font-handlee italic leading-none">
+            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter font-handlee italic leading-none">
               Welcome Back, <span className="text-indigo-400">Administrator</span>
             </h1>
-            <p className="text-slate-400 font-medium max-w-md text-sm leading-relaxed">
-              Real-time academic and personnel analytics.
+            <p className="text-slate-400 font-medium max-w-md text-[10px] leading-relaxed">
+              Monitoring AMV Institutional operations with real-time academic and personnel analytics.
             </p>
           </div>
           
-          <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full lg:w-auto">
-            <div className="bg-white/5 backdrop-blur-xl p-3 sm:p-4 rounded-[1.5rem] border border-white/10 flex flex-col items-center gap-1 min-w-[120px] flex-1 sm:flex-none">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <Activity size={16} />
+          <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full lg:w-auto">
+            <div className="bg-white/5 backdrop-blur-xl p-2 sm:p-3 rounded-xl border border-white/10 flex flex-col items-center gap-1 min-w-[100px] flex-1 sm:flex-none">
+              <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <Activity size={14} />
               </div>
-              <span className="text-xl font-black text-white tabular-nums tracking-tighter">98.2%</span>
-              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center">Uptime</span>
+              <span className="text-lg font-black text-white tabular-nums tracking-tighter">98.2%</span>
+              <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest text-center">System Uptime</span>
             </div>
-            <div className="bg-white/5 backdrop-blur-xl p-3 sm:p-4 rounded-[1.5rem] border border-white/10 flex flex-col items-center gap-1 min-w-[120px] flex-1 sm:flex-none">
-              <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
-                <Users2 size={16} />
+            <div className="bg-white/5 backdrop-blur-xl p-2 sm:p-3 rounded-xl border border-white/10 flex flex-col items-center gap-1 min-w-[100px] flex-1 sm:flex-none">
+              <div className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                <Users2 size={14} />
               </div>
-              <span className="text-xl font-black text-white tabular-nums tracking-tighter">2,412</span>
-              <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Users</span>
+              <span className="text-lg font-black text-white tabular-nums tracking-tighter">2,412</span>
+              <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest text-center">Active Users</span>
             </div>
           </div>
         </div>
@@ -73,23 +73,20 @@ export default function AdminDashboard() {
           { label: 'Grade Sections', value: stats?.totalSections || 0, icon: Landmark, color: 'amber', change: 'Across 13 grades' },
           { label: 'Total Units', value: stats?.totalClassRooms || 0, icon: Layers, color: 'rose', change: '92% Capacity' },
         ].map((stat, i) => (
-          <div key={i} className="group hover:bg-indigo-600 hover:border-indigo-600 hover:shadow-2xl hover:shadow-indigo-500/30 transition-all duration-500 rounded-[2rem] border border-slate-200/60 shadow-xl shadow-slate-200/40 bg-white/50 backdrop-blur-sm overflow-hidden p-4 relative">
-            <div className={`absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 group-hover:bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-all duration-700`} />
-            <div className="flex justify-center mb-4 relative z-10">
-              <div className={`p-4 bg-slate-50 rounded-2xl group-hover:scale-110 group-hover:bg-white group-hover:text-indigo-600 transition-all duration-500 shadow-inner text-slate-400`}>
-                <stat.icon size={28} />
+          <div key={i} className="group hover:bg-indigo-600 hover:border-indigo-600 hover:shadow-lg transition-all duration-300 rounded-2xl border border-slate-100 shadow-sm bg-white/80 overflow-hidden p-3 relative">
+            <div className="flex justify-between items-start mb-2 relative z-10">
+              <div className={`p-2 bg-slate-50 rounded-lg group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-slate-400`}>
+                <stat.icon size={18} />
               </div>
+              <span className={`text-[7px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white/80`}>
+                {stat.change}
+              </span>
             </div>
-            <div className="relative z-10 flex flex-col items-center text-center">
-              <h3 className="text-[10px] font-black text-slate-400 group-hover:text-white/80 transition-colors uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
-              <p className="text-3xl font-black text-slate-800 group-hover:text-white group-hover:scale-110 transition-all tracking-tighter tabular-nums font-handlee">
+            <div className="relative z-10 text-left">
+              <h3 className="text-[8px] font-black text-slate-400 group-hover:text-white/80 transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
+              <p className="text-xl font-black text-slate-800 group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
-              <div className="mt-1">
-                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-50 group-hover:bg-white/20 text-slate-400 group-hover:text-white border border-slate-100 group-hover:border-white/20 transition-all`}>
-                  {stat.change}
-                </span>
-              </div>
             </div>
           </div>
         ))}
@@ -97,29 +94,24 @@ export default function AdminDashboard() {
 
       {/* Dashboard Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 p-4 sm:p-6 text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-white/10 rounded-[1.5rem] border border-white/20 backdrop-blur-xl">
-                <Landmark size={24} className="text-indigo-300" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold font-handlee tracking-tight">Institutional Dashboard</h2>
-                <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] mt-0.5">Core Institutional Profile Management</p>
-              </div>
-            </div>
+        <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden">
+          <div className="p-3 border-b border-slate-100 flex items-center gap-3">
+             <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
+                <Landmark size={18} />
+             </div>
+             <div className="w-12 h-0.5 bg-slate-100 rounded-full" />
           </div>
-          <div className="p-3 sm:p-4 lg:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-slate-50/50">
+          <div className="p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 bg-slate-50/30">
             {[
-              { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
-              { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
-              { name: 'Guardian Info', href: '/admin/parents', icon: Heart },
-              { name: 'Section Matrix', href: '/admin/grades', icon: Layers },
-              { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck },
-              { name: 'Class Matrix', href: '/admin/classes', icon: Presentation },
-              { name: 'User Access', href: '/admin/users', icon: ShieldUser },
+              { name: 'Student Profile', href: '/admin/students', icon: UserPlus, color: 'teal' },
+              { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase, color: 'teal' },
+              { name: 'Guardian Info', href: '/admin/parents', icon: Heart, color: 'teal' },
+              { name: 'Section Matrix', href: '/admin/grades', icon: Layers, color: 'teal' },
+              { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck, color: 'teal' },
+              { name: 'Class Matrix', href: '/admin/classes', icon: Presentation, color: 'teal' },
+              { name: 'User Access', href: '/admin/users', icon: ShieldUser, color: 'teal' },
             ].map((btn, i) => (
-              <DashboardButton key={i} {...btn} color="primary" />
+              <DashboardButton key={i} {...btn} />
             ))}
           </div>
         </div>
@@ -130,20 +122,19 @@ export default function AdminDashboard() {
 
 function DashboardButton({ name, href, icon: Icon, color }: any) {
   const colorMap: any = {
-    primary: 'hover:border-primary group-hover:bg-primary group-hover:text-white text-primary hover:text-primary bg-primary/5',
-    orange: 'hover:border-orange-600 group-hover:bg-orange-600 group-hover:text-white text-orange-600 hover:text-orange-700 bg-orange-50',
-    emerald: 'hover:border-emerald-600 group-hover:bg-emerald-600 group-hover:text-white text-emerald-600 hover:text-emerald-700 bg-emerald-50',
+    teal: 'text-teal-500 bg-white border-slate-100 hover:border-teal-500 hover:bg-teal-50',
+    indigo: 'text-indigo-500 bg-white border-slate-100 hover:border-indigo-500 hover:bg-indigo-50',
   };
 
   return (
     <Link 
       href={href}
-      className={`flex flex-col items-center gap-2 p-4 bg-white border border-slate-100 rounded-[1.5rem] transition-all group hover:shadow-2xl hover:-translate-y-1 active:scale-95 shadow-sm`}
+      className={`flex flex-col items-center gap-2 p-3 border rounded-xl transition-all group active:scale-95 shadow-sm ${colorMap[color] || colorMap.teal}`}
     >
-      <div className={`p-3 rounded-xl shadow-inner transition-all duration-500 ${colorMap[color].split(' ').slice(1,4).join(' ')} ${colorMap[color].split(' ').slice(4,6).join(' ')}`}>
-        <Icon size={20} />
+      <div className="p-2 bg-slate-50 rounded-lg group-hover:bg-white transition-all">
+        <Icon size={18} />
       </div>
-      <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest text-center group-hover:text-slate-800 transition-colors">
+      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest text-center group-hover:text-slate-800 transition-colors">
         {name}
       </span>
     </Link>
