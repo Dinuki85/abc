@@ -52,7 +52,7 @@ export default function DashboardNavbar({
   const displayName = user?.fullName || user?.username || 'Administrator';
 
   return (
-    <header className="h-20 bg-white border-b border-gray-100 shadow-sm flex items-center justify-between px-8 relative z-[60] w-full">
+    <header className="h-20 bg-white border-b border-gray-100 shadow-sm flex items-center justify-between px-4 md:px-8 relative z-[60] w-full">
       {/* Branding */}
       <div className="flex items-center gap-4">
         {onMenuToggle && (
@@ -75,7 +75,7 @@ export default function DashboardNavbar({
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-4 md:gap-8">
         {/* Machine Time */}
         <div className="hidden lg:flex flex-col items-end border-r border-gray-200 pr-8">
           <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">System Status</span>
@@ -86,7 +86,7 @@ export default function DashboardNavbar({
         </div>
 
         {/* User Identity */}
-        <div className="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-xl border border-gray-100 hover:bg-primary/5 transition-colors cursor-pointer group">
+        <div className="flex items-center gap-2 md:gap-4 bg-slate-50 px-2 md:px-4 py-1.5 md:py-2 rounded-xl border border-gray-100 hover:bg-primary/5 transition-colors cursor-pointer group">
           <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-white font-black shadow-md ring-2 ring-white group-hover:ring-secondary/50 transition-all">
             {displayName[0].toUpperCase()}
           </div>
@@ -103,7 +103,7 @@ export default function DashboardNavbar({
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-full font-bold text-xs transition-all active:scale-95 shadow-md shadow-primary/20 uppercase tracking-widest"
+          className="flex items-center gap-2 md:gap-3 bg-primary hover:bg-primary-hover text-white p-2.5 md:px-5 md:py-2.5 rounded-full font-bold text-xs transition-all active:scale-95 shadow-md shadow-primary/20 uppercase tracking-widest"
         >
           <LogOut size={16} />
           <span className="hidden sm:inline">Log Out</span>
