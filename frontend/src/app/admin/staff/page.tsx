@@ -134,7 +134,7 @@ export default function StaffPage() {
             <h1 className="text-xl font-black text-black tracking-tighter leading-none">
               Staff Registry
             </h1>
-            <p className="text-[12px] text-black font-black uppercase tracking-[0.15em] mt-1">
+            <p className="text-[13px] text-black font-black uppercase tracking-[0.15em] mt-1">
               Institutional Personnel Management
             </p>
           </div>
@@ -145,14 +145,14 @@ export default function StaffPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
             <Input 
               placeholder="Filter by name or ID..." 
-              className="pl-12 h-12 w-full rounded-xl border-slate-100 bg-slate-50 focus:bg-white transition-all text-xs font-bold text-black"
+              className="pl-12 h-12 w-full rounded-xl border-slate-100 bg-slate-50 focus:bg-white transition-all text-sm font-bold text-black"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
           <Button 
-            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-xs"
+            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-sm"
             onClick={() => setShowModal(true)}
           >
             <UserPlus size={16} className="mr-2" />
@@ -187,7 +187,7 @@ export default function StaffPage() {
           </div>
           <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full border border-gray-100">
             <FileSpreadsheet size={14} className="text-primary" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black">
+            <span className="text-[12px] font-black uppercase tracking-[0.2em] text-black">
               {filteredStaff.length} Records Total
             </span>
           </div>
@@ -197,11 +197,11 @@ export default function StaffPage() {
             <Table>
               <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
                 <TableRow className="border-none">
-                  <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black w-[180px]">Teacher ID</TableHead>
-                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Name & Designation</TableHead>
-                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Grade Focus</TableHead>
-                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black w-[200px]">Class Assignments</TableHead>
-                  <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-right w-[150px]">Actions</TableHead>
+                  <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black w-[180px]">Teacher ID</TableHead>
+                  <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Name & Designation</TableHead>
+                  <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Grade Focus</TableHead>
+                  <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black w-[200px]">Class Assignments</TableHead>
+                  <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-right w-[150px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -234,13 +234,13 @@ export default function StaffPage() {
                     <TableCell className="py-5">
                       <div className="flex flex-col">
                         <span className="text-sm font-black text-black">{staff.name}</span>
-                        <span className="text-[12px] font-black text-black uppercase tracking-widest mt-0.5">
+                        <span className="text-[13px] font-black text-black uppercase tracking-widest mt-0.5">
                           {staff.designation || 'Class Teacher'}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell className="py-5 text-center">
-                      <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[11px] font-black uppercase tracking-widest border border-slate-200">
+                      <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[12px] font-black uppercase tracking-widest border border-slate-200">
                         {staff.gradeName || 'General'}
                       </span>
                     </TableCell>
@@ -249,9 +249,9 @@ export default function StaffPage() {
                         {staff.classes && staff.classes.length > 0 ? (
                           staff.classes.map((cls: any, idx: number) => (
                             <div key={idx} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary/5 text-primary border border-primary/10 transition-all hover:bg-primary/10">
-                              <span className="text-[11px] font-black uppercase tracking-tighter">{cls.className}</span>
+                              <span className="text-[12px] font-black uppercase tracking-tighter">{cls.className}</span>
                               <div className="h-3 w-px bg-primary/20" />
-                              <span className="text-[11px] font-bold opacity-70">{cls.studentCount} St.</span>
+                              <span className="text-[12px] font-bold opacity-70">{cls.studentCount} St.</span>
                             </div>
                           ))
                         ) : (
@@ -311,7 +311,7 @@ export default function StaffPage() {
               
               <form onSubmit={handleCreate} className="p-10 space-y-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Full Personnel Name</label>
+                  <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-2">Full Personnel Name</label>
                   <div className="relative">
                     <Input 
                       placeholder="e.g. Mr. Saman Kumara" 
@@ -326,7 +326,7 @@ export default function StaffPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Username / Index ID</label>
+                    <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-2">Username / Index ID</label>
                     <Input 
                       placeholder="TEA-2024-001" 
                       value={username} 
@@ -337,7 +337,7 @@ export default function StaffPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Temporary Password</label>
+                    <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-2">Temporary Password</label>
                     <div className="relative">
                       <Input 
                         type="password"
@@ -353,7 +353,7 @@ export default function StaffPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Institutional Designation</label>
+                  <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-2">Institutional Designation</label>
                   <select 
                     value={designation} 
                     onChange={(e) => setDesignation(e.target.value)} 
@@ -407,7 +407,7 @@ export default function StaffPage() {
               
               <form onSubmit={handleUpdate} className="p-10 space-y-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Update Full Name</label>
+                  <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-2">Update Full Name</label>
                   <div className="relative">
                     <Input 
                       placeholder="e.g. Mr. Saman Kumara" 
@@ -421,7 +421,7 @@ export default function StaffPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Update Designation</label>
+                  <label className="text-[12px] font-black text-black uppercase tracking-[0.2em] ml-2">Update Designation</label>
                   <select 
                     value={designation} 
                     onChange={(e) => setDesignation(e.target.value)} 
