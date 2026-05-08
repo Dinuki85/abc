@@ -4,7 +4,7 @@ import Sidebar from "@/components/admin/Sidebar";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import MobileSidebar from "@/components/admin/MobileSidebar";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { api } from "@/lib/api";
 import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck, Landmark, UserPlus, Activity, FileSpreadsheet, GraduationCap } from "lucide-react";
 
@@ -22,6 +22,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -33,6 +34,8 @@ export default function AdminLayout({
       setIsAuthorized(true);
     }
   }, [router]);
+
+  const isNoScrollPage = ['/admin', '/admin/registration', '/admin/performance', '/admin/reporting'].includes(pathname);
 
   // Keep the shell visible while checking auth so it never flashes blank
   if (!isAuthorized) {
@@ -70,9 +73,9 @@ export default function AdminLayout({
           <Sidebar menuItems={adminMenuItems} />
         </aside>
 
-        {/* Main Content - No Scroll */}
-        <main className="flex-1 overflow-hidden p-4 md:p-6 relative">
-          <div className="max-w-[1600px] mx-auto h-full overflow-hidden">
+        {/* Main Content - Conditional Scroll */}
+        <main className={`flex-1 ${isNoScrollPage ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'} p-4 md:p-6 relative`}>
+          <div className={`max-w-[1600px] mx-auto h-full ${isNoScrollPage ? 'overflow-hidden' : ''}`}>
             {children}
           </div>
         </main>

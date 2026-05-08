@@ -11,24 +11,23 @@ import Link from 'next/link';
 
 export default function ReportingPage() {
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-1000 pb-20">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 bg-slate-800 p-8 rounded-[2.5rem] shadow-xl border border-slate-700">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white backdrop-blur-xl border border-white/10">
-              <FileSpreadsheet size={28} />
+    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-1000 pb-2">
+      <div className="relative overflow-hidden bg-slate-900 rounded-xl p-3 md:p-4 shadow-xl border border-white/5 flex-shrink-0">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
+        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md">
+              <FileSpreadsheet className="text-indigo-400" size={14} />
+              <span className="text-[9px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Report Matrix</span>
             </div>
-            <h1 className="text-4xl font-bold text-white tracking-tight font-handlee">
-              Advanced Reporting Engine
+            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
+              Institutional <span className="text-indigo-400">Reporting</span>
             </h1>
           </div>
-          <p className="text-slate-400 font-medium ml-15">
-            Cross-Reference Institutional Intelligence & PDF Generation
-          </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 overflow-y-auto custom-scrollbar content-start">
         
         <ReportSection 
           title="All School Data" 
@@ -80,18 +79,18 @@ export default function ReportingPage() {
 
 function ReportSection({ title, items }: any) {
   return (
-    <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm space-y-6 flex flex-col h-full">
-      <div className="flex flex-col gap-2">
-        <h4 className="text-[11px] font-black text-slate-800 uppercase tracking-[0.3em] font-handlee">{title}</h4>
-        <div className="w-12 h-1 bg-secondary rounded-full" />
+    <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm space-y-3 flex flex-col h-full">
+      <div className="flex flex-col gap-1">
+        <h4 className="text-[9px] font-black text-black uppercase tracking-[0.2em] font-handlee">{title}</h4>
+        <div className="w-10 h-0.5 bg-indigo-500 rounded-full" />
       </div>
-      <div className="grid grid-cols-1 gap-2 flex-1">
+      <div className="grid grid-cols-1 gap-1.5 flex-1">
         {items.map((item: any, i: number) => (
-          <Link key={i} href="#" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 hover:shadow-md hover:border-slate-200 border border-transparent transition-all group">
-            <div className="p-2 bg-slate-100 rounded-lg text-slate-400 group-hover:bg-primary/10 group-hover:text-primary transition-all">
-             <item.icon size={16} />
+          <Link key={i} href="#" className="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-600 hover:shadow-md border border-transparent transition-all group">
+            <div className="p-1.5 bg-slate-100 rounded-lg text-slate-700 group-hover:bg-white/20 group-hover:text-white transition-all">
+             <item.icon size={14} />
             </div>
-            <span className="text-xs font-bold text-slate-600 group-hover:text-slate-900 transition-colors">{item.name}</span>
+            <span className="text-[10px] font-black text-black group-hover:text-white transition-colors">{item.name}</span>
           </Link>
         ))}
       </div>
