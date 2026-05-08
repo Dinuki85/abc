@@ -152,10 +152,10 @@ export default function StudentsPage() {
               <GraduationCap size={28} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tighter font-handlee leading-none">
+              <h1 className="text-2xl font-bold text-black tracking-tighter font-handlee leading-none">
                 Student Register
               </h1>
-              <p className="text-[11px] text-slate-400 font-black uppercase tracking-[0.2em] mt-2">
+              <p className="text-[11px] text-black font-black uppercase tracking-[0.2em] mt-2">
                 AMV Institutional Directory
               </p>
             </div>
@@ -239,12 +239,12 @@ export default function StudentsPage() {
             <CardTitle className="text-xl font-bold text-slate-800">Student Directory</CardTitle>
           </div>
           <div className="flex items-center gap-6">
-             <div className="hidden md:flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-full border border-gray-100">
-               <FileSpreadsheet size={14} className="text-primary" />
-               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                 {totalElements} Records Total
-               </span>
-             </div>
+              <div className="hidden md:flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-full border border-gray-100">
+                <FileSpreadsheet size={14} className="text-primary" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black">
+                  {totalElements} Records Total
+                </span>
+              </div>
              
              <div className="flex items-center gap-2">
                <button 
@@ -272,12 +272,12 @@ export default function StudentsPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-[210px] z-10">
+              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-[230px] z-10">
                 <TableRow className="border-none">
-                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 w-[180px]">Admission No</TableHead>
-                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Student Identity</TableHead>
-                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-center w-[150px]">Grade / Class</TableHead>
-                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-center w-[150px]">Verification</TableHead>
+                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black w-[180px]">Admission No</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Student Identity</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black text-center w-[150px]">Grade / Class</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black text-center w-[150px]">Verification</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -315,10 +315,10 @@ export default function StudentsPage() {
                       onClick={() => openProfile(st)}
                     >
                       <div className="flex flex-col px-2">
-                        <span className="text-sm font-bold text-slate-800 group-hover:text-primary transition-colors">
-                          {st.fullName || <span className="text-slate-300 italic font-medium">Pending Completion</span>}
+                        <span className="text-sm font-black text-black group-hover:text-primary transition-colors">
+                          {st.fullName || <span className="text-black italic font-bold">Pending Completion</span>}
                         </span>
-                        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-0.5">
+                        <span className="text-[10px] font-black text-black uppercase tracking-widest mt-0.5">
                           Account Created
                         </span>
                       </div>

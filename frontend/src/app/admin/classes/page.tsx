@@ -56,10 +56,10 @@ export default function ClassesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700">
+          <h1 className="text-3xl font-black text-black">
             Classes Directory
           </h1>
-          <p className="text-slate-500 mt-1">
+          <p className="text-black font-bold mt-1 uppercase text-[10px] tracking-widest">
             Organize grades, sections, and assigned teachers
           </p>
         </div>
@@ -71,8 +71,8 @@ export default function ClassesPage() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Academic Sections</CardTitle>
-          <span className="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase tracking-widest">
+          <CardTitle className="text-black font-black">Academic Sections</CardTitle>
+          <span className="text-xs font-black bg-slate-100 text-black px-3 py-1 rounded-full uppercase tracking-widest">
             {classes.length} Classes
           </span>
         </CardHeader>
@@ -100,16 +100,16 @@ export default function ClassesPage() {
                 </TableRow>
               ) : classes.map((c) => (
                 <TableRow key={c.id}>
-                  <TableCell className="font-bold text-slate-700">ID: {c.id}</TableCell>
+                  <TableCell className="font-black text-black">ID: {c.id}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                        <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
                           <Home size={14} />
                        </div>
-                       <span className="font-bold text-slate-800">{c.grade?.name}</span> - {c.name}
+                       <span className="font-black text-black">{c.grade?.name}</span> - <span className="font-bold text-black">{c.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell className={c.classTeacher ? "text-indigo-600 font-bold" : "text-slate-400 italic text-sm"}>
+                  <TableCell className={c.classTeacher ? "text-indigo-600 font-black" : "text-black italic font-bold text-sm"}>
                     {c.classTeacher?.name || 'Unassigned'}
                   </TableCell>
                   <TableCell>

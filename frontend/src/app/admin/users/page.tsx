@@ -27,10 +27,10 @@ export default function UsersPage() {
               <ShieldCog size={28} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tighter leading-none font-handlee">
+              <h1 className="text-2xl font-bold text-black tracking-tighter leading-none font-handlee">
                 User Access
               </h1>
-              <p className="text-[11px] text-slate-400 font-black uppercase tracking-[0.2em] mt-2">
+              <p className="text-[11px] text-black font-black uppercase tracking-[0.2em] mt-2">
                 System Role & Permission Engine
               </p>
             </div>
@@ -63,15 +63,15 @@ export default function UsersPage() {
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User ID</TableHead>
-                <TableHead>Username</TableHead>
-                <TableHead>System Role</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Last Activity</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+            <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-[230px] z-10">
+              <TableRow className="border-none">
+                <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">User ID</TableHead>
+                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Username</TableHead>
+                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">System Role</TableHead>
+                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Email</TableHead>
+                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Last Activity</TableHead>
+                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Status</TableHead>
+                <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

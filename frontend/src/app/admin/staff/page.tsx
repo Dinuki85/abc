@@ -133,10 +133,10 @@ export default function StaffPage() {
               <Briefcase size={28} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tighter font-handlee leading-none">
+              <h1 className="text-2xl font-bold text-black tracking-tighter font-handlee leading-none">
                 Staff Registry
               </h1>
-              <p className="text-[11px] text-slate-400 font-black uppercase tracking-[0.2em] mt-2">
+              <p className="text-[11px] text-black font-black uppercase tracking-[0.2em] mt-2">
                 Institutional Personnel Management
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function StaffPage() {
           </div>
           <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full border border-gray-100">
             <FileSpreadsheet size={14} className="text-primary" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black">
               {filteredStaff.length} Records Total
             </span>
           </div>
@@ -198,13 +198,13 @@ export default function StaffPage() {
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-[210px] z-10">
+              <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-[230px] z-10">
                 <TableRow className="border-none">
-                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 w-[180px]">Teacher ID</TableHead>
-                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Name & Designation</TableHead>
-                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-center w-[150px]">Grade Focus</TableHead>
-                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 w-[200px]">Class Assignments</TableHead>
-                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 text-right w-[150px]">Actions</TableHead>
+                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black w-[180px]">Teacher ID</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Name & Designation</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black text-center w-[150px]">Grade Focus</TableHead>
+                  <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black w-[200px]">Class Assignments</TableHead>
+                  <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black text-right w-[150px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -236,8 +236,8 @@ export default function StaffPage() {
                     </TableCell>
                     <TableCell className="py-5">
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold text-slate-800">{staff.name}</span>
-                        <span className="text-[10px] font-black text-secondary-hover uppercase tracking-widest mt-0.5">
+                        <span className="text-sm font-black text-black">{staff.name}</span>
+                        <span className="text-[10px] font-black text-black uppercase tracking-widest mt-0.5">
                           {staff.designation || 'Class Teacher'}
                         </span>
                       </div>
