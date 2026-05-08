@@ -159,7 +159,7 @@ export default function StaffProfileSetup() {
                     <FormInput label="NIC" name="nic" value={formData.nic} onChange={handleChange} />
                     
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Date Of Birth</label>
+                      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">Date Of Birth</label>
                       <Input type="date" name="dob" value={formData.dob || ''} onChange={handleChange} className="h-14 rounded-2xl bg-slate-50" />
                     </div>
                     
@@ -195,7 +195,7 @@ export default function StaffProfileSetup() {
                     <FormInput label="Special Physical Condition" name="specialPhysicalCondition" value={formData.specialPhysicalCondition} onChange={handleChange} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Long term disease description</label>
+                    <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">Long term disease description</label>
                     <textarea 
                       name="healthDescription" 
                       value={formData.healthDescription || ''} 
@@ -219,7 +219,7 @@ export default function StaffProfileSetup() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">1st Appointment Date</label>
+                      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">1st Appointment Date</label>
                       <Input type="date" name="firstAppointmentDate" value={formData.firstAppointmentDate || ''} onChange={handleChange} className="h-14 rounded-2xl bg-slate-50" />
                     </div>
                     <FormInput label="1st Appointment District" name="firstAppointmentDistrict" value={formData.firstAppointmentDistrict} onChange={handleChange} />
@@ -235,7 +235,7 @@ export default function StaffProfileSetup() {
                     <FormInput label="Position" name="position" value={formData.position} onChange={handleChange} />
                     
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Increment Date</label>
+                      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">Increment Date</label>
                       <Input type="date" name="incrementDate" value={formData.incrementDate || ''} onChange={handleChange} className="h-14 rounded-2xl bg-slate-50" />
                     </div>
                     
@@ -268,11 +268,11 @@ export default function StaffProfileSetup() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2 md:col-span-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Permanent Address</label>
+                      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">Permanent Address</label>
                       <textarea name="address" value={formData.address || ''} onChange={handleChange} rows={2} className="w-full rounded-2xl border-gray-200 bg-slate-50 p-4 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all resize-none" />
                     </div>
                     <div className="space-y-2 md:col-span-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Temporary Address</label>
+                      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">Temporary Address</label>
                       <textarea name="temporaryAddress" value={formData.temporaryAddress || ''} onChange={handleChange} rows={2} className="w-full rounded-2xl border-gray-200 bg-slate-50 p-4 text-sm focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all resize-none" />
                     </div>
                     
@@ -344,7 +344,7 @@ export default function StaffProfileSetup() {
                     <FormInput label="Working Company" name="spouseWorkingCompany" value={formData.spouseWorkingCompany} onChange={handleChange} />
                     
                     <div className="space-y-2 md:col-span-2 pt-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Children (Name & Age)</label>
+                      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">Children (Name & Age)</label>
                       <textarea 
                         name="childrenDetails" 
                         value={formData.childrenDetails || ''} 
@@ -381,7 +381,7 @@ export default function StaffProfileSetup() {
 function FormInput({ label, name, value, onChange, type = "text", readOnly = false, className = "" }: any) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">{label}</label>
       <Input 
         type={type} 
         name={name} 
@@ -397,7 +397,7 @@ function FormInput({ label, name, value, onChange, type = "text", readOnly = fal
 function FormSelect({ label, name, value, onChange, options }: any) {
   return (
     <div className="space-y-2">
-      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[12px] font-black text-black uppercase tracking-widest ml-1">{label}</label>
       <select 
         name={name} 
         value={value || ''} 
