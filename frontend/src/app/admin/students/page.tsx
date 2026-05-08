@@ -290,10 +290,10 @@ export default function StudentsPage() {
                   <TableRow>
                     <TableCell colSpan={4} className="py-32 text-center">
                       <div className="flex flex-col items-center gap-4">
-                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
+                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-black">
                           <Search size={40} />
                         </div>
-                        <p className="text-slate-400 font-medium italic">No students found matching your criteria</p>
+                        <p className="text-black font-black italic">No students found matching your criteria</p>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -322,7 +322,7 @@ export default function StudentsPage() {
                     </TableCell>
                     <TableCell className="py-5 text-center">
                       <div className="flex flex-col items-center gap-1.5">
-                        <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-widest border border-slate-200">
+                        <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[9px] font-black uppercase tracking-widest border border-slate-200">
                           {st.gradeName || 'N/A'}
                         </span>
                         <span className="px-3 py-1 rounded-full bg-primary/5 text-primary text-[9px] font-black uppercase tracking-widest border border-primary/10">
@@ -357,11 +357,11 @@ export default function StudentsPage() {
                     <UserPlus size={32} />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-800 font-handlee">New Student Enrollment</h3>
-                    <p className="text-sm text-slate-400 font-medium tracking-tight">Generate access credentials and assign academic cell</p>
+                    <h3 className="text-2xl font-bold text-black font-handlee">New Student Enrollment</h3>
+                    <p className="text-sm text-black font-black tracking-tight">Generate access credentials and assign academic cell</p>
                   </div>
                 </div>
-                <button onClick={() => setShowModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
+                <button onClick={() => setShowModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-black hover:bg-slate-100 transition-all">
                   <X size={24} />
                 </button>
               </div>
@@ -369,7 +369,7 @@ export default function StudentsPage() {
               <form onSubmit={handleEnrollment} className="p-10 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Admission / Index No</label>
+                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Admission / Index No</label>
                     <div className="relative">
                       <Input 
                         placeholder="STU-2024-0001" 
@@ -385,7 +385,7 @@ export default function StudentsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Secure Passcode</label>
+                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Secure Passcode</label>
                     <div className="relative">
                       <Input 
                         type="password"
@@ -404,7 +404,7 @@ export default function StudentsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Primary Academic Grade</label>
+                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Primary Academic Grade</label>
                     <select 
                       value={selectedGradeId} 
                       onChange={(e) => {
@@ -424,7 +424,7 @@ export default function StudentsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Assigned Class Section</label>
+                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Assigned Class Section</label>
                     <select 
                       value={selectedClassId} 
                       onChange={(e) => setSelectedClassId(parseInt(e.target.value))} 
@@ -448,7 +448,7 @@ export default function StudentsPage() {
                   >
                     Authorize & Enroll Student
                   </Button>
-                  <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-6">
+                  <p className="text-center text-[10px] text-black font-black uppercase tracking-[0.2em] mt-6">
                     Verified Administrative Action &bull; Security Logged
                   </p>
                 </div>

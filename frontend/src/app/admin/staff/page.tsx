@@ -217,10 +217,10 @@ export default function StaffPage() {
                   <TableRow>
                     <TableCell colSpan={5} className="py-32 text-center">
                       <div className="flex flex-col items-center gap-4">
-                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
+                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-black">
                           <Search size={40} />
                         </div>
-                        <p className="text-slate-400 font-medium italic">No personnel records found</p>
+                        <p className="text-black font-black italic">No personnel records found</p>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -240,7 +240,7 @@ export default function StaffPage() {
                       </div>
                     </TableCell>
                     <TableCell className="py-5 text-center">
-                      <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-widest border border-slate-200">
+                      <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[9px] font-black uppercase tracking-widest border border-slate-200">
                         {staff.gradeName || 'General'}
                       </span>
                     </TableCell>
@@ -255,7 +255,7 @@ export default function StaffPage() {
                             </div>
                           ))
                         ) : (
-                          <span className="text-[9px] font-bold text-slate-300 italic uppercase tracking-widest">Unassigned</span>
+                          <span className="text-[9px] font-black text-black italic uppercase tracking-widest">Unassigned</span>
                         )}
                       </div>
                     </TableCell>
@@ -300,18 +300,18 @@ export default function StaffPage() {
                     <UserPlus size={32} />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-800 font-handlee">Register Staff Member</h3>
-                    <p className="text-sm text-slate-400 font-medium tracking-tight">Create faculty credentials and set institutional role</p>
+                    <h3 className="text-2xl font-bold text-black font-handlee">Register Staff Member</h3>
+                    <p className="text-sm text-black font-black tracking-tight">Create faculty credentials and set institutional role</p>
                   </div>
                 </div>
-                <button onClick={() => setShowModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
+                <button onClick={() => setShowModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-black hover:bg-slate-100 transition-all">
                   <X size={24} />
                 </button>
               </div>
               
               <form onSubmit={handleCreate} className="p-10 space-y-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Full Personnel Name</label>
+                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Full Personnel Name</label>
                   <div className="relative">
                     <Input 
                       placeholder="e.g. Mr. Saman Kumara" 
@@ -326,7 +326,7 @@ export default function StaffPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Username / Index ID</label>
+                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Username / Index ID</label>
                     <Input 
                       placeholder="TEA-2024-001" 
                       value={username} 
@@ -337,7 +337,7 @@ export default function StaffPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Temporary Password</label>
+                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Temporary Password</label>
                     <div className="relative">
                       <Input 
                         type="password"
@@ -353,7 +353,7 @@ export default function StaffPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Institutional Designation</label>
+                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Institutional Designation</label>
                   <select 
                     value={designation} 
                     onChange={(e) => setDesignation(e.target.value)} 
@@ -396,18 +396,18 @@ export default function StaffPage() {
                     <Edit2 size={32} />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-800 font-handlee">Modify Staff Profile</h3>
-                    <p className="text-sm text-slate-400 font-medium tracking-tight">Update institutional information for faculty member</p>
+                    <h3 className="text-2xl font-bold text-black font-handlee">Modify Staff Profile</h3>
+                    <p className="text-sm text-black font-black tracking-tight">Update institutional information for faculty member</p>
                   </div>
                 </div>
-                <button onClick={() => setShowEditModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
+                <button onClick={() => setShowEditModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-black hover:bg-slate-100 transition-all">
                   <X size={24} />
                 </button>
               </div>
               
               <form onSubmit={handleUpdate} className="p-10 space-y-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Update Full Name</label>
+                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Update Full Name</label>
                   <div className="relative">
                     <Input 
                       placeholder="e.g. Mr. Saman Kumara" 
@@ -421,7 +421,7 @@ export default function StaffPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2">Update Designation</label>
+                  <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Update Designation</label>
                   <select 
                     value={designation} 
                     onChange={(e) => setDesignation(e.target.value)} 
