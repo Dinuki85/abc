@@ -50,12 +50,12 @@ export default function AdminDashboard() {
             <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
               <Activity size={12} className="text-emerald-400" />
               <span className="text-base font-black text-white tabular-nums tracking-tighter">98.2%</span>
-              <span className="text-[6px] font-black text-slate-500 uppercase tracking-widest">Uptime</span>
+              <span className="text-[6px] font-black text-white uppercase tracking-widest">Uptime</span>
             </div>
             <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
               <Users2 size={12} className="text-amber-400" />
               <span className="text-base font-black text-white tabular-nums tracking-tighter">2,412</span>
-              <span className="text-[6px] font-black text-slate-500 uppercase tracking-widest">Users</span>
+              <span className="text-[6px] font-black text-white uppercase tracking-widest">Users</span>
             </div>
           </div>
         </div>
@@ -79,8 +79,8 @@ export default function AdminDashboard() {
               </span>
             </div>
             <div className="relative z-10 text-left mt-1">
-              <h3 className="text-[7px] font-black text-slate-800 group-hover:text-white/80 transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
-              <p className="text-lg font-black text-slate-950 group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
+              <h3 className="text-[7px] font-black text-black group-hover:text-white transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
+              <p className="text-lg font-black text-black group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
             </div>
@@ -127,10 +127,10 @@ function DashboardButton({ name, href, icon: Icon, color }: any) {
       href={href}
       className={`flex flex-col items-center gap-2 p-3 border rounded-xl transition-all group active:scale-95 shadow-sm ${colorMap[color] || colorMap.teal}`}
     >
-      <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-white transition-all text-slate-700 group-hover:text-teal-600">
+      <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-white transition-all text-black group-hover:text-teal-600">
         <Icon size={18} />
       </div>
-      <span className="text-[8px] font-black text-slate-800 uppercase tracking-widest text-center group-hover:text-slate-900 transition-colors">
+      <span className="text-[8px] font-black text-black uppercase tracking-widest text-center group-hover:text-black transition-colors">
         {name}
       </span>
     </Link>
