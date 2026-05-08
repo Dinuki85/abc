@@ -26,9 +26,9 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-1000 pb-20">
+    <div className="space-y-5 animate-in fade-in duration-1000 pb-10">
       {/* High-Impact Institutional Banner */}
-      <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] p-6 md:p-10 shadow-2xl border border-white/5">
+      <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] p-6 md:p-8 shadow-2xl border border-white/5">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
         
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Compact High-Density Stats Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Enrollment', value: stats?.totalStudents || 0, icon: GraduationCap, color: 'indigo', change: '+12 this month' },
           { label: 'Academic Faculty', value: stats?.academicStaffCount || 0, icon: Briefcase, color: 'emerald', change: 'Stable' },
@@ -75,19 +75,21 @@ export default function AdminDashboard() {
         ].map((stat, i) => (
           <div key={i} className="group hover:border-indigo-500/50 transition-all duration-500 rounded-[2.5rem] border border-slate-200/60 shadow-xl shadow-slate-200/40 bg-white/50 backdrop-blur-sm overflow-hidden p-6 relative">
             <div className={`absolute -right-4 -top-4 w-24 h-24 bg-slate-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
-            <div className="flex justify-between items-start mb-4 relative z-10">
+            <div className="flex justify-center mb-4 relative z-10">
               <div className={`p-4 bg-slate-50 rounded-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner text-slate-400`}>
-                <stat.icon size={24} />
+                <stat.icon size={28} />
               </div>
-              <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-slate-50 text-slate-400 border border-slate-100`}>
-                {stat.change}
-              </span>
             </div>
-            <div className="relative z-10">
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
-              <p className="text-3xl font-black text-slate-800 tracking-tighter tabular-nums font-handlee">
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">{stat.label}</h3>
+              <p className="text-4xl font-black text-slate-900 tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
+              <div className="mt-2">
+                <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-slate-50 text-slate-400 border border-slate-100`}>
+                  {stat.change}
+                </span>
+              </div>
             </div>
           </div>
         ))}
@@ -107,7 +109,7 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
-          <div className="p-4 sm:p-8 lg:p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 bg-slate-50/50">
+          <div className="p-4 sm:p-6 lg:p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 bg-slate-50/50">
             {[
               { name: 'Student Profile', href: '/admin/students', icon: UserPlus },
               { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase },
