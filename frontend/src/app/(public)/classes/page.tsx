@@ -108,6 +108,7 @@ export default function AcademicsPage() {
       desc: 'Specialized programs and vocational training for students after their Advanced Level examinations.',
       medium: 'Sinhala',
       academic: '1 1/2 Years',
+      continues: '1 1/2 Years',
       vocational: '06 Months',
       nvq: 'Available',
       subjects: [
@@ -171,10 +172,10 @@ export default function AcademicsPage() {
                           <td className="p-4 font-medium text-gray-600">{prog.altSubject}</td>
                         </tr>
                       )}
-                      {prog.academic && (
+                      {prog.continues && (
                         <tr className="border-b border-gray-100">
-                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">Academic</td>
-                          <td className="p-4 font-medium text-gray-600">{prog.academic}</td>
+                          <td className="p-4 font-bold text-gray-700 bg-gray-50 uppercase tracking-wider text-[10px]">Continues</td>
+                          <td className="p-4 font-medium text-gray-600">{prog.continues}</td>
                         </tr>
                       )}
                       {prog.vocational && (
