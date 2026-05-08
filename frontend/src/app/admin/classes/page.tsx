@@ -63,7 +63,7 @@ export default function ClassesPage() {
             <h1 className="text-xl font-black text-black tracking-tighter leading-none">
               Classes Directory
             </h1>
-            <p className="text-[12px] text-black font-black uppercase tracking-[0.15em] mt-1">
+            <p className="text-[13px] text-black font-black uppercase tracking-[0.15em] mt-1">
               Academic Structure Management
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function ClassesPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-black font-black">Academic Sections</CardTitle>
-          <span className="text-xs font-black bg-slate-100 text-black px-3 py-1 rounded-full uppercase tracking-widest">
+          <span className="text-sm font-black bg-slate-100 text-black px-3 py-1 rounded-full uppercase tracking-widest">
             {classes.length} Classes
           </span>
         </CardHeader>
@@ -91,11 +91,11 @@ export default function ClassesPage() {
           <Table>
             <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
               <TableRow className="border-none">
-                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Class Index</TableHead>
-                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Grade & Section</TableHead>
-                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Homeroom Teacher</TableHead>
-                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Status</TableHead>
-                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-right">Actions</TableHead>
+                <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Class Index</TableHead>
+                <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Grade & Section</TableHead>
+                <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Homeroom Teacher</TableHead>
+                <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Status</TableHead>
+                <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
