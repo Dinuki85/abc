@@ -18,7 +18,7 @@ export default function ReportingPage() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md">
               <FileSpreadsheet className="text-indigo-400" size={14} />
-              <span className="text-[9px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Report Matrix</span>
+              <span className="text-[12px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Report Matrix</span>
             </div>
             <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
               Institutional <span className="text-indigo-400">Reporting</span>
@@ -81,7 +81,7 @@ function ReportSection({ title, items }: any) {
   return (
     <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm space-y-3 flex flex-col h-full">
       <div className="flex flex-col gap-1">
-        <h4 className="text-[9px] font-black text-black uppercase tracking-[0.2em] font-handlee">{title}</h4>
+        <h4 className="text-[12px] font-black text-black uppercase tracking-[0.2em] font-handlee">{title}</h4>
         <div className="w-10 h-0.5 bg-indigo-500 rounded-full" />
       </div>
       <div className="grid grid-cols-1 gap-1.5 flex-1">
@@ -90,7 +90,7 @@ function ReportSection({ title, items }: any) {
             <div className="p-1.5 bg-slate-100 rounded-lg text-slate-700 group-hover:bg-white/20 group-hover:text-white transition-all">
              <item.icon size={14} />
             </div>
-            <span className="text-[10px] font-black text-black group-hover:text-white transition-colors">{item.name}</span>
+            <span className="text-[12px] font-black text-black group-hover:text-white transition-colors">{item.name}</span>
           </Link>
         ))}
       </div>
