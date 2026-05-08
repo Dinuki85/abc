@@ -160,20 +160,20 @@ export default function TeacherDashboard() {
   const getStatusBadge = (student: StudentProfile) => {
     if (student.verificationStatus === 'VERIFIED') {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-600 border border-emerald-100">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-600 border border-emerald-100">
           <CheckCircle2 size={12} /> Verified
         </span>
       );
     }
     if (student.verificationStatus === 'NEEDS_CORRECTION') {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-100">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-black uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-100">
           <AlertCircle size={12} /> Flagged
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-black uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100">
         <ShieldCheck size={12} /> Pending Audit
       </span>
     );
@@ -203,7 +203,7 @@ export default function TeacherDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Column 1: Assigned Grade (Read Only) */}
           <div className="space-y-2">
-            <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.15em] ml-1">
+            <label className="block text-xs font-black text-black uppercase tracking-[0.15em] ml-1">
               ASSIGNED GRADE
             </label>
             <div className="w-full h-14 bg-slate-50 border border-slate-100 rounded-2xl px-6 flex items-center justify-between opacity-80 cursor-not-allowed">
@@ -216,7 +216,7 @@ export default function TeacherDashboard() {
 
           {/* Column 2: Select Class */}
           <div className="space-y-2">
-            <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.15em] ml-1">
+            <label className="block text-xs font-black text-black uppercase tracking-[0.15em] ml-1">
               SELECT CLASS
             </label>
             <div className="relative">
@@ -239,7 +239,7 @@ export default function TeacherDashboard() {
 
           {/* Column 3: Quick Search */}
           <div className="space-y-2">
-            <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.15em] ml-1">
+            <label className="block text-xs font-black text-black uppercase tracking-[0.15em] ml-1">
               QUICK SEARCH
             </label>
             <div className="relative">
@@ -299,10 +299,10 @@ export default function TeacherDashboard() {
                     <Table>
                       <TableHeader className="bg-slate-50 border-b border-slate-100">
                         <TableRow>
-                          <TableHead className="font-black text-xs text-slate-400 uppercase tracking-widest py-4 pl-8">Student</TableHead>
-                          <TableHead className="font-black text-xs text-slate-400 uppercase tracking-widest py-4">Index No.</TableHead>
-                          <TableHead className="font-black text-xs text-slate-400 uppercase tracking-widest py-4">Assigned Class</TableHead>
-                          <TableHead className="font-black text-xs text-slate-400 uppercase tracking-widest py-4 text-right pr-8">Audit Status</TableHead>
+                          <TableHead className="font-black text-sm text-black uppercase tracking-widest py-4 pl-8">Student</TableHead>
+                          <TableHead className="font-black text-sm text-black uppercase tracking-widest py-4">Index No.</TableHead>
+                          <TableHead className="font-black text-sm text-black uppercase tracking-widest py-4">Assigned Class</TableHead>
+                          <TableHead className="font-black text-sm text-black uppercase tracking-widest py-4 text-right pr-8">Audit Status</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -324,7 +324,7 @@ export default function TeacherDashboard() {
                               <span className="text-xs font-bold text-slate-500 uppercase">{student.username}</span>
                             </TableCell>
                             <TableCell className="py-4">
-                              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest border border-slate-200 bg-slate-50 px-3 py-1 rounded-full group-hover:bg-white transition-colors">
+                              <span className="text-[12px] font-black text-black uppercase tracking-widest border border-slate-200 bg-slate-50 px-3 py-1 rounded-full group-hover:bg-white transition-colors">
                                 {student.className || 'NO CLASS'}
                               </span>
                             </TableCell>
@@ -355,12 +355,12 @@ export default function TeacherDashboard() {
                        {activeStudent.fullName ? activeStudent.fullName.charAt(0) : '?'}
                     </div>
                     <div>
-                       <h3 className="text-3xl font-black text-slate-900 tracking-tighter mb-2 font-fredoka">{activeStudent.fullName || 'Unknown Student'}</h3>
+                       <h3 className="text-4xl font-black text-slate-900 tracking-tighter mb-2 font-fredoka">{activeStudent.fullName || 'Unknown Student'}</h3>
                        <div className="flex flex-wrap items-center gap-3">
-                           <span className="text-xs font-black text-slate-600 uppercase tracking-widest bg-slate-100 px-4 py-1.5 rounded-full border border-slate-200 shadow-sm">
+                           <span className="text-sm font-black text-slate-600 uppercase tracking-widest bg-slate-100 px-4 py-1.5 rounded-full border border-slate-200 shadow-sm">
                                {activeStudent.username}
                            </span>
-                           <span className="text-xs font-black text-[#2ab0c5] uppercase tracking-widest px-4 py-1.5 rounded-full border border-cyan-200 bg-cyan-50 shadow-sm">
+                           <span className="text-sm font-black text-[#2ab0c5] uppercase tracking-widest px-4 py-1.5 rounded-full border border-cyan-200 bg-cyan-50 shadow-sm">
                                {activeStudent.className || 'NO CLASS'}
                            </span>
                        </div>
@@ -368,7 +368,7 @@ export default function TeacherDashboard() {
                  </div>
 
                  <div className="relative z-10 flex flex-col items-end gap-2 mt-4 md:mt-0">
-                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Current Status</span>
+                     <span className="text-[14px] font-black uppercase tracking-widest text-black">Current Status</span>
                      {getStatusBadge(activeStudent)}
                  </div>
               </div>
@@ -385,13 +385,13 @@ export default function TeacherDashboard() {
                   <button
                     key={t.id}
                     onClick={() => setStudentTab(t.id as any)}
-                    className={`flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                    className={`flex-1 min-w-[140px] flex items-center justify-center gap-2 py-3 rounded-2xl text-[14px] font-black uppercase tracking-widest transition-all ${
                       studentTab === t.id 
                         ? 'bg-white text-[#2ab0c5] shadow-md border border-cyan-100' 
-                        : 'text-slate-400 hover:text-slate-600'
+                        : 'text-black hover:text-[#2ab0c5]'
                     }`}
                   >
-                    <t.icon size={14} />
+                    <t.icon size={16} />
                     {t.label}
                   </button>
                 ))}
@@ -470,12 +470,12 @@ export default function TeacherDashboard() {
               <div className="p-8 md:p-12 bg-slate-50 border-t border-slate-100">
                  <div className="flex flex-col lg:flex-row gap-8 items-start lg:items-end">
                      <div className="flex-1 w-full space-y-3">
-                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                           <ShieldCheck size={14} className="text-[#2ab0c5]"/> Audit Feedback (Required for Rejection)
+                        <label className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                           <ShieldCheck size={16} className="text-[#2ab0c5]"/> Audit Feedback (Required for Rejection)
                         </label>
                         <textarea 
                           placeholder="Type a message explaining any issues found within their submitted documents..." 
-                          className="w-full h-24 p-5 rounded-2xl bg-white border border-slate-200 font-bold text-slate-700 placeholder:text-slate-400 focus:ring-4 focus:border-[#2ab0c5] focus:ring-cyan-500/10 transition-all resize-none shadow-sm"
+                          className="w-full h-24 p-5 rounded-2xl bg-white border border-slate-200 font-bold text-slate-700 placeholder:text-slate-400 focus:ring-4 focus:border-[#2ab0c5] focus:ring-cyan-500/10 transition-all resize-none shadow-sm text-md"
                           value={auditComment}
                           onChange={(e) => setAuditComment(e.target.value)}
                         />
@@ -513,7 +513,7 @@ export default function TeacherDashboard() {
 function VerificationRow({ label, value, highlight = false }: { label: string, value: any, highlight?: boolean }) {
   return (
     <TableRow>
-      <TableCell className="w-1/3 py-4 px-6 font-bold text-[10px] text-slate-400 uppercase tracking-widest bg-slate-50/50">{label}</TableCell>
+      <TableCell className="w-1/3 py-4 px-6 font-bold text-[12px] text-black uppercase tracking-widest bg-slate-50/50">{label}</TableCell>
       <TableCell className={`py-4 px-6 font-bold text-sm ${highlight ? 'text-indigo-600' : 'text-slate-800'}`}>
         {value || <span className="text-rose-300 italic font-normal">Not Provided</span>}
       </TableCell>
