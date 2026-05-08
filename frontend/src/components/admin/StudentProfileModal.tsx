@@ -114,11 +114,11 @@ export default function StudentProfileModal({ student, isOpen, onClose, onSave }
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-               <div className="relative">
-                 <Input className="h-12 w-64 rounded-xl border-gray-200" placeholder=": Search" />
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 w-full sm:w-auto">
+               <div className="relative flex-1 sm:flex-none">
+                 <Input className="h-12 w-full sm:w-64 rounded-xl border-gray-200" placeholder=": Search" />
                </div>
-               <span className="text-emerald-500 font-bold text-sm">All List</span>
+               <span className="text-emerald-500 font-bold text-sm hidden sm:inline">All List</span>
                <button onClick={onClose} className="w-12 h-12 rounded-[1.25rem] flex flex-shrink-0 items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all border border-gray-100 shadow-sm ml-auto sm:ml-4">
                  <X size={24} />
                </button>
