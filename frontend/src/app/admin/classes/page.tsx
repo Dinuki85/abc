@@ -63,7 +63,7 @@ export default function ClassesPage() {
             <h1 className="text-xl font-black text-black tracking-tighter leading-none">
               Classes Directory
             </h1>
-            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+            <p className="text-[12px] text-black font-black uppercase tracking-[0.15em] mt-1">
               Academic Structure Management
             </p>
           </div>
@@ -71,7 +71,7 @@ export default function ClassesPage() {
         
         <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
           <Button 
-            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-xs"
             onClick={() => setShowModal(true)}
           >
             <Plus size={16} className="mr-2" />
@@ -91,11 +91,11 @@ export default function ClassesPage() {
           <Table>
             <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
               <TableRow className="border-none">
-                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Class Index</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Grade & Section</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Homeroom Teacher</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Status</TableHead>
-                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-right">Actions</TableHead>
+                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Class Index</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Grade & Section</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Homeroom Teacher</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Status</TableHead>
+                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -124,7 +124,7 @@ export default function ClassesPage() {
                     {c.classTeacher?.name || 'Unassigned'}
                   </TableCell>
                   <TableCell>
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider
                       ${c.classTeacher ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'}`}>
                       {c.classTeacher ? 'Active' : 'Missing Staff'}
                     </span>

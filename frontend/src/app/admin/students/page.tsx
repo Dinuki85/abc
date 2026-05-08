@@ -153,7 +153,7 @@ export default function StudentsPage() {
             <h1 className="text-xl font-black text-black tracking-tighter leading-none">
               Student Register
             </h1>
-            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+            <p className="text-[12px] text-black font-black uppercase tracking-[0.15em] mt-1">
               AMV Institutional Directory
             </p>
           </div>
@@ -180,7 +180,7 @@ export default function StudentsPage() {
                 if (gId !== '') fetchClassesForGrade(gId, true);
                 else setFilterClasses([]);
               }}
-              className="h-12 px-4 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-black min-w-[100px] cursor-pointer hover:bg-slate-50 transition-colors"
+              className="h-12 px-4 bg-white border border-slate-200 rounded-xl text-xs font-black text-black min-w-[120px] cursor-pointer hover:bg-slate-50 transition-colors"
             >
               <option value="">All Grades</option>
               {grades.map(g => (
@@ -192,7 +192,7 @@ export default function StudentsPage() {
               value={filterClassId} 
               onChange={(e) => setFilterClassId(e.target.value === '' ? '' : parseInt(e.target.value))}
               disabled={filterGradeId === ''}
-              className="h-12 px-4 bg-white border border-slate-200 rounded-xl text-[10px] font-black text-black min-w-[100px] disabled:opacity-50 cursor-pointer hover:bg-slate-50 transition-colors"
+              className="h-12 px-4 bg-white border border-slate-200 rounded-xl text-xs font-black text-black min-w-[120px] disabled:opacity-50 cursor-pointer hover:bg-slate-50 transition-colors"
             >
               <option value="">All Classes</option>
               {filterClasses.map(c => (
@@ -202,7 +202,7 @@ export default function StudentsPage() {
           </div>
 
           <Button 
-            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-xs"
             onClick={() => setShowModal(true)}
           >
             <UserPlus size={16} className="mr-2" />
@@ -238,7 +238,7 @@ export default function StudentsPage() {
           <div className="flex items-center gap-6">
               <div className="hidden md:flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-full border border-gray-100">
                 <FileSpreadsheet size={14} className="text-primary" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black">
+                <span className="text-xs font-black uppercase tracking-[0.15em] text-black">
                   {totalElements} Records Total
                 </span>
               </div>
@@ -271,10 +271,10 @@ export default function StudentsPage() {
             <Table>
               <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
                 <TableRow className="border-none">
-                  <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black w-[180px]">Admission No</TableHead>
-                  <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Student Identity</TableHead>
-                  <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-center w-[150px]">Grade / Class</TableHead>
-                  <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-center w-[150px]">Verification</TableHead>
+                  <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black w-[180px]">Admission No</TableHead>
+                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Student Identity</TableHead>
+                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Grade / Class</TableHead>
+                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Verification</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -315,23 +315,23 @@ export default function StudentsPage() {
                         <span className="text-sm font-black text-black group-hover:text-primary transition-colors">
                           {st.fullName || <span className="text-black italic font-bold">Pending Completion</span>}
                         </span>
-                        <span className="text-[10px] font-black text-black uppercase tracking-widest mt-0.5">
+                        <span className="text-[12px] font-black text-black uppercase tracking-widest mt-0.5">
                           Account Created
                         </span>
                       </div>
                     </TableCell>
                     <TableCell className="py-5 text-center">
                       <div className="flex flex-col items-center gap-1.5">
-                        <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[9px] font-black uppercase tracking-widest border border-slate-200">
+                        <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[11px] font-black uppercase tracking-widest border border-slate-200">
                           {st.gradeName || 'N/A'}
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-primary/5 text-primary text-[9px] font-black uppercase tracking-widest border border-primary/10">
+                        <span className="px-3 py-1 rounded-full bg-primary/5 text-primary text-[11px] font-black uppercase tracking-widest border border-primary/10">
                           Class {st.className || 'N/A'}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell className="py-5 text-center">
-                      <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border
+                      <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest border
                         ${st.verificationStatus === 'VERIFIED' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
                           st.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
                         <div className={`w-1.5 h-1.5 rounded-full ${st.verificationStatus === 'VERIFIED' ? 'bg-emerald-500' : 'bg-blue-500'} animate-pulse`} />
@@ -369,7 +369,7 @@ export default function StudentsPage() {
               <form onSubmit={handleEnrollment} className="p-10 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Admission / Index No</label>
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Admission / Index No</label>
                     <div className="relative">
                       <Input 
                         placeholder="STU-2024-0001" 
@@ -385,7 +385,7 @@ export default function StudentsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Secure Passcode</label>
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Secure Passcode</label>
                     <div className="relative">
                       <Input 
                         type="password"
@@ -404,7 +404,7 @@ export default function StudentsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Primary Academic Grade</label>
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Primary Academic Grade</label>
                     <select 
                       value={selectedGradeId} 
                       onChange={(e) => {
@@ -424,7 +424,7 @@ export default function StudentsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-black uppercase tracking-[0.2em] ml-2">Assigned Class Section</label>
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Assigned Class Section</label>
                     <select 
                       value={selectedClassId} 
                       onChange={(e) => setSelectedClassId(parseInt(e.target.value))} 
@@ -448,7 +448,7 @@ export default function StudentsPage() {
                   >
                     Authorize & Enroll Student
                   </Button>
-                  <p className="text-center text-[10px] text-black font-black uppercase tracking-[0.2em] mt-6">
+                  <p className="text-center text-xs text-black font-black uppercase tracking-[0.15em] mt-6">
                     Verified Administrative Action &bull; Security Logged
                   </p>
                 </div>

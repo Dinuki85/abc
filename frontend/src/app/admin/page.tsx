@@ -35,13 +35,13 @@ export default function AdminDashboard() {
         <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-8">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md">
-              <ShieldCheck className="text-indigo-400" size={14} />
-              <span className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Command Center</span>
+              <ShieldCheck className="text-indigo-400" size={16} />
+              <span className="text-[11px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Command Center</span>
             </div>
             <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
               Welcome Back, <span className="text-indigo-400">Administrator</span>
             </h1>
-            <p className="text-slate-300 font-bold max-w-md text-[9px] leading-relaxed uppercase tracking-[0.2em]">
+            <p className="text-slate-300 font-bold max-w-md text-[11px] leading-relaxed uppercase tracking-[0.2em]">
               Institutional Command Center
             </p>
           </div>
@@ -50,12 +50,12 @@ export default function AdminDashboard() {
             <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
               <Activity size={12} className="text-emerald-400" />
               <span className="text-base font-black text-white tabular-nums tracking-tighter">98.2%</span>
-              <span className="text-[6px] font-black text-white uppercase tracking-widest">Uptime</span>
+              <span className="text-[9px] font-black text-white uppercase tracking-widest">Uptime</span>
             </div>
             <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
               <Users2 size={12} className="text-amber-400" />
               <span className="text-base font-black text-white tabular-nums tracking-tighter">2,412</span>
-              <span className="text-[6px] font-black text-white uppercase tracking-widest">Users</span>
+              <span className="text-[9px] font-black text-white uppercase tracking-widest">Users</span>
             </div>
           </div>
         </div>
@@ -74,13 +74,13 @@ export default function AdminDashboard() {
               <div className={`p-1.5 bg-slate-100 rounded-lg group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-slate-700`}>
                 <stat.icon size={16} />
               </div>
-              <span className={`text-[6px] font-black uppercase tracking-widest text-slate-800 group-hover:text-white/80`}>
+              <span className={`text-[9px] font-black uppercase tracking-widest text-slate-800 group-hover:text-white/80`}>
                 {stat.change}
               </span>
             </div>
             <div className="relative z-10 text-center mt-1">
-              <h3 className="text-[7px] font-black text-black group-hover:text-white transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
-              <p className="text-lg font-black text-black group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
+              <h3 className="text-[10px] font-black text-black group-hover:text-white transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
+              <p className="text-xl font-black text-black group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
             </div>
@@ -130,7 +130,7 @@ function DashboardButton({ name, href, icon: Icon, color }: any) {
       <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-white transition-all text-black group-hover:text-teal-600">
         <Icon size={18} />
       </div>
-      <span className="text-[8px] font-black text-black uppercase tracking-widest text-center group-hover:text-black transition-colors">
+      <span className="text-[11px] font-black text-black uppercase tracking-widest text-center group-hover:text-black transition-colors">
         {name}
       </span>
     </Link>

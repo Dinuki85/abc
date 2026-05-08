@@ -28,7 +28,7 @@ export default function UsersPage() {
             <h1 className="text-xl font-black text-black tracking-tighter leading-none">
               User Access
             </h1>
-            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+            <p className="text-[12px] text-black font-black uppercase tracking-[0.15em] mt-1">
               System Role & Permission Engine
             </p>
           </div>
@@ -46,7 +46,7 @@ export default function UsersPage() {
           </div>
 
           <Button 
-            className="h-12 px-6 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+            className="h-12 px-6 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-black uppercase tracking-widest active:scale-95 transition-all text-xs"
           >
             <UserPlus size={16} className="mr-2" />
             Create User
@@ -62,13 +62,13 @@ export default function UsersPage() {
           <Table>
             <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
               <TableRow className="border-none">
-                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">User ID</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Username</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">System Role</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Email</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Last Activity</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Status</TableHead>
-                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-right">Actions</TableHead>
+                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black">User ID</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Username</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">System Role</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Email</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Last Activity</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Status</TableHead>
+                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -84,7 +84,7 @@ export default function UsersPage() {
                     </span>
                   </TableCell>
                   <TableCell className="text-black font-bold">{u.email}</TableCell>
-                  <TableCell className="text-black font-bold text-[10px] uppercase">{u.lastLogin}</TableCell>
+                  <TableCell className="text-black font-bold text-[11px] uppercase">{u.lastLogin}</TableCell>
                   <TableCell>
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold
                       ${u.status === 'Active' ? 'text-emerald-600' : 'text-slate-400'}`}>

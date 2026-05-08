@@ -134,7 +134,7 @@ export default function StaffPage() {
             <h1 className="text-xl font-black text-black tracking-tighter leading-none">
               Staff Registry
             </h1>
-            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+            <p className="text-[12px] text-black font-black uppercase tracking-[0.15em] mt-1">
               Institutional Personnel Management
             </p>
           </div>
@@ -152,7 +152,7 @@ export default function StaffPage() {
           </div>
 
           <Button 
-            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-xs"
             onClick={() => setShowModal(true)}
           >
             <UserPlus size={16} className="mr-2" />
@@ -197,11 +197,11 @@ export default function StaffPage() {
             <Table>
               <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
                 <TableRow className="border-none">
-                  <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black w-[180px]">Teacher ID</TableHead>
-                  <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Name & Designation</TableHead>
-                  <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-center w-[150px]">Grade Focus</TableHead>
-                  <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black w-[200px]">Class Assignments</TableHead>
-                  <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-right w-[150px]">Actions</TableHead>
+                  <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black w-[180px]">Teacher ID</TableHead>
+                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Name & Designation</TableHead>
+                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Grade Focus</TableHead>
+                  <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black w-[200px]">Class Assignments</TableHead>
+                  <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-right w-[150px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -234,13 +234,13 @@ export default function StaffPage() {
                     <TableCell className="py-5">
                       <div className="flex flex-col">
                         <span className="text-sm font-black text-black">{staff.name}</span>
-                        <span className="text-[10px] font-black text-black uppercase tracking-widest mt-0.5">
+                        <span className="text-[12px] font-black text-black uppercase tracking-widest mt-0.5">
                           {staff.designation || 'Class Teacher'}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell className="py-5 text-center">
-                      <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[9px] font-black uppercase tracking-widest border border-slate-200">
+                      <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[11px] font-black uppercase tracking-widest border border-slate-200">
                         {staff.gradeName || 'General'}
                       </span>
                     </TableCell>
@@ -249,9 +249,9 @@ export default function StaffPage() {
                         {staff.classes && staff.classes.length > 0 ? (
                           staff.classes.map((cls: any, idx: number) => (
                             <div key={idx} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary/5 text-primary border border-primary/10 transition-all hover:bg-primary/10">
-                              <span className="text-[9px] font-black uppercase tracking-tighter">{cls.className}</span>
+                              <span className="text-[11px] font-black uppercase tracking-tighter">{cls.className}</span>
                               <div className="h-3 w-px bg-primary/20" />
-                              <span className="text-[9px] font-bold opacity-70">{cls.studentCount} St.</span>
+                              <span className="text-[11px] font-bold opacity-70">{cls.studentCount} St.</span>
                             </div>
                           ))
                         ) : (

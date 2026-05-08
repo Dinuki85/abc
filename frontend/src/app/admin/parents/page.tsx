@@ -20,7 +20,7 @@ export default function ParentsPage() {
             <h1 className="text-xl font-black text-black tracking-tighter leading-none">
               Parents Directory
             </h1>
-            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+            <p className="text-[12px] text-black font-black uppercase tracking-[0.15em] mt-1">
               Guardian Contact & Student Links
             </p>
           </div>
@@ -28,7 +28,7 @@ export default function ParentsPage() {
         
         <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
           <Button 
-            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-xs"
           >
             <Plus size={16} className="mr-2" />
             Add Guardian
@@ -44,12 +44,12 @@ export default function ParentsPage() {
           <Table>
             <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
               <TableRow className="border-none">
-                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Parent ID</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Name</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Relation</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Linked Students</TableHead>
-                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Contact</TableHead>
-                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-right">Manage</TableHead>
+                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Parent ID</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Name</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Relation</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Linked Students</TableHead>
+                <TableHead className="py-4 text-xs font-black uppercase tracking-[0.15em] text-black">Contact</TableHead>
+                <TableHead className="px-8 py-4 text-xs font-black uppercase tracking-[0.15em] text-black text-right">Manage</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,13 +58,13 @@ export default function ParentsPage() {
                   <TableCell className="px-8 font-black text-black">{p.id}</TableCell>
                   <TableCell className="font-bold text-black">{p.name}</TableCell>
                   <TableCell>
-                    <span className="inline-flex items-center px-2 py-1 bg-slate-100 text-black font-black rounded-lg text-[10px] border border-slate-200 uppercase tracking-widest">
+                    <span className="inline-flex items-center px-2 py-1 bg-slate-100 text-black font-black rounded-lg text-[11px] border border-slate-200 uppercase tracking-widest">
                       {p.relation}
                     </span>
                   </TableCell>
-                  <TableCell className="font-black text-primary uppercase text-[11px]">{p.students}</TableCell>
+                  <TableCell className="font-black text-primary uppercase text-[12px]">{p.students}</TableCell>
                   <TableCell>
-                    <div className="flex flex-col space-y-1 text-black font-black text-[10px]">
+                    <div className="flex flex-col space-y-1 text-black font-black text-[11px]">
                       <span className="flex items-center uppercase tracking-tighter"><Mail size={12} className="mr-1 text-primary"/> {p.email}</span>
                       <span className="flex items-center uppercase tracking-tighter"><Phone size={12} className="mr-1 text-primary"/> {p.phone}</span>
                     </div>
