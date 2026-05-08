@@ -36,8 +36,8 @@ export default function UsersPage() {
             </div>
           </div>
           
-          <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto">
-            <div className="relative flex-1 lg:min-w-[400px]">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full xl:w-auto">
+            <div className="relative flex-1 w-full sm:w-auto lg:min-w-[400px]">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <Input 
                 placeholder="Search username or email..." 
@@ -48,7 +48,7 @@ export default function UsersPage() {
             </div>
 
             <Button 
-              className="h-14 px-8 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-black uppercase tracking-widest shadow-xl shadow-teal-500/20 group active:scale-95 transition-all text-xs"
+              className="w-full sm:w-auto h-14 px-8 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-black uppercase tracking-widest shadow-xl shadow-teal-500/20 group active:scale-95 transition-all text-xs"
             >
               <UserPlus size={20} className="mr-3 group-hover:scale-110 transition-transform" />
               Create User
