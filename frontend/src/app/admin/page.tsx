@@ -26,9 +26,9 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="space-y-4 animate-in fade-in duration-1000 pb-4">
+    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-1000 pb-2">
       {/* High-Impact Institutional Banner */}
-      <div className="relative overflow-hidden bg-slate-900 rounded-[2rem] p-4 md:p-6 shadow-2xl border border-white/5">
+      <div className="relative overflow-hidden bg-slate-900 rounded-xl p-3 md:p-4 shadow-xl border border-white/5 flex-shrink-0">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
         
@@ -38,53 +38,49 @@ export default function AdminDashboard() {
               <ShieldCheck className="text-indigo-400" size={14} />
               <span className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Command Center</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter font-handlee italic leading-none">
+            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
               Welcome Back, <span className="text-indigo-400">Administrator</span>
             </h1>
-            <p className="text-slate-200 font-bold max-w-md text-[10px] leading-relaxed uppercase tracking-[0.2em]">
-              Real-time Institutional Data Analytics
+            <p className="text-slate-300 font-bold max-w-md text-[9px] leading-relaxed uppercase tracking-[0.2em]">
+              Institutional Command Center
             </p>
           </div>
           
           <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full lg:w-auto">
-            <div className="bg-white/5 backdrop-blur-xl p-2 sm:p-3 rounded-xl border border-white/10 flex flex-col items-center gap-1 min-w-[100px] flex-1 sm:flex-none">
-              <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <Activity size={14} />
-              </div>
-              <span className="text-lg font-black text-white tabular-nums tracking-tighter">98.2%</span>
-              <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest text-center">System Uptime</span>
+            <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
+              <Activity size={12} className="text-emerald-400" />
+              <span className="text-base font-black text-white tabular-nums tracking-tighter">98.2%</span>
+              <span className="text-[6px] font-black text-slate-500 uppercase tracking-widest">Uptime</span>
             </div>
-            <div className="bg-white/5 backdrop-blur-xl p-2 sm:p-3 rounded-xl border border-white/10 flex flex-col items-center gap-1 min-w-[100px] flex-1 sm:flex-none">
-              <div className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
-                <Users2 size={14} />
-              </div>
-              <span className="text-lg font-black text-white tabular-nums tracking-tighter">2,412</span>
-              <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest text-center">Active Users</span>
+            <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
+              <Users2 size={12} className="text-amber-400" />
+              <span className="text-base font-black text-white tabular-nums tracking-tighter">2,412</span>
+              <span className="text-[6px] font-black text-slate-500 uppercase tracking-widest">Users</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Compact High-Density Stats Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
         {[
           { label: 'Total Enrollment', value: stats?.totalStudents || 0, icon: GraduationCap, color: 'indigo', change: '+12 this month' },
           { label: 'Academic Faculty', value: stats?.academicStaffCount || 0, icon: Briefcase, color: 'emerald', change: 'Stable' },
           { label: 'Grade Sections', value: stats?.totalSections || 0, icon: Landmark, color: 'amber', change: 'Across 13 grades' },
           { label: 'Total Units', value: stats?.totalClassRooms || 0, icon: Layers, color: 'rose', change: '92% Capacity' },
         ].map((stat, i) => (
-          <div key={i} className="group hover:bg-indigo-600 hover:border-indigo-600 hover:shadow-lg transition-all duration-300 rounded-2xl border border-slate-100 shadow-sm bg-white/80 overflow-hidden p-3 relative">
-            <div className="flex justify-between items-start mb-2 relative z-10">
-              <div className={`p-2 bg-slate-100 rounded-lg group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-slate-700`}>
-                <stat.icon size={18} />
+          <div key={i} className="group hover:bg-indigo-600 hover:border-indigo-600 hover:shadow-md transition-all duration-300 rounded-xl border border-slate-100 shadow-sm bg-white/80 overflow-hidden p-2 relative">
+            <div className="flex justify-between items-start relative z-10">
+              <div className={`p-1.5 bg-slate-100 rounded-lg group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-slate-700`}>
+                <stat.icon size={16} />
               </div>
-              <span className={`text-[7px] font-black uppercase tracking-widest text-slate-800 group-hover:text-white/80`}>
+              <span className={`text-[6px] font-black uppercase tracking-widest text-slate-800 group-hover:text-white/80`}>
                 {stat.change}
               </span>
             </div>
-            <div className="relative z-10 text-left">
-              <h3 className="text-[8px] font-black text-slate-800 group-hover:text-white/80 transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
-              <p className="text-xl font-black text-slate-950 group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
+            <div className="relative z-10 text-left mt-1">
+              <h3 className="text-[7px] font-black text-slate-800 group-hover:text-white/80 transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
+              <p className="text-lg font-black text-slate-950 group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
             </div>
@@ -93,15 +89,15 @@ export default function AdminDashboard() {
       </section>
 
       {/* Dashboard Content */}
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden">
-          <div className="p-3 border-b border-slate-100 flex items-center gap-3">
-             <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <Landmark size={18} />
+      <div className="flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="h-full bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col">
+          <div className="p-2 border-b border-slate-100 flex items-center gap-3 flex-shrink-0">
+             <div className="w-6 h-6 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
+                <Landmark size={14} />
              </div>
-             <div className="w-12 h-0.5 bg-slate-100 rounded-full" />
+             <div className="w-10 h-0.5 bg-slate-100 rounded-full" />
           </div>
-          <div className="p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 bg-slate-50/30">
+          <div className="p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 bg-slate-50/30 flex-1 overflow-y-auto custom-scrollbar content-start">
             {[
               { name: 'Student Profile', href: '/admin/students', icon: UserPlus, color: 'teal' },
               { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase, color: 'teal' },
