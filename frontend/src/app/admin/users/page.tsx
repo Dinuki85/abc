@@ -19,66 +19,63 @@ export default function UsersPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-20">
       {/* Premium Compact Header - Snap-to-Top Perfection */}
-      <div className="sticky top-[80px] z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-4 bg-slate-50/95 backdrop-blur-xl border-b border-slate-200/60 shadow-sm mb-8">
-        <div className="max-w-[1600px] mx-auto flex flex-col xl:flex-row items-center justify-between gap-6 bg-white p-5 rounded-[2.5rem] border border-white shadow-2xl shadow-slate-200/50">
-          
-          <div className="flex items-center gap-5 px-3">
-            <div className="w-14 h-14 bg-teal-500/10 rounded-[1.5rem] flex items-center justify-center text-teal-600 shadow-inner">
-              <ShieldCog size={28} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-black tracking-tighter leading-none font-handlee">
-                User Access
-              </h1>
-              <p className="text-[11px] text-black font-black uppercase tracking-[0.2em] mt-2">
-                System Role & Permission Engine
-              </p>
-            </div>
+      <div className="max-w-[1600px] mx-auto bg-white p-4 rounded-[2rem] border border-slate-100 shadow-xl flex flex-col xl:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4 px-2">
+          <div className="w-12 h-12 bg-teal-500/10 rounded-2xl flex items-center justify-center text-teal-600">
+            <ShieldCog size={24} />
           </div>
-          
-          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 w-full xl:w-auto">
-            <div className="relative flex-1 w-full sm:w-auto lg:min-w-[400px]">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-              <Input 
-                placeholder="Search username or email..." 
-                className="pl-14 h-14 w-full rounded-2xl border-gray-100 bg-slate-50/50 focus:bg-white focus:ring-teal-500/20 focus:border-teal-600 shadow-inner transition-all text-sm font-medium"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+          <div>
+            <h1 className="text-xl font-black text-black tracking-tighter leading-none">
+              User Access
+            </h1>
+            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+              System Role & Permission Engine
+            </p>
+          </div>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+          <div className="relative flex-1 lg:min-w-[350px]">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <Input 
+              placeholder="Search user or email..." 
+              className="pl-12 h-12 w-full rounded-xl border-slate-100 bg-slate-50 focus:bg-white transition-all text-xs font-bold text-black"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
-            <Button 
-              className="w-full sm:w-auto h-14 px-8 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-black uppercase tracking-widest shadow-xl shadow-teal-500/20 group active:scale-95 transition-all text-xs"
-            >
-              <UserPlus size={20} className="mr-3 group-hover:scale-110 transition-transform" />
-              Create User
-            </Button>
-          </div>
+          <Button 
+            className="h-12 px-6 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+          >
+            <UserPlus size={16} className="mr-2" />
+            Create User
+          </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>System Users</CardTitle>
+          <CardTitle className="text-black font-black">System Users</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader className="bg-slate-50/80 backdrop-blur-sm sticky top-[230px] z-10">
+            <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
               <TableRow className="border-none">
-                <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">User ID</TableHead>
-                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Username</TableHead>
-                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">System Role</TableHead>
-                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Email</TableHead>
-                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Last Activity</TableHead>
-                <TableHead className="py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black">Status</TableHead>
-                <TableHead className="px-8 py-4 text-[9px] font-black uppercase tracking-[0.3em] text-black text-right">Actions</TableHead>
+                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">User ID</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Username</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">System Role</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Email</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Last Activity</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Status</TableHead>
+                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.map((u) => (
                 <TableRow key={u.id}>
-                  <TableCell className="font-medium text-slate-700">{u.id}</TableCell>
-                  <TableCell className="font-mono text-slate-800">{u.username}</TableCell>
+                  <TableCell className="font-black text-black">{u.id}</TableCell>
+                  <TableCell className="font-mono font-bold text-black">{u.username}</TableCell>
                   <TableCell>
                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                       ${u.role === 'Super Admin' ? 'bg-purple-100 text-purple-800' : 
@@ -86,8 +83,8 @@ export default function UsersPage() {
                       {u.role}
                     </span>
                   </TableCell>
-                  <TableCell className="text-slate-500">{u.email}</TableCell>
-                  <TableCell className="text-slate-500 text-xs">{u.lastLogin}</TableCell>
+                  <TableCell className="text-black font-bold">{u.email}</TableCell>
+                  <TableCell className="text-black font-bold text-[10px] uppercase">{u.lastLogin}</TableCell>
                   <TableCell>
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold
                       ${u.status === 'Active' ? 'text-emerald-600' : 'text-slate-400'}`}>

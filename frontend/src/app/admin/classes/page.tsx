@@ -54,19 +54,30 @@ export default function ClassesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-black">
-            Classes Directory
-          </h1>
-          <p className="text-black font-bold mt-1 uppercase text-[10px] tracking-widest">
-            Organize grades, sections, and assigned teachers
-          </p>
+      <div className="max-w-[1600px] mx-auto bg-white p-4 rounded-[2rem] border border-slate-100 shadow-xl flex flex-col xl:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4 px-2">
+          <div className="w-12 h-12 bg-blue-600/10 rounded-2xl flex items-center justify-center text-blue-600">
+            <Home size={24} />
+          </div>
+          <div>
+            <h1 className="text-xl font-black text-black tracking-tighter leading-none">
+              Classes Directory
+            </h1>
+            <p className="text-[9px] text-black font-black uppercase tracking-[0.2em] mt-1">
+              Academic Structure Management
+            </p>
+          </div>
         </div>
-        <Button className="shrink-0 group" onClick={() => setShowModal(true)}>
-          <Plus size={18} className="mr-2 group-hover:rotate-90 transition-transform" />
-          Create Class
-        </Button>
+        
+        <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+          <Button 
+            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-[10px]"
+            onClick={() => setShowModal(true)}
+          >
+            <Plus size={16} className="mr-2" />
+            Create Class
+          </Button>
+        </div>
       </div>
 
       <Card>
@@ -78,13 +89,13 @@ export default function ClassesPage() {
         </CardHeader>
         <CardContent className="p-0 overflow-hidden">
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Class Index</TableHead>
-                <TableHead>Grade & Section</TableHead>
-                <TableHead>Homeroom Teacher</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+            <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
+              <TableRow className="border-none">
+                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Class Index</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Grade & Section</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Homeroom Teacher</TableHead>
+                <TableHead className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black">Status</TableHead>
+                <TableHead className="px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-black text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
