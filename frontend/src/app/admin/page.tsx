@@ -73,20 +73,20 @@ export default function AdminDashboard() {
           { label: 'Grade Sections', value: stats?.totalSections || 0, icon: Landmark, color: 'amber', change: 'Across 13 grades' },
           { label: 'Total Units', value: stats?.totalClassRooms || 0, icon: Layers, color: 'rose', change: '92% Capacity' },
         ].map((stat, i) => (
-          <div key={i} className="group hover:border-indigo-500/50 transition-all duration-500 rounded-[2rem] border border-slate-200/60 shadow-xl shadow-slate-200/40 bg-white/50 backdrop-blur-sm overflow-hidden p-4 relative">
-            <div className={`absolute -right-4 -top-4 w-24 h-24 bg-slate-500/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
+          <div key={i} className="group hover:bg-indigo-600 hover:border-indigo-600 hover:shadow-2xl hover:shadow-indigo-500/30 transition-all duration-500 rounded-[2rem] border border-slate-200/60 shadow-xl shadow-slate-200/40 bg-white/50 backdrop-blur-sm overflow-hidden p-4 relative">
+            <div className={`absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/5 group-hover:bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-all duration-700`} />
             <div className="flex justify-center mb-4 relative z-10">
-              <div className={`p-4 bg-slate-50 rounded-2xl group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shadow-inner text-slate-400`}>
+              <div className={`p-4 bg-slate-50 rounded-2xl group-hover:scale-110 group-hover:bg-white group-hover:text-indigo-600 transition-all duration-500 shadow-inner text-slate-400`}>
                 <stat.icon size={28} />
               </div>
             </div>
             <div className="relative z-10 flex flex-col items-center text-center">
-              <h3 className="text-[10px] font-black text-slate-400 group-hover:text-indigo-600 transition-colors uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
-              <p className="text-3xl font-black text-slate-800 group-hover:scale-110 transition-transform tracking-tighter tabular-nums font-handlee">
+              <h3 className="text-[10px] font-black text-slate-400 group-hover:text-white/80 transition-colors uppercase tracking-[0.2em] mb-1">{stat.label}</h3>
+              <p className="text-3xl font-black text-slate-800 group-hover:text-white group-hover:scale-110 transition-all tracking-tighter tabular-nums font-handlee">
                 {stat.value.toLocaleString()}
               </p>
               <div className="mt-1">
-                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-50 text-slate-400 border border-slate-100`}>
+                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-50 group-hover:bg-white/20 text-slate-400 group-hover:text-white border border-slate-100 group-hover:border-white/20 transition-all`}>
                   {stat.change}
                 </span>
               </div>
