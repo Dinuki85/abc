@@ -2,24 +2,27 @@
 
 import { 
   CheckCircle2, GraduationCap, Trophy, HeartHandshake, 
-  FileSpreadsheet, ClipboardList, ArrowRight, Activity
+  FileSpreadsheet, ClipboardList, ArrowRight, BarChart3,
+  TrendingUp, Wallet
 } from 'lucide-react';
 import Link from 'next/link';
 
 const modules = [
   // Row 1
-  { name: 'Exam Result', href: '#', icon: CheckCircle2, desc: "Input & analyze scores", color: "#17a2b8" },
-  { name: 'Scholarship Distribution', href: '#', icon: GraduationCap, desc: "Track merit awards", color: "#17a2b8" },
-  { name: 'Sport Places', href: '#', icon: Trophy, desc: "Log team placements", color: "#17a2b8" },
+  { name: 'Exam Result', href: '#', icon: CheckCircle2, desc: "Input & verify student scores", color: "#17a2b8" },
+  { name: 'Scholarship Distribution', href: '#', icon: GraduationCap, desc: "Manage merit-based awards", color: "#17a2b8" },
+  { name: 'Sport Places', href: '#', icon: Trophy, desc: "Track athletic achievements", color: "#17a2b8" },
+  { name: 'Welfare Payment', href: '#', icon: HeartHandshake, desc: "Student support programs", color: "#d97706" },
   // Row 2
-  { name: 'Welfare Payment', href: '#', icon: HeartHandshake, desc: "Manage student funds", color: "#d97706" },
-  { name: 'S1 Form', href: '#', icon: FileSpreadsheet, desc: "Official gov. forms", color: "#d97706" },
-  { name: 'Assessment Result', href: '#', icon: ClipboardList, desc: "Review classroom metrics", color: "#d97706" },
+  { name: 'Welfare Tracking', href: '#', icon: Wallet, desc: "Audit payment history", color: "#d97706" },
+  { name: 'S1 Form', href: '#', icon: FileSpreadsheet, desc: "Official gov. data forms", color: "#d97706" },
+  { name: 'Performance Analytics', href: '#', icon: TrendingUp, desc: "Advanced result metrics", color: "#343a40" },
+  { name: 'Assessment Result', href: '#', icon: ClipboardList, desc: "Review classroom evaluations", color: "#343a40" },
 ];
 
 export default function PerformancePage() {
   return (
-    <div className="h-full grid grid-cols-3 grid-rows-2 gap-4 animate-in fade-in duration-700">
+    <div className="h-full grid grid-cols-4 grid-rows-2 gap-4 animate-in fade-in duration-700">
       {modules.map((mod, i) => {
         const Icon = mod.icon;
         return (
@@ -62,10 +65,10 @@ export default function PerformancePage() {
               </div>
 
               <div className="mt-2">
-                <h3 className="text-xl font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
+                <h3 className="text-lg font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
                   {mod.name}
                 </h3>
-                <p className="text-[12px] font-black text-black mt-1 leading-snug opacity-80 line-clamp-1">
+                <p className="text-[11px] font-black text-black mt-1 leading-snug opacity-80 line-clamp-1">
                   {mod.desc}
                 </p>
               </div>
