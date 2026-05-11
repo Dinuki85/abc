@@ -9,7 +9,7 @@ import { api } from "@/lib/api";
 import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck, Landmark, UserPlus, Activity, FileSpreadsheet, GraduationCap } from "lucide-react";
 
 const adminMenuItems = [
-  { name: 'Dashboard', href: '/admin', icon: Landmark },
+  { name: 'Dashboard', href: '/admin/institutional', icon: Landmark },
   { name: 'Registration', href: '/admin/registration', icon: UserPlus },
   { name: 'Performance', href: '/admin/performance', icon: Activity },
   { name: 'Display', href: '/admin/reporting', icon: FileSpreadsheet },

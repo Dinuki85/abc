@@ -173,18 +173,7 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {/* Footer */}
-        <div
-          className="flex-shrink-0 flex justify-between items-center"
-          style={{ borderTop: '2px solid #17a2b8', paddingTop: 6, padding: '6px 4px 0' }}
-        >
-          <span style={{ fontSize: 8, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.35em', color: '#17a2b8' }}>
-            AMV · Integrated Secure Interface
-          </span>
-          <span style={{ fontSize: 8, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.35em', color: '#343a40' }}>
-            © 2026 Institutional Command Center
-          </span>
-        </div>
+
       </main>
     </div>
   );
