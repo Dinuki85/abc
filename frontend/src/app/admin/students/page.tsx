@@ -18,9 +18,9 @@ export default function StudentsPage() {
   const [selectedStudent, setSelectedStudent] = useState<StudentProfile | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  // Pagination State
+  // Pagination State (Disabled - showing all)
   const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(10000);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   
@@ -236,36 +236,15 @@ export default function StudentsPage() {
             <CardTitle className="text-lg font-black text-black">Student Directory</CardTitle>
           </div>
           <div className="flex items-center gap-6">
-              <div className="hidden md:flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-full border border-gray-100">
-                <FileSpreadsheet size={14} className="text-primary" />
+              <div className="hidden md:flex items-center gap-2 bg-slate-50 px-6 py-3 rounded-full border border-gray-100 shadow-sm">
+                <FileSpreadsheet size={16} className="text-primary" />
                 <span className="text-sm font-black uppercase tracking-[0.15em] text-black">
-                  {totalElements} Records Total
+                  {totalElements} Institutional Records
                 </span>
               </div>
-             
-             <div className="flex items-center gap-2">
-               <button 
-                 disabled={currentPage === 0 || isLoading}
-                 onClick={() => fetchStudents(currentPage - 1)}
-                 className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-gray-200 hover:border-primary hover:text-primary disabled:opacity-30 transition-all shadow-sm"
-               >
-                 <ChevronRight size={18} className="rotate-180" />
-               </button>
-               <div className="bg-primary/5 px-4 h-10 rounded-xl flex items-center border border-primary/10">
-                 <span className="text-sm font-black text-primary tabular-nums uppercase tracking-widest">
-                   {currentPage + 1} / {totalPages || 1}
-                 </span>
-               </div>
-               <button 
-                 disabled={currentPage + 1 >= totalPages || isLoading}
-                 onClick={() => fetchStudents(currentPage + 1)}
-                 className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-gray-200 hover:border-primary hover:text-primary disabled:opacity-30 transition-all shadow-sm"
-               >
-                 <ChevronRight size={18} />
-               </button>
-             </div>
           </div>
         </CardHeader>
+
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
