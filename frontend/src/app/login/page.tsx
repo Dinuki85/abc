@@ -64,43 +64,43 @@ export default function LoginPage() {
 
   return (
     <div className="h-screen bg-slate-50 flex flex-col justify-center relative overflow-hidden font-inter">
-      {/* Background decorations */}
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl mix-blend-multiply" />
-      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-indigo-500/10 blur-3xl mix-blend-multiply" />
+      {/* Background school-colored decorations */}
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-[#17a2b8]/10 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 rounded-full bg-[#ffc107]/10 blur-[100px] pointer-events-none" />
       
       {/* Back Button */}
       <Link 
         href="/" 
-        className="absolute top-4 left-4 flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-all font-medium group z-50 scale-90"
+        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-[#17a2b8] transition-all font-medium group z-50 scale-90"
       >
-        <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:bg-blue-50 transition-colors border border-slate-100">
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+        <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:bg-[#17a2b8]/5 transition-colors border border-slate-100">
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
         </div>
-        <span className="hidden sm:inline">Back to Home</span>
+        <span className="text-[10px] font-black uppercase tracking-widest">Back to Home</span>
       </Link>
       
       <div className="relative sm:mx-auto sm:w-full sm:max-w-md z-10 px-4 flex flex-col items-center">
-        <div className="text-center mb-4">
-          <Link href="/" className="inline-block mb-2">
-            <div className="relative p-1 bg-white rounded-2xl border-2 border-blue-100 shadow-sm">
-              <img src="/img/favicon.png" alt="AMV Logo" className="w-16 h-16 object-contain" />
+        <div className="text-center mb-6">
+          <Link href="/" className="inline-block mb-3">
+            <div className="relative p-2 bg-white rounded-[2rem] border-2 border-[#17a2b8] shadow-[0_8px_20px_-10px_rgba(23,162,184,0.3)] group transition-transform hover:scale-105 duration-500">
+              {/* Inner amber glow */}
+              <div className="absolute inset-0 rounded-[2rem] border-4 border-[#ffc107]/20 pointer-events-none" />
+              <img src="/img/favicon.png" alt="AMV Logo" className="w-20 h-20 object-contain relative z-10" />
             </div>
           </Link>
-          <h1 className="text-xl font-black text-slate-900 tracking-tight leading-tight uppercase max-w-[320px] mx-auto">
-            Andiambalama Maha Vidhyalaya
+          <h1 className="text-2xl font-black text-[#343a40] tracking-tight leading-tight uppercase max-w-[360px] mx-auto">
+            Andiambalama <span className="text-[#17a2b8]">Maha</span> Vidhyalaya
           </h1>
-          <h2 className="mt-1 text-sm font-bold text-blue-600 tracking-[0.2em] uppercase">
-            Portal Access
+          <h2 className="mt-2 text-[10px] font-black text-[#ffc107] tracking-[0.4em] uppercase opacity-90">
+            Institutional Portal Access
           </h2>
-          
-          <div className="mt-4" />
         </div>
 
-        <div className="bg-white/70 backdrop-blur-2xl py-8 px-10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] sm:rounded-[2.5rem] border border-white/60 w-full relative overflow-hidden group/card">
-          {/* Subtle accent light */}
-          <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl" />
+        <div className="bg-white/70 backdrop-blur-3xl py-10 px-10 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.15)] sm:rounded-[3rem] border border-white/60 w-full relative overflow-hidden">
+          {/* Subtle school-colored accent light */}
+          <div className="absolute -top-32 -right-32 w-64 h-64 bg-[#17a2b8]/5 rounded-full blur-3xl" />
           
-          <form className="space-y-5 relative z-10" onSubmit={handleLogin}>
+          <form className="space-y-6 relative z-10" onSubmit={handleLogin}>
             {error && (
               <div className="bg-rose-50 border border-rose-100 text-rose-600 px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                 <AlertCircle className="h-5 w-5 shrink-0" />
@@ -108,51 +108,50 @@ export default function LoginPage() {
               </div>
             )}
 
-
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="relative group">
-                <label htmlFor="username" className="block text-[11px] font-black text-slate-500 uppercase tracking-wider mb-1 ml-1">
-                  User Name
+                <label htmlFor="username" className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">
+                  Credentials ID
                 </label>
                 <div className="relative">
                   <Input 
                     type="text" 
-                    placeholder="Index No / NIC" 
+                    placeholder="Index Number / NIC" 
                     id="username" 
-                    className="pl-10 h-11 border-slate-200 bg-slate-50/50 focus:bg-white transition-all text-sm font-bold"
+                    className="pl-12 h-12 border-slate-200 bg-white/50 focus:bg-white focus:border-[#17a2b8] focus:ring-0 transition-all text-sm font-bold rounded-2xl shadow-sm"
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     disabled={isLoading}
                   />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="h-4 w-4 text-slate-300 group-focus-within:text-[#17a2b8] transition-colors" />
                   </div>
                 </div>
               </div>
 
               <div className="relative group">
-                <label htmlFor="password" className="block text-[11px] font-black text-slate-500 uppercase tracking-wider mb-1 ml-1">
-                  Password
+                <label htmlFor="password" title="Secure Encryption Active" className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1 flex items-center gap-1.5">
+                  Secure Password
                 </label>
                 <div className="relative">
                   <Input 
                     type={showPassword ? "text" : "password"} 
                     placeholder="••••••••" 
                     id="password" 
-                    className="pl-10 pr-10 h-11 border-slate-200 bg-slate-50/50 focus:bg-white transition-all text-sm font-bold [&::-ms-reveal]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
+                    className="pl-12 pr-12 h-12 border-slate-200 bg-white/50 focus:bg-white focus:border-[#17a2b8] focus:ring-0 transition-all text-sm font-bold rounded-2xl shadow-sm [&::-ms-reveal]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
                   />
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="h-4 w-4 text-slate-300 group-focus-within:text-[#17a2b8] transition-colors" />
                   </div>
                   <button 
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-300 hover:text-[#17a2b8] transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -161,48 +160,44 @@ export default function LoginPage() {
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center">
+              <div className="flex items-center group/check cursor-pointer" onClick={() => {
+                const el = document.getElementById('remember-me') as HTMLInputElement;
+                if (el) el.checked = !el.checked;
+              }}>
                 <input
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-3.5 w-3.5 text-blue-600 focus:ring-blue-500 border-slate-300 rounded cursor-pointer"
+                  className="h-4 w-4 text-[#17a2b8] focus:ring-[#17a2b8] border-slate-300 rounded-lg cursor-pointer transition-all"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-[11px] font-bold text-slate-500 uppercase cursor-pointer">
-                  Remember
+                <label htmlFor="remember-me" className="ml-2 block text-[10px] font-black text-slate-400 uppercase tracking-widest cursor-pointer group-hover/check:text-slate-600">
+                  Stay Signed In
                 </label>
               </div>
 
               <button 
                 type="button"
                 onClick={() => alert("Please contact your school office for password support.")}
-                className="text-[11px] font-black text-blue-600 hover:text-blue-700 uppercase tracking-wider"
+                className="text-[10px] font-black text-[#17a2b8] hover:text-[#138496] uppercase tracking-widest transition-colors"
               >
-                Help?
+                Access Support?
               </button>
             </div>
 
             <div>
               <Button 
                 type="submit" 
-                className="w-full h-12 text-sm shadow-xl font-black uppercase tracking-[0.2em] bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:shadow-blue-200/50 transition-all active:scale-[0.98] rounded-2xl border-none"
+                className="w-full h-12 text-sm shadow-[0_10px_25px_-5px_rgba(23,162,184,0.4)] font-black uppercase tracking-[0.3em] bg-gradient-to-r from-[#17a2b8] to-[#138496] hover:scale-[1.02] transition-all active:scale-[0.98] rounded-2xl border-none text-white"
                 isLoading={isLoading}
               >
                 Sign In
               </Button>
             </div>
           </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] opacity-80">
-              Institutional Security Protocol
-            </p>
-          </div>
         </div>
       </div>
     </div>
-
-
   );
 }
+
 
