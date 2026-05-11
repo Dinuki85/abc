@@ -11,8 +11,9 @@ import Link from 'next/link';
 
 export default function ReportingPage() {
   return (
-    <div className="h-full flex flex-col gap-4 animate-in fade-in duration-700 pb-2">
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-y-auto custom-scrollbar content-start">
+    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-700">
+      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 content-start">
+
         
         <ReportSection 
           title="All School Data" 
@@ -68,32 +69,33 @@ export default function ReportingPage() {
 
 function ReportSection({ title, items, color }: any) {
   return (
-    <div className="bg-white p-5 rounded-[2rem] border-2 shadow-sm space-y-4 flex flex-col h-full transition-all duration-300 hover:shadow-xl"
+    <div className="bg-white p-4 rounded-[1.5rem] border-2 shadow-sm space-y-3 flex flex-col h-full transition-all duration-300 hover:shadow-lg"
          style={{ borderColor: `${color}15` }}>
-      <div className="flex flex-col gap-1.5 px-1">
-        <h4 className="text-[14px] font-black text-black uppercase tracking-[0.15em]">{title}</h4>
-        <div className="w-12 h-1 rounded-full" style={{ backgroundColor: color }} />
+      <div className="flex flex-col gap-1 px-1">
+        <h4 className="text-[13px] font-black text-black uppercase tracking-[0.1em]">{title}</h4>
+        <div className="w-10 h-1 rounded-full" style={{ backgroundColor: color }} />
       </div>
-      <div className="grid grid-cols-1 gap-2 flex-1">
+      <div className="grid grid-cols-1 gap-1.5 flex-1">
         {items.map((item: any, i: number) => (
           <Link 
             key={i} 
             href="#" 
-            className="flex items-center justify-between group p-3 rounded-xl border-2 border-transparent hover:border-slate-100 hover:bg-slate-50 transition-all"
+            className="flex items-center justify-between group p-2.5 rounded-xl border-2 border-transparent hover:border-slate-100 hover:bg-slate-50 transition-all"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <div 
-                className="p-2 rounded-lg transition-all duration-300 group-hover:scale-110"
-                style={{ backgroundColor: `${color}15`, color: color }}
+                className="p-1.5 rounded-lg transition-all duration-300 group-hover:scale-110"
+                style={{ backgroundColor: `${color}10`, color: color }}
               >
-                <item.icon size={18} strokeWidth={2.5} />
+                <item.icon size={16} strokeWidth={2.5} />
               </div>
-              <span className="text-[13px] font-black text-black uppercase tracking-tight">{item.name}</span>
+              <span className="text-[12px] font-black text-black uppercase tracking-tight">{item.name}</span>
             </div>
-            <ArrowRight size={14} className="text-slate-300 group-hover:text-black group-hover:translate-x-1 transition-all" strokeWidth={3} />
+            <ArrowRight size={12} className="text-slate-300 group-hover:text-black group-hover:translate-x-1 transition-all" strokeWidth={3} />
           </Link>
         ))}
       </div>
     </div>
   );
 }
+
