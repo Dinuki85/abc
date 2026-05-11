@@ -5,95 +5,100 @@ import {
   Award, Phone, FileCheck, Layers, BookCheck, 
   GraduationCap, Heart, Landmark, Users2, 
   UserCheck, ShieldCheck, BookOpen, Contact, 
-  Briefcase, Calendar
+  Briefcase, Calendar, ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
 
+const reports = [
+  // All School Data
+  { name: 'All Student List', icon: Users, desc: 'Complete registry', color: '#17a2b8' },
+  { name: 'Welfare Payment', icon: HeartHandshake, desc: 'Financial status', color: '#17a2b8' },
+  { name: 'Health Report', icon: Activity, desc: 'Medical records', color: '#17a2b8' },
+  { name: 'Skill Matrix', icon: Award, desc: 'Competency tracking', color: '#17a2b8' },
+  { name: 'Contact Directory', icon: Phone, desc: 'Guardian contacts', color: '#17a2b8' },
+  
+  // Categorization
+  { name: 'Section List', icon: Layers, desc: 'Grade distribution', color: '#d97706' },
+  { name: 'Subject List', icon: BookCheck, desc: 'Enrollment stats', color: '#d97706' },
+  { name: 'Scholarship Roll', icon: GraduationCap, desc: 'Merit recipients', color: '#d97706' },
+  { name: 'Religion List', icon: Heart, desc: 'Demographic data', color: '#d97706' },
+  { name: 'Nationality List', icon: Landmark, desc: 'Origin tracking', color: '#d97706' },
+  
+  // Categorization Cont. + Teachers
+  { name: 'Gender List', icon: Users2, desc: 'Diversity metrics', color: '#d97706' },
+  { name: 'Exam Report', icon: FileCheck, desc: 'Academic results', color: '#6f42c1' },
+  { name: 'Class Teachers', icon: UserCheck, desc: 'Assignment records', color: '#6f42c1' },
+  { name: 'Teacher Incharge', icon: ShieldCheck, desc: 'Lead roles list', color: '#6f42c1' },
+  { name: 'Subject Wise List', icon: BookOpen, desc: 'Teacher expertise', color: '#6f42c1' },
+
+  // CVs & Files
+  { name: 'Student CV', icon: Contact, desc: 'Personal portfolio', color: '#343a40' },
+  { name: 'Teacher CV', icon: Briefcase, desc: 'Professional record', color: '#343a40' },
+  { name: 'Guardian CV', icon: Heart, desc: 'Profile details', color: '#343a40' },
+  { name: 'Teacher Timetable', icon: Calendar, desc: 'Period schedule', color: '#343a40' },
+];
+
 export default function ReportingPage() {
   return (
-    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-1000 pb-2">
-      <div className="relative overflow-hidden bg-slate-900 rounded-xl p-3 md:p-4 shadow-xl border border-white/5 flex-shrink-0">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
-        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md">
-              <FileSpreadsheet className="text-indigo-400" size={14} />
-              <span className="text-[12px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Report Matrix</span>
+    <div className="h-full grid grid-cols-5 grid-rows-4 gap-3 p-0.5 animate-in fade-in duration-700">
+      {reports.map((report, i) => {
+        const Icon = report.icon;
+        return (
+          <Link key={i} href="#" className="block group">
+            <div
+              className="h-full bg-white rounded-2xl p-3.5 flex flex-col justify-between border-2 transition-all duration-300 relative overflow-hidden cursor-pointer"
+              style={{ borderColor: `${report.color}25` }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = report.color;
+                el.style.transform = 'translateY(-2px)';
+                el.style.boxShadow = `0 8px 25px -8px ${report.color}35`;
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = `${report.color}25`;
+                el.style.transform = '';
+                el.style.boxShadow = '';
+              }}
+            >
+              {/* Ghost watermark icon */}
+              <Icon
+                className="absolute -bottom-3 -right-3 pointer-events-none transition-opacity duration-300 opacity-[0.04] group-hover:opacity-[0.08]"
+                style={{ width: 64, height: 64, color: report.color }}
+              />
+
+              <div className="flex items-start justify-between">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${report.color}15`, color: report.color }}
+                >
+                  <Icon size={18} strokeWidth={2.2} />
+                </div>
+                <div
+                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${report.color}15`, color: report.color }}
+                >
+                  <ArrowRight size={12} strokeWidth={3} />
+                </div>
+              </div>
+
+              <div className="mt-1">
+                <h3 className="text-[14px] font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
+                  {report.name}
+                </h3>
+                <p className="text-[10px] font-black text-black mt-0.5 leading-snug opacity-70 line-clamp-1">
+                  {report.desc}
+                </p>
+              </div>
+
+              <div
+                className="absolute bottom-0 left-0 h-[3px] w-0 group-hover:w-full transition-all duration-500 rounded-b-2xl"
+                style={{ backgroundColor: report.color }}
+              />
             </div>
-            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
-              Institutional <span className="text-indigo-400">Reporting</span>
-            </h1>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 overflow-y-auto custom-scrollbar content-start">
-        
-        <ReportSection 
-          title="All School Data" 
-          items={[
-            { name: 'All Student List', icon: Users },
-            { name: 'Welfare Paid/Not Paid', icon: HeartHandshake },
-            { name: 'Health Report', icon: Activity },
-            { name: 'Skill Matrix Report', icon: Award },
-            { name: 'Contact Directory', icon: Phone },
-            { name: 'School Exam Report', icon: FileCheck },
-          ]} 
-        />
-
-        <ReportSection 
-          title="Student Categorization" 
-          items={[
-            { name: 'Section Based List', icon: Layers },
-            { name: 'Subject Based List', icon: BookCheck },
-            { name: 'Scholarship Roll', icon: GraduationCap },
-            { name: 'Religion Based List', icon: Heart },
-            { name: 'Nationality Based List', icon: Landmark },
-            { name: 'Gender Based List', icon: Users2 },
-          ]} 
-        />
-
-        <ReportSection 
-          title="Teacher Records" 
-          items={[
-            { name: 'Class Teacher List', icon: UserCheck },
-            { name: 'Teacher Incharge List', icon: ShieldCheck },
-            { name: 'Subject Wise List', icon: BookOpen },
-          ]} 
-        />
-
-        <ReportSection 
-          title="Individual CV & Files" 
-          items={[
-            { name: 'Student Curriculum Vitae', icon: Contact },
-            { name: 'Teacher Curriculum Vitae', icon: Briefcase },
-            { name: 'Guardian Curriculum Vitae', icon: Heart },
-            { name: 'Teacher Timetable', icon: Calendar },
-          ]} 
-        />
-
-      </div>
-    </div>
-  );
-}
-
-function ReportSection({ title, items }: any) {
-  return (
-    <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm space-y-3 flex flex-col h-full">
-      <div className="flex flex-col gap-1">
-        <h4 className="text-[12px] font-black text-black uppercase tracking-[0.2em] font-handlee">{title}</h4>
-        <div className="w-10 h-0.5 bg-indigo-500 rounded-full" />
-      </div>
-      <div className="grid grid-cols-1 gap-1.5 flex-1">
-        {items.map((item: any, i: number) => (
-          <Link key={i} href="#" className="flex items-center gap-2 p-2 rounded-lg hover:bg-indigo-600 hover:shadow-md border border-transparent transition-all group">
-            <div className="p-1.5 bg-slate-100 rounded-lg text-slate-700 group-hover:bg-white/20 group-hover:text-white transition-all">
-             <item.icon size={14} />
-            </div>
-            <span className="text-[12px] font-black text-black group-hover:text-white transition-colors">{item.name}</span>
           </Link>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
