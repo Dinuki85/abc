@@ -71,13 +71,14 @@ export default function LoginPage() {
       {/* Back Button */}
       <Link 
         href="/" 
-        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-[#17a2b8] transition-all font-medium group z-50 scale-90"
+        className="absolute top-6 left-6 flex items-center gap-2 text-black hover:text-[#17a2b8] transition-all font-black group z-50 scale-90"
       >
-        <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:bg-[#17a2b8]/5 transition-colors border border-slate-100">
-          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+        <div className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center group-hover:bg-[#17a2b8]/5 transition-colors border-2 border-black">
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform stroke-[3]" />
         </div>
-        <span className="text-[10px] font-black uppercase tracking-widest">Back to Home</span>
+        <span className="text-[10px] uppercase tracking-[0.2em]">Return Home</span>
       </Link>
+
       
       <div className="relative sm:mx-auto sm:w-full sm:max-w-md z-10 px-4 flex flex-col items-center">
         <div className="text-center mb-6">
@@ -91,8 +92,8 @@ export default function LoginPage() {
           <h1 className="text-2xl font-black text-[#343a40] tracking-tight leading-tight uppercase max-w-[360px] mx-auto">
             Andiambalama <span className="text-[#17a2b8]">Maha</span> Vidhyalaya
           </h1>
-          <h2 className="mt-2 text-[10px] font-black text-[#ffc107] tracking-[0.4em] uppercase opacity-90">
-            Institutional Portal Access
+          <h2 className="mt-2 text-[10px] font-black text-[#ffc107] tracking-[0.4em] uppercase opacity-0 h-0 overflow-hidden">
+            Portal Access
           </h2>
         </div>
 
@@ -102,7 +103,7 @@ export default function LoginPage() {
           
           <form className="space-y-6 relative z-10" onSubmit={handleLogin}>
             {error && (
-              <div className="bg-rose-50 border border-rose-100 text-rose-600 px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="bg-rose-50 border border-rose-100 text-rose-600 px-4 py-3 rounded-2xl text-xs font-black flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                 <AlertCircle className="h-5 w-5 shrink-0" />
                 <p>{error}</p>
               </div>
@@ -110,7 +111,7 @@ export default function LoginPage() {
 
             <div className="space-y-4">
               <div className="relative group">
-                <label htmlFor="username" className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">
+                <label htmlFor="username" className="block text-[11px] font-black text-black uppercase tracking-[0.15em] mb-2 ml-1">
                   Credentials ID
                 </label>
                 <div className="relative">
@@ -118,20 +119,20 @@ export default function LoginPage() {
                     type="text" 
                     placeholder="Index Number / NIC" 
                     id="username" 
-                    className="pl-12 h-12 border-slate-200 bg-white/50 focus:bg-white focus:border-[#17a2b8] focus:ring-0 transition-all text-sm font-bold rounded-2xl shadow-sm"
+                    className="pl-12 h-12 border-slate-300 bg-white/50 focus:bg-white focus:border-[#17a2b8] focus:ring-0 transition-all text-sm font-black text-black rounded-2xl shadow-sm placeholder:text-slate-400"
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     disabled={isLoading}
                   />
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <User className="h-4 w-4 text-slate-300 group-focus-within:text-[#17a2b8] transition-colors" />
+                    <User className="h-4 w-4 text-black group-focus-within:text-[#17a2b8] transition-colors" />
                   </div>
                 </div>
               </div>
 
               <div className="relative group">
-                <label htmlFor="password" title="Secure Encryption Active" className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1 flex items-center gap-1.5">
+                <label htmlFor="password" title="Secure Encryption Active" className="block text-[11px] font-black text-black uppercase tracking-[0.15em] mb-2 ml-1 flex items-center gap-1.5">
                   Secure Password
                 </label>
                 <div className="relative">
@@ -139,19 +140,19 @@ export default function LoginPage() {
                     type={showPassword ? "text" : "password"} 
                     placeholder="••••••••" 
                     id="password" 
-                    className="pl-12 pr-12 h-12 border-slate-200 bg-white/50 focus:bg-white focus:border-[#17a2b8] focus:ring-0 transition-all text-sm font-bold rounded-2xl shadow-sm [&::-ms-reveal]:hidden [&::-webkit-credentials-auto-fill-button]:hidden"
+                    className="pl-12 pr-12 h-12 border-slate-300 bg-white/50 focus:bg-white focus:border-[#17a2b8] focus:ring-0 transition-all text-sm font-black text-black rounded-2xl shadow-sm [&::-ms-reveal]:hidden [&::-webkit-credentials-auto-fill-button]:hidden placeholder:text-slate-400"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
                   />
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="h-4 w-4 text-slate-300 group-focus-within:text-[#17a2b8] transition-colors" />
+                    <Lock className="h-4 w-4 text-black group-focus-within:text-[#17a2b8] transition-colors" />
                   </div>
                   <button 
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-300 hover:text-[#17a2b8] transition-colors"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-black hover:text-[#17a2b8] transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -168,9 +169,9 @@ export default function LoginPage() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-[#17a2b8] focus:ring-[#17a2b8] border-slate-300 rounded-lg cursor-pointer transition-all"
+                  className="h-4 w-4 text-[#17a2b8] focus:ring-[#17a2b8] border-black rounded-lg cursor-pointer transition-all"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-[10px] font-black text-slate-400 uppercase tracking-widest cursor-pointer group-hover/check:text-slate-600">
+                <label htmlFor="remember-me" className="ml-2 block text-[11px] font-black text-black uppercase tracking-widest cursor-pointer group-hover/check:opacity-70">
                   Stay Signed In
                 </label>
               </div>
@@ -178,11 +179,12 @@ export default function LoginPage() {
               <button 
                 type="button"
                 onClick={() => alert("Please contact your school office for password support.")}
-                className="text-[10px] font-black text-[#17a2b8] hover:text-[#138496] uppercase tracking-widest transition-colors"
+                className="text-[11px] font-black text-[#17a2b8] hover:text-[#138496] uppercase tracking-widest transition-colors"
               >
                 Access Support?
               </button>
             </div>
+
 
             <div>
               <Button 
