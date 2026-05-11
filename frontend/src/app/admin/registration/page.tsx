@@ -2,22 +2,26 @@
 
 import { 
   UserCheck, Trophy, Calendar, GraduationCap, 
-  Star, ArrowRight, ClipboardList
+  Star, ArrowRight, BookCheck, ClipboardList, Zap
 } from 'lucide-react';
 import Link from 'next/link';
 
 const modules = [
-  { name: 'Add To Classes', href: '/admin/registration/add-to-class', icon: UserCheck, desc: "Register class positions", color: "#17a2b8" },
-  { name: 'Add To Sport', href: '#', icon: Trophy, desc: "Register sporting teams", color: "#17a2b8" },
-  { name: 'Co-Activities', href: '#', icon: Star, desc: "Enroll societies & clubs", color: "#17a2b8" },
-  { name: 'Time Table', href: '#', icon: Calendar, desc: "Manage period schedules", color: "#d97706" },
-  { name: 'Scholarship Enr.', href: '#', icon: GraduationCap, desc: "Enrollment applications", color: "#d97706" },
-  { name: 'Event Registration', href: '#', icon: Calendar, desc: "Manage event attendance", color: "#d97706" },
+  // Row 1
+  { name: 'Add To Classes', href: '/admin/registration/add-to-class', icon: UserCheck, desc: "Assign students to classes", color: "#17a2b8" },
+  { name: 'Add To Sport', href: '#', icon: Trophy, desc: "Register for sports teams", color: "#17a2b8" },
+  { name: 'Add To Co-Activities', href: '#', icon: Star, desc: "Enroll in school societies", color: "#17a2b8" },
+  { name: 'Time Table', href: '#', icon: Zap, desc: "Assign period schedules", color: "#d97706" },
+  // Row 2
+  { name: 'Scholarship', href: '#', icon: GraduationCap, desc: "Enrollment applications", color: "#d97706" },
+  { name: 'Add To Event', href: '#', icon: Calendar, desc: "Register for school events", color: "#d97706" },
+  { name: 'Add To Subject', href: '#', icon: BookCheck, desc: "Assign optional subjects", color: "#343a40" },
+  { name: 'Add To Assessment', href: '#', icon: ClipboardList, desc: "Register for evaluations", color: "#343a40" },
 ];
 
 export default function RegistrationPage() {
   return (
-    <div className="h-full grid grid-cols-3 grid-rows-2 gap-4 animate-in fade-in duration-700">
+    <div className="h-full grid grid-cols-4 grid-rows-2 gap-4 animate-in fade-in duration-700">
       {modules.map((mod, i) => {
         const Icon = mod.icon;
         return (
@@ -59,11 +63,11 @@ export default function RegistrationPage() {
                 </div>
               </div>
 
-              <div>
-                <h3 className="text-xl font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
+              <div className="mt-2">
+                <h3 className="text-lg font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
                   {mod.name}
                 </h3>
-                <p className="text-[12px] font-black text-black mt-1 leading-snug opacity-70">
+                <p className="text-[11px] font-black text-black mt-1 leading-snug opacity-80 line-clamp-1">
                   {mod.desc}
                 </p>
               </div>
