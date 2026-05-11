@@ -2,17 +2,19 @@
 
 import { 
   CheckCircle2, GraduationCap, Trophy, HeartHandshake, 
-  FileSpreadsheet, ClipboardList, ArrowRight
+  FileSpreadsheet, ClipboardList, ArrowRight, Activity
 } from 'lucide-react';
 import Link from 'next/link';
 
 const modules = [
-  { name: 'Exam Results Entry', href: '#', icon: CheckCircle2, desc: "Input & analyze scores", color: "#17a2b8" },
-  { name: 'Scholarship Dist.', href: '#', icon: GraduationCap, desc: "Track merit awards", color: "#17a2b8" },
-  { name: 'Sporting Success', href: '#', icon: Trophy, desc: "Log team placements", color: "#17a2b8" },
-  { name: 'Welfare Processing', href: '#', icon: HeartHandshake, desc: "Manage student funds", color: "#d97706" },
-  { name: 'S1 Data Forms', href: '#', icon: FileSpreadsheet, desc: "Official gov. forms", color: "#d97706" },
-  { name: 'Assessment Analytics', href: '#', icon: ClipboardList, desc: "Review classroom metrics", color: "#d97706" },
+  // Row 1
+  { name: 'Exam Result', href: '#', icon: CheckCircle2, desc: "Input & analyze scores", color: "#17a2b8" },
+  { name: 'Scholarship Distribution', href: '#', icon: GraduationCap, desc: "Track merit awards", color: "#17a2b8" },
+  { name: 'Sport Places', href: '#', icon: Trophy, desc: "Log team placements", color: "#17a2b8" },
+  // Row 2
+  { name: 'Welfare Payment', href: '#', icon: HeartHandshake, desc: "Manage student funds", color: "#d97706" },
+  { name: 'S1 Form', href: '#', icon: FileSpreadsheet, desc: "Official gov. forms", color: "#d97706" },
+  { name: 'Assessment Result', href: '#', icon: ClipboardList, desc: "Review classroom metrics", color: "#d97706" },
 ];
 
 export default function PerformancePage() {
@@ -59,11 +61,11 @@ export default function PerformancePage() {
                 </div>
               </div>
 
-              <div>
+              <div className="mt-2">
                 <h3 className="text-xl font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
                   {mod.name}
                 </h3>
-                <p className="text-[12px] font-black text-black mt-1 leading-snug opacity-70">
+                <p className="text-[12px] font-black text-black mt-1 leading-snug opacity-80 line-clamp-1">
                   {mod.desc}
                 </p>
               </div>
