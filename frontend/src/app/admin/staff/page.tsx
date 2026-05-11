@@ -112,7 +112,7 @@ export default function StaffPage() {
 
   const openEditModal = (staff: any) => {
     setEditingStaff(staff);
-    setName(staff.name);
+    setName(staff.name || staff.fullName || '');
     setDesignation(staff.designation || 'CLASS_TEACHER'); 
     setShowEditModal(true);
   };
@@ -233,7 +233,7 @@ export default function StaffPage() {
                     </TableCell>
                     <TableCell className="py-5">
                       <div className="flex flex-col">
-                        <span className="text-sm font-black text-black">{staff.name}</span>
+                        <span className="text-sm font-black text-black">{staff.name || staff.fullName}</span>
                         <span className="text-[13px] font-black text-black uppercase tracking-widest mt-0.5">
                           {staff.designation || 'Class Teacher'}
                         </span>
@@ -268,7 +268,7 @@ export default function StaffPage() {
                           <Eye size={16} />
                         </button>
                         <button 
-                          onClick={() => openProfile(staff)}
+                          onClick={() => openEditModal(staff)}
                           className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm active:scale-90"
                         >
                           <Edit2 size={16} />
