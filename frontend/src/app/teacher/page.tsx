@@ -423,7 +423,7 @@ export default function TeacherDashboard() {
                              <VerificationRow label="Blood Group" value={activeStudent.bloodGroup} highlight />
                              <VerificationRow label="Physical Condition" value={activeStudent.specialPhysicalCondition} />
                              <VerificationRow label="Special Illness" value={activeStudent.specialIllness} />
-                             <VerificationRow label="Long term diseases" value={activeStudent.longTermDiseases} />
+                             <VerificationRow label="Long term diseases" value={activeStudent.longTermDisease} />
                              <VerificationRow label="Special Need" value={activeStudent.specialNeed} />
                              <VerificationRow label="Medical Description" value={activeStudent.medicalDescription} />
                            </>
