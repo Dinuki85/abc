@@ -161,10 +161,7 @@ export default function LoginPage() {
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center group/check cursor-pointer" onClick={() => {
-                const el = document.getElementById('remember-me') as HTMLInputElement;
-                if (el) el.checked = !el.checked;
-              }}>
+              <div className="flex items-center group/check cursor-pointer">
                 <input
                   id="remember-me"
                   name="remember-me"
@@ -175,6 +172,7 @@ export default function LoginPage() {
                   Stay Signed In
                 </label>
               </div>
+
 
               <button 
                 type="button"
