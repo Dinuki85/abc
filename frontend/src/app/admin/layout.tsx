@@ -35,7 +35,8 @@ export default function AdminLayout({
     }
   }, [router]);
 
-  const isNoScrollPage = ['/admin', '/admin/registration', '/admin/performance', '/admin/reporting'].includes(pathname);
+  const isNoScrollPage = ['/admin', '/admin/institutional', '/admin/registration', '/admin/performance', '/admin/reporting'].includes(pathname);
+
 
   // Keep the shell visible while checking auth so it never flashes blank
   if (!isAuthorized) {

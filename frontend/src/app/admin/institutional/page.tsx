@@ -10,48 +10,67 @@ import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 
 export default function InstitutionalAdminPage() {
+  const modules = [
+    { name: 'Student Profile', href: '/admin/students', icon: UserPlus, desc: "Records & Enrollment", color: "#17a2b8" },
+    { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase, desc: "Teaching & Academic", color: "#17a2b8" },
+    { name: 'Guardian Info', href: '/admin/parents', icon: Heart, desc: "Emergency Contacts", color: "#17a2b8" },
+    { name: 'Section Matrix', href: '/admin/grades', icon: Layers, desc: "Primary & Secondary", color: "#ffc107" },
+    { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck, desc: "Curriculum Mapping", color: "#ffc107" },
+    { name: 'Class Matrix', href: '/admin/classes', icon: Presentation, desc: "Room Assignments", color: "#ffc107" },
+    { name: 'User Access', href: '/admin/users', icon: ShieldUser, desc: "Roles & Security", color: "#343a40" },
+    { name: 'Co-Curricular', href: '#', icon: Star, desc: "Societies & Clubs", color: "#343a40" },
+    { name: 'Sport List', href: '#', icon: Trophy, desc: "Athletics & Teams", color: "#343a40" },
+  ];
+
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-1000 pb-20">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-              <ShieldCheck size={28} />
-            </div>
-            <h1 className="text-4xl font-bold text-slate-800 tracking-tight font-handlee">
+    <div className="h-full flex flex-col gap-4 animate-in fade-in duration-700">
+      {/* Compact Header */}
+      <div className="flex items-center justify-between bg-white px-6 py-4 rounded-3xl shadow-sm border border-slate-100 flex-shrink-0">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-[#17a2b8]/10 rounded-xl flex items-center justify-center text-[#17a2b8]">
+            <ShieldCheck size={24} />
+          </div>
+          <div>
+            <h1 className="text-xl font-black text-[#343a40] tracking-tight leading-none">
               Institutional Administration
             </h1>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+              Core Profile & Infrastructure Management
+            </p>
           </div>
-          <p className="text-slate-500 font-medium ml-15">
-            Core Institutional Profile Management
-          </p>
+        </div>
+        <div className="hidden lg:flex items-center gap-2">
+          <div className="px-3 py-1 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-black text-slate-500 uppercase">
+            System Admin Mode
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { name: 'Student Profile', href: '/admin/students', icon: UserPlus, desc: "Manage detailed student records and profiles." },
-          { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase, desc: "Manage teaching and non-teaching staff records." },
-          { name: 'Guardian Info', href: '/admin/parents', icon: Heart, desc: "Manage parent and guardian contact information." },
-          { name: 'Section Matrix', href: '/admin/grades', icon: Layers, desc: "Configure primary and secondary sections." },
-          { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck, desc: "Manage academic subjects and curriculums." },
-          { name: 'Class Matrix', href: '/admin/classes', icon: Presentation, desc: "Configure individual classrooms and capacities." },
-          { name: 'User Access', href: '/admin/users', icon: ShieldUser, desc: "Manage system access and roles." },
-          { name: 'Co-Curricular', href: '#', icon: Star, desc: "Manage school societies and clubs." },
-          { name: 'Sport List', href: '#', icon: Trophy, desc: "Manage school sports teams and activities." },
-        ].map((btn, i) => (
-          <Link key={i} href={btn.href}>
-            <Card className="hover:border-primary hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group rounded-[2rem] border-slate-100 shadow-sm h-full">
-              <CardContent className="p-6 flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="p-4 bg-primary/5 text-primary rounded-2xl group-hover:bg-primary group-hover:text-white transition-all">
-                    <btn.icon size={24} />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-800 tracking-tight">{btn.name}</h3>
-                </div>
-                <p className="text-sm text-slate-500 font-medium">{btn.desc}</p>
-              </CardContent>
-            </Card>
+      {/* Compact Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-1 min-h-0 overflow-hidden">
+        {modules.map((btn, i) => (
+          <Link key={i} href={btn.href} className="block h-full group">
+            <div className="bg-white border-2 border-slate-50 rounded-[1.5rem] p-4 h-full flex items-center gap-4 hover:border-[#17a2b8]/30 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group/card">
+              {/* Subtle background icon for premium feel */}
+              <btn.icon className="absolute -right-4 -bottom-4 w-20 h-20 text-slate-50 group-hover/card:text-[#17a2b8]/5 transition-colors" />
+              
+              <div className={`p-3 rounded-2xl transition-all duration-500`} style={{ backgroundColor: `${btn.color}10`, color: btn.color }}>
+                <btn.icon size={22} className="group-hover:scale-110 transition-transform" />
+              </div>
+              
+              <div className="flex-1 min-w-0 z-10">
+                <h3 className="text-sm font-black text-[#343a40] tracking-tight group-hover:text-[#17a2b8] transition-colors truncate">
+                  {btn.name}
+                </h3>
+                <p className="text-[11px] font-bold text-slate-400 mt-0.5 truncate">
+                  {btn.desc}
+                </p>
+              </div>
+              
+              <div className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#17a2b8] group-hover:text-white transition-all">
+                <BookOpen size={12} />
+              </div>
+            </div>
           </Link>
         ))}
       </div>
@@ -66,3 +85,4 @@ function Star(props: any) {
     </svg>
   );
 }
+
