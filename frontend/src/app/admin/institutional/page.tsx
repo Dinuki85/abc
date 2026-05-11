@@ -3,7 +3,7 @@
 import {
   Layers, BookCheck, Briefcase, Heart, Trophy,
   UserPlus, Presentation, ClipboardList, Award,
-  Calendar, Users, Medal, Zap, BookOpen
+  Calendar, Users, Medal, Zap, BookOpen, ArrowLeft
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -27,63 +27,78 @@ const modules = [
 
 export default function InstitutionalAdminPage() {
   return (
-    <div className="h-full grid grid-cols-4 grid-rows-3 gap-3 p-0.5 animate-in fade-in duration-700">
-      {modules.map((mod, i) => {
-        const Icon = mod.icon;
-        return (
-          <Link key={i} href={mod.href} className="group block">
-            <div
-              className="h-full bg-white rounded-2xl p-4 flex flex-col justify-between border-2 transition-all duration-300 relative overflow-hidden cursor-pointer"
-              style={{ borderColor: `${mod.color}25` }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = mod.color;
-                el.style.transform = 'translateY(-2px)';
-                el.style.boxShadow = `0 10px 30px -8px ${mod.color}35`;
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = `${mod.color}25`;
-                el.style.transform = '';
-                el.style.boxShadow = '';
-              }}
-            >
-              {/* Ghost watermark icon */}
-              <Icon
-                className="absolute -bottom-3 -right-3 pointer-events-none transition-opacity duration-300 opacity-[0.04] group-hover:opacity-[0.08]"
-                style={{ width: 80, height: 80, color: mod.color }}
-              />
+    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-700">
+      {/* Back Header */}
+      <div className="flex items-center gap-4 px-2 py-1">
+        <Link 
+          href="/admin" 
+          className="w-10 h-10 rounded-xl bg-white border-2 border-slate-100 flex items-center justify-center text-black hover:border-primary hover:text-primary transition-all shadow-sm group"
+        >
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" strokeWidth={3} />
+        </Link>
+        <div>
+          <h1 className="text-lg font-black text-black uppercase tracking-tight leading-none">Institutional Administration</h1>
+          <p className="text-[10px] font-black text-black/50 uppercase tracking-[0.2em] mt-1">Command Center / Institutional</p>
+        </div>
+      </div>
 
-              {/* Icon badge */}
+      <div className="flex-1 grid grid-cols-4 grid-rows-3 gap-3 p-0.5">
+        {modules.map((mod, i) => {
+          const Icon = mod.icon;
+          return (
+            <Link key={i} href={mod.href} className="group block">
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
+                className="h-full bg-white rounded-2xl p-4 flex flex-col justify-between border-2 transition-all duration-300 relative overflow-hidden cursor-pointer"
+                style={{ borderColor: `${mod.color}25` }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = mod.color;
+                  el.style.transform = 'translateY(-2px)';
+                  el.style.boxShadow = `0 10px 30px -8px ${mod.color}35`;
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.borderColor = `${mod.color}25`;
+                  el.style.transform = '';
+                  el.style.boxShadow = '';
+                }}
               >
-                <Icon size={22} strokeWidth={2.2} />
-              </div>
+                {/* Ghost watermark icon */}
+                <Icon
+                  className="absolute -bottom-3 -right-3 pointer-events-none transition-opacity duration-300 opacity-[0.04] group-hover:opacity-[0.08]"
+                  style={{ width: 80, height: 80, color: mod.color }}
+                />
 
-              {/* Text */}
-              <div className="z-10 mt-2">
-                <h3
-                  className="text-lg font-black tracking-tight leading-tight transition-colors duration-200 text-black uppercase"
+                {/* Icon badge */}
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
                 >
-                  {mod.name}
-                </h3>
-                <p className="text-[11px] font-black text-black mt-1 leading-snug line-clamp-1 opacity-80">
-                  {mod.desc}
-                </p>
+                  <Icon size={22} strokeWidth={2.2} />
+                </div>
+
+                {/* Text */}
+                <div className="z-10 mt-2">
+                  <h3
+                    className="text-lg font-black tracking-tight leading-tight transition-colors duration-200 text-black uppercase"
+                  >
+                    {mod.name}
+                  </h3>
+                  <p className="text-[11px] font-black text-black mt-1 leading-snug line-clamp-1 opacity-80">
+                    {mod.desc}
+                  </p>
+                </div>
+
+                {/* Bottom color accent bar */}
+                <div
+                  className="absolute bottom-0 left-0 h-[3px] w-0 group-hover:w-full transition-all duration-500 rounded-b-2xl"
+                  style={{ backgroundColor: mod.color }}
+                />
               </div>
-
-
-              {/* Bottom color accent bar */}
-              <div
-                className="absolute bottom-0 left-0 h-[3px] w-0 group-hover:w-full transition-all duration-500 rounded-b-2xl"
-                style={{ backgroundColor: mod.color }}
-              />
-            </div>
-          </Link>
-        );
-      })}
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }

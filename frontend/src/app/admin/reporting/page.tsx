@@ -5,16 +5,28 @@ import {
   Award, Phone, FileCheck, Layers, BookCheck, 
   GraduationCap, Heart, Landmark, Users2, 
   UserCheck, ShieldCheck, BookOpen, Contact, 
-  Briefcase, Calendar, ArrowRight
+  Briefcase, Calendar, ArrowRight, ArrowLeft
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ReportingPage() {
   return (
     <div className="h-full flex flex-col gap-3 animate-in fade-in duration-700">
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 content-start">
+      {/* Back Header */}
+      <div className="flex items-center gap-4 px-2 py-1">
+        <Link 
+          href="/admin" 
+          className="w-10 h-10 rounded-xl bg-white border-2 border-slate-100 flex items-center justify-center text-black hover:border-primary hover:text-primary transition-all shadow-sm group"
+        >
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" strokeWidth={3} />
+        </Link>
+        <div>
+          <h1 className="text-lg font-black text-black uppercase tracking-tight leading-none">Institutional Reporting</h1>
+          <p className="text-[10px] font-black text-black/50 uppercase tracking-[0.2em] mt-1">Command Center / Reporting</p>
+        </div>
+      </div>
 
-        
+      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 content-start">
         <ReportSection 
           title="All School Data" 
           color="#17a2b8"
@@ -61,7 +73,6 @@ export default function ReportingPage() {
             { name: 'Teacher Timetable', icon: Calendar },
           ]} 
         />
-
       </div>
     </div>
   );
@@ -98,4 +109,3 @@ function ReportSection({ title, items, color }: any) {
     </div>
   );
 }
-
