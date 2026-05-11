@@ -13,8 +13,8 @@ const adminMenuItems = [
   { name: 'Registration', href: '/admin/registration', icon: UserPlus },
   { name: 'Performance', href: '/admin/performance', icon: Activity },
   { name: 'Display', href: '/admin/reporting', icon: FileSpreadsheet },
-  { name: 'User Management', href: '/admin/users', icon: Settings },
 ];
+
 
 export default function AdminLayout({
   children,

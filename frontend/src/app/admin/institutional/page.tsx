@@ -3,7 +3,7 @@
 import {
   Layers, BookCheck, Briefcase, Heart, Trophy,
   UserPlus, Presentation, ClipboardList, Award,
-  Calendar, ShieldUser, Users, Medal, Zap, BookOpen
+  Calendar, Users, Medal, Zap, BookOpen
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -13,14 +13,13 @@ const modules = [
   { name: 'Staff',          href: '/admin/staff',       icon: Briefcase,      desc: 'Teaching & Academic',       color: '#17a2b8' },
   { name: 'Guardian',       href: '/admin/parents',     icon: Heart,          desc: 'Parent & Contacts',         color: '#17a2b8' },
   { name: 'Section',        href: '/admin/grades',      icon: Layers,         desc: 'Primary & Secondary',       color: '#d97706' },
-  { name: 'Subject',        href: '/admin/subjects',    icon: BookCheck,      desc: 'Curriculum Mapping',        color: '#d97706' },
   // Row 2
+  { name: 'Subject',        href: '/admin/subjects',    icon: BookCheck,      desc: 'Curriculum Mapping',        color: '#d97706' },
   { name: 'Class',          href: '/admin/classes',     icon: Presentation,   desc: 'Room Assignments',          color: '#d97706' },
   { name: 'Assessment',     href: '#',                  icon: ClipboardList,  desc: 'Exams & Evaluations',       color: '#6f42c1' },
   { name: 'Co-Curricular',  href: '#',                  icon: Star,           desc: 'Societies & Clubs',         color: '#6f42c1' },
-  { name: 'Sport',          href: '#',                  icon: Trophy,         desc: 'Athletics & Teams',         color: '#6f42c1' },
-  { name: 'User',           href: '/admin/users',       icon: ShieldUser,     desc: 'Roles & Security',          color: '#343a40' },
   // Row 3
+  { name: 'Sport',          href: '#',                  icon: Trophy,         desc: 'Athletics & Teams',         color: '#6f42c1' },
   { name: 'Scholarship',    href: '#',                  icon: Award,          desc: 'Bursaries & Awards',        color: '#343a40' },
   { name: 'Sportmeet',      href: '#',                  icon: Medal,          desc: 'Meets & Championships',     color: '#343a40' },
   { name: 'Event',          href: '#',                  icon: Calendar,       desc: 'School Events & Calendar',  color: '#343a40' },
@@ -28,7 +27,7 @@ const modules = [
 
 export default function InstitutionalAdminPage() {
   return (
-    <div className="h-full grid grid-cols-5 grid-rows-3 gap-3 p-0.5 animate-in fade-in duration-700">
+    <div className="h-full grid grid-cols-4 grid-rows-3 gap-3 p-0.5 animate-in fade-in duration-700">
       {modules.map((mod, i) => {
         const Icon = mod.icon;
         return (
@@ -52,7 +51,7 @@ export default function InstitutionalAdminPage() {
               {/* Ghost watermark icon */}
               <Icon
                 className="absolute -bottom-3 -right-3 pointer-events-none transition-opacity duration-300 opacity-[0.04] group-hover:opacity-[0.08]"
-                style={{ width: 72, height: 72, color: mod.color }}
+                style={{ width: 80, height: 80, color: mod.color }}
               />
 
               {/* Icon badge */}
@@ -60,7 +59,7 @@ export default function InstitutionalAdminPage() {
                 className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                 style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
               >
-                <Icon size={20} strokeWidth={2.2} />
+                <Icon size={22} strokeWidth={2.2} />
               </div>
 
               {/* Text */}
