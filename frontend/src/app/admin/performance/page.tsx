@@ -2,51 +2,80 @@
 
 import { 
   CheckCircle2, GraduationCap, Trophy, HeartHandshake, 
-  FileSpreadsheet, ClipboardList, Activity
+  FileSpreadsheet, ClipboardList, ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+
+const modules = [
+  { name: 'Exam Results Entry', href: '#', icon: CheckCircle2, desc: "Input & analyze scores", color: "#17a2b8" },
+  { name: 'Scholarship Dist.', href: '#', icon: GraduationCap, desc: "Track merit awards", color: "#17a2b8" },
+  { name: 'Sporting Success', href: '#', icon: Trophy, desc: "Log team placements", color: "#17a2b8" },
+  { name: 'Welfare Processing', href: '#', icon: HeartHandshake, desc: "Manage student funds", color: "#d97706" },
+  { name: 'S1 Data Forms', href: '#', icon: FileSpreadsheet, desc: "Official gov. forms", color: "#d97706" },
+  { name: 'Assessment Analytics', href: '#', icon: ClipboardList, desc: "Review classroom metrics", color: "#d97706" },
+];
 
 export default function PerformancePage() {
   return (
-    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-1000 pb-2">
-      <div className="relative overflow-hidden bg-slate-900 rounded-xl p-3 md:p-4 shadow-xl border border-white/5 flex-shrink-0">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-emerald-500/20 to-transparent pointer-events-none" />
-        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md">
-              <Activity className="text-emerald-400" size={14} />
-              <span className="text-[12px] font-black text-emerald-300 uppercase tracking-[0.2em]">Institutional Merit Matrix</span>
-            </div>
-            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
-              Performance & <span className="text-emerald-400">Analytics</span>
-            </h1>
-          </div>
-        </div>
-      </div>
+    <div className="h-full grid grid-cols-3 grid-rows-2 gap-4 animate-in fade-in duration-700">
+      {modules.map((mod, i) => {
+        const Icon = mod.icon;
+        return (
+          <Link key={i} href={mod.href} className="block group">
+            <div
+              className="h-full bg-white rounded-[2rem] p-6 flex flex-col justify-between border-2 transition-all duration-300 relative overflow-hidden"
+              style={{ borderColor: `${mod.color}25` }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = mod.color;
+                el.style.transform = 'translateY(-3px)';
+                el.style.boxShadow = `0 12px 40px -10px ${mod.color}30`;
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = `${mod.color}25`;
+                el.style.transform = '';
+                el.style.boxShadow = '';
+              }}
+            >
+              {/* Watermark icon */}
+              <Icon
+                className="absolute -bottom-4 -right-4 opacity-[0.04] pointer-events-none transition-opacity duration-300 group-hover:opacity-[0.08]"
+                style={{ width: 100, height: 100, color: mod.color }}
+              />
 
-      <div className="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 overflow-y-auto custom-scrollbar content-start">
-        {[
-          { name: 'Exam Results Entry', href: '#', icon: CheckCircle2, desc: "Input and analyze student examination scores." },
-          { name: 'Scholarship Dist.', href: '#', icon: GraduationCap, desc: "Track scholarship distributions and merit awards." },
-          { name: 'Sporting Success', href: '#', icon: Trophy, desc: "Log team placements and athletic achievements." },
-          { name: 'Welfare Processing', href: '#', icon: HeartHandshake, desc: "Manage student welfare funds and programs." },
-          { name: 'S1 Data Forms', href: '#', icon: FileSpreadsheet, desc: "Submit and review official governmental S1 forms." },
-          { name: 'Assessment Analytics', href: '#', icon: ClipboardList, desc: "Review classroom level assessment metrics." },
-        ].map((btn, i) => (
-          <Link key={i} href={btn.href} className="group h-full">
-            <div className="h-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm transition-all hover:bg-emerald-600 hover:border-emerald-600 group-active:scale-95 flex flex-col gap-2">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600 group-hover:bg-white/20 group-hover:text-white transition-all">
-                  <btn.icon size={18} />
+              <div className="flex items-start justify-between">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
+                >
+                  <Icon size={28} strokeWidth={2.2} />
                 </div>
-                <h3 className="text-[12px] font-black text-black group-hover:text-white uppercase tracking-widest">{btn.name}</h3>
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
+                >
+                  <ArrowRight size={16} strokeWidth={3} />
+                </div>
               </div>
-              <p className="text-[11px] font-bold text-slate-800 group-hover:text-white/80 leading-tight">{btn.desc}</p>
+
+              <div>
+                <h3 className="text-xl font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
+                  {mod.name}
+                </h3>
+                <p className="text-[12px] font-black text-black mt-1 leading-snug opacity-70">
+                  {mod.desc}
+                </p>
+              </div>
+
+              <div
+                className="absolute bottom-0 left-0 h-[4px] w-0 group-hover:w-full transition-all duration-500 rounded-b-[2rem]"
+                style={{ backgroundColor: mod.color }}
+              />
             </div>
           </Link>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }

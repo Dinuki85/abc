@@ -2,51 +2,80 @@
 
 import { 
   UserCheck, Trophy, Calendar, GraduationCap, 
-  BookCheck, ClipboardList, PlusCircle, Star
+  Star, ArrowRight, ClipboardList
 } from 'lucide-react';
 import Link from 'next/link';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+
+const modules = [
+  { name: 'Add To Classes', href: '/admin/registration/add-to-class', icon: UserCheck, desc: "Register class positions", color: "#17a2b8" },
+  { name: 'Add To Sport', href: '#', icon: Trophy, desc: "Register sporting teams", color: "#17a2b8" },
+  { name: 'Co-Activities', href: '#', icon: Star, desc: "Enroll societies & clubs", color: "#17a2b8" },
+  { name: 'Time Table', href: '#', icon: Calendar, desc: "Manage period schedules", color: "#d97706" },
+  { name: 'Scholarship Enr.', href: '#', icon: GraduationCap, desc: "Enrollment applications", color: "#d97706" },
+  { name: 'Event Registration', href: '#', icon: Calendar, desc: "Manage event attendance", color: "#d97706" },
+];
 
 export default function RegistrationPage() {
   return (
-    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-1000 pb-2">
-      <div className="relative overflow-hidden bg-slate-900 rounded-xl p-3 md:p-4 shadow-xl border border-white/5 flex-shrink-0">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-orange-500/20 to-transparent pointer-events-none" />
-        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 backdrop-blur-md">
-              <PlusCircle className="text-orange-400" size={14} />
-              <span className="text-[12px] font-black text-orange-300 uppercase tracking-[0.2em]">Institutional Enrollment Matrix</span>
-            </div>
-            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
-              Enrollment & <span className="text-orange-400">Registration</span>
-            </h1>
-          </div>
-        </div>
-      </div>
+    <div className="h-full grid grid-cols-3 grid-rows-2 gap-4 animate-in fade-in duration-700">
+      {modules.map((mod, i) => {
+        const Icon = mod.icon;
+        return (
+          <Link key={i} href={mod.href} className="block group">
+            <div
+              className="h-full bg-white rounded-[2rem] p-6 flex flex-col justify-between border-2 transition-all duration-300 relative overflow-hidden"
+              style={{ borderColor: `${mod.color}25` }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = mod.color;
+                el.style.transform = 'translateY(-3px)';
+                el.style.boxShadow = `0 12px 40px -10px ${mod.color}30`;
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = `${mod.color}25`;
+                el.style.transform = '';
+                el.style.boxShadow = '';
+              }}
+            >
+              {/* Watermark icon */}
+              <Icon
+                className="absolute -bottom-4 -right-4 opacity-[0.04] pointer-events-none transition-opacity duration-300 group-hover:opacity-[0.08]"
+                style={{ width: 100, height: 100, color: mod.color }}
+              />
 
-      <div className="flex-1 min-h-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 overflow-y-auto custom-scrollbar content-start">
-        {[
-          { name: 'Add To Classes', href: '/admin/registration/add-to-class', icon: UserCheck, desc: "Assign students to classes and register class positions." },
-          { name: 'Add To Sport', href: '#', icon: Trophy, desc: "Register students for specific sports teams." },
-          { name: 'Co-Activities', href: '#', icon: Star, desc: "Enroll students in societies and extra-curricular clubs." },
-          { name: 'Time Table', href: '#', icon: Calendar, desc: "Manage and assign period timetables." },
-          { name: 'Scholarship Enr.', href: '#', icon: GraduationCap, desc: "Register students for specific scholarships." },
-          { name: 'Event Registration', href: '#', icon: Calendar, desc: "Manage participation in school events." },
-        ].map((btn, i) => (
-          <Link key={i} href={btn.href} className="group h-full">
-            <div className="h-full bg-white p-4 rounded-xl border border-slate-100 shadow-sm transition-all hover:bg-orange-600 hover:border-orange-600 group-active:scale-95 flex flex-col gap-2">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-50 rounded-lg text-orange-600 group-hover:bg-white/20 group-hover:text-white transition-all">
-                  <btn.icon size={18} />
+              <div className="flex items-start justify-between">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
+                >
+                  <Icon size={28} strokeWidth={2.2} />
                 </div>
-                <h3 className="text-[12px] font-black text-black group-hover:text-white uppercase tracking-widest">{btn.name}</h3>
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
+                >
+                  <ArrowRight size={16} strokeWidth={3} />
+                </div>
               </div>
-              <p className="text-[11px] font-bold text-slate-800 group-hover:text-white/80 leading-tight">{btn.desc}</p>
+
+              <div>
+                <h3 className="text-xl font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
+                  {mod.name}
+                </h3>
+                <p className="text-[12px] font-black text-black mt-1 leading-snug opacity-70">
+                  {mod.desc}
+                </p>
+              </div>
+
+              <div
+                className="absolute bottom-0 left-0 h-[4px] w-0 group-hover:w-full transition-all duration-500 rounded-b-[2rem]"
+                style={{ backgroundColor: mod.color }}
+              />
             </div>
           </Link>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
