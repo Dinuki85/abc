@@ -24,30 +24,9 @@ export default function InstitutionalAdminPage() {
 
   return (
     <div className="h-full flex flex-col gap-4 animate-in fade-in duration-700">
-      {/* Compact Header */}
-      <div className="flex items-center justify-between bg-white px-6 py-4 rounded-3xl shadow-sm border border-slate-100 flex-shrink-0">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-[#17a2b8]/10 rounded-xl flex items-center justify-center text-[#17a2b8]">
-            <ShieldCheck size={24} />
-          </div>
-          <div>
-            <h1 className="text-xl font-black text-[#343a40] tracking-tight leading-none">
-              Institutional Administration
-            </h1>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-              Core Profile & Infrastructure Management
-            </p>
-          </div>
-        </div>
-        <div className="hidden lg:flex items-center gap-2">
-          <div className="px-3 py-1 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-black text-slate-500 uppercase">
-            System Admin Mode
-          </div>
-        </div>
-      </div>
-
       {/* Compact Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-1 min-h-0 overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-1 min-h-0">
+
         {modules.map((btn, i) => (
           <Link key={i} href={btn.href} className="block h-full group">
             <div className="bg-white border-2 border-slate-50 rounded-[1.5rem] p-4 h-full flex items-center gap-4 hover:border-[#17a2b8]/30 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group/card">
