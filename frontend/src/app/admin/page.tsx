@@ -2,254 +2,190 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
-import { 
-  Users, UserCheck, Layers, BookOpen, GraduationCap, 
-  ClipboardList, Briefcase, HeartHandshake,
-  Calendar, Award, Trophy, Medal, CheckCircle2,
-  FileSpreadsheet, UserPlus, BookCheck, Activity, Phone,
-  FileCheck, Contact, Landmark, LogOut, Clock,
-  Heart, Star, Presentation, Users2
+import {
+  Users, Briefcase, Layers, Landmark, GraduationCap,
+  Settings, UserPlus, Activity, FileSpreadsheet, ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    setMounted(true);
     const user = api.getCurrentUser();
     setCurrentUser(user);
+
+    if (user && (user.role === 'ROLE_ADMIN' || user.role === 'ROLE_STAFF')) {
+      api.getStaffProfile()
+        .then(p => { if (p?.name) setCurrentUser((prev: any) => ({ ...prev, fullName: p.name })); })
+        .catch(() => {});
+    }
+
     api.getAdminStats().then(setStats);
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
   }, []);
 
+  if (!mounted) return null;
+
+  const statItems = [
+    { label: 'Students',       value: stats?.totalStudents ?? 0,      icon: GraduationCap, bg: '#e6f7f9', color: '#17a2b8' },
+    { label: 'Academic Staff', value: stats?.academicStaffCount ?? 0, icon: Briefcase,     bg: '#fff9e6', color: '#d49e00' },
+    { label: 'Non-Academic',   value: 0,                              icon: Users,         bg: '#e9eaeb', color: '#343a40' },
+    { label: 'Sections',       value: stats?.totalSections ?? 0,      icon: Landmark,      bg: '#e6f7f9', color: '#138496' },
+    { label: 'Class Rooms',    value: stats?.totalClassRooms ?? 0,    icon: Layers,        bg: '#fff9e6', color: '#d49e00' },
+  ];
+
+  const modules = [
+    { title: 'Administration', sub: 'Create Your School Basic Profile', href: '/admin/institutional', icon: Settings,        variant: 'indigo'  },
+    { title: 'Registration',   sub: 'Add Students and Staff',           href: '/admin/registration',  icon: UserPlus,        variant: 'emerald' },
+    { title: 'Performance',    sub: 'Enter Performance',                href: '/admin/performance',   icon: Activity,        variant: 'amber'   },
+    { title: 'Display',        sub: 'Reports and Analytics',            href: '/admin/reporting',     icon: FileSpreadsheet, variant: 'rose'    },
+  ];
+
   return (
-    <div className="h-full flex flex-col gap-3 animate-in fade-in duration-1000 pb-2">
-      {/* High-Impact Institutional Banner */}
-      <div className="relative overflow-hidden bg-slate-900 rounded-xl p-3 md:p-4 shadow-xl border border-white/5 flex-shrink-0">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
-        
-        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-8">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 backdrop-blur-md">
-              <ShieldCheck className="text-indigo-400" size={16} />
-              <span className="text-[11px] font-black text-indigo-300 uppercase tracking-[0.2em]">Institutional Command Center</span>
+    /*
+     * Layout contract:
+     *   Viewport height  = 588px
+     *   Shared navbar    =  80px  (h-20, rendered by AdminLayout)
+     *   Remaining height = 508px  ← this div must fit exactly here
+     *
+     * Internal budget (px, approximate):
+     *   top padding      =  16
+     *   Welcome section  = 100
+     *   gap              =  12
+     *   Stats row        =  92
+     *   gap              =  12
+     *   Buttons          = 236  (flex-1)
+     *   footer           =  18
+     *   bottom padding   =  16
+     *                    = 502  ✓ (6px breathing room)
+     */
+    <div
+      className="h-full flex flex-col overflow-hidden"
+      style={{ background: '#ffffff' }}
+    >
+
+
+
+      {/* ── MAIN CONTENT ──────────────────────────────────── */}
+      <main
+        className="flex-1 flex flex-col overflow-hidden relative z-10"
+        style={{ padding: '16px 40px 14px', gap: 12 }}
+      >
+
+        {/* ── 1. WELCOME ───────────────────────────────────── */}
+        <div
+          className="amv-fadeup flex-shrink-0 flex items-center justify-center gap-8"
+          style={{
+            background: 'linear-gradient(135deg, #e8f8fb 0%, #fffef0 60%, #fff9e6 100%)',
+            border: '2px solid #17a2b8',
+            borderLeft: '6px solid #17a2b8',
+            borderRadius: 20,
+            padding: '14px 36px',
+            boxShadow: '0 4px 20px rgba(23,162,184,0.12)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Background watermark */}
+          <div style={{
+            position: 'absolute', right: -20, top: -20,
+            width: 120, height: 120,
+            background: 'rgba(23,162,184,0.06)',
+            borderRadius: '50%',
+            pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', right: 60, bottom: -30,
+            width: 80, height: 80,
+            background: 'rgba(255,193,7,0.08)',
+            borderRadius: '50%',
+            pointerEvents: 'none',
+          }} />
+
+          {/* Floating Logo */}
+          <div className="relative flex-shrink-0">
+            <div
+              className="amv-logo-float relative flex items-center justify-center bg-white"
+              style={{ width: 84, height: 84, borderRadius: 24,
+                border: '3px solid #17a2b8', boxShadow: '5px 5px 0px #17a2b8' }}
+            >
+              <img src="/img/favicon.png" alt="School Logo"
+                style={{ width: 60, height: 60, objectFit: 'contain' }} />
             </div>
-            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter font-handlee italic leading-none">
-              Welcome Back, <span className="text-indigo-400">Administrator</span>
-            </h1>
-            <p className="text-slate-300 font-bold max-w-md text-[11px] leading-relaxed uppercase tracking-[0.2em]">
-              Institutional Command Center
-            </p>
           </div>
-          
-          <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full lg:w-auto">
-            <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
-              <Activity size={12} className="text-emerald-400" />
-              <span className="text-base font-black text-white tabular-nums tracking-tighter">98.2%</span>
-              <span className="text-[9px] font-black text-white uppercase tracking-widest">Uptime</span>
-            </div>
-            <div className="bg-white/5 backdrop-blur-xl p-2 rounded-lg border border-white/10 flex flex-col items-center gap-0.5 min-w-[80px]">
-              <Users2 size={12} className="text-amber-400" />
-              <span className="text-base font-black text-white tabular-nums tracking-tighter">2,412</span>
-              <span className="text-[9px] font-black text-white uppercase tracking-widest">Users</span>
-            </div>
+
+          {/* School Name */}
+          <div className="flex flex-col">
+            <h2
+              style={{ fontSize: 'clamp(20px, 3vw, 42px)', fontWeight: 900,
+                letterSpacing: '-0.03em', lineHeight: 1.15, margin: 0, color: '#000' }}
+            >
+              Welcome To{' '}
+              <span className="amv-gradient-text">Andiambalama</span>{' '}
+              Maha Vidhyalaya
+            </h2>
+            <div style={{ height: 5, width: 80,
+              background: 'linear-gradient(90deg,#17a2b8,#ffc107)',
+              borderRadius: 3, marginTop: 10 }} />
           </div>
         </div>
-      </div>
 
-      {/* Compact High-Density Stats Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 flex-shrink-0">
-        {[
-          { label: 'Total Enrollment', value: stats?.totalStudents || 0, icon: GraduationCap, color: 'indigo', change: '+12 this month' },
-          { label: 'Academic Faculty', value: stats?.academicStaffCount || 0, icon: Briefcase, color: 'emerald', change: 'Stable' },
-          { label: 'Grade Sections', value: stats?.totalSections || 0, icon: Landmark, color: 'amber', change: 'Across 13 grades' },
-          { label: 'Total Units', value: stats?.totalClassRooms || 0, icon: Layers, color: 'rose', change: '92% Capacity' },
-        ].map((stat, i) => (
-          <div key={i} className="group hover:bg-indigo-600 hover:border-indigo-600 hover:shadow-md transition-all duration-300 rounded-xl border border-slate-100 shadow-sm bg-white/80 overflow-hidden p-2 relative">
-            <div className="flex justify-between items-start relative z-10">
-              <div className={`p-1.5 bg-slate-100 rounded-lg group-hover:bg-white/10 group-hover:text-white transition-all duration-300 text-slate-700`}>
-                <stat.icon size={16} />
+
+        {/* ── 2. STATS ROW ─────────────────────────────────── */}
+        <div
+          className="amv-fadeup-1 flex-shrink-0 grid"
+          style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: 10 }}
+        >
+          {statItems.map((s, i) => (
+            <div key={i} className="amv-stat-card" style={{ padding: '12px 8px', gap: 5 }}>
+              <div className="amv-stat-icon" style={{ background: s.bg, color: s.color }}>
+                <s.icon size={17} strokeWidth={2.5} />
               </div>
-              <span className={`text-[9px] font-black uppercase tracking-widest text-slate-800 group-hover:text-white/80`}>
-                {stat.change}
-              </span>
+              <div className="amv-stat-val" style={{ fontSize: 'clamp(20px, 2.2vw, 32px)' }}>
+                {s.value.toLocaleString()}
+              </div>
+              <div className="amv-stat-label">{s.label}</div>
             </div>
-            <div className="relative z-10 text-center mt-1">
-              <h3 className="text-[10px] font-black text-black group-hover:text-white transition-colors uppercase tracking-[0.1em]">{stat.label}</h3>
-              <p className="text-xl font-black text-black group-hover:text-white transition-all tracking-tighter tabular-nums font-handlee">
-                {stat.value.toLocaleString()}
-              </p>
-            </div>
-          </div>
-        ))}
-      </section>
-
-      {/* Dashboard Content */}
-      <div className="flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="h-full bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col">
-          <div className="p-2 border-b border-slate-100 flex items-center gap-3 flex-shrink-0">
-             <div className="w-6 h-6 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <Landmark size={14} />
-             </div>
-             <div className="w-10 h-0.5 bg-slate-100 rounded-full" />
-          </div>
-          <div className="p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 bg-slate-50/30 flex-1 overflow-y-auto custom-scrollbar content-start">
-            {[
-              { name: 'Student Profile', href: '/admin/students', icon: UserPlus, color: 'teal' },
-              { name: 'Staff Directory', href: '/admin/staff', icon: Briefcase, color: 'teal' },
-              { name: 'Guardian Info', href: '/admin/parents', icon: Heart, color: 'teal' },
-              { name: 'Section Matrix', href: '/admin/grades', icon: Layers, color: 'teal' },
-              { name: 'Subject Matrix', href: '/admin/subjects', icon: BookCheck, color: 'teal' },
-              { name: 'Class Matrix', href: '/admin/classes', icon: Presentation, color: 'teal' },
-              { name: 'User Access', href: '/admin/users', icon: ShieldUser, color: 'teal' },
-            ].map((btn, i) => (
-              <DashboardButton key={i} {...btn} />
-            ))}
-          </div>
+          ))}
         </div>
-      </div>
+
+        {/* ── 3. MODULE BUTTONS ────────────────────────────── */}
+        <div
+          className="amv-fadeup-2 grid flex-1 min-h-0"
+          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}
+        >
+          {modules.map((m, i) => (
+            <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`}>
+              <span className="amv-btn-arrow"><ArrowRight size={14} /></span>
+              <div className="amv-btn-icon" style={{ width: 44, height: 44, borderRadius: 13 }}>
+                <m.icon size={22} strokeWidth={1.8} />
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <span className="amv-btn-title">{m.title}</span>
+                <span className="amv-btn-sub">({m.sub})</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div
+          className="flex-shrink-0 flex justify-between items-center"
+          style={{ borderTop: '2px solid #17a2b8', paddingTop: 6, padding: '6px 4px 0' }}
+        >
+          <span style={{ fontSize: 8, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.35em', color: '#17a2b8' }}>
+            AMV · Integrated Secure Interface
+          </span>
+          <span style={{ fontSize: 8, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.35em', color: '#343a40' }}>
+            © 2026 Institutional Command Center
+          </span>
+        </div>
+      </main>
     </div>
   );
 }
-
-function DashboardButton({ name, href, icon: Icon, color }: any) {
-  const colorMap: any = {
-    teal: 'text-teal-500 bg-white border-slate-100 hover:border-teal-500 hover:bg-teal-50',
-    indigo: 'text-indigo-500 bg-white border-slate-100 hover:border-indigo-500 hover:bg-indigo-50',
-  };
-
-  return (
-    <Link 
-      href={href}
-      className={`flex flex-col items-center gap-2 p-3 border rounded-xl transition-all group active:scale-95 shadow-sm ${colorMap[color] || colorMap.teal}`}
-    >
-      <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-white transition-all text-black group-hover:text-teal-600">
-        <Icon size={18} />
-      </div>
-      <span className="text-[11px] font-black text-black uppercase tracking-widest text-center group-hover:text-black transition-colors">
-        {name}
-      </span>
-    </Link>
-  );
-}
-
-function ReportColumn({ title, items }: any) {
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-2">
-        <h4 className="text-[11px] font-black text-slate-800 uppercase tracking-[0.3em] font-handlee">{title}</h4>
-        <div className="w-12 h-1 bg-secondary rounded-full" />
-      </div>
-      <div className="grid grid-cols-1 gap-2">
-        {items.map((item: any, i: number) => (
-          <Link key={i} href="#" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-md hover:translate-x-2 transition-all group">
-            <div className="p-2 bg-slate-100 rounded-lg text-slate-400 group-hover:bg-primary/10 group-hover:text-primary transition-all">
-             <item.icon size={14} />
-            </div>
-            <span className="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors">{item.name}</span>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ShieldUser(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-      <path d="M12 17s2-1 2-2.5c0-1.5-1-2.5-2-2.5s-2 1-2 2.5c0 1.5 2 2.5 2 2.5" />
-      <circle cx="12" cy="9" r="2" />
-    </svg>
-  )
-}
-
-function ShieldCheck(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
-      <path d="m9 12 2 2 4-4" />
-    </svg>
-  )
-}
-
-function PlusCircle(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 12h8" />
-      <path d="M12 8v8" />
-    </svg>
-  )
-}
-
-// Granular commit 4 for Step 5 (Frontend Integration)
-
-// Granular commit 8 for Step 5 (Frontend Integration)
-
-// Granular commit 12 for Step 5 (Frontend Integration)
-
-// Granular commit 16 for Step 5 (Frontend Integration)
-
-// Granular commit 20 for Step 5 (Frontend Integration)
-
-// Granular commit 24 for Step 5 (Frontend Integration)
-
-// Granular commit 28 for Step 5 (Frontend Integration)
-// Step 9-21 - Implement Admin view for staff details and assignments
-// Step 9-22 - Add search functionality for staff in Admin view
-// Step 9-23 - Add search functionality for students in Admin view
-// Step 9-24 - Implement real-time stats update in Admin dashboard
-// Step 9-25 - Add welcome message with personalization to all dashboards
-// Step 9-26 - Refine responsive layout for profile forms
-// Step 9-27 - Add confirmation dialogs for profile updates
-// Step 9-28 - Implement image upload placeholder for profiles
-// Step 9-29 - Add multi-language support (English/Sinhala) placeholders
-// Step 9-30 - Final cleanup of Role Specific Portals for Step 9
-// Step 10-3 - Final integration check of Teacher verification process
-// Step 10-6 - Add transition animations between portal views
-// Step 10-9 - Verify NIC login for staff with test data
-// Step 10-12 - Test verification status updates across roles
-// Step 10-15 - Optimize bundle size with dynamic imports
-// Step 10-18 - Implement session timeout warning logic
-// Step 10-21 - Polish glassmorphism effects for better contrast
-// Step 10-24 - Test password update workflow for new users
-// Step 10-27 - Final review of verification status tracking
-// Step 10-30 - Complete migration and refinement of School System Logic
