@@ -93,24 +93,21 @@ export default function LoginPage() {
             Portal Access
           </h2>
           
-          <div className="mt-3 flex flex-col gap-1">
-            <p className="text-[10px] font-bold text-slate-600 bg-white/60 border border-slate-200 py-1 px-3 rounded-full inline-block">
-              Student: Use Index No
-            </p>
-            <p className="text-[10px] font-bold text-slate-600 bg-white/60 border border-slate-200 py-1 px-3 rounded-full inline-block">
-              Staff: Use NIC (Numbers only)
-            </p>
-          </div>
+          <div className="mt-4" />
         </div>
 
-        <div className="bg-white/90 backdrop-blur-xl py-6 px-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] sm:rounded-[2rem] border border-white/50 w-full">
-          <form className="space-y-4" onSubmit={handleLogin}>
+        <div className="bg-white/70 backdrop-blur-2xl py-8 px-10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] sm:rounded-[2.5rem] border border-white/60 w-full relative overflow-hidden group/card">
+          {/* Subtle accent light */}
+          <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl" />
+          
+          <form className="space-y-5 relative z-10" onSubmit={handleLogin}>
             {error && (
-              <div className="bg-rose-50 border border-rose-100 text-rose-600 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
-                <AlertCircle className="h-4 w-4 shrink-0" />
+              <div className="bg-rose-50 border border-rose-100 text-rose-600 px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                <AlertCircle className="h-5 w-5 shrink-0" />
                 <p>{error}</p>
               </div>
             )}
+
 
             <div className="space-y-3">
               <div className="relative group">
@@ -188,22 +185,23 @@ export default function LoginPage() {
             <div>
               <Button 
                 type="submit" 
-                className="w-full h-11 text-sm shadow-md font-black uppercase tracking-widest bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all active:scale-[0.98] rounded-xl"
+                className="w-full h-12 text-sm shadow-xl font-black uppercase tracking-[0.2em] bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:shadow-blue-200/50 transition-all active:scale-[0.98] rounded-2xl border-none"
                 isLoading={isLoading}
               >
-                Login
+                Sign In
               </Button>
             </div>
           </form>
 
-          <div className="mt-4 text-center">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-              Secure Access System · AMV Negombo
+          <div className="mt-6 text-center">
+            <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em] opacity-80">
+              Institutional Security Protocol
             </p>
           </div>
         </div>
       </div>
     </div>
+
 
   );
 }
