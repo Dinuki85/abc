@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Button } from '@/components/ui/Button';
@@ -11,6 +13,7 @@ export default function ParentsPage() {
   ];
 
   return (
+    <div className="space-y-6 animate-in fade-in duration-700 pb-20">
       <div className="max-w-[1600px] mx-auto bg-white p-4 rounded-[2rem] border border-slate-100 shadow-xl flex flex-col xl:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4 px-2">
           <div className="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600">
@@ -36,9 +39,9 @@ export default function ParentsPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-black font-black">Registered Guardians</CardTitle>
+      <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white">
+        <CardHeader className="px-8 py-6 border-b border-gray-50">
+          <CardTitle className="text-lg font-black text-black">Registered Guardians</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -54,7 +57,7 @@ export default function ParentsPage() {
             </TableHeader>
             <TableBody>
               {parents.map((p) => (
-                <TableRow key={p.id}>
+                <TableRow key={p.id} className="hover:bg-slate-50 transition-colors">
                   <TableCell className="px-8 font-black text-black">{p.id}</TableCell>
                   <TableCell className="font-bold text-black">{p.name}</TableCell>
                   <TableCell>
@@ -69,7 +72,7 @@ export default function ParentsPage() {
                       <span className="flex items-center uppercase tracking-tighter"><Phone size={12} className="mr-1 text-primary"/> {p.phone}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-right space-x-2">
+                  <TableCell className="px-8 text-right space-x-2">
                     <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600">
                       <Edit2 size={16} />
                     </Button>

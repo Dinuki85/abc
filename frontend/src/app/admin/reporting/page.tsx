@@ -80,8 +80,9 @@ export default function ReportingPage() {
 
 function ReportSection({ title, items, color }: any) {
   return (
-    <div className="bg-white p-4 rounded-[1.5rem] border-2 shadow-sm space-y-3 flex flex-col h-full transition-all duration-300 hover:shadow-lg"
+    <div className="bg-white p-3.5 rounded-[1.25rem] border-2 shadow-sm space-y-2.5 flex flex-col lg:h-full transition-all duration-300 hover:shadow-lg"
          style={{ borderColor: `${color}15` }}>
+
       <div className="flex flex-col gap-1 px-1">
         <h4 className="text-[13px] font-black text-black uppercase tracking-[0.1em]">{title}</h4>
         <div className="w-10 h-1 rounded-full" style={{ backgroundColor: color }} />
