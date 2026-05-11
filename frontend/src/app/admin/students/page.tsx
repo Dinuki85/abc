@@ -245,21 +245,21 @@ export default function StudentsPage() {
           </div>
         </CardHeader>
 
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
+        <CardContent className="p-0 overflow-hidden">
+          <div className="w-full">
             <Table>
-              <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
+              <TableHeader className="bg-slate-50 border-b border-slate-200">
                 <TableRow className="border-none">
-                  <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black w-[180px]">Admission No</TableHead>
-                  <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Student Identity</TableHead>
-                  <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Grade / Class</TableHead>
-                  <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Verification</TableHead>
+                  <TableHead className="px-6 py-4 text-[12px] font-black uppercase tracking-[0.1em] text-black w-[150px]">Admission</TableHead>
+                  <TableHead className="py-4 text-[12px] font-black uppercase tracking-[0.1em] text-black">Student Name</TableHead>
+                  <TableHead className="hidden md:table-cell py-4 text-[12px] font-black uppercase tracking-[0.1em] text-black text-center w-[150px]">Academic Cell</TableHead>
+                  <TableHead className="hidden sm:table-cell py-4 text-[12px] font-black uppercase tracking-[0.1em] text-black text-center w-[130px]">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading && Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={`loading-${i}`}>
-                    <TableCell colSpan={4} className="px-8 py-8 animate-pulse">
+                    <TableCell colSpan={4} className="px-6 py-6 animate-pulse">
                       <div className="h-4 bg-slate-100 rounded-full w-full" />
                     </TableCell>
                   </TableRow>
@@ -269,10 +269,10 @@ export default function StudentsPage() {
                   <TableRow>
                     <TableCell colSpan={4} className="py-32 text-center">
                       <div className="flex flex-col items-center gap-4">
-                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-black">
-                          <Search size={40} />
+                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-black opacity-20">
+                          <Search size={32} />
                         </div>
-                        <p className="text-black font-black italic">No students found matching your criteria</p>
+                        <p className="text-black font-black italic opacity-40 uppercase tracking-widest text-xs">No Records Found</p>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -281,39 +281,40 @@ export default function StudentsPage() {
                 {!isLoading && students.map((st) => (
                   <TableRow key={st.id || st.username} className="hover:bg-slate-50/50 transition-colors group">
                     <TableCell 
-                      className="px-8 py-5 font-black text-primary font-mono tracking-tighter text-base cursor-pointer hover:underline"
+                      className="px-6 py-4 font-black text-primary font-mono tracking-tighter text-sm cursor-pointer hover:underline"
                       onClick={() => openProfile(st)}
                     >
                       {st.username}
                     </TableCell>
                     <TableCell 
-                      className="py-5 cursor-pointer group-hover:bg-slate-100 transition-colors rounded-xl"
+                      className="py-4 cursor-pointer"
                       onClick={() => openProfile(st)}
                     >
-                      <div className="flex flex-col px-2">
-                        <span className="text-sm font-black text-black group-hover:text-primary transition-colors">
-                          {st.fullName || <span className="text-black italic font-bold">Pending Completion</span>}
+                      <div className="flex flex-col">
+                        <span className="text-sm font-black text-black group-hover:text-primary transition-colors line-clamp-1">
+                          {st.fullName || <span className="text-rose-500 italic font-bold">Incomplete Profile</span>}
                         </span>
-                        <span className="text-[13px] font-black text-black uppercase tracking-widest mt-0.5">
-                          Account Created
-                        </span>
+                        <div className="flex items-center gap-2 mt-0.5 md:hidden">
+                           <span className="text-[10px] font-black text-black uppercase opacity-60">
+                             {st.gradeName} {st.className}
+                           </span>
+                        </div>
                       </div>
                     </TableCell>
-                    <TableCell className="py-5 text-center">
-                      <div className="flex flex-col items-center gap-1.5">
-                        <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[12px] font-black uppercase tracking-widest border border-slate-200">
+                    <TableCell className="hidden md:table-cell py-4 text-center">
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-[11px] font-black text-black uppercase tracking-widest">
                           {st.gradeName || 'N/A'}
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-primary/5 text-primary text-[12px] font-black uppercase tracking-widest border border-primary/10">
+                        <span className="text-[10px] font-black text-primary uppercase opacity-70">
                           Class {st.className || 'N/A'}
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell className="py-5 text-center">
-                      <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest border
+                    <TableCell className="hidden sm:table-cell py-4 text-center">
+                      <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-widest border
                         ${st.verificationStatus === 'VERIFIED' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
                           st.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${st.verificationStatus === 'VERIFIED' ? 'bg-emerald-500' : 'bg-blue-500'} animate-pulse`} />
                         {st.verificationStatus || 'PENDING'}
                       </div>
                     </TableCell>
@@ -323,6 +324,7 @@ export default function StudentsPage() {
             </Table>
           </div>
         </CardContent>
+
       </Card>
 
       {/* Enrollment Modal - Redesigned */}
