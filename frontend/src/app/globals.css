@@ -69,3 +69,344 @@ h1, h2, h3, h4, .font-handlee {
 /* Step 8-23 - Add gradient background for sidebar active state */
 /* Step 8-26 - Add font-inter as fallback to globals.css */
 /* Step 8-29 - Add logo placeholder to top of sidebar */
+
+/* ── Admin Dashboard ──────────────────────────────────────────── */
+@keyframes amv-gradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes amv-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes amv-fadeup {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.amv-gradient-text {
+  background: linear-gradient(90deg, #17a2b8, #ffc107, #17a2b8);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: amv-gradient 4s ease infinite;
+}
+
+.amv-logo-float { animation: amv-float 5s ease-in-out infinite; }
+
+.amv-fadeup   { animation: amv-fadeup 0.6s ease both; }
+.amv-fadeup-1 { animation: amv-fadeup 0.6s ease 0.1s both; }
+.amv-fadeup-2 { animation: amv-fadeup 0.6s ease 0.2s both; }
+
+/* ── Stat Cards ─────────────────────────────────────────────── */
+.amv-stat-card {
+  background: white;
+  border: 2.5px solid #343a40;
+  border-radius: 20px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: default;
+  box-shadow: 4px 4px 0px #343a40;
+}
+.amv-stat-card:hover {
+  transform: translateY(-6px) translateX(-2px);
+  box-shadow: 6px 10px 0px #343a40;
+  border-color: #17a2b8;
+}
+.amv-stat-card:hover .amv-stat-val { color: #17a2b8; }
+
+.amv-stat-val {
+  font-size: clamp(22px, 2.5vw, 34px);
+  font-weight: 900;
+  color: #000;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s;
+}
+.amv-stat-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  border: 2px solid #343a40;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.amv-stat-card:hover .amv-stat-icon { transform: scale(1.2) rotate(10deg); }
+
+.amv-stat-label {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #000;
+  text-align: center;
+}
+
+/* ── Module Buttons ─────────────────────────────────────────── */
+.amv-btn {
+  height: 100%;
+  border-radius: 20px;
+  border: 2.5px solid #343a40;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 4px 4px 0px #343a40;
+}
+.amv-btn:hover {
+  transform: translateY(-4px) translateX(-2px);
+  box-shadow: 6px 8px 0px #343a40;
+}
+
+/* Administration — School Primary Teal */
+.amv-btn-indigo .amv-btn-icon { background: #e6f7f9; color: #17a2b8; border: 2px solid #17a2b8; }
+.amv-btn-indigo:hover { background: #17a2b8; border-color: #17a2b8; box-shadow: 6px 8px 0px #0d6e7d; }
+.amv-btn-indigo:hover .amv-btn-icon { background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.4); transform: scale(1.1) rotate(6deg); }
+.amv-btn-indigo:hover .amv-btn-title { color: white; }
+.amv-btn-indigo:hover .amv-btn-sub   { color: rgba(255,255,255,0.85); }
+.amv-btn-indigo:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); }
+
+/* Registration — School Secondary Amber */
+.amv-btn-emerald .amv-btn-icon { background: #fff9e6; color: #d49e00; border: 2px solid #ffc107; }
+.amv-btn-emerald:hover { background: #ffc107; border-color: #ffc107; box-shadow: 6px 8px 0px #a07800; }
+.amv-btn-emerald:hover .amv-btn-icon { background: rgba(255,255,255,0.2); color: #343a40; border-color: rgba(255,255,255,0.4); transform: scale(1.1) rotate(6deg); }
+.amv-btn-emerald:hover .amv-btn-title { color: #343a40; }
+.amv-btn-emerald:hover .amv-btn-sub   { color: rgba(52,58,64,0.75); }
+.amv-btn-emerald:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); color: #343a40; }
+
+/* Performance — School Dark */
+.amv-btn-amber .amv-btn-icon { background: #e9eaeb; color: #343a40; border: 2px solid #343a40; }
+.amv-btn-amber:hover { background: #343a40; border-color: #343a40; box-shadow: 6px 8px 0px #000; }
+.amv-btn-amber:hover .amv-btn-icon { background: rgba(255,255,255,0.15); color: white; border-color: rgba(255,255,255,0.4); transform: scale(1.1) rotate(6deg); }
+.amv-btn-amber:hover .amv-btn-title { color: white; }
+.amv-btn-amber:hover .amv-btn-sub   { color: rgba(255,255,255,0.85); }
+.amv-btn-amber:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); }
+
+/* Display — School Teal (deeper) */
+.amv-btn-rose .amv-btn-icon { background: #e6f7f9; color: #138496; border: 2px solid #138496; }
+.amv-btn-rose:hover { background: #138496; border-color: #138496; box-shadow: 6px 8px 0px #0a5560; }
+.amv-btn-rose:hover .amv-btn-icon { background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.4); transform: scale(1.1) rotate(6deg); }
+.amv-btn-rose:hover .amv-btn-title { color: white; }
+.amv-btn-rose:hover .amv-btn-sub   { color: rgba(255,255,255,0.85); }
+.amv-btn-rose:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); }
+
+.amv-btn-icon {
+  width: 44px; height: 44px;
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.amv-btn-title {
+  font-size: clamp(11px, 1.2vw, 16px);
+  font-weight: 900;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-align: center;
+  transition: color 0.3s;
+}
+.amv-btn-sub {
+  font-size: 8px;
+  font-weight: 800;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  line-height: 1.4;
+  transition: color 0.3s;
+  opacity: 0.6;
+}
+.amv-btn:hover .amv-btn-sub { opacity: 1; }
+.amv-btn-arrow {
+  position: absolute;
+  top: 12px; right: 12px;
+  color: white;
+  opacity: 0;
+  transform: translate(6px, -6px);
+  transition: all 0.3s;
+}
+
+
+@keyframes amv-gradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes amv-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes amv-fadeup {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.amv-gradient-text {
+  background: linear-gradient(90deg, #4338ca, #818cf8, #4338ca);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: amv-gradient 4s ease infinite;
+}
+
+.amv-logo-float {
+  animation: amv-float 5s ease-in-out infinite;
+}
+
+.amv-fadeup { animation: amv-fadeup 0.6s ease both; }
+.amv-fadeup-1 { animation: amv-fadeup 0.6s ease 0.1s both; }
+.amv-fadeup-2 { animation: amv-fadeup 0.6s ease 0.2s both; }
+
+/* Stat Cards */
+.amv-stat-card {
+  background: white;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: default;
+}
+.amv-stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  border-color: #4338ca;
+}
+.amv-stat-card:hover .amv-stat-val { color: #4338ca; }
+.amv-stat-val {
+  font-size: clamp(22px, 2.5vw, 36px);
+  font-weight: 900;
+  color: #1e293b;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s;
+}
+.amv-stat-icon {
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.amv-stat-card:hover .amv-stat-icon { transform: scale(1.25) rotate(10deg); }
+.amv-stat-label {
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #94a3b8;
+  text-align: center;
+  transition: color 0.3s;
+}
+.amv-stat-card:hover .amv-stat-label { color: #475569; }
+
+/* Module Buttons */
+.amv-btn {
+  height: 100%;
+  border-radius: 28px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+
+/* Indigo */
+.amv-btn-indigo:hover { background: #4338ca; border-color: #4338ca; transform: translateY(-6px) scale(1.02); box-shadow: 0 24px 48px rgba(67,56,202,0.35); }
+.amv-btn-indigo .amv-btn-icon { background: #eef2ff; color: #4338ca; }
+.amv-btn-indigo:hover .amv-btn-icon { background: rgba(255,255,255,0.2); color: white; transform: scale(1.1) rotate(6deg); }
+.amv-btn-indigo:hover .amv-btn-title { color: white; }
+.amv-btn-indigo:hover .amv-btn-sub { color: rgba(255,255,255,0.75); }
+.amv-btn-indigo:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); }
+
+/* Emerald */
+.amv-btn-emerald:hover { background: #059669; border-color: #059669; transform: translateY(-6px) scale(1.02); box-shadow: 0 24px 48px rgba(5,150,105,0.35); }
+.amv-btn-emerald .amv-btn-icon { background: #ecfdf5; color: #059669; }
+.amv-btn-emerald:hover .amv-btn-icon { background: rgba(255,255,255,0.2); color: white; transform: scale(1.1) rotate(6deg); }
+.amv-btn-emerald:hover .amv-btn-title { color: white; }
+.amv-btn-emerald:hover .amv-btn-sub { color: rgba(255,255,255,0.75); }
+.amv-btn-emerald:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); }
+
+/* Amber */
+.amv-btn-amber:hover { background: #d97706; border-color: #d97706; transform: translateY(-6px) scale(1.02); box-shadow: 0 24px 48px rgba(217,119,6,0.35); }
+.amv-btn-amber .amv-btn-icon { background: #fffbeb; color: #d97706; }
+.amv-btn-amber:hover .amv-btn-icon { background: rgba(255,255,255,0.2); color: white; transform: scale(1.1) rotate(6deg); }
+.amv-btn-amber:hover .amv-btn-title { color: white; }
+.amv-btn-amber:hover .amv-btn-sub { color: rgba(255,255,255,0.75); }
+.amv-btn-amber:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); }
+
+/* Rose */
+.amv-btn-rose:hover { background: #e11d48; border-color: #e11d48; transform: translateY(-6px) scale(1.02); box-shadow: 0 24px 48px rgba(225,29,72,0.35); }
+.amv-btn-rose .amv-btn-icon { background: #fff1f2; color: #e11d48; }
+.amv-btn-rose:hover .amv-btn-icon { background: rgba(255,255,255,0.2); color: white; transform: scale(1.1) rotate(6deg); }
+.amv-btn-rose:hover .amv-btn-title { color: white; }
+.amv-btn-rose:hover .amv-btn-sub { color: rgba(255,255,255,0.75); }
+.amv-btn-rose:hover .amv-btn-arrow { opacity: 1; transform: translate(0,0); }
+
+.amv-btn-icon {
+  width: 64px; height: 64px;
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.amv-btn-title {
+  font-size: clamp(14px, 1.6vw, 22px);
+  font-weight: 900;
+  color: #1e293b;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-align: center;
+  transition: color 0.35s;
+}
+.amv-btn-sub {
+  font-size: 9px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  line-height: 1.4;
+  transition: color 0.35s;
+}
+.amv-btn-arrow {
+  position: absolute;
+  top: 14px; right: 14px;
+  color: white;
+  opacity: 0;
+  transform: translate(6px, -6px);
+  transition: all 0.35s;
+}
+
