@@ -52,7 +52,7 @@ export default function AdminLayout({
       <div className="fixed -top-40 -right-40 w-96 h-96 bg-indigo-700/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
       <div className="fixed -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
 
-      {/* Top Navbar - Fixed */}
+      {/* Top Navbar - Fixed - shown on ALL admin pages */}
       <header className="h-20 bg-white border-b border-gray-100 flex-shrink-0 relative z-50">
         <DashboardNavbar 
           onMenuToggle={() => setIsMobileMenuOpen(true)} 
@@ -69,13 +69,15 @@ export default function AdminLayout({
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - Fixed/Static Column */}
-        <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
-          <Sidebar menuItems={adminMenuItems} />
-        </aside>
+        {pathname !== '/admin' && (
+          <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
+            <Sidebar menuItems={adminMenuItems} />
+          </aside>
+        )}
 
         {/* Main Content - Conditional Scroll */}
-        <main className={`flex-1 ${isNoScrollPage ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'} p-4 md:p-6 relative`}>
-          <div className={`max-w-[1600px] mx-auto h-full ${isNoScrollPage ? 'overflow-hidden' : ''}`}>
+        <main className={`flex-1 ${isNoScrollPage ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'} ${pathname === '/admin' ? 'p-0' : 'p-4 md:p-6'} relative`}>
+          <div className={`max-w-none mx-auto h-full ${isNoScrollPage ? 'overflow-hidden' : ''}`}>
             {children}
           </div>
         </main>
