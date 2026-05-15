@@ -66,10 +66,12 @@ export default function DashboardNavbar({
         <div className="w-12 h-12 flex-shrink-0">
           <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain" />
         </div>
-        <div className="flex flex-col">
-          <span className="text-2xl font-bold text-primary font-handlee leading-tight uppercase">{brandName}</span>
-          <span className="text-[12px] text-black font-black tracking-widest uppercase mt-0.5">
-            Andiambalama MV
+        <div className="flex flex-col justify-center">
+          {brandName && brandName !== 'AMV ADMIN' && (
+            <span className="text-2xl font-bold text-primary font-handlee leading-tight uppercase">{brandName}</span>
+          )}
+          <span className={`text-black font-black tracking-widest uppercase mt-0.5 ${brandName && brandName !== 'AMV ADMIN' ? 'text-[12px]' : 'text-sm sm:text-base'}`}>
+            Welcome To Andiambalama MV
           </span>
         </div>
       </div>
