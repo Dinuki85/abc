@@ -183,18 +183,18 @@ export default function AdminDashboard() {
 
         {/* ── 3. MODULE BUTTONS ────────────────────────────── */}
         <div
-          className="amv-fadeup-2 grid flex-1 min-h-0"
-          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}
+          className="amv-fadeup-2 grid flex-1 min-h-0 pb-2"
+          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}
         >
           {modules.map((m, i) => (
-            <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`}>
-              <span className="amv-btn-arrow"><ArrowRight size={14} /></span>
-              <div className="amv-btn-icon" style={{ width: 44, height: 44, borderRadius: 13 }}>
-                <m.icon size={22} strokeWidth={1.8} />
+            <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`} style={{ padding: '24px 16px' }}>
+              <span className="amv-btn-arrow"><ArrowRight size={18} /></span>
+              <div className="amv-btn-icon" style={{ width: 72, height: 72, borderRadius: 22, marginBottom: 8 }}>
+                <m.icon size={36} strokeWidth={2} />
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <span className="amv-btn-title">{m.title}</span>
-                <span className="amv-btn-sub">({m.sub})</span>
+              <div className="flex flex-col items-center gap-1.5">
+                <span className="amv-btn-title" style={{ fontSize: 'clamp(18px, 1.8vw, 24px)', letterSpacing: '0.02em' }}>{m.title}</span>
+                <span className="amv-btn-sub" style={{ fontSize: '11px', letterSpacing: '0.12em' }}>({m.sub})</span>
               </div>
             </Link>
           ))}
