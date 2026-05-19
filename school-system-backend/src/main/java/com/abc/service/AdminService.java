@@ -404,7 +404,7 @@ public class AdminService {
 
         // 3. Assign Class if provided
         if (request.getGradeId() != null && request.getClassId() != null) {
-            this.assignStudentToClass(request.getUsername(), request.getGradeId(), request.getClassId());
+            this.assignStudentToClass(generatedUsername, request.getGradeId(), request.getClassId());
         }
     }
 
