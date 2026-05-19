@@ -72,9 +72,11 @@ export default function AdminLayout({
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - Fixed/Static Column */}
-        <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
-          <Sidebar menuItems={adminMenuItems} />
-        </aside>
+        {pathname !== '/admin' && (
+          <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
+            <Sidebar menuItems={adminMenuItems} />
+          </aside>
+        )}
 
         {/* Main Content - Conditional Scroll */}
         <main className={`flex-1 ${isNoScrollPage ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'} ${pathname === '/admin' ? 'p-0' : 'p-4 md:p-6'} relative`}>
