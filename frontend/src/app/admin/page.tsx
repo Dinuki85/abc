@@ -183,8 +183,8 @@ export default function AdminDashboard() {
 
         {/* ── 3. MODULE BUTTONS ────────────────────────────── */}
         <div
-          className="amv-fadeup-2 grid flex-1 min-h-0 pb-2"
-          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}
+          className="amv-fadeup-2 grid flex-1 pb-2"
+          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, minHeight: 260 }}
         >
           {modules.map((m, i) => (
             <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`} style={{ padding: '24px 16px' }}>
