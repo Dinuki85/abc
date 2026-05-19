@@ -19,6 +19,13 @@ export default function StudentsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
+  // Enrollment Modal State
+  const [showModal, setShowModal] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [selectedGradeId, setSelectedGradeId] = useState<number | ''>('');
+  const [selectedClassId, setSelectedClassId] = useState<number | ''>('');
+
   // Directory Filters
   const [filterGradeId, setFilterGradeId] = useState<number | ''>('');
   const [filterClassId, setFilterClassId] = useState<number | ''>('');
@@ -268,6 +275,28 @@ export default function StudentsPage() {
     setSelectedStudent(null);
   };
 
+  // Enrollment form submission
+  const handleEnrollment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setMessage(null);
+    try {
+      await api.enrollStudent(username, password, selectedGradeId as number, selectedClassId as number);
+      setMessage({ type: 'success', text: `Student ${username} enrolled successfully!` });
+      setShowModal(false);
+      setUsername('');
+      setPassword('');
+      setSelectedGradeId('');
+      setSelectedClassId('');
+      setClasses([]);
+      fetchStudents(currentPage);
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message || 'Enrollment failed. Please check the details.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   // Submit and Save student registration
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -368,6 +397,14 @@ export default function StudentsPage() {
               Clear Selection
             </Button>
           )}
+
+          <Button 
+            className="h-9 px-4 rounded-lg bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs shadow-md shadow-primary/20"
+            onClick={() => setShowModal(true)}
+          >
+            <UserPlus size={13} className="mr-1.5" />
+            Enroll Student
+          </Button>
         </div>
       </div>
 
@@ -729,6 +766,118 @@ export default function StudentsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Enrollment Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-500 overflow-y-auto py-10 px-4">
+          <div className="flex min-h-full items-center justify-center">
+            <div className="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl border border-white/20 overflow-hidden animate-in zoom-in-95 duration-500">
+              <div className="p-10 border-b border-gray-100 flex justify-between items-center bg-slate-50/30">
+                <div className="flex items-center gap-5">
+                  <div className="w-16 h-16 rounded-[1.5rem] bg-primary text-white flex items-center justify-center shadow-2xl shadow-primary/30">
+                    <UserPlus size={32} />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-black font-handlee">New Student Enrollment</h3>
+                    <p className="text-sm text-black font-black tracking-tight">Generate access credentials and assign academic cell</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-black hover:bg-slate-100 transition-all">
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleEnrollment} className="p-10 space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Admission / Index No</label>
+                    <div className="relative">
+                      <Input 
+                        placeholder="STU-2024-0001" 
+                        value={username} 
+                        onChange={(e) => setUsername(e.target.value)} 
+                        required 
+                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-50/50 focus:bg-white transition-all shadow-inner"
+                      />
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
+                        <ShieldCheck size={20} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Secure Passcode</label>
+                    <div className="relative">
+                      <Input 
+                        type="password"
+                        placeholder="••••••••" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        required 
+                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-50/50 focus:bg-white transition-all shadow-inner"
+                      />
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
+                        <Lock size={20} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Primary Academic Grade</label>
+                    <select 
+                      value={selectedGradeId} 
+                      onChange={(e) => {
+                        const gId = parseInt(e.target.value);
+                        setSelectedGradeId(gId);
+                        setSelectedClassId('');
+                        fetchClassesForGrade(gId);
+                      }} 
+                      required 
+                      className="w-full h-14 bg-slate-50/50 border border-gray-200 rounded-2xl px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-slate-700 shadow-inner"
+                    >
+                      <option value="">Choose Grade</option>
+                      {grades.map(g => (
+                        <option key={g.id} value={g.id}>{g.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Assigned Class Section</label>
+                    <select 
+                      value={selectedClassId} 
+                      onChange={(e) => setSelectedClassId(parseInt(e.target.value))} 
+                      required 
+                      disabled={!selectedGradeId}
+                      className="w-full h-14 bg-slate-50/50 border border-gray-200 rounded-2xl px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-slate-700 shadow-inner disabled:opacity-50"
+                    >
+                      <option value="">Choose Class</option>
+                      {classes.map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-6">
+                  <Button 
+                    type="submit" 
+                    className="w-full h-16 rounded-3xl font-bold text-lg uppercase tracking-widest shadow-2xl shadow-primary/30 bg-primary hover:bg-primary-hover text-white active:scale-95 transition-all" 
+                    isLoading={isSubmitting}
+                  >
+                    Authorize &amp; Enroll Student
+                  </Button>
+                  <p className="text-center text-xs text-black font-black uppercase tracking-[0.15em] mt-6">
+                    Verified Administrative Action &bull; Security Logged
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
