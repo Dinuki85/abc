@@ -641,8 +641,8 @@ export default function StudentsPage() {
           </div>
         </CardHeader>
 
-        <CardContent className="p-0 overflow-hidden">
-          <div className="w-full max-h-[220px] overflow-y-auto custom-scrollbar">
+        <CardContent className="p-0">
+          <div className="w-full">
             <Table>
               <TableHeader className="bg-slate-50 border-b border-slate-200 sticky top-0 z-20">
                 <TableRow className="border-none">
