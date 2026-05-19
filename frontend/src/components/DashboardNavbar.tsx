@@ -52,49 +52,49 @@ export default function DashboardNavbar({
   const displayName = user?.fullName || user?.username || 'Administrator';
 
   return (
-    <header className="h-20 bg-white border-b border-gray-100 shadow-sm flex items-center justify-between px-4 md:px-8 relative z-[60] w-full">
+    <header className="h-16 bg-white border-b border-gray-100 shadow-sm flex items-center justify-between px-4 md:px-8 relative z-[60] w-full">
       {/* Branding */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {onMenuToggle && (
           <button 
             onClick={onMenuToggle}
-            className="lg:hidden flex items-center justify-center p-2 text-primary hover:bg-primary/5 rounded-lg transition-colors mr-2"
+            className="lg:hidden flex items-center justify-center p-2 text-primary hover:bg-primary/5 rounded-lg transition-colors mr-1"
           >
-            <Menu size={24} />
+            <Menu size={20} />
           </button>
         )}
-        <div className="w-12 h-12 flex-shrink-0">
+        <div className="w-10 h-10 flex-shrink-0">
           <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain" />
         </div>
         <div className="flex flex-col justify-center">
           {brandName && brandName !== 'AMV ADMIN' && (
-            <span className="text-2xl font-bold text-primary font-handlee leading-tight uppercase">{brandName}</span>
+            <span className="text-xl font-bold text-primary font-handlee leading-tight uppercase">{brandName}</span>
           )}
-          <span className={`text-black font-black tracking-widest uppercase mt-0.5 ${brandName && brandName !== 'AMV ADMIN' ? 'text-[12px]' : 'text-sm sm:text-base'}`}>
+          <span className={`text-black font-black tracking-widest uppercase mt-0.5 ${brandName && brandName !== 'AMV ADMIN' ? 'text-[11px]' : 'text-xs sm:text-sm'}`}>
             Welcome To Andiambalama MV
           </span>
         </div>
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-4 md:gap-8">
+      <div className="flex items-center gap-3 md:gap-6">
         {/* Machine Time */}
-        <div className="hidden lg:flex flex-col items-end border-r border-gray-200 pr-8">
-          <span className="text-[11px] font-black text-black uppercase tracking-[0.2em]">System Status</span>
-          <div className="flex items-center gap-2 text-base font-black text-slate-800 tabular-nums">
-            <Clock size={14} className="text-primary" />
+        <div className="hidden lg:flex flex-col items-end border-r border-gray-200 pr-6">
+          <span className="text-[10px] font-black text-black uppercase tracking-[0.2em]">System Status</span>
+          <div className="flex items-center gap-2 text-sm font-black text-slate-800 tabular-nums">
+            <Clock size={12} className="text-primary" />
             {mounted && time ? time : '--:--:--'}
           </div>
         </div>
 
         {/* User Identity */}
-        <div className="flex items-center gap-2 bg-slate-50 px-2 py-1.5 rounded-xl border border-gray-100 hover:bg-primary/5 transition-colors cursor-pointer group">
-          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white font-black shadow-sm ring-2 ring-white group-hover:ring-secondary/50 transition-all">
+        <div className="flex items-center gap-2 bg-slate-50 px-2 py-1 rounded-xl border border-gray-100 hover:bg-primary/5 transition-colors cursor-pointer group">
+          <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-white font-black shadow-sm ring-2 ring-white group-hover:ring-secondary/50 transition-all text-xs">
             {displayName[0].toUpperCase()}
           </div>
           <div className="hidden md:flex items-center gap-1.5 pr-2">
-            <ShieldCheck size={14} className="text-primary" />
-            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider leading-none">
+            <ShieldCheck size={12} className="text-primary" />
+            <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider leading-none">
               {displayName}
             </span>
           </div>
@@ -102,9 +102,9 @@ export default function DashboardNavbar({
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 md:gap-3 bg-primary hover:bg-primary-hover text-white p-2.5 md:px-5 md:py-2.5 rounded-full font-bold text-xs transition-all active:scale-95 shadow-md shadow-primary/20 uppercase tracking-widest"
+          className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white p-2 md:px-4 md:py-2 rounded-full font-bold text-[11px] transition-all active:scale-95 shadow-md shadow-primary/20 uppercase tracking-widest"
         >
-          <LogOut size={16} />
+          <LogOut size={14} />
           <span className="hidden sm:inline">Log Out</span>
         </button>
       </div>

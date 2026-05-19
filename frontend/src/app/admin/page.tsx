@@ -73,17 +73,17 @@ export default function AdminDashboard() {
 
       {/* ── MAIN CONTENT ──────────────────────────────────── */}
       <main
-        className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden relative z-10 custom-scrollbar"
-        style={{ padding: '16px 40px 24px', gap: 16 }}
+        className="flex-1 flex flex-col overflow-hidden relative z-10"
+        style={{ padding: '12px 32px 12px', gap: 12 }}
       >
 
         {/* ── 1. WELCOME & STATS ──────────────────────────────── */}
         <div
-          className="amv-fadeup flex-shrink-0 flex flex-col justify-center gap-7 relative overflow-hidden group/banner"
+          className="amv-fadeup flex-shrink-0 flex flex-col justify-center gap-4 relative overflow-hidden group/banner"
           style={{
             background: 'linear-gradient(to right, #111424, #1a1f35)',
-            borderRadius: 24,
-            padding: '32px 40px',
+            borderRadius: 20,
+            padding: '20px 24px',
             boxShadow: '0 12px 30px -8px rgba(0,0,0,0.5)',
             border: '1px solid rgba(255,255,255,0.06)',
           }}
@@ -95,13 +95,13 @@ export default function AdminDashboard() {
           </div>
 
           {/* Greeting */}
-          <div className="relative z-10 flex items-center gap-6 pl-2">
-            <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-xl p-2 shrink-0">
+          <div className="relative z-10 flex items-center gap-4 pl-2">
+            <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-xl p-2 shrink-0">
               <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain filter drop-shadow-lg amv-logo-float" />
             </div>
             <div className="flex flex-col">
               <h2 className="tracking-wide" style={{ 
-                fontSize: 'clamp(26px, 2.8vw, 36px)', 
+                fontSize: 'clamp(20px, 2.2vw, 28px)', 
                 fontWeight: 800, 
                 color: '#f8fafc',
                 lineHeight: 1.1,
@@ -123,16 +123,16 @@ export default function AdminDashboard() {
           </div>
 
           {/* Stats Cards Inside Banner */}
-          <div className="flex w-full gap-5 relative z-10 mt-1">
+          <div className="flex w-full gap-4 relative z-10 mt-0">
             {statItems.map((s, i) => (
               <div 
                 key={i} 
-                className="amv-fadeup-1 flex flex-col items-center flex-1 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] group/card cursor-pointer"
+                className="amv-fadeup-1 flex flex-col items-center flex-1 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] group/card cursor-pointer"
                 style={{
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 24,
-                  padding: '32px 16px',
+                  borderRadius: 20,
+                  padding: '12px 10px',
                   boxShadow: '0 20px 40px -10px rgba(0,0,0,0.3)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
@@ -144,23 +144,23 @@ export default function AdminDashboard() {
                   className="transition-transform duration-300 group-hover/card:scale-110 group-hover/card:rotate-6"
                   style={{
                     background: s.color === '#343a40' ? 'rgba(255,255,255,0.12)' : `${s.color}35`,
-                    borderRadius: 16,
-                    width: 56,
-                    height: 56,
+                    borderRadius: 14,
+                    width: 44,
+                    height: 44,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginBottom: 20,
+                    marginBottom: 8,
                   }}
                 >
-                  <s.icon size={28} color={s.color === '#343a40' ? '#cbd5e1' : s.color} strokeWidth={2.5} className="group-hover/card:animate-pulse" />
+                  <s.icon size={22} color={s.color === '#343a40' ? '#cbd5e1' : s.color} strokeWidth={2.5} className="group-hover/card:animate-pulse" />
                 </div>
                 <div style={{ 
                   color: '#ffffff', 
-                  fontSize: 'clamp(32px, 3vw, 44px)', 
+                  fontSize: 'clamp(22px, 2.2vw, 28px)', 
                   fontWeight: 900, 
                   lineHeight: 1, 
-                  marginBottom: 10,
+                  marginBottom: 6,
                   letterSpacing: '-0.02em',
                   textShadow: '0 2px 10px rgba(0,0,0,0.2)'
                 }}>
@@ -168,7 +168,7 @@ export default function AdminDashboard() {
                 </div>
                 <div style={{ 
                   color: '#94a3b8', 
-                  fontSize: 12, 
+                  fontSize: 10, 
                   fontWeight: 700, 
                   letterSpacing: '0.12em', 
                   textTransform: 'uppercase',
@@ -183,18 +183,18 @@ export default function AdminDashboard() {
 
         {/* ── 3. MODULE BUTTONS ────────────────────────────── */}
         <div
-          className="amv-fadeup-2 grid flex-1 pb-2"
-          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, minHeight: 260 }}
+          className="amv-fadeup-2 grid flex-1 min-h-0"
+          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}
         >
           {modules.map((m, i) => (
-            <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`} style={{ padding: '24px 16px' }}>
-              <span className="amv-btn-arrow"><ArrowRight size={18} /></span>
-              <div className="amv-btn-icon" style={{ width: 72, height: 72, borderRadius: 22, marginBottom: 8 }}>
-                <m.icon size={36} strokeWidth={2} />
+            <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`} style={{ padding: '12px 12px' }}>
+              <span className="amv-btn-arrow"><ArrowRight size={14} /></span>
+              <div className="amv-btn-icon" style={{ width: 48, height: 48, borderRadius: 14, marginBottom: 4 }}>
+                <m.icon size={24} strokeWidth={2} />
               </div>
-              <div className="flex flex-col items-center gap-1.5">
-                <span className="amv-btn-title" style={{ fontSize: 'clamp(18px, 1.8vw, 24px)', letterSpacing: '0.02em' }}>{m.title}</span>
-                <span className="amv-btn-sub" style={{ fontSize: '11px', letterSpacing: '0.12em' }}>({m.sub})</span>
+              <div className="flex flex-col items-center gap-1">
+                <span className="amv-btn-title" style={{ fontSize: 'clamp(13px, 1.4vw, 18px)', letterSpacing: '0.02em' }}>{m.title}</span>
+                <span className="amv-btn-sub" style={{ fontSize: '9px', letterSpacing: '0.12em' }}>({m.sub})</span>
               </div>
             </Link>
           ))}
