@@ -95,26 +95,31 @@ export default function AdminDashboard() {
           </div>
 
           {/* Greeting */}
-          <div className="relative z-10 flex flex-col pl-1">
-            <h2 className="tracking-wide" style={{ 
-              fontSize: 'clamp(24px, 2.5vw, 32px)', 
-              fontWeight: 800, 
-              color: '#f8fafc',
-              lineHeight: 1.1,
-              margin: 0,
-            }}>
-              Welcome To{' '}
-              <span style={{ 
-                background: 'linear-gradient(135deg, #a5b4fc 0%, #818cf8 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 900,
-                textShadow: '0 2px 10px rgba(129, 140, 248, 0.2)'
+          <div className="relative z-10 flex items-center gap-6 pl-2">
+            <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-xl p-2 shrink-0">
+              <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain filter drop-shadow-lg amv-logo-float" />
+            </div>
+            <div className="flex flex-col">
+              <h2 className="tracking-wide" style={{ 
+                fontSize: 'clamp(26px, 2.8vw, 36px)', 
+                fontWeight: 800, 
+                color: '#f8fafc',
+                lineHeight: 1.1,
+                margin: 0,
               }}>
-                Andiambalama
-              </span>{' '}
-              Maha Vidhyalaya
-            </h2>
+                Welcome To{' '}
+                <span style={{ 
+                  background: 'linear-gradient(135deg, #a5b4fc 0%, #818cf8 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  fontWeight: 900,
+                  textShadow: '0 2px 10px rgba(129, 140, 248, 0.2)'
+                }}>
+                  Andiambalama
+                </span>{' '}
+                Maha Vidhyalaya
+              </h2>
+            </div>
           </div>
 
           {/* Stats Cards Inside Banner */}
@@ -124,10 +129,13 @@ export default function AdminDashboard() {
                 key={i} 
                 className="amv-fadeup-1 flex flex-col items-center flex-1 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] group/card cursor-pointer"
                 style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.05)',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
                   borderRadius: 24,
-                  padding: '24px 10px',
+                  padding: '32px 16px',
+                  boxShadow: '0 20px 40px -10px rgba(0,0,0,0.3)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
                   animationDelay: `${i * 100}ms`,
                   animationFillMode: 'both'
                 }}
@@ -135,33 +143,34 @@ export default function AdminDashboard() {
                 <div 
                   className="transition-transform duration-300 group-hover/card:scale-110 group-hover/card:rotate-6"
                   style={{
-                    background: s.color === '#343a40' ? 'rgba(255,255,255,0.1)' : `${s.color}25`,
-                    borderRadius: 14,
-                    width: 48,
-                    height: 48,
+                    background: s.color === '#343a40' ? 'rgba(255,255,255,0.12)' : `${s.color}35`,
+                    borderRadius: 16,
+                    width: 56,
+                    height: 56,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginBottom: 16,
+                    marginBottom: 20,
                   }}
                 >
-                  <s.icon size={24} color={s.color === '#343a40' ? '#94a3b8' : s.color} strokeWidth={2.5} className="group-hover/card:animate-pulse" />
+                  <s.icon size={28} color={s.color === '#343a40' ? '#cbd5e1' : s.color} strokeWidth={2.5} className="group-hover/card:animate-pulse" />
                 </div>
                 <div style={{ 
                   color: '#ffffff', 
-                  fontSize: 'clamp(24px, 2.5vw, 34px)', 
+                  fontSize: 'clamp(32px, 3vw, 44px)', 
                   fontWeight: 900, 
                   lineHeight: 1, 
-                  marginBottom: 6,
-                  letterSpacing: '-0.02em'
+                  marginBottom: 10,
+                  letterSpacing: '-0.02em',
+                  textShadow: '0 2px 10px rgba(0,0,0,0.2)'
                 }}>
                   {s.value.toLocaleString()}
                 </div>
                 <div style={{ 
-                  color: '#64748b', 
-                  fontSize: 10, 
-                  fontWeight: 800, 
-                  letterSpacing: '0.08em', 
+                  color: '#94a3b8', 
+                  fontSize: 12, 
+                  fontWeight: 700, 
+                  letterSpacing: '0.12em', 
                   textTransform: 'uppercase',
                   textAlign: 'center'
                 }}>
