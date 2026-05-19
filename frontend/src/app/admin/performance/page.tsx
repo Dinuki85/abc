@@ -43,7 +43,7 @@ export default function PerformancePage() {
           return (
             <Link key={i} href={mod.href} className="block group h-full">
               <div
-                className="h-full bg-white rounded-xl p-2 px-3 flex flex-col justify-between border-2 transition-all duration-300 relative overflow-hidden"
+                className="h-full bg-white rounded-xl p-2 px-3 flex flex-col items-center justify-center text-center border-2 transition-all duration-300 relative overflow-hidden"
                 style={{ borderColor: `${mod.color}25` }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLElement;
@@ -64,22 +64,15 @@ export default function PerformancePage() {
                   style={{ width: 50, height: 50, color: mod.color }}
                 />
 
-                <div className="flex items-start justify-between">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
-                  >
-                    <Icon size={18} strokeWidth={2.2} />
-                  </div>
-                  <div
-                    className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
-                  >
-                    <ArrowRight size={12} strokeWidth={3} />
-                  </div>
+                {/* Icon badge */}
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 mb-1"
+                  style={{ backgroundColor: `${mod.color}15`, color: mod.color }}
+                >
+                  <Icon size={18} strokeWidth={2.2} />
                 </div>
 
-                <div className="mt-1">
+                <div className="z-10">
                   <h3 className="text-[16px] font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
                     {mod.name}
                   </h3>
