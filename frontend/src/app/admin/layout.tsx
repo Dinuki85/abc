@@ -37,7 +37,7 @@ export default function AdminLayout({
     }
   }, [router]);
 
-  const isNoScrollPage = ['/admin', '/admin/institutional', '/admin/registration', '/admin/performance'].includes(pathname);
+  const isNoScrollPage = ['/admin', '/admin/institutional', '/admin/registration', '/admin/performance', '/admin/reporting'].includes(pathname);
 
 
 
