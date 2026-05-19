@@ -1,18 +1,18 @@
 package com.abc.dto;
 
 public class EnrollStudentRequest {
+    private String username;
     private String password;
-    private String fullName;
     private Long gradeId;
     private Long classId;
 
     public EnrollStudentRequest() {}
 
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
 
     public Long getGradeId() { return gradeId; }
     public void setGradeId(Long gradeId) { this.gradeId = gradeId; }

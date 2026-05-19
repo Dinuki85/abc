@@ -140,6 +140,12 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getTeacherOverview());
     }
 
+    @GetMapping("/next-student-index")
+    public ResponseEntity<java.util.Map<String, String>> getNextStudentIndex() {
+        String nextIndex = adminService.generateNextStudentIndex();
+        return ResponseEntity.ok(java.util.Collections.singletonMap("nextIndex", nextIndex));
+    }
+
     @PostMapping("/enroll-student")
     public ResponseEntity<?> enrollStudent(@RequestBody EnrollStudentRequest request) {
         try {

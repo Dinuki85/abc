@@ -362,26 +362,30 @@ public class AdminService {
         }).collect(Collectors.toList());
     }
 
-    @Transactional
-    public void enrollStudent(EnrollStudentRequest request) {
-        // Generate new index number based on the school prefix
+    public String generateNextStudentIndex() {
         Optional<String> maxUsernameOpt = userRepository.findMaxStudentUsernameWithPrefix(schoolIndexPrefix);
-        String generatedUsername;
         if (maxUsernameOpt.isPresent() && maxUsernameOpt.get().startsWith(schoolIndexPrefix)) {
             String maxStr = maxUsernameOpt.get();
             try {
                 int lastDigits = Integer.parseInt(maxStr.substring(schoolIndexPrefix.length()));
-                generatedUsername = schoolIndexPrefix + String.format("%05d", lastDigits + 1);
+                return schoolIndexPrefix + String.format("%05d", lastDigits + 1);
             } catch (NumberFormatException e) {
-                generatedUsername = schoolIndexPrefix + "00001";
+                return schoolIndexPrefix + "00001";
             }
         } else {
-            generatedUsername = schoolIndexPrefix + "00001";
+            return schoolIndexPrefix + "00001";
+        }
+    }
+
+    @Transactional
+    public void enrollStudent(EnrollStudentRequest request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new RuntimeException("Student with this index number already exists. Please refresh to get the latest index.");
         }
 
         // 1. Create User with temporary password
         User user = new User();
-        user.setUsername(generatedUsername);
+        user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.ROLE_STUDENT);
         user.setFirstLogin(true); // Mandatory first login workflow
@@ -390,7 +394,7 @@ public class AdminService {
         // 2. Create Student
         Student student = new Student();
         student.setUser(user);
-        student.setFullName(request.getFullName()); // Added to EnrollStudentRequest
+        student.setFullName(request.getUsername()); // Default name to index number
         student.setProfileCompleted(false);
         student.setVerificationStatus(VerificationStatus.PENDING);
         
@@ -404,7 +408,7 @@ public class AdminService {
 
         // 3. Assign Class if provided
         if (request.getGradeId() != null && request.getClassId() != null) {
-            this.assignStudentToClass(generatedUsername, request.getGradeId(), request.getClassId());
+            this.assignStudentToClass(request.getUsername(), request.getGradeId(), request.getClassId());
         }
     }
 

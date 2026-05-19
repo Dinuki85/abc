@@ -21,7 +21,7 @@ export default function StudentsPage() {
 
   // Enrollment Modal State
   const [showModal, setShowModal] = useState(false);
-  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [selectedGradeId, setSelectedGradeId] = useState<number | ''>('');
   const [selectedClassId, setSelectedClassId] = useState<number | ''>('');
@@ -147,6 +147,21 @@ export default function StudentsPage() {
       clearInterval(interval);
     };
   }, [currentPage, searchTerm, filterGradeId, filterClassId]);
+ 
+  // Fetch next student index when the enrollment modal is opened
+  useEffect(() => {
+    if (showModal) {
+      const fetchNextIndex = async () => {
+        try {
+          const nextIndex = await api.getNextStudentIndex();
+          setUsername(nextIndex);
+        } catch (error) {
+          console.error("Failed to fetch next student index", error);
+        }
+      };
+      fetchNextIndex();
+    }
+  }, [showModal]);
 
   const fetchClassesForGrade = async (gradeId: number, isFilter = false) => {
     try {
@@ -290,10 +305,10 @@ export default function StudentsPage() {
     setIsSubmitting(true);
     setMessage(null);
     try {
-      await api.enrollStudent(fullName, password, selectedGradeId as number, selectedClassId as number);
-      setMessage({ type: 'success', text: `Student ${fullName} enrolled successfully! Their Index Number will be auto-generated.` });
+      await api.enrollStudent(username, password, selectedGradeId as number, selectedClassId as number);
+      setMessage({ type: 'success', text: `Student enrolled successfully with Index Number: ${username}` });
       setShowModal(false);
-      setFullName('');
+      setUsername('');
       setPassword('');
       setSelectedGradeId('');
       setSelectedClassId('');
@@ -800,19 +815,18 @@ export default function StudentsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
                     <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2 flex justify-between">
-                      Student Full Name
-                      <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Index No Auto-generated</span>
+                      Generated Index No
+                      <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Auto-Generated</span>
                     </label>
                     <div className="relative">
                       <Input 
-                        placeholder="e.g. John Doe" 
-                        value={fullName} 
-                        onChange={(e) => setFullName(e.target.value)} 
-                        required 
-                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-50/50 focus:bg-white transition-all shadow-inner font-bold"
+                        placeholder="Fetching index..." 
+                        value={username} 
+                        readOnly
+                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-100 cursor-not-allowed focus:bg-slate-100 transition-all shadow-inner font-mono font-bold text-primary"
                       />
                       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
-                        <User size={20} />
+                        <ShieldCheck size={20} />
                       </div>
                     </div>
                   </div>

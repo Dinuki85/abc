@@ -304,7 +304,16 @@ class ApiService {
     return true;
   }
 
-  async getTeachers(): Promise<any[]> {
+  async getNextStudentIndex(): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/admin/next-student-index`, {
+      headers: this.getHeaders()
+    });
+    if (!response.ok) throw new Error(await response.text());
+    const data = await response.json();
+    return data.nextIndex;
+  }
+
+  async getTeachers(): Promise<Teacher[]> {
     const response = await fetch(`${API_BASE_URL}/admin/teachers`, {
       headers: this.getHeaders()
     });
@@ -394,11 +403,11 @@ class ApiService {
     return [];
   }
 
-  async enrollStudent(fullName: string, password: string, gradeId: number, classId: number): Promise<boolean> {
+  async enrollStudent(username: string, password: string, gradeId: number, classId: number): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/admin/enroll-student`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ fullName, password, gradeId, classId })
+      body: JSON.stringify({ username, password, gradeId, classId })
     });
     if (!response.ok) throw new Error(await response.text());
     return true;
