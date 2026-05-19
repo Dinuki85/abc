@@ -429,11 +429,16 @@ class ApiService {
     if (gradeId !== '' && gradeId !== undefined) url += `&gradeId=${gradeId}`;
     if (classId !== '' && classId !== undefined) url += `&classId=${classId}`;
     
-    const response = await fetch(url, {
-      headers: this.getHeaders()
-    });
-    if (response.ok) return await response.json();
-    return { content: [], totalElements: 0, totalPages: 0 };
+    try {
+      const response = await fetch(url, {
+        headers: this.getHeaders()
+      });
+      if (response.ok) return await response.json();
+      return { content: [], totalElements: 0, totalPages: 0 };
+    } catch (error) {
+      console.error("Failed to fetch students (Backend might be down):", error);
+      return { content: [], totalElements: 0, totalPages: 0 };
+    }
   }
 
   async getAdminStats(): Promise<any> {
