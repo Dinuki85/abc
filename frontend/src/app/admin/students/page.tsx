@@ -249,14 +249,23 @@ export default function StudentsPage() {
     }
   }, [selectedStudent]);
 
-  // If search matches exactly one student, load them automatically. If search is empty, clear the selection.
+  // Auto-select when a typed search yields exactly 1 result.
+  // Depends on [students, searchTerm] but the clear path ONLY fires from the second effect below,
+  // so polling-driven students updates will NOT close the workspace.
   useEffect(() => {
     if (searchTerm !== '' && students.length === 1) {
       setSelectedStudent(students[0]);
-    } else if (searchTerm === '') {
-      setSelectedStudent(null);
     }
   }, [students, searchTerm]);
+
+  // Only clear the selection when the user EXPLICITLY empties the search bar.
+  // By depending solely on [searchTerm] (not [students]), this effect does NOT
+  // re-fire when the 10-second polling refresh updates the student list.
+  useEffect(() => {
+    if (searchTerm === '') {
+      setSelectedStudent(null);
+    }
+  }, [searchTerm]);
 
   // Handle input binding
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
