@@ -73,8 +73,8 @@ export default function AdminDashboard() {
 
       {/* ── MAIN CONTENT ──────────────────────────────────── */}
       <main
-        className="flex-1 flex flex-col overflow-hidden relative z-10"
-        style={{ padding: '16px 40px 14px', gap: 12 }}
+        className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden relative z-10 custom-scrollbar"
+        style={{ padding: '16px 40px 24px', gap: 16 }}
       >
 
         {/* ── 1. WELCOME & STATS ──────────────────────────────── */}
