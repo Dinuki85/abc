@@ -6,13 +6,14 @@ import MobileSidebar from "@/components/admin/MobileSidebar";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { api } from "@/lib/api";
-import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck, Landmark, UserPlus, Activity, FileSpreadsheet, GraduationCap } from "lucide-react";
+import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck, Landmark, UserPlus, Activity, FileSpreadsheet, GraduationCap, LayoutDashboard, Presentation } from "lucide-react";
 
 const adminMenuItems = [
-  { name: 'Dashboard', href: '/admin/institutional', icon: Landmark },
-  { name: 'Registration', href: '/admin/registration', icon: UserPlus },
+  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Institutional', href: '/admin/institutional', icon: Landmark },
+  { name: 'Registration', href: '/admin/registration', icon: ShieldCheck },
   { name: 'Performance', href: '/admin/performance', icon: Activity },
-  { name: 'Display', href: '/admin/reporting', icon: FileSpreadsheet },
+  { name: 'Display', href: '/admin/reporting', icon: Presentation },
 ];
 
 
@@ -71,11 +72,9 @@ export default function AdminLayout({
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - Fixed/Static Column */}
-        {pathname !== '/admin' && (
-          <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
-            <Sidebar menuItems={adminMenuItems} />
-          </aside>
-        )}
+        <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
+          <Sidebar menuItems={adminMenuItems} />
+        </aside>
 
         {/* Main Content - Conditional Scroll */}
         <main className={`flex-1 ${isNoScrollPage ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'} ${pathname === '/admin' ? 'p-0' : 'p-4 md:p-6'} relative`}>
