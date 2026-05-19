@@ -31,6 +31,8 @@ export default function ChangePasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
+    
     setIsLoading(true);
     setError('');
 
@@ -53,7 +55,6 @@ export default function ChangePasswordPage() {
     }
 
     try {
-      if (!user) throw new Error('User not found');
       // If newUsername is empty, use the current username
       const finalUsername = newUsername || user.username;
       const success = await api.changePassword(user.username, newPassword, finalUsername);

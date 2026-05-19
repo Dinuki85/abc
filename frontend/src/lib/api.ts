@@ -96,10 +96,8 @@ export interface StudentProfile {
   addressPermanent?: string;
   addressTemporary?: string;
   contactEmergency?: string;
-  contactHome?: string;
-  contactMobile?: string;
-  distanceToSchool?: string;
-  
+  medicalDescription?: string;
+  talentDescription?: string;
   talentAgri?: boolean;
   talentIct?: boolean;
   talentAesthetic?: boolean;
@@ -270,16 +268,6 @@ class ApiService {
     return true;
   }
 
-  async enrollStudent(data: { username: string, password: string, gradeId: number, classId: number }) {
-    const response = await fetch(`${API_BASE_URL}/admin/enroll-student`, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify(data)
-    });
-    if (!response.ok) throw new Error(await response.text());
-    return true;
-  }
-
   async getGrades(): Promise<Grade[]> {
     const response = await fetch(`${API_BASE_URL}/admin/grades`, {
       headers: this.getHeaders()
@@ -382,14 +370,6 @@ class ApiService {
     return null;
   }
 
-  async getTeachers(): Promise<any[]> {
-    const response = await fetch(`${API_BASE_URL}/admin/teachers`, {
-      headers: this.getHeaders()
-    });
-    if (response.ok) return await response.json();
-    return [];
-  }
-
   async getTeacherOverview(): Promise<any> {
     const response = await fetch(`${API_BASE_URL}/admin/teachers/overview`, {
       headers: this.getHeaders()
@@ -412,6 +392,16 @@ class ApiService {
     });
     if (response.ok) return await response.json();
     return [];
+  }
+
+  async enrollStudent(username: string, password: string, gradeId: number, classId: number): Promise<boolean> {
+    const response = await fetch(`${API_BASE_URL}/admin/enroll-student`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ username, password, gradeId, classId, fullName: username })
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return true;
   }
 
   async deleteStudent(username: string): Promise<boolean> {
