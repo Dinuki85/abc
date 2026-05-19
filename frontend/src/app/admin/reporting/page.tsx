@@ -84,7 +84,7 @@ function ReportSection({ title, items, color }: any) {
          style={{ borderColor: `${color}15` }}>
 
       <div className="flex flex-col gap-0.5 px-1">
-        <h4 className="text-[11px] font-black text-black uppercase tracking-[0.1em]">{title}</h4>
+        <h4 className="text-[12px] font-black text-black uppercase tracking-[0.1em]">{title}</h4>
         <div className="w-8 h-[3px] rounded-full" style={{ backgroundColor: color }} />
       </div>
       <div className="grid grid-cols-1 gap-1 flex-1">
@@ -101,7 +101,7 @@ function ReportSection({ title, items, color }: any) {
               >
                 <item.icon size={14} strokeWidth={2.5} />
               </div>
-              <span className="text-[10px] font-black text-black uppercase tracking-tight">{item.name}</span>
+              <span className="text-[12px] font-black text-black uppercase tracking-tight">{item.name}</span>
             </div>
             <ArrowRight size={10} className="text-slate-300 group-hover:text-black group-hover:translate-x-0.5 transition-all" strokeWidth={3} />
           </Link>

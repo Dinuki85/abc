@@ -79,10 +79,10 @@ export default function RegistrationPage() {
                 </div>
 
                 <div className="mt-1">
-                  <h3 className="text-[13px] font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
+                  <h3 className="text-[16px] font-black tracking-tight leading-tight text-black uppercase transition-colors duration-200">
                     {mod.name}
                   </h3>
-                  <p className="text-[10px] font-black text-black mt-0.5 leading-snug opacity-80 line-clamp-1">
+                  <p className="text-[11px] font-black text-black mt-0.5 leading-snug opacity-80 line-clamp-1">
                     {mod.desc}
                   </p>
                 </div>

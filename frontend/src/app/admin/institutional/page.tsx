@@ -80,11 +80,11 @@ export default function InstitutionalAdminPage() {
                 {/* Text */}
                 <div className="z-10 mt-1">
                   <h3
-                    className="text-[13px] font-black tracking-tight leading-tight transition-colors duration-200 text-black uppercase"
+                    className="text-[16px] font-black tracking-tight leading-tight transition-colors duration-200 text-black uppercase"
                   >
                     {mod.name}
                   </h3>
-                  <p className="text-[10px] font-black text-black mt-0.5 leading-snug line-clamp-1 opacity-80">
+                  <p className="text-[11px] font-black text-black mt-0.5 leading-snug line-clamp-1 opacity-80">
                     {mod.desc}
                   </p>
                 </div>
