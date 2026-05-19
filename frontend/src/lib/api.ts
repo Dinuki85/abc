@@ -394,11 +394,11 @@ class ApiService {
     return [];
   }
 
-  async enrollStudent(username: string, password: string, gradeId: number, classId: number): Promise<boolean> {
+  async enrollStudent(fullName: string, password: string, gradeId: number, classId: number): Promise<boolean> {
     const response = await fetch(`${API_BASE_URL}/admin/enroll-student`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ username, password, gradeId, classId, fullName: username })
+      body: JSON.stringify({ fullName, password, gradeId, classId })
     });
     if (!response.ok) throw new Error(await response.text());
     return true;

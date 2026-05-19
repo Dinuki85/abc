@@ -9,6 +9,9 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
+
+    @org.springframework.data.jpa.repository.Query("SELECT MAX(u.username) FROM User u WHERE u.role = 'ROLE_STUDENT' AND u.username LIKE CONCAT(:prefix, '%')")
+    Optional<String> findMaxStudentUsernameWithPrefix(@org.springframework.data.repository.query.Param("prefix") String prefix);
 }
 
 // Granular commit 7 for Step 1

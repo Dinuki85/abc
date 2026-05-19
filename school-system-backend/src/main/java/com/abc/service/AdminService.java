@@ -4,6 +4,7 @@ import com.abc.dto.*;
 import com.abc.entity.*;
 import com.abc.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
+
+    @Value("${school.index.prefix:11246}")
+    private String schoolIndexPrefix;
 
     @Autowired
     private UserRepository userRepository;
@@ -360,13 +364,24 @@ public class AdminService {
 
     @Transactional
     public void enrollStudent(EnrollStudentRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new RuntimeException("Student with this index number already exists");
+        // Generate new index number based on the school prefix
+        Optional<String> maxUsernameOpt = userRepository.findMaxStudentUsernameWithPrefix(schoolIndexPrefix);
+        String generatedUsername;
+        if (maxUsernameOpt.isPresent() && maxUsernameOpt.get().startsWith(schoolIndexPrefix)) {
+            String maxStr = maxUsernameOpt.get();
+            try {
+                int lastDigits = Integer.parseInt(maxStr.substring(schoolIndexPrefix.length()));
+                generatedUsername = schoolIndexPrefix + String.format("%05d", lastDigits + 1);
+            } catch (NumberFormatException e) {
+                generatedUsername = schoolIndexPrefix + "00001";
+            }
+        } else {
+            generatedUsername = schoolIndexPrefix + "00001";
         }
 
         // 1. Create User with temporary password
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setUsername(generatedUsername);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.ROLE_STUDENT);
         user.setFirstLogin(true); // Mandatory first login workflow

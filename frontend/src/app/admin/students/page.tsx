@@ -21,7 +21,7 @@ export default function StudentsPage() {
 
   // Enrollment Modal State
   const [showModal, setShowModal] = useState(false);
-  const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
   const [selectedGradeId, setSelectedGradeId] = useState<number | ''>('');
   const [selectedClassId, setSelectedClassId] = useState<number | ''>('');
@@ -290,10 +290,10 @@ export default function StudentsPage() {
     setIsSubmitting(true);
     setMessage(null);
     try {
-      await api.enrollStudent(username, password, selectedGradeId as number, selectedClassId as number);
-      setMessage({ type: 'success', text: `Student ${username} enrolled successfully!` });
+      await api.enrollStudent(fullName, password, selectedGradeId as number, selectedClassId as number);
+      setMessage({ type: 'success', text: `Student ${fullName} enrolled successfully! Their Index Number will be auto-generated.` });
       setShowModal(false);
-      setUsername('');
+      setFullName('');
       setPassword('');
       setSelectedGradeId('');
       setSelectedClassId('');
@@ -799,17 +799,20 @@ export default function StudentsPage() {
               <form onSubmit={handleEnrollment} className="p-10 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Admission / Index No</label>
+                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2 flex justify-between">
+                      Student Full Name
+                      <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Index No Auto-generated</span>
+                    </label>
                     <div className="relative">
                       <Input 
-                        placeholder="STU-2024-0001" 
-                        value={username} 
-                        onChange={(e) => setUsername(e.target.value)} 
+                        placeholder="e.g. John Doe" 
+                        value={fullName} 
+                        onChange={(e) => setFullName(e.target.value)} 
                         required 
-                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-50/50 focus:bg-white transition-all shadow-inner"
+                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-50/50 focus:bg-white transition-all shadow-inner font-bold"
                       />
                       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
-                        <ShieldCheck size={20} />
+                        <User size={20} />
                       </div>
                     </div>
                   </div>
