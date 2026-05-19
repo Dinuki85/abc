@@ -113,6 +113,9 @@ public class StudentService {
         }
         
         student.setProfileCompleted(true);
+        if (request.getIsActiveStudent() != null) {
+            student.setActiveStudent(request.getIsActiveStudent());
+        }
         // Reset verification status to PENDING if it was NEEDS_CORRECTION 
         // to alert the teacher that new data is available for review
         if (student.getVerificationStatus() == null || student.getVerificationStatus() == com.abc.entity.VerificationStatus.NEEDS_CORRECTION) {

@@ -20,6 +20,9 @@ public class AdminController {
     @Autowired
     private IntakeService intakeService;
 
+    @Autowired
+    private com.abc.service.StudentService studentService;
+
     @PostMapping("/intake")
     public ResponseEntity<?> bulkIntake(@RequestBody BulkIntakeRequest request) {
         try {
@@ -182,6 +185,15 @@ public class AdminController {
         try {
             adminService.deleteStudent(username);
             return ResponseEntity.ok("Student deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/students/profile")
+    public ResponseEntity<?> saveStudentProfile(@RequestParam String username, @RequestBody com.abc.dto.StudentProfileRequest request) {
+        try {
+            return ResponseEntity.ok(studentService.saveStudentProfile(username, request));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

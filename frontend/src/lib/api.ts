@@ -221,7 +221,13 @@ class ApiService {
   }
 
   async saveStudentProfile(username: string, profile: StudentProfile) {
-    const response = await fetch(`${API_BASE_URL}/student/profile?username=${username}`, {
+    const user = this.getCurrentUser();
+    const isAdminOrStaffOrTeacher = user && (user.role === 'ROLE_ADMIN' || user.role === 'ROLE_TEACHER' || user.role === 'ROLE_STAFF');
+    const url = isAdminOrStaffOrTeacher 
+      ? `${API_BASE_URL}/admin/students/profile?username=${username}`
+      : `${API_BASE_URL}/student/profile?username=${username}`;
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(profile),

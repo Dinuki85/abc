@@ -57,8 +57,12 @@ public class StudentProfileRequest {
     private String distanceToSchool;
     private Long gradeId;
     private Long classId;
+    private Boolean isActiveStudent;
 
     public StudentProfileRequest() {}
+
+    public Boolean getIsActiveStudent() { return isActiveStudent; }
+    public void setIsActiveStudent(Boolean isActiveStudent) { this.isActiveStudent = isActiveStudent; }
 
     // Getters and Setters
     public String getFullName() { return fullName; }
