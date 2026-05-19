@@ -3,6 +3,7 @@
 import Sidebar from "@/components/admin/Sidebar";
 import DashboardNavbar from "@/components/DashboardNavbar";
 import MobileSidebar from "@/components/admin/MobileSidebar";
+import AdminBreadcrumbs from "@/components/admin/AdminBreadcrumbs";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { api } from "@/lib/api";
@@ -56,12 +57,19 @@ export default function AdminLayout({
       <div className="fixed -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
 
       {/* Top Navbar - Fixed - shown on ALL admin pages */}
-      <header className="h-20 bg-white border-b border-gray-100 flex-shrink-0 relative z-50">
+      <header className="h-16 bg-white border-b border-gray-100 flex-shrink-0 relative z-50">
         <DashboardNavbar 
           onMenuToggle={() => setIsMobileMenuOpen(true)} 
           brandName="AMV ADMIN"
         />
       </header>
+
+      {/* Dynamic Breadcrumbs Directory Bar */}
+      {pathname !== '/admin' && (
+        <div className="bg-white border-b border-slate-200/80 px-4 md:px-8 py-2 flex-shrink-0 relative z-40 shadow-sm flex items-center">
+          <AdminBreadcrumbs />
+        </div>
+      )}
 
       <MobileSidebar 
         isOpen={isMobileMenuOpen} 
