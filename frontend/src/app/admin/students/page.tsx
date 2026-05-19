@@ -261,10 +261,9 @@ export default function StudentsPage() {
     }
   };
 
-  // Reset/Clear workspace form fields to empty state
+  // Reset/Clear workspace selection
   const handleReset = () => {
     setSelectedStudent(null);
-    setMessage({ type: 'success', text: 'Form fields cleared. Ready for new input!' });
   };
 
   // Submit and Save student registration
@@ -358,13 +357,15 @@ export default function StudentsPage() {
             ))}
           </select>
 
-          <Button 
-            className="h-9 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs"
-            onClick={handleReset}
-          >
-            <RotateCcw size={13} className="mr-1.5" />
-            New / Clear
-          </Button>
+          {selectedStudent && (
+            <Button 
+              className="h-9 px-3 rounded-lg bg-slate-600 hover:bg-slate-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs"
+              onClick={handleReset}
+            >
+              <RotateCcw size={13} className="mr-1.5" />
+              Clear Selection
+            </Button>
+          )}
         </div>
       </div>
 
@@ -430,34 +431,28 @@ export default function StudentsPage() {
 
                 {/* Right workspace form input fields */}
                 <div className="flex-1 p-5 bg-white relative">
-                  <form onSubmit={handleSave} className="space-y-4">
+                  <div className="space-y-4">
                     
                     {activeTab === 'basic' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          <FormField label="Index No" name="username" value={formData.username || ''} onChange={handleChange} disabled={true} placeholder="STU-2026-0001" />
-                          <FormField label="Full Name" name="fullName" value={formData.fullName || ''} onChange={handleChange} placeholder="Firstname Lastname" />
-                          <FormField label="Name in Sinhala as Birth Certificate" name="nameSinhala" value={formData.nameSinhala || ''} onChange={handleChange} placeholder="සිංහල නම" />
-                          <FormField label="Name with Initial" name="nameWithInitials" value={formData.nameWithInitials || ''} onChange={handleChange} placeholder="A.B.C. Name" />
-                          <FormField label="Name with Initial Sinhala" name="nameWithInitialSinhala" value={formData.nameWithInitialSinhala || ''} onChange={handleChange} placeholder="A.B.C. සිංහල නම" />
-                          <FormField label="Date Of Birth" name="dob" type="date" value={formData.dob || ''} onChange={handleChange} />
-                          <FormField label="NIC" name="nic" value={formData.nic || ''} onChange={handleChange} placeholder="National ID Card No" />
-                          <FormField label="Birth Certificate No" name="birthCertificateNumber" value={formData.birthCertificateNumber || ''} onChange={handleChange} placeholder="BC-12345" />
-                          <FormField label="District" name="district" value={formData.district || ''} onChange={handleChange} placeholder="Home District" />
-                          <FormField label="Religion" name="religion" value={formData.religion || ''} onChange={handleChange} placeholder="e.g. Buddhist" />
-                          <SelectField 
-                            label="Gender" 
-                            name="gender" 
-                            value={formData.gender || ''} 
-                            onChange={handleChange} 
-                            options={[{label: 'Male', value: 'MALE'}, {label: 'Female', value: 'FEMALE'}]} 
-                          />
-                          <FormField label="Mother Name" name="motherName" value={formData.motherName || ''} onChange={handleChange} placeholder="Mother's Full Name" />
-                          <FormField label="Father Name" name="fatherName" value={formData.fatherName || ''} onChange={handleChange} placeholder="Father's Full Name" />
-                          <FormField label="Guardian ID" name="guardianIdRef" value={formData.guardianIdRef || ''} onChange={handleChange} placeholder="e.g. GUA-1234" />
-                          <FormField label="Age - Auto Calculate" name="age" type="number" value={formData.age || ''} onChange={handleChange} disabled placeholder="Auto-calculated" />
-                          <FormField label="Inter School House" name="interSchoolHouse" value={formData.interSchoolHouse || ''} onChange={handleChange} placeholder="House Name" />
-                          <FormField label="Siblings" name="siblings" type="number" value={formData.siblings || ''} onChange={handleChange} placeholder="No of siblings" />
+                          <FormField label="Index No" value={formData.username} />
+                          <FormField label="Full Name" value={formData.fullName} />
+                          <FormField label="Name in Sinhala as Birth Certificate" value={formData.nameSinhala} />
+                          <FormField label="Name with Initial" value={formData.nameWithInitials} />
+                          <FormField label="Name with Initial Sinhala" value={formData.nameWithInitialSinhala} />
+                          <FormField label="Date Of Birth" value={formData.dob} />
+                          <FormField label="NIC" value={formData.nic} />
+                          <FormField label="Birth Certificate No" value={formData.birthCertificateNumber} />
+                          <FormField label="District" value={formData.district} />
+                          <FormField label="Religion" value={formData.religion} />
+                          <FormField label="Gender" value={formData.gender === 'MALE' ? 'Male' : formData.gender === 'FEMALE' ? 'Female' : formData.gender} />
+                          <FormField label="Mother Name" value={formData.motherName} />
+                          <FormField label="Father Name" value={formData.fatherName} />
+                          <FormField label="Guardian ID" value={formData.guardianIdRef} />
+                          <FormField label="Age - Auto Calculate" value={formData.age} />
+                          <FormField label="Inter School House" value={formData.interSchoolHouse} />
+                          <FormField label="Siblings" value={formData.siblings} />
                         </div>
                       </div>
                     )}
@@ -465,84 +460,51 @@ export default function StudentsPage() {
                     {activeTab === 'health' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          <FormField label="Height" name="height" value={formData.height || ''} onChange={handleChange} placeholder="e.g. 150 cm" />
-                          <FormField label="Weight" name="weight" value={formData.weight || ''} onChange={handleChange} placeholder="e.g. 45 kg" />
-                          <SelectField 
-                            label="Blood Type" 
-                            name="bloodGroup" 
-                            value={formData.bloodGroup || ''} 
-                            onChange={handleChange} 
-                            options={[
-                              {label: 'A+', value: 'A+'}, {label: 'A-', value: 'A-'},
-                              {label: 'B+', value: 'B+'}, {label: 'B-', value: 'B-'},
-                              {label: 'O+', value: 'O+'}, {label: 'O-', value: 'O-'},
-                              {label: 'AB+', value: 'AB+'}, {label: 'AB-', value: 'AB-'}
-                            ]} 
-                          />
-                          <FormField label="Special Physical Condition" name="specialPhysicalCondition" value={formData.specialPhysicalCondition || ''} onChange={handleChange} placeholder="e.g. None" />
-                          <FormField label="Special Illness" name="specialIllness" value={formData.specialIllness || ''} onChange={handleChange} placeholder="Special illnesses" />
-                          <FormField label="Long Term Diseases" name="longTermDiseases" value={formData.longTermDiseases || ''} onChange={handleChange} placeholder="e.g. Asthma" />
-                          <FormField label="Special Need" name="specialNeed" value={formData.specialNeed || ''} onChange={handleChange} placeholder="Special needs" />
+                          <FormField label="Height" value={formData.height} />
+                          <FormField label="Weight" value={formData.weight} />
+                          <FormField label="Blood Type" value={formData.bloodGroup} />
+                          <FormField label="Special Physical Condition" value={formData.specialPhysicalCondition} />
+                          <FormField label="Special Illness" value={formData.specialIllness} />
+                          <FormField label="Long Term Diseases" value={formData.longTermDiseases} />
+                          <FormField label="Special Need" value={formData.specialNeed} />
                         </div>
-                        <TextAreaField label="Medical Description" name="medicalDescription" value={formData.medicalDescription || ''} onChange={handleChange} placeholder="Provide details here..." />
+                        <FormField label="Medical Description" value={formData.medicalDescription} />
                       </div>
                     )}
 
                     {activeTab === 'skills' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
-                          <h4 className="text-[10px] font-black uppercase tracking-widest text-primary">Achievements (3* Combo Box)</h4>
+                        <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
+                          <h4 className="text-[10px] font-black uppercase tracking-widest text-primary">Achievements</h4>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                            {[
-                              {id: 'intl', label: 'International', name: 'achievementInternational'},
-                              {id: 'nat', label: 'National', name: 'achievementNational'},
-                              {id: 'prov', label: 'Provincial', name: 'achievementProvincial'},
-                              {id: 'zonal', label: 'Zonal', name: 'achievementZonal'},
-                              {id: 'div', label: 'Divisional', name: 'achievementDivisional'},
-                              {id: 'sch', label: 'School', name: 'achievementSchool'}
-                            ].map((lvl) => (
-                              <div key={lvl.id} className="space-y-1 text-left">
-                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider ml-1">{lvl.label}</label>
-                                <select 
-                                  name={lvl.name}
-                                  value={formData[lvl.name] || ''}
-                                  onChange={handleChange}
-                                  className="w-full h-8 bg-white border border-slate-200 rounded-lg px-2 text-xs font-bold text-black"
-                                >
-                                  <option value="">None</option>
-                                  <option value="1st">1st Place</option>
-                                  <option value="2nd">2nd Place</option>
-                                  <option value="3rd">3rd Place</option>
-                                  <option value="participant">Participant</option>
-                                </select>
-                              </div>
-                            ))}
+                            <FormField label="International" value={formData.achievementInternational} />
+                            <FormField label="National" value={formData.achievementNational} />
+                            <FormField label="Provincial" value={formData.achievementProvincial} />
+                            <FormField label="Zonal" value={formData.achievementZonal} />
+                            <FormField label="Divisional" value={formData.achievementDivisional} />
+                            <FormField label="School" value={formData.achievementSchool} />
                           </div>
-                          <TextAreaField label="Description * 3" name="talentDescription" value={formData.talentDescription || ''} onChange={handleChange} placeholder="Outline top achievements here..." />
+                          <FormField label="Achievements Description" value={formData.talentDescription} />
                         </div>
 
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
-                          <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-600">Additional Talent Areas (Check Box)</h4>
+                        <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
+                          <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Additional Talent Areas</h4>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                             {[
-                              {label: 'Agriculture', name: 'talentAgri'},
-                              {label: 'ICT', name: 'talentIct'},
-                              {label: 'Aesthetic', name: 'talentAesthetic'},
-                              {label: 'Media & Announcing', name: 'talentMedia'},
-                              {label: 'Sport & Athletic', name: 'talentSport'},
-                              {label: 'Innovation', name: 'talentInnovation'},
-                              {label: 'Cinematography', name: 'talentCinematography'}
+                              {label: 'Agriculture', val: formData.talentAgri},
+                              {label: 'ICT', val: formData.talentIct},
+                              {label: 'Aesthetic', val: formData.talentAesthetic},
+                              {label: 'Media & Announcing', val: formData.talentMedia},
+                              {label: 'Sport & Athletic', val: formData.talentSport},
+                              {label: 'Innovation', val: formData.talentInnovation},
+                              {label: 'Cinematography', val: formData.talentCinematography}
                             ].map((t) => (
-                              <label key={t.name} className="flex items-center gap-2 p-2 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-primary transition-all text-left">
-                                <input 
-                                  type="checkbox" 
-                                  name={t.name}
-                                  checked={!!formData[t.name]}
-                                  onChange={(e) => setFormData((prev: any) => ({ ...prev, [t.name]: e.target.checked }))}
-                                  className="w-3.5 h-3.5 text-primary rounded border-slate-300 focus:ring-primary"
-                                />
-                                <span className="text-[11px] font-black text-black">{t.label}</span>
-                              </label>
+                              <div key={t.label} className={`flex items-center gap-2 p-2 px-3 border rounded-xl transition-all ${
+                                t.val ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800 font-bold' : 'bg-slate-50/30 border-slate-100 text-slate-400'
+                              }`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${t.val ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
+                                <span className="text-[10px] font-black uppercase tracking-wider">{t.label}</span>
+                              </div>
                             ))}
                           </div>
                         </div>
@@ -552,16 +514,16 @@ export default function StudentsPage() {
                     {activeTab === 'contact' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <TextAreaField label="Permanent Address" name="addressPermanent" value={formData.addressPermanent || ''} onChange={handleChange} placeholder="Street, City, Postal Code" />
-                          <TextAreaField label="Temporary Address" name="addressTemporary" value={formData.addressTemporary || ''} onChange={handleChange} placeholder="Address details..." />
+                          <FormField label="Permanent Address" value={formData.addressPermanent} />
+                          <FormField label="Temporary Address" value={formData.addressTemporary} />
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                          <FormField label="Emergency Contact" name="contactEmergency" value={formData.contactEmergency || ''} onChange={handleChange} placeholder="Contact No" />
-                          <FormField label="Whatsapp No" name="contactWhatsapp" value={formData.contactWhatsapp || ''} onChange={handleChange} placeholder="Whatsapp No" />
-                          <FormField label="Home No" name="contactHome" value={formData.contactHome || ''} onChange={handleChange} placeholder="Home Line" />
-                          <FormField label="Mobile No" name="contactMobile" value={formData.contactMobile || ''} onChange={handleChange} placeholder="Mobile Line" />
-                          <FormField label="Email Address" name="contactEmail" type="email" value={formData.contactEmail || ''} onChange={handleChange} placeholder="name@email.com" />
-                          <FormField label="Distance to School" name="distanceToSchool" value={formData.distanceToSchool || ''} onChange={handleChange} placeholder="e.g. 2 km" />
+                          <FormField label="Emergency Contact" value={formData.contactEmergency} />
+                          <FormField label="Whatsapp No" value={formData.contactWhatsapp} />
+                          <FormField label="Home No" value={formData.contactHome} />
+                          <FormField label="Mobile No" value={formData.contactMobile} />
+                          <FormField label="Email Address" value={formData.contactEmail} />
+                          <FormField label="Distance to School" value={formData.distanceToSchool} />
                         </div>
                       </div>
                     )}
@@ -569,56 +531,21 @@ export default function StudentsPage() {
                     {activeTab === 'exams' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <FormField label="Grade 05 Exam Result" name="resultGrade05" value={formData.resultGrade05 || ''} onChange={handleChange} placeholder="Grade 5 Scholarship Score" />
-                          <FormField label="GCE OL Exam Result" name="resultGceOl" value={formData.resultGceOl || ''} onChange={handleChange} placeholder="O/L Summary, e.g. 9As" />
+                          <FormField label="Grade 05 Exam Result" value={formData.resultGrade05} />
+                          <FormField label="GCE OL Exam Result" value={formData.resultGceOl} />
                         </div>
                       </div>
                     )}
 
                     {activeTab === 'visibility' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-6 justify-start w-fit">
-                          <span className="text-[10px] font-black text-black uppercase tracking-widest">Profile Visibility Status</span>
-                          <label className="flex items-center gap-2 cursor-pointer">
-                            <input 
-                              type="radio" 
-                              name="isActive" 
-                              value="true" 
-                              checked={formData.isActive === true || formData.isActive === 'true'} 
-                              onChange={() => setFormData((prev: any) => ({ ...prev, isActive: true }))}
-                              className="w-4 h-4 text-emerald-600 focus:ring-emerald-500" 
-                            />
-                            <span className="text-xs font-black text-emerald-700">Active</span>
-                          </label>
-                          <label className="flex items-center gap-2 cursor-pointer">
-                            <input 
-                              type="radio" 
-                              name="isActive" 
-                              value="false" 
-                              checked={formData.isActive === false || formData.isActive === 'false'} 
-                              onChange={() => setFormData((prev: any) => ({ ...prev, isActive: false }))}
-                              className="w-4 h-4 text-rose-600 focus:ring-rose-500" 
-                            />
-                            <span className="text-xs font-black text-rose-700">Inactive</span>
-                          </label>
+                        <div className="w-fit">
+                          <FormField label="Profile Visibility Status" value={formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive'} />
                         </div>
                       </div>
                     )}
 
-                    {/* Save details button */}
-                    <div className="flex justify-end pt-2 border-t border-slate-100">
-                      <Button 
-                        type="submit" 
-                        className="h-10 px-6 rounded-lg bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest shadow-md active:scale-95 transition-all text-xs" 
-                        isLoading={isSubmitting}
-                      >
-                        <Save size={14} className="mr-1.5" />
-                        Save Details
-                      </Button>
-                    </div>
-
-                  </form>
-                </div>
+                  </div>
               </div>
             </CardContent>
           </Card>
@@ -726,56 +653,13 @@ export default function StudentsPage() {
   );
 }
 
-function FormField({ label, name, value, onChange, disabled, type = 'text', placeholder }: any) {
+function FormField({ label, value }: any) {
   return (
-    <div className="space-y-1 text-left">
-      <label className="text-[9px] font-black text-black uppercase tracking-[0.12em] ml-1">{label}</label>
-      <Input 
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        placeholder={placeholder}
-        className="h-8 rounded-lg border-slate-200 bg-slate-50 focus:bg-white text-black font-bold text-xs" 
-      />
-    </div>
-  );
-}
-
-function SelectField({ label, name, value, onChange, disabled, options }: any) {
-  return (
-    <div className="space-y-1 text-left">
-      <label className="text-[9px] font-black text-black uppercase tracking-[0.12em] ml-1">{label}</label>
-      <select 
-        name={name}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2 focus:outline-none focus:bg-white transition-all text-xs font-bold text-black cursor-pointer"
-      >
-        <option value="">Choose Options</option>
-        {options.map((opt: any) => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-function TextAreaField({ label, name, value, onChange, disabled, placeholder }: any) {
-  return (
-    <div className="space-y-1 text-left">
-      <label className="text-[9px] font-black text-black uppercase tracking-[0.12em] ml-1">{label}</label>
-      <textarea 
-        name={name}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        placeholder={placeholder}
-        rows={2}
-        className="w-full p-2 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none transition-all text-xs font-bold text-black custom-scrollbar resize-none"
-      />
+    <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left hover:bg-slate-100 hover:border-slate-200/60 transition-all">
+      <span className="block text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{label}</span>
+      <span className="block text-xs font-black text-black leading-tight break-words">
+        {value === true || value === 'true' ? 'Active' : value === false || value === 'false' ? 'Inactive' : value || '—'}
+      </span>
     </div>
   );
 }
