@@ -142,70 +142,54 @@ export default function StudentsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700 pb-20">
-      {/* Institutional Top Bar - Static to avoid overlap */}
-      <div className="max-w-[1600px] mx-auto bg-white p-4 rounded-[2rem] border border-slate-100 shadow-xl flex flex-col xl:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4 px-2">
-          <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-            <GraduationCap size={24} />
-          </div>
-          <div>
-            <h1 className="text-xl font-black text-black tracking-tighter leading-none">
-              Student Register
-            </h1>
-            <p className="text-[13px] text-black font-black uppercase tracking-[0.15em] mt-1">
-              AMV Institutional Directory
-            </p>
-          </div>
+    <div className="space-y-3 animate-in fade-in duration-700 pb-10">
+      {/* Institutional Compact Toolbar */}
+      <div className="w-full bg-white p-2 px-3 rounded-xl border border-slate-100 shadow-md flex flex-col sm:flex-row items-center gap-2 justify-between">
+        <div className="relative flex-1 w-full sm:max-w-[380px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+          <Input 
+            placeholder="Search index or name..." 
+            className="pl-9 h-9 w-full rounded-lg border-slate-200 bg-slate-50 focus:bg-white transition-all text-xs font-bold text-black"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
         
-        <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
-          <div className="relative flex-1 lg:min-w-[350px]">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-            <Input 
-              placeholder="Search index or name..." 
-              className="pl-12 h-12 w-full rounded-xl border-slate-100 bg-slate-50 focus:bg-white transition-all text-sm font-bold text-black"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+          <select 
+            value={filterGradeId} 
+            onChange={(e) => {
+              const gId = e.target.value === '' ? '' : parseInt(e.target.value);
+              setFilterGradeId(gId);
+              setFilterClassId('');
+              if (gId !== '') fetchClassesForGrade(gId, true);
+              else setFilterClasses([]);
+            }}
+            className="h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-black text-black min-w-[110px] cursor-pointer hover:bg-slate-50 transition-colors"
+          >
+            <option value="">All Grades</option>
+            {grades.map(g => (
+              <option key={g.id} value={g.id}>{g.name}</option>
+            ))}
+          </select>
 
-          <div className="flex items-center gap-2">
-            <select 
-              value={filterGradeId} 
-              onChange={(e) => {
-                const gId = e.target.value === '' ? '' : parseInt(e.target.value);
-                setFilterGradeId(gId);
-                setFilterClassId('');
-                if (gId !== '') fetchClassesForGrade(gId, true);
-                else setFilterClasses([]);
-              }}
-              className="h-12 px-4 bg-white border border-slate-200 rounded-xl text-sm font-black text-black min-w-[120px] cursor-pointer hover:bg-slate-50 transition-colors"
-            >
-              <option value="">All Grades</option>
-              {grades.map(g => (
-                <option key={g.id} value={g.id}>{g.name}</option>
-              ))}
-            </select>
-
-            <select 
-              value={filterClassId} 
-              onChange={(e) => setFilterClassId(e.target.value === '' ? '' : parseInt(e.target.value))}
-              disabled={filterGradeId === ''}
-              className="h-12 px-4 bg-white border border-slate-200 rounded-xl text-sm font-black text-black min-w-[120px] disabled:opacity-50 cursor-pointer hover:bg-slate-50 transition-colors"
-            >
-              <option value="">All Classes</option>
-              {filterClasses.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-          </div>
+          <select 
+            value={filterClassId} 
+            onChange={(e) => setFilterClassId(e.target.value === '' ? '' : parseInt(e.target.value))}
+            disabled={filterGradeId === ''}
+            className="h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-black text-black min-w-[110px] disabled:opacity-50 cursor-pointer hover:bg-slate-50 transition-colors"
+          >
+            <option value="">All Classes</option>
+            {filterClasses.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
 
           <Button 
-            className="h-12 px-6 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-widest active:scale-95 transition-all text-sm"
+            className="h-9 px-4 rounded-lg bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs"
             onClick={() => setShowModal(true)}
           >
-            <UserPlus size={16} className="mr-2" />
+            <UserPlus size={14} className="mr-1.5" />
             Enroll
           </Button>
         </div>
