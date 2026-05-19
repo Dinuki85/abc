@@ -38,6 +38,9 @@ public class AdminService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private com.abc.repository.VerificationRepository verificationRepository;
+
     public void createTeacher(String name, String username, String password, String designationStr) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
@@ -486,11 +489,19 @@ public class AdminService {
         Student student = studentRepository.findByUser_Username(username)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         
+        // 1. Delete student_class assignment first
         Optional<StudentClass> scOpt = studentClassRepository.findByStudent(student);
         scOpt.ifPresent(studentClass -> studentClassRepository.delete(studentClass));
 
+        // 2. Delete verification record (FK references students.id)
+        verificationRepository.findByStudent_Id(student.getId())
+                .ifPresent(v -> verificationRepository.delete(v));
+
+        // 3. Now safe to delete the student
         User user = student.getUser();
         studentRepository.delete(student);
+
+        // 4. Finally delete the user account
         if (user != null) {
             userRepository.delete(user);
         }
