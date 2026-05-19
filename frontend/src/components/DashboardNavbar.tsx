@@ -88,18 +88,15 @@ export default function DashboardNavbar({
         </div>
 
         {/* User Identity */}
-        <div className="flex items-center gap-2 md:gap-4 bg-slate-50 px-2 md:px-4 py-1.5 md:py-2 rounded-xl border border-gray-100 hover:bg-primary/5 transition-colors cursor-pointer group">
-          <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-white font-black shadow-md ring-2 ring-white group-hover:ring-secondary/50 transition-all">
+        <div className="flex items-center gap-2 bg-slate-50 px-2 py-1.5 rounded-xl border border-gray-100 hover:bg-primary/5 transition-colors cursor-pointer group">
+          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white font-black shadow-sm ring-2 ring-white group-hover:ring-secondary/50 transition-all">
             {displayName[0].toUpperCase()}
           </div>
-          <div className="hidden md:flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck size={10} className="text-primary" />
-              <span className="text-[11px] font-black text-black uppercase tracking-widest leading-none">
-                {user?.role?.replace('ROLE_', '') || 'ADMIN'}
-              </span>
-            </div>
-            <span className="text-sm font-bold text-slate-800 mt-1 leading-none">{displayName}</span>
+          <div className="hidden md:flex items-center gap-1.5 pr-2">
+            <ShieldCheck size={14} className="text-primary" />
+            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider leading-none">
+              {displayName}
+            </span>
           </div>
         </div>
 
