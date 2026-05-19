@@ -242,10 +242,12 @@ export default function StudentsPage() {
     }
   }, [selectedStudent]);
 
-  // If search matches exactly one student, load them automatically
+  // If search matches exactly one student, load them automatically. If search is empty, clear the selection.
   useEffect(() => {
     if (searchTerm !== '' && students.length === 1) {
       setSelectedStudent(students[0]);
+    } else if (searchTerm === '') {
+      setSelectedStudent(null);
     }
   }, [students, searchTerm]);
 
@@ -539,8 +541,85 @@ export default function StudentsPage() {
 
                     {activeTab === 'visibility' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="w-fit">
-                          <FormField label="Profile Visibility Status" value={formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive'} />
+                        <div className="p-5 bg-slate-50/50 rounded-2xl border border-slate-100/80 space-y-4 max-w-md">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Modify Profile Visibility</span>
+                          </div>
+
+                          <div className="flex flex-col gap-3">
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                if (formData.isActive !== true && formData.isActive !== 'true') {
+                                  try {
+                                    setIsSubmitting(true);
+                                    // Update locally and in DB to active
+                                    await api.saveStudentProfile(formData.username, { ...formData, isActive: true });
+                                    setFormData((prev: any) => ({ ...prev, isActive: true }));
+                                    setMessage({ type: 'success', text: `Student ${formData.username} is now Active.` });
+                                    fetchStudents(currentPage);
+                                  } catch (err: any) {
+                                    setMessage({ type: 'error', text: err.message || 'Failed to update visibility.' });
+                                  } finally {
+                                    setIsSubmitting(false);
+                                  }
+                                }
+                              }}
+                              className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left ${
+                                formData.isActive === true || formData.isActive === 'true'
+                                  ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-bold'
+                                  : 'bg-white border-slate-200/60 hover:bg-slate-50 text-slate-500'
+                              }`}
+                              disabled={isSubmitting}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className={`w-2 h-2 rounded-full ${formData.isActive === true || formData.isActive === 'true' ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                                <span className="text-xs font-black uppercase tracking-wider">Active</span>
+                              </div>
+                              {formData.isActive === true || formData.isActive === 'true' ? (
+                                <span className="text-[9px] bg-emerald-500/20 text-emerald-700 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">Current Status</span>
+                              ) : (
+                                <span className="text-[9px] text-slate-400 font-bold">Select to Activate</span>
+                              )}
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                if (confirm(`WARNING: Setting this student to Inactive will completely delete their profile and login account from the database. Are you sure you want to proceed?`)) {
+                                  try {
+                                    setIsSubmitting(true);
+                                    await api.deleteStudent(formData.username);
+                                    setMessage({ type: 'success', text: `Student ${formData.username} has been set to Inactive and completely removed from the database.` });
+                                    setSelectedStudent(null);
+                                    setSearchTerm('');
+                                    fetchStudents(currentPage);
+                                  } catch (err: any) {
+                                    setMessage({ type: 'error', text: err.message || 'Failed to delete student.' });
+                                  } finally {
+                                    setIsSubmitting(false);
+                                  }
+                                }
+                              }}
+                              className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left ${
+                                formData.isActive === false || formData.isActive === 'false'
+                                  ? 'bg-rose-50 border-rose-200 text-rose-800 font-bold'
+                                  : 'bg-white border-slate-200/60 hover:bg-rose-50/30 hover:border-rose-200 text-slate-500'
+                              }`}
+                              disabled={isSubmitting}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className={`w-2 h-2 rounded-full ${formData.isActive === false || formData.isActive === 'false' ? 'bg-rose-500 animate-pulse' : 'bg-slate-300'}`} />
+                                <span className="text-xs font-black uppercase tracking-wider">Inactive (Delete Profile)</span>
+                              </div>
+                              {formData.isActive === false || formData.isActive === 'false' ? (
+                                <span className="text-[9px] bg-rose-500/20 text-rose-700 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">Current Status</span>
+                              ) : (
+                                <span className="text-[9px] text-rose-500 font-bold">Click to Delete</span>
+                              )}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     )}

@@ -408,6 +408,15 @@ class ApiService {
     return [];
   }
 
+  async deleteStudent(username: string): Promise<boolean> {
+    const response = await fetch(`${API_BASE_URL}/admin/students/${username}`, {
+      method: 'DELETE',
+      headers: this.getHeaders()
+    });
+    if (!response.ok) throw new Error(await response.text());
+    return true;
+  }
+
   async getPaginatedStudents(page: number, size: number, searchTerm?: string, gradeId?: number | '', classId?: number | ''): Promise<any> {
     let url = `${API_BASE_URL}/admin/students?page=${page}&size=${size}`;
     if (searchTerm) url += `&searchTerm=${encodeURIComponent(searchTerm)}`;

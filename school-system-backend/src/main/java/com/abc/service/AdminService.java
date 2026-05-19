@@ -480,6 +480,21 @@ public class AdminService {
             studentClassRepository.save(sc);
         }
     }
+
+    @Transactional
+    public void deleteStudent(String username) {
+        Student student = studentRepository.findByUser_Username(username)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        
+        Optional<StudentClass> scOpt = studentClassRepository.findByStudent(student);
+        scOpt.ifPresent(studentClass -> studentClassRepository.delete(studentClass));
+
+        User user = student.getUser();
+        studentRepository.delete(student);
+        if (user != null) {
+            userRepository.delete(user);
+        }
+    }
 }
 
 // Granular commit 4 for Step 4 (Admin & Dashboard Logic)

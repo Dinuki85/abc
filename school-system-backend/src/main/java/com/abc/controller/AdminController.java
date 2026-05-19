@@ -176,6 +176,16 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/students/{username}")
+    public ResponseEntity<?> deleteStudent(@PathVariable String username) {
+        try {
+            adminService.deleteStudent(username);
+            return ResponseEntity.ok("Student deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
 
 // Granular commit 1 for Step 4 (Admin & Dashboard Logic)
