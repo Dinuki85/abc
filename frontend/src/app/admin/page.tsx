@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import {
   Users, Briefcase, Layers, Landmark, GraduationCap,
-  Settings, UserPlus, Activity, FileSpreadsheet, ArrowRight
+  Settings, UserPlus, Activity, FileSpreadsheet, ArrowRight, ShieldCheck
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -77,81 +77,100 @@ export default function AdminDashboard() {
         style={{ padding: '16px 40px 14px', gap: 12 }}
       >
 
-        {/* ── 1. WELCOME ───────────────────────────────────── */}
+        {/* ── 1. WELCOME & STATS ──────────────────────────────── */}
         <div
-          className="amv-fadeup flex-shrink-0 flex items-center justify-center gap-8"
+          className="amv-fadeup flex-shrink-0 flex flex-col justify-center gap-7 relative overflow-hidden group/banner"
           style={{
-            background: 'linear-gradient(135deg, #e8f8fb 0%, #fffef0 60%, #fff9e6 100%)',
-            border: '2px solid #17a2b8',
-            borderLeft: '6px solid #17a2b8',
-            borderRadius: 20,
-            padding: '14px 36px',
-            boxShadow: '0 4px 20px rgba(23,162,184,0.12)',
-            position: 'relative',
-            overflow: 'hidden',
+            background: 'linear-gradient(to right, #111424, #1a1f35)',
+            borderRadius: 24,
+            padding: '32px 40px',
+            boxShadow: '0 12px 30px -8px rgba(0,0,0,0.5)',
+            border: '1px solid rgba(255,255,255,0.06)',
           }}
         >
-          {/* Background watermark */}
-          <div style={{
-            position: 'absolute', right: -20, top: -20,
-            width: 120, height: 120,
-            background: 'rgba(23,162,184,0.06)',
-            borderRadius: '50%',
-            pointerEvents: 'none',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -30,
-            width: 80, height: 80,
-            background: 'rgba(255,193,7,0.08)',
-            borderRadius: '50%',
-            pointerEvents: 'none',
-          }} />
-
-          {/* Floating Logo */}
-          <div className="relative flex-shrink-0">
-            <div
-              className="amv-logo-float relative flex items-center justify-center bg-white"
-              style={{ width: 84, height: 84, borderRadius: 24,
-                border: '3px solid #17a2b8', boxShadow: '5px 5px 0px #17a2b8' }}
-            >
-              <img src="/img/favicon.png" alt="School Logo"
-                style={{ width: 60, height: 60, objectFit: 'contain' }} />
-            </div>
+          {/* Subtle Background Glows for premium feel */}
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+            <div className="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl opacity-50 group-hover/banner:opacity-70 transition-opacity duration-700"></div>
+            <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl opacity-50 group-hover/banner:opacity-70 transition-opacity duration-700"></div>
           </div>
 
-          {/* School Name */}
-          <div className="flex flex-col">
-            <h2
-              style={{ fontSize: 'clamp(20px, 3vw, 42px)', fontWeight: 900,
-                letterSpacing: '-0.03em', lineHeight: 1.15, margin: 0, color: '#000' }}
-            >
+          {/* Greeting */}
+          <div className="relative z-10 flex flex-col pl-1">
+            <h2 className="tracking-wide" style={{ 
+              fontSize: 'clamp(24px, 2.5vw, 32px)', 
+              fontWeight: 800, 
+              color: '#f8fafc',
+              lineHeight: 1.1,
+              margin: 0,
+            }}>
               Welcome To{' '}
-              <span className="amv-gradient-text">Andiambalama</span>{' '}
+              <span style={{ 
+                background: 'linear-gradient(135deg, #a5b4fc 0%, #818cf8 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 900,
+                textShadow: '0 2px 10px rgba(129, 140, 248, 0.2)'
+              }}>
+                Andiambalama
+              </span>{' '}
               Maha Vidhyalaya
             </h2>
-            <div style={{ height: 5, width: 80,
-              background: 'linear-gradient(90deg,#17a2b8,#ffc107)',
-              borderRadius: 3, marginTop: 10 }} />
           </div>
-        </div>
 
-
-        {/* ── 2. STATS ROW ─────────────────────────────────── */}
-        <div
-          className="amv-fadeup-1 flex-shrink-0 grid"
-          style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: 10 }}
-        >
-          {statItems.map((s, i) => (
-            <div key={i} className="amv-stat-card" style={{ padding: '12px 8px', gap: 5 }}>
-              <div className="amv-stat-icon" style={{ background: s.bg, color: s.color }}>
-                <s.icon size={17} strokeWidth={2.5} />
+          {/* Stats Cards Inside Banner */}
+          <div className="flex w-full gap-5 relative z-10 mt-1">
+            {statItems.map((s, i) => (
+              <div 
+                key={i} 
+                className="amv-fadeup-1 flex flex-col items-center flex-1 bg-white transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] group/card cursor-pointer"
+                style={{
+                  borderRadius: 20,
+                  padding: '20px 10px',
+                  boxShadow: '0 5px 0 #334155, 0 10px 15px -3px rgba(0,0,0,0.1)',
+                  border: '1px solid #cbd5e1',
+                  animationDelay: `${i * 100}ms`,
+                  animationFillMode: 'both'
+                }}
+              >
+                <div 
+                  className="transition-transform duration-300 group-hover/card:scale-110 group-hover/card:rotate-6 shadow-sm group-hover/card:shadow-md"
+                  style={{
+                    background: s.bg,
+                    border: '2px solid #334155',
+                    borderRadius: 14,
+                    width: 46,
+                    height: 46,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 12,
+                  }}
+                >
+                  <s.icon size={22} color={s.color} strokeWidth={2.5} className="group-hover/card:animate-pulse" />
+                </div>
+                <div style={{ 
+                  color: '#0f172a', 
+                  fontSize: 'clamp(24px, 2.5vw, 34px)', 
+                  fontWeight: 900, 
+                  lineHeight: 1, 
+                  marginBottom: 6,
+                  letterSpacing: '-0.02em'
+                }}>
+                  {s.value.toLocaleString()}
+                </div>
+                <div style={{ 
+                  color: '#64748b', 
+                  fontSize: 10, 
+                  fontWeight: 800, 
+                  letterSpacing: '0.08em', 
+                  textTransform: 'uppercase',
+                  textAlign: 'center'
+                }}>
+                  {s.label}
+                </div>
               </div>
-              <div className="amv-stat-val" style={{ fontSize: 'clamp(20px, 2.2vw, 32px)' }}>
-                {s.value.toLocaleString()}
-              </div>
-              <div className="amv-stat-label">{s.label}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* ── 3. MODULE BUTTONS ────────────────────────────── */}
