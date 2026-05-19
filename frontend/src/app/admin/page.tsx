@@ -122,34 +122,33 @@ export default function AdminDashboard() {
             {statItems.map((s, i) => (
               <div 
                 key={i} 
-                className="amv-fadeup-1 flex flex-col items-center flex-1 bg-white transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] group/card cursor-pointer"
+                className="amv-fadeup-1 flex flex-col items-center flex-1 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] group/card cursor-pointer"
                 style={{
-                  borderRadius: 20,
-                  padding: '20px 10px',
-                  boxShadow: '0 5px 0 #334155, 0 10px 15px -3px rgba(0,0,0,0.1)',
-                  border: '1px solid #cbd5e1',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  borderRadius: 24,
+                  padding: '24px 10px',
                   animationDelay: `${i * 100}ms`,
                   animationFillMode: 'both'
                 }}
               >
                 <div 
-                  className="transition-transform duration-300 group-hover/card:scale-110 group-hover/card:rotate-6 shadow-sm group-hover/card:shadow-md"
+                  className="transition-transform duration-300 group-hover/card:scale-110 group-hover/card:rotate-6"
                   style={{
-                    background: s.bg,
-                    border: '2px solid #334155',
+                    background: s.color === '#343a40' ? 'rgba(255,255,255,0.1)' : `${s.color}25`,
                     borderRadius: 14,
-                    width: 46,
-                    height: 46,
+                    width: 48,
+                    height: 48,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginBottom: 12,
+                    marginBottom: 16,
                   }}
                 >
-                  <s.icon size={22} color={s.color} strokeWidth={2.5} className="group-hover/card:animate-pulse" />
+                  <s.icon size={24} color={s.color === '#343a40' ? '#94a3b8' : s.color} strokeWidth={2.5} className="group-hover/card:animate-pulse" />
                 </div>
                 <div style={{ 
-                  color: '#0f172a', 
+                  color: '#ffffff', 
                   fontSize: 'clamp(24px, 2.5vw, 34px)', 
                   fontWeight: 900, 
                   lineHeight: 1, 
