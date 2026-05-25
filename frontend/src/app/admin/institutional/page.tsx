@@ -27,7 +27,7 @@ const modules = [
 
 export default function InstitutionalAdminPage() {
   return (
-    <div className="h-full flex flex-col gap-2 animate-in fade-in duration-700">
+    <div className="min-h-full md:h-full flex flex-col gap-2 animate-in fade-in duration-700 overflow-y-auto md:overflow-hidden">
       {/* Back Header */}
       <div className="flex items-center gap-3 px-2 py-0.5">
         <Link 
@@ -42,7 +42,7 @@ export default function InstitutionalAdminPage() {
         </div>
       </div>
 
-      <div className="flex-1 grid grid-cols-4 grid-rows-3 gap-2 p-0.5">
+      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-3 p-0.5 overflow-y-auto md:overflow-visible">
         {modules.map((mod, i) => {
           const Icon = mod.icon;
           return (
