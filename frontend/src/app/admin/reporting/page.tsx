@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 export default function ReportingPage() {
   return (
-    <div className="h-full flex flex-col gap-2 animate-in fade-in duration-700">
+    <div className="min-h-full md:h-full flex flex-col gap-2 animate-in fade-in duration-700 overflow-y-auto md:overflow-hidden">
       {/* Back Header */}
       <div className="flex items-center gap-3 px-2 py-0.5">
         <Link 
@@ -26,7 +26,7 @@ export default function ReportingPage() {
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 content-start">
+      <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-3 content-start overflow-y-auto md:overflow-visible">
         <ReportSection 
           title="All School Data" 
           color="#17a2b8"
