@@ -13,6 +13,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -127,13 +128,21 @@ export default function AdminDashboard() {
             {statItems.map((s, i) => (
               <div 
                 key={i} 
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
                 className="amv-fadeup-1 flex flex-col items-center flex-1 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] group/card cursor-pointer"
                 style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: hoveredIdx === i 
+                    ? (s.color === '#343a40' ? 'rgba(255,255,255,0.12)' : `${s.color}15`) 
+                    : 'rgba(255,255,255,0.04)',
+                  border: hoveredIdx === i 
+                    ? `1px solid ${s.color === '#343a40' ? '#cbd5e1' : s.color}` 
+                    : '1px solid rgba(255,255,255,0.08)',
                   borderRadius: 20,
                   padding: '12px 10px',
-                  boxShadow: '0 20px 40px -10px rgba(0,0,0,0.3)',
+                  boxShadow: hoveredIdx === i
+                    ? `0 20px 40px -10px ${s.color === '#343a40' ? 'rgba(255,255,255,0.1)' : `${s.color}35`}`
+                    : '0 20px 40px -10px rgba(0,0,0,0.3)',
                   backdropFilter: 'blur(10px)',
                   WebkitBackdropFilter: 'blur(10px)',
                   animationDelay: `${i * 100}ms`,
