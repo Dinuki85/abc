@@ -66,7 +66,7 @@ export default function AdminDashboard() {
      *                    = 502  ✓ (6px breathing room)
      */
     <div
-      className="h-full flex flex-col overflow-hidden"
+      className="min-h-full md:h-full flex flex-col overflow-y-auto md:overflow-hidden"
       style={{ background: '#ffffff' }}
     >
 
@@ -74,8 +74,8 @@ export default function AdminDashboard() {
 
       {/* ── MAIN CONTENT ──────────────────────────────────── */}
       <main
-        className="flex-1 flex flex-col overflow-hidden relative z-10"
-        style={{ padding: '12px 32px 12px', gap: 12 }}
+        className="flex-1 flex flex-col overflow-y-auto md:overflow-hidden relative z-10 px-4 md:px-8 py-3"
+        style={{ gap: 12 }}
       >
 
         {/* ── 1. WELCOME & STATS ──────────────────────────────── */}
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Stats Cards Inside Banner */}
-          <div className="flex w-full gap-4 relative z-10 mt-0">
+          <div className="grid grid-cols-2 sm:grid-cols-5 md:flex md:w-full gap-2.5 md:gap-4 relative z-10 mt-2 md:mt-0">
             {statItems.map((s, i) => (
               <div 
                 key={i} 
@@ -192,8 +192,8 @@ export default function AdminDashboard() {
 
         {/* ── 3. MODULE BUTTONS ────────────────────────────── */}
         <div
-          className="amv-fadeup-2 grid flex-1 min-h-0"
-          style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}
+          className="amv-fadeup-2 grid grid-cols-2 md:grid-cols-4 flex-1 min-h-0"
+          style={{ gap: 12 }}
         >
           {modules.map((m, i) => (
             <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`} style={{ padding: '12px 12px' }}>
