@@ -385,7 +385,7 @@ h1, h2, h3, h4, .font-handlee {
 .amv-btn-title {
   font-size: clamp(14px, 1.6vw, 22px);
   font-weight: 900;
-  color: #1e293b;
+  color: #000000;
   text-transform: uppercase;
   letter-spacing: -0.01em;
   line-height: 1;
@@ -395,7 +395,7 @@ h1, h2, h3, h4, .font-handlee {
 .amv-btn-sub {
   font-size: 9px;
   font-weight: 700;
-  color: #94a3b8;
+  color: #000000;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   text-align: center;
@@ -410,4 +410,56 @@ h1, h2, h3, h4, .font-handlee {
   transform: translate(6px, -6px);
   transition: all 0.35s;
 }
+
+/* ==========================================================================
+   ADMIN LAYOUT SYSTEM OVERRIDES: ENFORCE BOLD BLACK FONT COLORS ONLY
+   ========================================================================== */
+
+/* Enforce bold weight globally within the admin layout container */
+.admin-layout-container,
+.admin-layout-container * {
+  font-weight: 700 !important;
+}
+
+/* Force body text, header, and content to black and bold */
+.admin-layout-container p:not(.keep-colors),
+.admin-layout-container span:not(.text-white):not(.text-emerald-700):not(.text-rose-700):not(.text-indigo-600):not(.text-primary):not(.keep-colors):not(.amv-btn-title):not(.amv-btn-sub):not(.amv-btn-arrow),
+.admin-layout-container div:not(.bg-indigo-600):not(.bg-primary):not(.bg-emerald-600):not(.bg-rose-600):not(.bg-secondary):not(.amv-btn-indigo):not(.amv-btn-emerald):not(.amv-btn-amber):not(.amv-btn-rose) > span:not(.text-white):not(.keep-colors):not(.amv-btn-title):not(.amv-btn-sub):not(.amv-btn-arrow),
+.admin-layout-container h1:not(.keep-colors),
+.admin-layout-container h2:not(.keep-colors),
+.admin-layout-container h3:not(.keep-colors),
+.admin-layout-container h4:not(.keep-colors),
+.admin-layout-container h5:not(.keep-colors),
+.admin-layout-container h6:not(.keep-colors),
+.admin-layout-container a:not(.text-white):not(.keep-colors),
+.admin-layout-container button:not(.bg-primary):not(.bg-indigo-600):not(.bg-emerald-600):not(.bg-rose-600):not(.bg-slate-600):not(.text-white):not(.keep-colors),
+.admin-layout-container label:not(.keep-colors),
+.admin-layout-container th:not(.keep-colors),
+.admin-layout-container td:not(.keep-colors),
+.admin-layout-container input:not(.keep-colors),
+.admin-layout-container select:not(.keep-colors),
+.admin-layout-container textarea:not(.keep-colors) {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+/* Specifically target any elements using gray/slate text color utilities */
+.admin-layout-container [class*="text-slate-"],
+.admin-layout-container [class*="text-gray-"],
+.admin-layout-container [class*="text-zinc-"],
+.admin-layout-container [class*="text-neutral-"],
+.admin-layout-container [class*="text-stone-"] {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+/* Ensure placeholders inside inputs/textareas are also black and bold */
+.admin-layout-container input::placeholder,
+.admin-layout-container textarea::placeholder {
+  color: #000000 !important;
+  opacity: 0.7 !important;
+  font-weight: 800 !important;
+}
+
+
 

@@ -51,7 +51,7 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="h-[100dvh] overflow-hidden bg-[#f8fafc] font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 flex flex-col">
+    <div className="h-[100dvh] overflow-hidden bg-[#f8fafc] font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 flex flex-col admin-layout-container">
       {/* Background decoration */}
       <div className="fixed -top-40 -right-40 w-96 h-96 bg-indigo-700/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
       <div className="fixed -bottom-40 -left-20 w-72 h-72 bg-amber-500/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
