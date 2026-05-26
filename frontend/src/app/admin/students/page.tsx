@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Button } from '@/components/ui/Button';
@@ -13,15 +13,15 @@ import { api, StudentProfile, Grade } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
 
 export default function StudentsPage() {
+  const workspaceRef = useRef<HTMLDivElement>(null);
   const [students, setStudents] = useState<StudentProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-  // Enrollment Modal State
-  const [showModal, setShowModal] = useState(false);
-  const [username, setUsername] = useState('');
+  // New Enrollment / Edit Mode states inside workspace
+  const [isEnrollMode, setIsEnrollMode] = useState(false);
   const [password, setPassword] = useState('');
   const [selectedGradeId, setSelectedGradeId] = useState<number | ''>('');
   const [selectedClassId, setSelectedClassId] = useState<number | ''>('');
@@ -147,21 +147,6 @@ export default function StudentsPage() {
       clearInterval(interval);
     };
   }, [currentPage, searchTerm, filterGradeId, filterClassId]);
- 
-  // Fetch next student index when the enrollment modal is opened
-  useEffect(() => {
-    if (showModal) {
-      const fetchNextIndex = async () => {
-        try {
-          const nextIndex = await api.getNextStudentIndex();
-          setUsername(nextIndex);
-        } catch (error) {
-          console.error("Failed to fetch next student index", error);
-        }
-      };
-      fetchNextIndex();
-    }
-  }, [showModal]);
 
   const fetchClassesForGrade = async (gradeId: number, isFilter = false) => {
     try {
@@ -192,6 +177,7 @@ export default function StudentsPage() {
   // Load clicked student details into 6 tabs
   useEffect(() => {
     if (selectedStudent) {
+      setIsEnrollMode(false);
       let data = { ...selectedStudent };
       if (selectedStudent.additionalData) {
         try {
@@ -202,8 +188,8 @@ export default function StudentsPage() {
         }
       }
       setFormData(data);
-    } else {
-      // Set to blank empty registration fields
+    } else if (!isEnrollMode) {
+      // Set to blank empty fields by default (showing — for FormField)
       setFormData({
         username: '',
         fullName: '',
@@ -265,8 +251,6 @@ export default function StudentsPage() {
   }, [selectedStudent]);
 
   // Auto-select when a typed search yields exactly 1 result.
-  // Depends on [students, searchTerm] but the clear path ONLY fires from the second effect below,
-  // so polling-driven students updates will NOT close the workspace.
   useEffect(() => {
     if (searchTerm !== '' && students.length === 1) {
       setSelectedStudent(students[0]);
@@ -274,8 +258,6 @@ export default function StudentsPage() {
   }, [students, searchTerm]);
 
   // Only clear the selection when the user EXPLICITLY empties the search bar.
-  // By depending solely on [searchTerm] (not [students]), this effect does NOT
-  // re-fire when the 10-second polling refresh updates the student list.
   useEffect(() => {
     if (searchTerm === '') {
       setSelectedStudent(null);
@@ -297,35 +279,107 @@ export default function StudentsPage() {
   // Reset/Clear workspace selection
   const handleReset = () => {
     setSelectedStudent(null);
+    setIsEnrollMode(false);
   };
 
-  // Enrollment form submission
-  const handleEnrollment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setMessage(null);
+  // Select a student from the table and scroll to workspace
+  const handleSelectStudent = (st: StudentProfile) => {
+    setSelectedStudent(st);
+    setIsEnrollMode(false);
+    setTimeout(() => {
+      workspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  };
+
+  // Start Enrollment Mode: Sets index number auto-generation
+  const handleStartEnrollment = async () => {
+    setSelectedStudent(null);
+    setIsEnrollMode(true);
+    setSelectedGradeId('');
+    setSelectedClassId('');
+    setPassword('');
+    setClasses([]);
+    
+    setFormData({
+      username: 'Generating...',
+      fullName: '',
+      nameSinhala: '',
+      nameWithInitials: '',
+      nameWithInitialSinhala: '',
+      dob: '',
+      nic: '',
+      birthCertificateNumber: '',
+      district: '',
+      religion: '',
+      gender: '',
+      motherName: '',
+      fatherName: '',
+      guardianIdRef: '',
+      age: '',
+      interSchoolHouse: '',
+      siblings: '',
+      
+      height: '',
+      weight: '',
+      bloodGroup: '',
+      specialPhysicalCondition: '',
+      specialIllness: '',
+      longTermDiseases: '',
+      specialNeed: '',
+      medicalDescription: '',
+
+      achievementInternational: '',
+      achievementNational: '',
+      achievementProvincial: '',
+      achievementZonal: '',
+      achievementDivisional: '',
+      achievementSchool: '',
+      talentDescription: '',
+      talentAgri: false,
+      talentIct: false,
+      talentAesthetic: false,
+      talentMedia: false,
+      talentSport: false,
+      talentInnovation: false,
+      talentCinematography: false,
+
+      addressPermanent: '',
+      addressTemporary: '',
+      contactEmergency: '',
+      contactWhatsapp: '',
+      contactHome: '',
+      contactMobile: '',
+      contactEmail: '',
+      distanceToSchool: '',
+
+      resultGrade05: '',
+      resultGceOl: '',
+
+      isActive: true,
+    });
+
     try {
-      await api.enrollStudent(username, password, selectedGradeId as number, selectedClassId as number);
-      setMessage({ type: 'success', text: `Student enrolled successfully with Index Number: ${username}` });
-      setShowModal(false);
-      setUsername('');
-      setPassword('');
-      setSelectedGradeId('');
-      setSelectedClassId('');
-      setClasses([]);
-      fetchStudents(currentPage);
-    } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'Enrollment failed. Please check the details.' });
-    } finally {
-      setIsSubmitting(false);
+      const nextIndex = await api.getNextStudentIndex();
+      setFormData((prev: any) => ({ ...prev, username: nextIndex }));
+    } catch (error) {
+      console.error("Failed to generate next index", error);
+      setFormData((prev: any) => ({ ...prev, username: '' }));
     }
   };
 
-  // Submit and Save student registration
-  const handleSave = async (e: React.FormEvent) => {
+  // Submit and Enroll Student (saving passcode and grade/class, and profile details)
+  const handleSaveEnrollment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.username) {
-      setMessage({ type: 'error', text: 'Index / Admission No is required to save details.' });
+    if (!formData.username || formData.username === 'Generating...') {
+      setMessage({ type: 'error', text: 'Auto-generated Index No is required.' });
+      return;
+    }
+    if (!password) {
+      setMessage({ type: 'error', text: 'Secure passcode is required for enrollment.' });
+      return;
+    }
+    if (!selectedGradeId || !selectedClassId) {
+      setMessage({ type: 'error', text: 'Primary Grade and Class Section are required.' });
       return;
     }
 
@@ -333,39 +387,120 @@ export default function StudentsPage() {
     setMessage(null);
 
     try {
-      // Base schema keys
+      // Step 1: Enroll (Create user login)
+      await api.enrollStudent(formData.username, password, selectedGradeId as number, selectedClassId as number);
+
+      // Step 2: Save registration profile details
       const baseKeys = ['id', 'username', 'fullName', 'gender', 'dob', 'isActive', 'gradeId', 'classId', 'verificationStatus', 'verifiedByName', 'verifiedAt', 'verificationComment', 'profileCompleted'];
       const extraData: Record<string, any> = {};
-
       Object.keys(formData).forEach(key => {
         if (!baseKeys.includes(key) && !key.startsWith('additionalData')) {
           extraData[key] = formData[key];
         }
       });
-
+      
       const payload = {
         ...formData,
         additionalData: JSON.stringify(extraData)
       };
-
+      
       await api.saveStudentProfile(formData.username, payload);
-      setMessage({ type: 'success', text: `Registration details for ${formData.username} saved successfully!` });
+
+      setMessage({ type: 'success', text: `Student successfully enrolled under Admission No: ${formData.username}` });
+      setIsEnrollMode(false);
       fetchStudents(currentPage);
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'Failed to save registration' });
+      setMessage({ type: 'error', text: error.message || 'Enrollment failed.' });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const tabs = [
-    { id: 'basic', name: 'Tab 1 - Basic Information', icon: User },
-    { id: 'health', name: 'Tab 2 - Health', icon: HeartPulse },
-    { id: 'skills', name: 'Tab 3 - Skills', icon: Star },
-    { id: 'contact', name: 'Tab 4 - Contact Information', icon: MapPin },
-    { id: 'exams', name: 'Tab 5 - Exam Result', icon: FileCheck },
-    { id: 'visibility', name: 'Tab 6 - Visibility', icon: Eye },
+    { id: 'basic', name: 'Basic Information', icon: User },
+    { id: 'health', name: 'Health', icon: HeartPulse },
+    { id: 'skills', name: 'Skills', icon: Star },
+    { id: 'contact', name: 'Contact Information', icon: MapPin },
+    { id: 'exams', name: 'Exam Result', icon: FileCheck },
+    { id: 'visibility', name: 'Visibility', icon: Eye },
   ];
+
+  // Helper Input Renderer that switches between editable and non-editable view
+  function FormInput({ 
+    label, 
+    name, 
+    type = "text", 
+    options = null, 
+    disabled = false, 
+    placeholder = "" 
+  }: { 
+    label: string, 
+    name: string, 
+    type?: string, 
+    options?: { label: string, value: any }[] | null, 
+    disabled?: boolean, 
+    placeholder?: string 
+  }) {
+    if (isEnrollMode) {
+      if (options) {
+        return (
+          <div className="space-y-1 text-left">
+            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+            <select
+              name={name}
+              value={formData[name] || ''}
+              onChange={handleChange}
+              disabled={disabled}
+              className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black"
+            >
+              <option value="">Choose {label}</option>
+              {options.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+        );
+      }
+      if (type === "textarea") {
+        return (
+          <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
+            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+            <textarea
+              name={name}
+              value={formData[name] || ''}
+              onChange={handleChange}
+              disabled={disabled}
+              placeholder={placeholder}
+              rows={3}
+              className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 focus:ring-primary/10 custom-scrollbar"
+            />
+          </div>
+        );
+      }
+      return (
+        <div className="space-y-1 text-left">
+          <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+          <Input
+            type={type}
+            name={name}
+            value={formData[name] || ''}
+            onChange={handleChange}
+            disabled={disabled}
+            placeholder={placeholder}
+            className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-primary/10"
+          />
+        </div>
+      );
+    } else {
+      // Read Only Mode
+      let displayVal = formData[name];
+      if (options && displayVal) {
+        const matched = options.find(o => o.value === displayVal);
+        if (matched) displayVal = matched.label;
+      }
+      return <FormField label={label} value={displayVal} />;
+    }
+  }
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 pb-10">
@@ -412,7 +547,7 @@ export default function StudentsPage() {
             ))}
           </select>
 
-          {selectedStudent && (
+          {(selectedStudent || isEnrollMode) && (
             <Button 
               className="h-9 px-3 rounded-lg bg-slate-600 hover:bg-slate-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs"
               onClick={handleReset}
@@ -424,7 +559,7 @@ export default function StudentsPage() {
 
           <Button 
             className="h-9 px-4 rounded-lg bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs shadow-md shadow-primary/20"
-            onClick={() => setShowModal(true)}
+            onClick={handleStartEnrollment}
           >
             <UserPlus size={13} className="mr-1.5" />
             Enroll Student
@@ -449,109 +584,224 @@ export default function StudentsPage() {
         </div>
       )}
 
-      {/* Dynamic Workspace State Indicator & Main tabbed registration form card - Visible only when a student is selected/filtered */}
-      {selectedStudent && (
-        <>
-          <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
-              Workspace Mode: Edit Student: {selectedStudent.username}
-            </span>
-          </div>
+      {/* Dynamic Workspace State Indicator */}
+      <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300">
+        <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
+          {isEnrollMode 
+            ? "Workspace Mode: New Student Enrollment (Edit Mode)" 
+            : selectedStudent 
+              ? `Workspace Mode: View Student: ${selectedStudent.username}` 
+              : "Workspace Mode: Standby (Select a student to view details)"}
+        </span>
+      </div>
 
-          <Card className="rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative animate-in fade-in slide-in-from-top-3 duration-500">
-            <CardHeader className="px-5 py-3.5 border-b border-slate-100 flex flex-row items-center justify-between">
-              <div className="flex items-center gap-2">
-                <GraduationCap className="text-primary" size={20} />
-                <CardTitle className="text-sm font-black text-black">Student Registration Command Center</CardTitle>
+      {/* Main tabbed registration form card - Renders unconditionally */}
+      <div ref={workspaceRef} />
+      <form onSubmit={handleSaveEnrollment}>
+        <Card className="rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative animate-in fade-in slide-in-from-top-3 duration-500">
+          <CardHeader className="px-5 py-3.5 border-b border-slate-100 flex flex-row items-center justify-between">
+            <div className="flex items-center gap-2">
+              <GraduationCap className="text-primary" size={20} />
+              <CardTitle className="text-sm font-black text-black">
+                {isEnrollMode ? "Student Enrollment Command Center" : "Student Registration Command Center"}
+              </CardTitle>
+            </div>
+            <div className="px-3 py-1 bg-primary/10 rounded-full text-[10px] font-black uppercase tracking-widest text-primary">
+              ID: {isEnrollMode ? (formData.username || 'Generating...') : (selectedStudent?.username || '—')}
+            </div>
+          </CardHeader>
+
+          <CardContent className="p-0">
+            <div className="flex flex-col lg:flex-row min-h-[360px]">
+              
+              {/* Left sidebar tab selector */}
+              <div className="w-full lg:w-60 bg-slate-50/50 border-r border-slate-100 p-3 flex lg:flex-col gap-1 overflow-x-auto lg:overflow-y-auto whitespace-nowrap lg:whitespace-normal">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-[10px] uppercase tracking-wider text-left ${
+                      activeTab === tab.id 
+                        ? 'bg-primary text-white shadow-md shadow-primary/20' 
+                        : 'text-slate-500 hover:bg-white hover:text-primary'
+                    }`}
+                  >
+                    <tab.icon size={14} />
+                    {tab.name}
+                  </button>
+                ))}
               </div>
-              <div className="px-3 py-1 bg-primary/10 rounded-full text-[10px] font-black uppercase tracking-widest text-primary">
-                ID: {selectedStudent.username}
-              </div>
-            </CardHeader>
 
-            <CardContent className="p-0">
-              <div className="flex flex-col lg:flex-row min-h-[360px]">
-                
-                {/* Left sidebar tab selector */}
-                <div className="w-full lg:w-60 bg-slate-50/50 border-r border-slate-100 p-3 flex lg:flex-col gap-1 overflow-x-auto lg:overflow-y-auto whitespace-nowrap lg:whitespace-normal">
-                  {tabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setActiveTab(tab.id as any)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-[10px] uppercase tracking-wider text-left ${
-                        activeTab === tab.id 
-                          ? 'bg-primary text-white shadow-md shadow-primary/20' 
-                          : 'text-slate-500 hover:bg-white hover:text-primary'
-                      }`}
-                    >
-                      <tab.icon size={14} />
-                      {tab.name}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Right workspace form input fields */}
-                <div className="flex-1 p-5 bg-white relative">
-                  <div className="space-y-4">
-                    
-                    {activeTab === 'basic' && (
-                      <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          <FormField label="Index No" value={formData.username} />
-                          <FormField label="Full Name" value={formData.fullName} />
-                          <FormField label="Name in Sinhala as Birth Certificate" value={formData.nameSinhala} />
-                          <FormField label="Name with Initial" value={formData.nameWithInitials} />
-                          <FormField label="Name with Initial Sinhala" value={formData.nameWithInitialSinhala} />
-                          <FormField label="Date Of Birth" value={formData.dob} />
-                          <FormField label="NIC" value={formData.nic} />
-                          <FormField label="Birth Certificate No" value={formData.birthCertificateNumber} />
-                          <FormField label="District" value={formData.district} />
-                          <FormField label="Religion" value={formData.religion} />
-                          <FormField label="Gender" value={formData.gender === 'MALE' ? 'Male' : formData.gender === 'FEMALE' ? 'Female' : formData.gender} />
-                          <FormField label="Mother Name" value={formData.motherName} />
-                          <FormField label="Father Name" value={formData.fatherName} />
-                          <FormField label="Guardian ID" value={formData.guardianIdRef} />
-                          <FormField label="Age - Auto Calculate" value={formData.age} />
-                          <FormField label="Inter School House" value={formData.interSchoolHouse} />
-                          <FormField label="Siblings" value={formData.siblings} />
-                        </div>
-                      </div>
-                    )}
-
-                    {activeTab === 'health' && (
-                      <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          <FormField label="Height" value={formData.height} />
-                          <FormField label="Weight" value={formData.weight} />
-                          <FormField label="Blood Type" value={formData.bloodGroup} />
-                          <FormField label="Special Physical Condition" value={formData.specialPhysicalCondition} />
-                          <FormField label="Special Illness" value={formData.specialIllness} />
-                          <FormField label="Long Term Diseases" value={formData.longTermDiseases} />
-                          <FormField label="Special Need" value={formData.specialNeed} />
-                        </div>
-                        <FormField label="Medical Description" value={formData.medicalDescription} />
-                      </div>
-                    )}
-
-                    {activeTab === 'skills' && (
-                      <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                          <h4 className="text-[10px] font-black uppercase tracking-widest text-primary">Achievements</h4>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                            <FormField label="International" value={formData.achievementInternational} />
-                            <FormField label="National" value={formData.achievementNational} />
-                            <FormField label="Provincial" value={formData.achievementProvincial} />
-                            <FormField label="Zonal" value={formData.achievementZonal} />
-                            <FormField label="Divisional" value={formData.achievementDivisional} />
-                            <FormField label="School" value={formData.achievementSchool} />
+              {/* Right workspace form input fields */}
+              <div className="flex-1 p-5 bg-white relative">
+                <div className="space-y-4">
+                  
+                  {activeTab === 'basic' && (
+                    <div className="space-y-4 animate-in fade-in duration-300">
+                      {/* Passcode and Class Credentials - Edit Mode Only */}
+                      {isEnrollMode && (
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100/80 mb-2 space-y-3">
+                          <h4 className="text-[10px] font-black uppercase tracking-widest text-primary">Academic Cell &amp; Credentials</h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Secure Passcode</label>
+                              <Input 
+                                type="password"
+                                placeholder="••••••••" 
+                                value={password} 
+                                onChange={(e) => setPassword(e.target.value)} 
+                                required 
+                                className="h-10 rounded-xl border-slate-200 bg-white text-xs font-bold text-black focus:ring-2 focus:ring-primary/10"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Primary Grade</label>
+                              <select 
+                                value={selectedGradeId} 
+                                onChange={(e) => {
+                                  const gId = parseInt(e.target.value);
+                                  setSelectedGradeId(gId);
+                                  setSelectedClassId('');
+                                  fetchClassesForGrade(gId);
+                                }} 
+                                required 
+                                className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black"
+                              >
+                                <option value="">Choose Grade</option>
+                                {grades.map(g => (
+                                  <option key={g.id} value={g.id}>{g.name}</option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Class Section</label>
+                              <select 
+                                value={selectedClassId} 
+                                onChange={(e) => setSelectedClassId(parseInt(e.target.value))} 
+                                required 
+                                disabled={!selectedGradeId}
+                                className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black disabled:opacity-50"
+                              >
+                                <option value="">Choose Class</option>
+                                {classes.map(c => (
+                                  <option key={c.id} value={c.id}>{c.name}</option>
+                                ))}
+                              </select>
+                            </div>
                           </div>
-                          <FormField label="Achievements Description" value={formData.talentDescription} />
                         </div>
+                      )}
 
-                        <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                          <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Additional Talent Areas</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        <FormInput label="Index No" name="username" disabled />
+                        <FormInput label="Full Name" name="fullName" />
+                        <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" />
+                        <FormInput label="Name with Initial" name="nameWithInitials" />
+                        <FormInput label="Name with Initial Sinhala" name="nameWithInitialSinhala" />
+                        <FormInput label="Date Of Birth" name="dob" type="date" />
+                        <FormInput label="NIC" name="nic" />
+                        <FormInput label="Birth Certificate No" name="birthCertificateNumber" />
+                        <FormInput label="District" name="district" />
+                        <FormInput label="Religion" name="religion" />
+                        <FormInput 
+                          label="Gender" 
+                          name="gender" 
+                          options={[{label: 'Male', value: 'MALE'}, {label: 'Female', value: 'FEMALE'}]} 
+                        />
+                        <FormInput label="Mother Name" name="motherName" />
+                        <FormInput label="Father Name" name="fatherName" />
+                        <FormInput label="Guardian ID" name="guardianIdRef" />
+                        <FormInput label="Age - Auto Calculate" name="age" disabled placeholder="Auto-calculated" />
+                        <FormInput label="Inter School House" name="interSchoolHouse" />
+                        <FormInput label="Siblings" name="siblings" type="number" />
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === 'health' && (
+                    <div className="space-y-4 animate-in fade-in duration-300">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        <FormInput label="Height" name="height" />
+                        <FormInput label="Weight" name="weight" />
+                        <FormInput 
+                          label="Blood Type" 
+                          name="bloodGroup" 
+                          options={[
+                            {label: 'A+', value: 'A+'}, {label: 'A-', value: 'A-'},
+                            {label: 'B+', value: 'B+'}, {label: 'B-', value: 'B-'},
+                            {label: 'O+', value: 'O+'}, {label: 'O-', value: 'O-'},
+                            {label: 'AB+', value: 'AB+'}, {label: 'AB-', value: 'AB-'}
+                          ]} 
+                        />
+                        <FormInput label="Special Physical Condition" name="specialPhysicalCondition" />
+                        <FormInput label="Special Illness" name="specialIllness" />
+                        <FormInput label="Long Term Diseases" name="longTermDiseases" />
+                        <FormInput label="Special Need" name="specialNeed" />
+                      </div>
+                      <FormInput label="Medical Description" name="medicalDescription" type="textarea" />
+                    </div>
+                  )}
+
+                  {activeTab === 'skills' && (
+                    <div className="space-y-4 animate-in fade-in duration-300">
+                      <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-primary">Achievements</h4>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                          {[
+                            { label: "International", name: "achievementInternational" },
+                            { label: "National", name: "achievementNational" },
+                            { label: "Provincial", name: "achievementProvincial" },
+                            { label: "Zonal", name: "achievementZonal" },
+                            { label: "Divisional", name: "achievementDivisional" },
+                            { label: "School", name: "achievementSchool" }
+                          ].map(ach => (
+                            <FormInput 
+                              key={ach.name}
+                              label={ach.label} 
+                              name={ach.name} 
+                              options={[
+                                { label: '1st Place', value: '1st' },
+                                { label: '2nd Place', value: '2nd' },
+                                { label: '3rd Place', value: '3rd' },
+                                { label: 'Participant', value: 'participant' }
+                              ]}
+                            />
+                          ))}
+                        </div>
+                        <FormInput label="Achievements Description" name="talentDescription" type="textarea" />
+                      </div>
+
+                      <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Additional Talent Areas</h4>
+                        
+                        {isEnrollMode ? (
+                          // Edit Mode: Checkbox select
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                            {[
+                              { label: 'Agriculture', name: 'talentAgri' },
+                              { label: 'ICT', name: 'talentIct' },
+                              { label: 'Aesthetic', name: 'talentAesthetic' },
+                              { label: 'Media & Announcing', name: 'talentMedia' },
+                              { label: 'Sport & Athletic', name: 'talentSport' },
+                              { label: 'Innovation', name: 'talentInnovation' },
+                              { label: 'Cinematography', name: 'talentCinematography' }
+                            ].map((t) => (
+                              <label key={t.name} className="flex items-center gap-3 p-2 px-3 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-primary transition-all">
+                                <input 
+                                  type="checkbox" 
+                                  name={t.name}
+                                  checked={formData[t.name] === true || formData[t.name] === 'true'}
+                                  onChange={handleChange}
+                                  className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
+                                />
+                                <span className="text-xs font-bold text-slate-700">{t.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        ) : (
+                          // Read Only View Badges
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                             {[
                               {label: 'Agriculture', val: formData.talentAgri},
@@ -570,128 +820,119 @@ export default function StudentsPage() {
                               </div>
                             ))}
                           </div>
-                        </div>
+                        )}
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {activeTab === 'contact' && (
-                      <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <FormField label="Permanent Address" value={formData.addressPermanent} />
-                          <FormField label="Temporary Address" value={formData.addressTemporary} />
-                        </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                          <FormField label="Emergency Contact" value={formData.contactEmergency} />
-                          <FormField label="Whatsapp No" value={formData.contactWhatsapp} />
-                          <FormField label="Home No" value={formData.contactHome} />
-                          <FormField label="Mobile No" value={formData.contactMobile} />
-                          <FormField label="Email Address" value={formData.contactEmail} />
-                          <FormField label="Distance to School" value={formData.distanceToSchool} />
-                        </div>
+                  {activeTab === 'contact' && (
+                    <div className="space-y-4 animate-in fade-in duration-300">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <FormInput label="Permanent Address" name="addressPermanent" type="textarea" />
+                        <FormInput label="Temporary Address" name="addressTemporary" type="textarea" />
                       </div>
-                    )}
-
-                    {activeTab === 'exams' && (
-                      <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <FormField label="Grade 05 Exam Result" value={formData.resultGrade05} />
-                          <FormField label="GCE OL Exam Result" value={formData.resultGceOl} />
-                        </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                        <FormInput label="Emergency Contact" name="contactEmergency" />
+                        <FormInput label="Whatsapp No" name="contactWhatsapp" />
+                        <FormInput label="Home No" name="contactHome" />
+                        <FormInput label="Mobile No" name="contactMobile" />
+                        <FormInput label="Email Address" name="contactEmail" type="email" />
+                        <FormInput label="Distance to School" name="distanceToSchool" />
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {activeTab === 'visibility' && (
-                      <div className="space-y-4 animate-in fade-in duration-300">
-                        <div className="p-5 bg-slate-50/50 rounded-2xl border border-slate-100/80 space-y-4 max-w-md">
-                          <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Modify Profile Visibility</span>
-                          </div>
+                  {activeTab === 'exams' && (
+                    <div className="space-y-4 animate-in fade-in duration-300">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <FormInput label="Grade 05 Exam Result" name="resultGrade05" />
+                        <FormInput label="GCE OL Exam Result" name="resultGceOl" />
+                      </div>
+                    </div>
+                  )}
 
+                  {activeTab === 'visibility' && (
+                    <div className="space-y-4 animate-in fade-in duration-300">
+                      <div className="p-5 bg-slate-50/50 rounded-2xl border border-slate-100/80 space-y-4 max-w-md">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Modify Profile Visibility</span>
+                        </div>
+
+                        {isEnrollMode ? (
+                          // Edit Mode: Visibility selectors
                           <div className="flex flex-col gap-3">
-                            <button
-                              type="button"
-                              onClick={async () => {
-                                if (formData.isActive !== true && formData.isActive !== 'true') {
-                                  try {
-                                    setIsSubmitting(true);
-                                    // Update locally and in DB to active
-                                    await api.saveStudentProfile(formData.username, { ...formData, isActive: true });
-                                    setFormData((prev: any) => ({ ...prev, isActive: true }));
-                                    setMessage({ type: 'success', text: `Student ${formData.username} is now Active.` });
-                                    fetchStudents(currentPage);
-                                  } catch (err: any) {
-                                    setMessage({ type: 'error', text: err.message || 'Failed to update visibility.' });
-                                  } finally {
-                                    setIsSubmitting(false);
-                                  }
-                                }
-                              }}
-                              className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left ${
-                                formData.isActive === true || formData.isActive === 'true'
-                                  ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-bold'
-                                  : 'bg-white border-slate-200/60 hover:bg-slate-50 text-slate-500'
-                              }`}
-                              disabled={isSubmitting}
-                            >
-                              <div className="flex items-center gap-3">
-                                <span className={`w-2 h-2 rounded-full ${formData.isActive === true || formData.isActive === 'true' ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-                                <span className="text-xs font-black uppercase tracking-wider">Active</span>
-                              </div>
-                              {formData.isActive === true || formData.isActive === 'true' ? (
-                                <span className="text-[9px] bg-emerald-500/20 text-emerald-700 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">Current Status</span>
-                              ) : (
-                                <span className="text-[9px] text-slate-400 font-bold">Select to Activate</span>
-                              )}
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={async () => {
-                                if (confirm(`WARNING: Setting this student to Inactive will completely delete their profile and login account from the database. Are you sure you want to proceed?`)) {
-                                  try {
-                                    setIsSubmitting(true);
-                                    await api.deleteStudent(formData.username);
-                                    setMessage({ type: 'success', text: `Student ${formData.username} has been set to Inactive and completely removed from the database.` });
-                                    setSelectedStudent(null);
-                                    setSearchTerm('');
-                                    fetchStudents(currentPage);
-                                  } catch (err: any) {
-                                    setMessage({ type: 'error', text: err.message || 'Failed to delete student.' });
-                                  } finally {
-                                    setIsSubmitting(false);
-                                  }
-                                }
-                              }}
-                              className={`flex items-center justify-between p-3 rounded-xl border transition-all text-left ${
-                                formData.isActive === false || formData.isActive === 'false'
-                                  ? 'bg-rose-50 border-rose-200 text-rose-800 font-bold'
-                                  : 'bg-white border-slate-200/60 hover:bg-rose-50/30 hover:border-rose-200 text-slate-500'
-                              }`}
-                              disabled={isSubmitting}
-                            >
-                              <div className="flex items-center gap-3">
-                                <span className={`w-2 h-2 rounded-full ${formData.isActive === false || formData.isActive === 'false' ? 'bg-rose-500 animate-pulse' : 'bg-slate-300'}`} />
-                                <span className="text-xs font-black uppercase tracking-wider">Inactive (Delete Profile)</span>
-                              </div>
-                              {formData.isActive === false || formData.isActive === 'false' ? (
-                                <span className="text-[9px] bg-rose-500/20 text-rose-700 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">Current Status</span>
-                              ) : (
-                                <span className="text-[9px] text-rose-500 font-bold">Click to Delete</span>
-                              )}
-                            </button>
+                            <label className="flex items-center gap-4 cursor-pointer p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-55 transition-colors">
+                              <input 
+                                type="radio" 
+                                name="isActive" 
+                                value="true" 
+                                checked={formData.isActive === true || formData.isActive === 'true'} 
+                                onChange={() => setFormData((prev:any) => ({...prev, isActive: true}))}
+                                className="w-4 h-4 text-emerald-500 focus:ring-emerald-500" 
+                              />
+                              <span className="text-xs font-bold text-emerald-800">Active</span>
+                            </label>
+                            <label className="flex items-center gap-4 cursor-pointer p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                              <input 
+                                type="radio" 
+                                name="isActive" 
+                                value="false" 
+                                checked={formData.isActive === false || formData.isActive === 'false'} 
+                                onChange={() => setFormData((prev:any) => ({...prev, isActive: false}))}
+                                className="w-4 h-4 text-rose-500 focus:ring-rose-500" 
+                              />
+                              <span className="text-xs font-bold text-rose-800">Inactive</span>
+                            </label>
                           </div>
-                        </div>
+                        ) : (
+                          // Read Only View
+                          <div className="flex flex-col gap-3">
+                            <div className={`flex items-center justify-between p-3 rounded-xl border ${
+                              formData.isActive === true || formData.isActive === 'true'
+                                ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-bold'
+                                : 'bg-rose-50 border-rose-200 text-rose-800 font-bold'
+                            }`}>
+                              <div className="flex items-center gap-3">
+                                <span className={`w-2 h-2 rounded-full ${formData.isActive === true || formData.isActive === 'true' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                                <span className="text-xs font-black uppercase tracking-wider">
+                                  {formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive'}
+                                </span>
+                              </div>
+                              <span className="text-[9px] bg-slate-500/20 text-slate-700 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">Read-Only</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                  </div>
+                  {/* Submit / Action buttons inside workspace in Edit Mode */}
+                  {isEnrollMode && (
+                    <div className="mt-6 flex justify-end gap-3 border-t border-slate-100 pt-4">
+                      <Button 
+                        type="button" 
+                        onClick={() => setIsEnrollMode(false)}
+                        className="h-10 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-black font-black uppercase tracking-wider text-xs active:scale-95 transition-all"
+                      >
+                        Cancel
+                      </Button>
+                      <Button 
+                        type="submit" 
+                        className="h-10 px-8 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-primary/20"
+                        isLoading={isSubmitting}
+                      >
+                        Save &amp; Enroll Student
+                      </Button>
+                    </div>
+                  )}
+
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
+            </div>
+          </CardContent>
+        </Card>
+      </form>
 
       {/* Main Student Directory List - Positioned below the Workspace */}
       <Card className="rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative">
@@ -746,13 +987,22 @@ export default function StudentsPage() {
                 {!isLoading && students.map((st) => (
                   <TableRow 
                     key={st.id || st.username} 
-                    onClick={() => setSelectedStudent(st)}
+                    onClick={() => handleSelectStudent(st)}
                     className={`hover:bg-slate-50/50 transition-colors group cursor-pointer ${
                       selectedStudent && selectedStudent.username === st.username ? 'bg-primary/5 hover:bg-primary/5' : ''
                     }`}
                   >
-                    <TableCell className="px-4 py-2 font-black text-primary font-mono tracking-tighter text-xs">
-                      {st.username}
+                    <TableCell className="px-4 py-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectStudent(st);
+                        }}
+                        className="font-black text-primary font-mono tracking-tighter text-xs hover:underline cursor-pointer focus:outline-none transition-all active:scale-95 bg-primary/10 hover:bg-primary/20 px-2.5 py-1 rounded-lg border border-primary/20"
+                      >
+                        {st.username}
+                      </button>
                     </TableCell>
                     <TableCell className="py-2">
                       <div className="flex flex-col text-left">
@@ -790,120 +1040,6 @@ export default function StudentsPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Enrollment Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-500 overflow-y-auto py-10 px-4">
-          <div className="flex min-h-full items-center justify-center">
-            <div className="bg-white rounded-[3rem] w-full max-w-xl shadow-2xl border border-white/20 overflow-hidden animate-in zoom-in-95 duration-500">
-              <div className="p-10 border-b border-gray-100 flex justify-between items-center bg-slate-50/30">
-                <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-[1.5rem] bg-primary text-white flex items-center justify-center shadow-2xl shadow-primary/30">
-                    <UserPlus size={32} />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-black font-handlee">New Student Enrollment</h3>
-                    <p className="text-sm text-black font-black tracking-tight">Generate access credentials and assign academic cell</p>
-                  </div>
-                </div>
-                <button onClick={() => setShowModal(false)} className="w-12 h-12 rounded-2xl flex items-center justify-center text-black hover:bg-slate-100 transition-all">
-                  <X size={24} />
-                </button>
-              </div>
-              
-              <form onSubmit={handleEnrollment} className="p-10 space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2 flex justify-between">
-                      Generated Index No
-                      <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Auto-Generated</span>
-                    </label>
-                    <div className="relative">
-                      <Input 
-                        placeholder="Fetching index..." 
-                        value={username} 
-                        readOnly
-                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-100 cursor-not-allowed focus:bg-slate-100 transition-all shadow-inner font-mono font-bold text-primary"
-                      />
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
-                        <ShieldCheck size={20} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Secure Passcode</label>
-                    <div className="relative">
-                      <Input 
-                        type="password"
-                        placeholder="••••••••" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                        required 
-                        className="h-14 pl-12 rounded-2xl border-gray-200 bg-slate-50/50 focus:bg-white transition-all shadow-inner"
-                      />
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
-                        <Lock size={20} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Primary Academic Grade</label>
-                    <select 
-                      value={selectedGradeId} 
-                      onChange={(e) => {
-                        const gId = parseInt(e.target.value);
-                        setSelectedGradeId(gId);
-                        setSelectedClassId('');
-                        fetchClassesForGrade(gId);
-                      }} 
-                      required 
-                      className="w-full h-14 bg-slate-50/50 border border-gray-200 rounded-2xl px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-slate-700 shadow-inner"
-                    >
-                      <option value="">Choose Grade</option>
-                      {grades.map(g => (
-                        <option key={g.id} value={g.id}>{g.name}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="text-xs font-black text-black uppercase tracking-[0.15em] ml-2">Assigned Class Section</label>
-                    <select 
-                      value={selectedClassId} 
-                      onChange={(e) => setSelectedClassId(parseInt(e.target.value))} 
-                      required 
-                      disabled={!selectedGradeId}
-                      className="w-full h-14 bg-slate-50/50 border border-gray-200 rounded-2xl px-5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm font-bold text-slate-700 shadow-inner disabled:opacity-50"
-                    >
-                      <option value="">Choose Class</option>
-                      {classes.map(c => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <Button 
-                    type="submit" 
-                    className="w-full h-16 rounded-3xl font-bold text-lg uppercase tracking-widest shadow-2xl shadow-primary/30 bg-primary hover:bg-primary-hover text-white active:scale-95 transition-all" 
-                    isLoading={isSubmitting}
-                  >
-                    Authorize &amp; Enroll Student
-                  </Button>
-                  <p className="text-center text-xs text-black font-black uppercase tracking-[0.15em] mt-6">
-                    Verified Administrative Action &bull; Security Logged
-                  </p>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
