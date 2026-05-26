@@ -101,24 +101,23 @@ export default function AdminDashboard() {
               <img src="/img/favicon.png" alt="AMV Logo" className="w-full h-full object-contain filter drop-shadow-lg amv-logo-float" />
             </div>
             <div className="flex flex-col">
-              <h2 className="tracking-wide" style={{ 
+              <h2 className="tracking-wide keep-colors" style={{ 
                 fontSize: 'clamp(20px, 2.2vw, 28px)', 
                 fontWeight: 800, 
                 color: '#f8fafc',
                 lineHeight: 1.1,
                 margin: 0,
               }}>
-                Welcome To{' '}
-                <span style={{ 
+                <span className="keep-colors" style={{ 
                   background: 'linear-gradient(135deg, #a5b4fc 0%, #818cf8 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   fontWeight: 900,
                   textShadow: '0 2px 10px rgba(129, 140, 248, 0.2)'
                 }}>
-                  Andiambalama
+                  AMV
                 </span>{' '}
-                Maha Vidhyalaya
+                Spotlight
               </h2>
             </div>
           </div>
