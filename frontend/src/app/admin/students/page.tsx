@@ -67,7 +67,7 @@ const BLANK_FORM = {
 };
 
 const BASE_KEYS = [
-  'id', 'username', 'fullName', 'gender', 'dob', 'isActive',
+  'id', 'username', 'fullName', 'gender', 'dob', 'isActive', 'isActiveStudent',
   'gradeId', 'classId', 'verificationStatus', 'verifiedByName',
   'verifiedAt', 'verificationComment', 'profileCompleted',
 ];
@@ -79,7 +79,9 @@ function buildPayload(data: any) {
       extraData[key] = data[key];
     }
   });
-  return { ...data, additionalData: JSON.stringify(extraData) };
+  // Map frontend isActive to backend isActiveStudent
+  const activeVal = data.isActive === true || data.isActive === 'true';
+  return { ...data, isActiveStudent: activeVal, additionalData: JSON.stringify(extraData) };
 }
 
 function mergeAdditional(st: any) {
@@ -87,6 +89,9 @@ function mergeAdditional(st: any) {
   if (st.additionalData) {
     try { data = { ...data, ...JSON.parse(st.additionalData) }; } catch {}
   }
+  // Map backend isActiveStudent to frontend isActive
+  const backendActive = st.isActiveStudent !== undefined ? st.isActiveStudent : st.isActive;
+  data.isActive = backendActive === true || backendActive === 'true';
   return data;
 }
 
@@ -833,7 +838,7 @@ export default function StudentsPage() {
               )}
 
               {!isLoading && students.map(st => {
-                const isActive = (st as any).isActive === true || (st as any).isActive === 'true';
+                const isActive = st.isActiveStudent === true || (st as any).isActive === true || (st as any).isActive === 'true';
                 return (
                   <TableRow key={st.id || st.username} onClick={() => handleSelectStudent(st)}
                     className={`hover:bg-slate-50/50 transition-colors group cursor-pointer ${selectedStudent?.username === st.username ? 'bg-primary/5 hover:bg-primary/5' : ''}`}>
