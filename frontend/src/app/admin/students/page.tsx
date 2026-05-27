@@ -7,10 +7,11 @@ import { Button } from '@/components/ui/Button';
 import {
   Search, X, ShieldCheck, GraduationCap,
   CheckCircle2, AlertCircle, Lock, UserPlus, Eye, FileSpreadsheet,
-  Save, User, HeartPulse, Star, MapPin, FileCheck, RotateCcw, Loader2
+  Save, User, HeartPulse, Star, MapPin, FileCheck, RotateCcw, Loader2, ArrowRight
 } from 'lucide-react';
 import { api, StudentProfile, Grade } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
+import Link from 'next/link';
 
 // ─── Blank form template (reused for reset & new enrollment) ─────────────────
 const BLANK_FORM = {
@@ -797,89 +798,19 @@ export default function StudentsPage() {
         </Card>
       </form>
 
-      {/* ── Student Directory ───────────────────────────────────────────────── */}
-      <Card className="rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative">
-        <CardHeader className="px-5 py-3 border-b border-slate-100 flex flex-row items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-4 bg-secondary rounded-full" />
-            <CardTitle className="text-xs font-black text-black">Student Directory</CardTitle>
+      {/* ── Student Directory Redirect ──────────────────────────────────────── */}
+      <Card className="rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative mt-6">
+        <CardContent className="p-8 text-center flex flex-col items-center justify-center gap-4">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+            <FileSpreadsheet size={32} />
           </div>
-          <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-1 rounded-full border border-slate-100 shadow-sm">
-            <FileSpreadsheet size={13} className="text-primary" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-black">{totalElements} Institutional Records</span>
+          <div className="space-y-1">
+            <h3 className="text-lg font-black text-slate-800 uppercase tracking-tight">Student Directory Has Moved</h3>
+            <p className="text-xs font-bold text-slate-500">The full student list and search functionality is now located in the institutional reporting module.</p>
           </div>
-        </CardHeader>
-
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader className="bg-slate-50 border-b border-slate-200 sticky top-0 z-20">
-              <TableRow className="border-none">
-                <TableHead className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black w-[150px]">Admission</TableHead>
-                <TableHead className="py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black">Student Name</TableHead>
-                <TableHead className="hidden md:table-cell py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center w-[150px]">Academic Cell</TableHead>
-                <TableHead className="hidden sm:table-cell py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center w-[90px]">Active</TableHead>
-                <TableHead className="hidden sm:table-cell py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center w-[130px]">Verification</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading && Array.from({ length: 3 }).map((_, i) => (
-                <TableRow key={`sk-${i}`}>
-                  <TableCell colSpan={5} className="px-4 py-3 animate-pulse"><div className="h-3 bg-slate-100 rounded-full w-full" /></TableCell>
-                </TableRow>
-              ))}
-
-              {!isLoading && students.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={5} className="py-12 text-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center opacity-20"><Search size={20} /></div>
-                      <p className="text-black font-black italic opacity-40 uppercase tracking-widest text-[10px]">No Records Found</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-
-              {!isLoading && students.map(st => {
-                const isActive = st.isActiveStudent === true || (st as any).activeStudent === true || (st as any).isActive === true || (st as any).isActive === 'true';
-                return (
-                  <TableRow key={st.id || st.username} onClick={() => handleSelectStudent(st)}
-                    className={`hover:bg-slate-50/50 transition-colors group cursor-pointer ${selectedStudent?.username === st.username ? 'bg-primary/5 hover:bg-primary/5' : ''}`}>
-                    <TableCell className="px-4 py-2">
-                      <button type="button" onClick={e => { e.stopPropagation(); handleSelectStudent(st); }}
-                        className="font-black text-primary font-mono tracking-tighter text-xs hover:underline cursor-pointer focus:outline-none transition-all active:scale-95 bg-primary/10 hover:bg-primary/20 px-2.5 py-1 rounded-lg border border-primary/20">
-                        {st.username}
-                      </button>
-                    </TableCell>
-                    <TableCell className="py-2">
-                      <div className="flex flex-col text-left">
-                        <span className="text-xs font-black text-black group-hover:text-primary transition-colors line-clamp-1">
-                          {st.fullName || <span className="text-rose-500 italic font-bold">Incomplete Profile</span>}
-                        </span>
-                        <span className="text-[9px] font-black text-black uppercase opacity-60 md:hidden">{st.gradeName} {st.className}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell py-2 text-center">
-                      <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-[9px] font-black text-black uppercase tracking-widest">{st.gradeName || 'N/A'}</span>
-                        <span className="text-[9px] font-black text-primary uppercase opacity-70">Class {st.className || 'N/A'}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell py-2 text-center">
-                      <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-black uppercase border ${isActive ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}>
-                        <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
-                        {isActive ? 'Active' : 'Inactive'}
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell py-2 text-center">
-                      <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${st.verificationStatus === 'VERIFIED' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : st.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
-                        {st.verificationStatus || 'PENDING'}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+          <Link href="/admin/reporting?report=students" className="mt-4 flex items-center gap-2 h-12 px-8 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-primary/20">
+            View All Student List <ArrowRight size={16} />
+          </Link>
         </CardContent>
       </Card>
 
