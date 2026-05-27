@@ -210,13 +210,79 @@ export default function StudentsPage() {
 
   // Load selected student into workspace
   useEffect(() => {
+    if (showModal) return; // Prevent overwriting workspace form data while modal is editing
     if (selectedStudent) {
       setIsEnrollMode(false);
       setFormData(mergeAdditional(selectedStudent));
     } else if (!isEnrollMode) {
       setFormData({ ...BLANK_FORM });
     }
-  }, [selectedStudent]);
+  }, [selectedStudent, showModal]);
+
+  // Sync modal changes to workspace and directory list in real-time when the modal is open
+  useEffect(() => {
+    if (showModal) {
+      // 1. Sync workspace read-only form data
+      setFormData(modalFormData);
+
+      // Look up grade and class names in real-time
+      const gradeObj = grades.find(g => g.id === modalSelectedGrade);
+      const classObj = modalClasses.find(c => c.id === modalSelectedClass);
+
+      // 2. Sync selectedStudent basic fields so workspace header updates (e.g. ID, active status)
+      setSelectedStudent((prev: any) => {
+        if (!prev || prev.username !== modalFormData.username) {
+          // If no student is selected, or if the user loaded a new student in the modal,
+          // create a mock student profile representation to activate the workspace view
+          return {
+            username: modalFormData.username,
+            fullName: modalFormData.fullName,
+            isActive: modalFormData.isActive,
+            gradeId: modalSelectedGrade,
+            classId: modalSelectedClass,
+            gradeName: gradeObj ? gradeObj.name : undefined,
+            className: classObj ? classObj.name : undefined,
+          } as unknown as StudentProfile;
+        }
+        return {
+          ...prev,
+          fullName: modalFormData.fullName,
+          isActive: modalFormData.isActive,
+          gradeId: modalSelectedGrade || prev.gradeId,
+          classId: modalSelectedClass || prev.classId,
+          gradeName: gradeObj ? gradeObj.name : prev.gradeName,
+          className: classObj ? classObj.name : prev.className,
+        };
+      });
+
+      // 3. Sync directory list so row badges update in real-time
+      setStudents((prevList) =>
+        prevList.map((st) => {
+          if (st.username === modalFormData.username) {
+            return {
+              ...st,
+              fullName: modalFormData.fullName,
+              isActive: modalFormData.isActive,
+              gradeId: modalSelectedGrade || st.gradeId,
+              classId: modalSelectedClass || st.classId,
+              gradeName: gradeObj ? gradeObj.name : st.gradeName,
+              className: classObj ? classObj.name : st.className,
+            };
+          }
+          return st;
+        })
+      );
+    }
+  }, [modalFormData, showModal, modalSelectedGrade, modalSelectedClass, grades, modalClasses]);
+
+  // Reset dummy selectedStudent if modal is closed and we were in 'new' mode
+  useEffect(() => {
+    if (!showModal) {
+      if (modalMode === 'new') {
+        setSelectedStudent(null);
+      }
+    }
+  }, [showModal]);
 
   // Auto-select when search yields exactly 1 result
   useEffect(() => {
@@ -301,6 +367,7 @@ export default function StudentsPage() {
           try { setModalClasses(await api.getClassesByGrade(st.gradeId)); } catch {}
         }
         setModalMode('edit');
+        setSelectedStudent(st); // Select the loaded student in workspace in real-time
         setModalMessage({ type: 'success', text: `Loaded: ${st.fullName || st.username}` });
       } else {
         setModalMessage({ type: 'error', text: 'No student found with that ID or name.' });
