@@ -37,7 +37,7 @@ export default function AdminLayout({
     }
   }, [router]);
 
-  const isNoScrollPage = ['/admin', '/admin/institutional', '/admin/registration', '/admin/performance', '/admin/reporting'].includes(pathname);
+  const isNoScrollPage = ['/admin', '/admin/institutional', '/admin/registration', '/admin/performance'].includes(pathname);
 
 
 
@@ -88,7 +88,7 @@ export default function AdminLayout({
 
         {/* Main Content - Conditional Scroll */}
         <main className={`flex-1 ${isNoScrollPage ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'} ${pathname === '/admin' ? 'p-0' : 'p-4 md:p-6'} relative`}>
-          <div className={`max-w-none mx-auto h-full ${isNoScrollPage ? 'overflow-hidden' : ''}`}>
+          <div className={`max-w-none mx-auto ${isNoScrollPage ? 'h-full overflow-hidden' : ''}`}>
             {children}
           </div>
         </main>
