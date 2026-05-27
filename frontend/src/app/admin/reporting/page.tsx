@@ -12,7 +12,6 @@ import {
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { api, StudentProfile, Grade } from '@/lib/api';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 
 function ReportingDashboard() {
   return (
@@ -152,7 +151,7 @@ function StudentListReport() {
   }, [searchTerm, filterGradeId, filterClassId]);
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 border border-slate-200/60">
+    <div className="flex flex-col bg-white rounded-2xl shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500 border border-slate-200/60">
       <div className="flex-none p-5 border-b border-slate-100 bg-slate-50/50">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -210,34 +209,42 @@ function StudentListReport() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto">
-        <Table>
-          <TableHeader className="bg-slate-50 border-b border-slate-200 sticky top-0 z-20">
-            <TableRow className="border-none">
-              <TableHead className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black w-[150px]">Admission</TableHead>
-              <TableHead className="py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black min-w-[200px]">Student Name</TableHead>
-              <TableHead className="hidden md:table-cell py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center w-[150px]">Academic Cell</TableHead>
-              <TableHead className="hidden lg:table-cell py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black w-[250px]">Permanent Address</TableHead>
-              <TableHead className="hidden sm:table-cell py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center w-[90px]">Active</TableHead>
-              <TableHead className="hidden sm:table-cell py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center w-[130px]">Verification</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+      <div>
+        <table className="w-full table-fixed text-left text-sm text-slate-600 border-collapse">
+          <colgroup>
+            <col style={{ width: '12%' }} />
+            <col style={{ width: '22%' }} />
+            <col style={{ width: '16%' }} />
+            <col style={{ width: '30%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '10%' }} />
+          </colgroup>
+          <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-20">
+            <tr>
+              <th className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black">Admission</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black">Student Name</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center hidden md:table-cell">Academic Cell</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black hidden lg:table-cell">Permanent Address</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center hidden sm:table-cell">Active</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center hidden sm:table-cell">Verification</th>
+            </tr>
+          </thead>
+          <tbody>
             {isLoading && Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={`sk-${i}`}>
-                <TableCell colSpan={6} className="px-4 py-3 animate-pulse"><div className="h-3 bg-slate-100 rounded-full w-full" /></TableCell>
-              </TableRow>
+              <tr key={`sk-${i}`} className="border-b border-slate-100">
+                <td colSpan={6} className="px-4 py-3 animate-pulse"><div className="h-3 bg-slate-100 rounded-full w-full" /></td>
+              </tr>
             ))}
 
             {!isLoading && students.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={6} className="py-12 text-center">
+              <tr>
+                <td colSpan={6} className="py-12 text-center">
                   <div className="flex flex-col items-center gap-2">
                     <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center opacity-20"><Search size={20} /></div>
                     <p className="text-black font-black italic opacity-40 uppercase tracking-widest text-[10px]">No Records Found</p>
                   </div>
-                </TableCell>
-              </TableRow>
+                </td>
+              </tr>
             )}
 
             {!isLoading && students.map(st => {
@@ -251,43 +258,43 @@ function StudentListReport() {
               }
 
               return (
-                <TableRow key={st.id || st.username} className="hover:bg-slate-50/50 transition-colors group">
-                  <TableCell className="px-4 py-2">
-                    <span className="font-black text-slate-700 font-mono tracking-tighter text-xs">{st.username}</span>
-                  </TableCell>
-                  <TableCell className="py-2">
+                <tr key={st.id || st.username} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                  <td className="px-4 py-2">
+                    <span className="font-black text-slate-700 font-mono tracking-tighter text-xs truncate block">{st.username}</span>
+                  </td>
+                  <td className="px-2 py-2">
                     <div className="flex flex-col text-left">
-                      <span className="text-xs font-black text-black line-clamp-1">
-                        {st.fullName || <span className="text-rose-500 italic font-bold">Incomplete Profile</span>}
+                      <span className="text-xs font-black text-black truncate">
+                        {st.fullName || <span className="text-rose-500 italic font-bold">Incomplete</span>}
                       </span>
                       <span className="text-[9px] font-black text-black uppercase opacity-60 md:hidden">{st.gradeName} {st.className}</span>
                     </div>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell py-2 text-center">
+                  </td>
+                  <td className="px-2 py-2 text-center hidden md:table-cell">
                     <div className="flex flex-col items-center gap-0.5">
                       <span className="text-[9px] font-black text-black uppercase tracking-widest">{st.gradeName || 'N/A'}</span>
                       <span className="text-[9px] font-black text-slate-500 uppercase opacity-70">Class {st.className || 'N/A'}</span>
                     </div>
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell py-2">
-                    <span className="text-[10px] font-bold text-slate-600 line-clamp-1">{address}</span>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell py-2 text-center">
+                  </td>
+                  <td className="px-2 py-2 hidden lg:table-cell">
+                    <span className="text-[10px] font-bold text-slate-600 block truncate">{address}</span>
+                  </td>
+                  <td className="px-2 py-2 text-center hidden sm:table-cell">
                     <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-black uppercase border ${isActive ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}>
                       <span className={`w-1 h-1 rounded-full ${isActive ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
                       {isActive ? 'Active' : 'Inactive'}
                     </div>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell py-2 text-center">
+                  </td>
+                  <td className="px-2 py-2 text-center hidden sm:table-cell">
                     <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${st.verificationStatus === 'VERIFIED' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : st.verificationStatus === 'NEEDS_CORRECTION' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
                       {st.verificationStatus || 'PENDING'}
                     </div>
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               );
             })}
-          </TableBody>
-        </Table>
+          </tbody>
+        </table>
       </div>
     </div>
   );
