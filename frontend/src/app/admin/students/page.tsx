@@ -391,6 +391,7 @@ export default function StudentsPage() {
     setModalSubmitting(true);
     setModalMessage(null);
     try {
+      let savedProfile: StudentProfile | null = null;
       if (modalMode === 'new') {
         if (!modalPassword) {
           setModalMessage({ type: 'error', text: 'Secure passcode is required for new enrollment.' });
@@ -401,22 +402,36 @@ export default function StudentsPage() {
           setModalSubmitting(false); return;
         }
         await api.enrollStudent(modalFormData.username, modalPassword, modalSelectedGrade as number, modalSelectedClass as number);
-        await api.saveStudentProfile(modalFormData.username, buildPayload(modalFormData));
+        savedProfile = await api.saveStudentProfile(modalFormData.username, buildPayload(modalFormData));
         setModalMessage({ type: 'success', text: `Student enrolled: ${modalFormData.username}` });
       } else {
         // EDIT mode — update profile only. isActive: false = soft deactivation, NOT deletion.
-        await api.saveStudentProfile(modalFormData.username, buildPayload(modalFormData));
+        savedProfile = await api.saveStudentProfile(modalFormData.username, buildPayload(modalFormData));
         setModalMessage({ type: 'success', text: 'Student profile saved successfully.' });
       }
+
+      // Clear filters/search so the newly enrolled/edited student is guaranteed to be visible in the directory list
+      setSearchTerm('');
+      setFilterGradeId('');
+      setFilterClassId('');
+      setFilterClasses([]);
+
       // Refresh directory list
-      const res = await api.getPaginatedStudents(currentPage, pageSize, searchTerm, filterGradeId, filterClassId);
+      const res = await api.getPaginatedStudents(0, pageSize, '', '', '');
       setStudents(res.content);
       setTotalElements(res.totalElements);
+      setCurrentPage(0);
 
       // Auto-select the saved student in the workspace so read-only view shows updated data
-      const updated = res.content.find((s: StudentProfile) => s.username === modalFormData.username);
-      if (updated) {
-        setSelectedStudent(updated);
+      if (savedProfile) {
+        const gradeObj = grades.find(g => g.id === (savedProfile.gradeId || modalSelectedGrade));
+        const classObj = modalClasses.find(c => c.id === (savedProfile.classId || modalSelectedClass));
+        const enrichedProfile = {
+          ...savedProfile,
+          gradeName: savedProfile.gradeName || (gradeObj ? gradeObj.name : undefined),
+          className: savedProfile.className || (classObj ? classObj.name : undefined)
+        };
+        setSelectedStudent(enrichedProfile);
         setIsEnrollMode(false);
       }
 
