@@ -1,10 +1,10 @@
 import React from 'react';
 
-export function Table({ children, className = '', ...props }: React.HTMLAttributes<HTMLDivElement> & { children: React.ReactNode }) {
+export function Table({ children, className = '', tableClassName = '', ...props }: React.HTMLAttributes<HTMLDivElement> & { children: React.ReactNode; tableClassName?: string }) {
   return (
     <div className="relative group/table">
       <div className={`w-full overflow-x-auto rounded-xl border border-slate-200 bg-white/50 backdrop-blur-sm custom-scrollbar ${className}`} {...props}>
-        <table className="w-full text-sm text-left text-slate-600 border-collapse">
+        <table className={`w-full text-sm text-left text-slate-600 border-collapse ${tableClassName}`}>
           {children}
         </table>
       </div>

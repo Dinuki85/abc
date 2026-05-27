@@ -728,47 +728,26 @@ export default function StudentsPage() {
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
-                            {isEnrollMode ? 'Set Profile Visibility' : 'Profile Visibility Status'}
+                            Profile Visibility Status
                           </span>
                         </div>
-                        {isEnrollMode ? (
-                          <div className="flex flex-col gap-3">
-                            <label className="flex items-center gap-4 cursor-pointer p-3 bg-white border border-emerald-200 rounded-xl hover:bg-emerald-50 transition-colors">
-                              <input type="radio" name="isActive" value="true" checked={formData.isActive === true || formData.isActive === 'true'} onChange={() => setFormData((p: any) => ({ ...p, isActive: true }))} className="w-4 h-4 text-emerald-500 focus:ring-emerald-500" />
-                              <div>
-                                <span className="text-xs font-black text-emerald-800 block">Active</span>
-                                <span className="text-[10px] text-slate-400 font-bold">Student can log in and access the system</span>
-                              </div>
-                            </label>
-                            <label className="flex items-center gap-4 cursor-pointer p-3 bg-white border border-rose-200 rounded-xl hover:bg-rose-50 transition-colors">
-                              <input type="radio" name="isActive" value="false" checked={formData.isActive === false || formData.isActive === 'false'} onChange={() => setFormData((p: any) => ({ ...p, isActive: false }))} className="w-4 h-4 text-rose-500 focus:ring-rose-500" />
-                              <div>
-                                <span className="text-xs font-black text-rose-800 block">Inactive</span>
-                                <span className="text-[10px] text-slate-400 font-bold">Record preserved. Student cannot log in.</span>
-                              </div>
-                            </label>
-                          </div>
-                        ) : (
-                          <div className={`flex items-center gap-3 p-4 rounded-xl border ${
-                            formData.isActive === true || formData.isActive === 'true'
-                              ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                              : 'bg-rose-50 border-rose-200 text-rose-800'
-                          }`}>
-                            <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${
-                              formData.isActive === true || formData.isActive === 'true' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'
-                            }`} />
+                        <div className="flex flex-col gap-3">
+                          <label className="flex items-center gap-4 cursor-pointer p-3 bg-white border border-emerald-200 rounded-xl hover:bg-emerald-50 transition-colors">
+                            <input type="radio" name="isActive" value="true" checked={formData.isActive === true || formData.isActive === 'true'} onChange={() => setFormData((p: any) => ({ ...p, isActive: true }))} className="w-4 h-4 text-emerald-500 focus:ring-emerald-500" />
                             <div>
-                              <span className="text-xs font-black block uppercase tracking-wider">
-                                {formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive'}
-                              </span>
-                              <span className="text-[10px] font-bold opacity-70">
-                                {formData.isActive === true || formData.isActive === 'true'
-                                  ? 'Student can log in and access the system'
-                                  : 'Record preserved. Student cannot log in.'}
-                              </span>
+                              <span className="text-xs font-black text-emerald-800 block">Active</span>
+                              <span className="text-[10px] text-slate-400 font-bold">Student can log in and access the system</span>
                             </div>
-                          </div>
-                        )}
+                          </label>
+                          <label className="flex items-center gap-4 cursor-pointer p-3 bg-white border border-rose-200 rounded-xl hover:bg-rose-50 transition-colors">
+                            <input type="radio" name="isActive" value="false" checked={formData.isActive === false || formData.isActive === 'false'} onChange={() => setFormData((p: any) => ({ ...p, isActive: false }))} className="w-4 h-4 text-rose-500 focus:ring-rose-500" />
+                            <div>
+                              <span className="text-xs font-black text-rose-800 block">Inactive</span>
+                              <span className="text-[10px] text-slate-400 font-bold">Record preserved. Student cannot log in.</span>
+                            </div>
+                          </label>
+                        </div>
+                        <p className="text-[10px] font-bold text-slate-400 pt-1">Click Save Changes after selecting a status.</p>
                       </div>
                     </div>
                   )}
@@ -784,11 +763,9 @@ export default function StudentsPage() {
                       }} className="h-10 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-black font-black uppercase tracking-wider text-xs active:scale-95 transition-all">
                         {isEnrollMode ? 'Cancel Enrollment' : 'Revert Changes'}
                       </Button>
-                      {isEnrollMode && (
-                        <Button type="submit" className="h-10 px-8 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-primary/20" isLoading={isSubmitting}>
-                          {isLoadedExistingStudent ? 'Save Changes' : 'Save & Enroll Student'}
-                        </Button>
-                      )}
+                      <Button type="submit" className="h-10 px-8 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-primary/20" isLoading={isSubmitting}>
+                        {isEnrollMode ? (isLoadedExistingStudent ? 'Save Changes' : 'Save & Enroll Student') : 'Save Changes'}
+                      </Button>
                     </div>
                   )}
                 </div>

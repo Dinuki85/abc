@@ -1,6 +1,8 @@
 package com.abc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentProfileRequest {
@@ -57,12 +59,18 @@ public class StudentProfileRequest {
     private String distanceToSchool;
     private Long gradeId;
     private Long classId;
+    @JsonProperty("isActiveStudent")
+    @JsonAlias({"activeStudent", "isActive"})
     private Boolean isActiveStudent;
 
     public StudentProfileRequest() {}
 
     public Boolean getIsActiveStudent() { return isActiveStudent; }
     public void setIsActiveStudent(Boolean isActiveStudent) { this.isActiveStudent = isActiveStudent; }
+
+    // Alternative accessors for Jackson compatibility
+    public Boolean getActiveStudent() { return isActiveStudent; }
+    public void setActiveStudent(Boolean activeStudent) { this.isActiveStudent = activeStudent; }
 
     // Getters and Setters
     public String getFullName() { return fullName; }
