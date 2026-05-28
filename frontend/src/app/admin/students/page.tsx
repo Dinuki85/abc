@@ -498,7 +498,7 @@ function StudentsPageContent() {
   // ────────────────────────────────────────────────────────────────────────────
   return (
     <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStudent }}>
-      <div className="h-[calc(100dvh-136px)] md:h-[calc(100dvh-156px)] flex flex-col overflow-hidden space-y-3 animate-in fade-in duration-700">
+      <div className="flex flex-col space-y-3 animate-in fade-in duration-700 pb-6">
 
         {/* ── Toolbar ─────────────────────────────────────────────────────────── */}
         <div className="w-full bg-white p-2 px-3 rounded-xl border border-slate-100 shadow-md flex flex-col sm:flex-row items-center gap-2 justify-between shrink-0">
@@ -562,8 +562,8 @@ function StudentsPageContent() {
 
         {/* ── Workspace card (view / legacy inline enroll) ─────────────────── */}
         <div ref={workspaceRef} />
-        <form onSubmit={handleSaveWorkspace} className="flex-1 min-h-0 flex flex-col">
-          <Card className="flex-1 min-h-0 flex flex-col h-full rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative animate-in fade-in slide-in-from-top-3 duration-500">
+        <form onSubmit={handleSaveWorkspace}>
+          <Card className="rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative animate-in fade-in slide-in-from-top-3 duration-500">
             <CardHeader className="px-5 py-3 border-b border-slate-100 flex flex-row items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <GraduationCap className="text-primary" size={20} />
@@ -609,10 +609,10 @@ function StudentsPageContent() {
               </div>
             </CardHeader>
 
-            <CardContent className="p-0 flex-1 min-h-0 flex flex-col">
-              <div className="flex flex-col lg:flex-row flex-1 min-h-0">
+            <CardContent className="p-0">
+              <div className="flex flex-col lg:flex-row">
                 {/* Sidebar */}
-                <div className="w-full lg:w-60 bg-slate-50/50 border-r border-slate-100 p-3 flex lg:flex-col gap-1 overflow-x-auto lg:overflow-y-auto whitespace-nowrap lg:whitespace-normal custom-scrollbar shrink-0">
+                <div className="w-full lg:w-60 bg-slate-50/50 border-r border-slate-100 p-3 flex lg:flex-col gap-1 overflow-x-auto whitespace-nowrap lg:whitespace-normal custom-scrollbar shrink-0">
                   {TABS.filter(tab => tab.id !== 'visibility' || !isEnrollMode).map(tab => (
                     <button key={tab.id} type="button" onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-[10px] uppercase tracking-wider text-left ${activeTab === tab.id ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-slate-500 hover:bg-white hover:text-primary'}`}>
@@ -622,7 +622,7 @@ function StudentsPageContent() {
                 </div>
 
                 {/* Tab content */}
-                <div className="flex-1 p-5 bg-white relative overflow-y-auto custom-scrollbar">
+                <div className="flex-1 p-5 bg-white relative">
                   <div className="space-y-4">
 
                     {activeTab === 'basic' && (
