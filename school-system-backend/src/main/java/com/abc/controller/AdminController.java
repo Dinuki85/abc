@@ -199,7 +199,8 @@ public class AdminController {
     @PostMapping("/students/profile")
     public ResponseEntity<?> saveStudentProfile(@RequestParam String username, @RequestBody com.abc.dto.StudentProfileRequest request) {
         try {
-            return ResponseEntity.ok(studentService.saveStudentProfile(username, request));
+            studentService.saveStudentProfile(username, request);
+            return ResponseEntity.ok(adminService.getStudentByUsername(username));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
