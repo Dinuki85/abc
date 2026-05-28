@@ -260,13 +260,15 @@ function StudentListReport() {
               return (
                 <tr key={st.id || st.username} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
                   <td className="px-4 py-2">
-                    <span className="font-black text-slate-700 font-mono tracking-tighter text-xs truncate block">{st.username}</span>
+                    <Link href={`/admin/students?search=${st.username}`} className="font-black text-slate-700 font-mono tracking-tighter text-xs truncate hover:text-primary transition-colors cursor-pointer block">
+                      {st.username}
+                    </Link>
                   </td>
                   <td className="px-2 py-2">
                     <div className="flex flex-col text-left">
-                      <span className="text-xs font-black text-black truncate">
+                      <Link href={`/admin/students?search=${st.username}`} className="text-xs font-black text-black truncate hover:text-primary transition-colors cursor-pointer block">
                         {st.fullName || <span className="text-rose-500 italic font-bold">Incomplete</span>}
-                      </span>
+                      </Link>
                       <span className="text-[9px] font-black text-black uppercase opacity-60 md:hidden">{st.gradeName} {st.className}</span>
                     </div>
                   </td>

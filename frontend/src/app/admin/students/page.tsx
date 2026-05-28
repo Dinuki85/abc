@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import {
@@ -11,6 +11,7 @@ import {
 import { api, StudentProfile, Grade } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
 import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 // ─── Blank form template (reused for reset & new enrollment) ─────────────────
 const BLANK_FORM = {
@@ -184,13 +185,17 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
 
 
 
-export default function StudentsPage() {
+function StudentsPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
+
   const workspaceRef = useRef<HTMLDivElement>(null);
 
   // ── Directory state ────────────────────────────────────────────────────────
   const [students, setStudents] = useState<StudentProfile[]>([]);
   const [_isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [grades, setGrades] = useState<Grade[]>([]);
   const [filterGradeId] = useState<number | ''>('');
   const [filterClassId] = useState<number | ''>('');
@@ -329,6 +334,8 @@ export default function StudentsPage() {
     setIsLoadedExistingStudent(false);
     setEnrollSearchId('');
     setFormData({ ...BLANK_FORM });
+    setSearchTerm('');
+    router.replace('/admin/students');
   };
 
   const _handleSelectStudent = (st: StudentProfile) => {
@@ -814,6 +821,14 @@ export default function StudentsPage() {
 
       </div>
     </FormContext.Provider>
+  );
+}
+
+export default function StudentsPage() {
+  return (
+    <Suspense fallback={<div className="p-8 flex items-center justify-center h-full"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+      <StudentsPageContent />
+    </Suspense>
   );
 }
 
