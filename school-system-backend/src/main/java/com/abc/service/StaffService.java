@@ -106,12 +106,10 @@ public class StaffService {
         staff.setChildrenDetails(request.getChildrenDetails());
 
         staff.setProfileCompleted(true);
-        
-        // Update user username to NIC
-        if (request.getNic() != null && !request.getNic().trim().isEmpty()) {
-            User user = staff.getUser();
-            user.setUsername(request.getNic().trim());
-            userRepository.save(user);
+
+        // Visibility / active status
+        if (request.getIsActiveStaff() != null) {
+            staff.setActiveStaff(request.getIsActiveStaff());
         }
 
         return staffRepository.save(staff);
