@@ -584,6 +584,14 @@ function StaffPageContent() {
               />
             </div>
 
+            <Link
+              href="/admin/reporting?report=teachers"
+              className="h-12 px-6 rounded-xl border border-slate-200 hover:border-indigo-600 hover:text-indigo-600 bg-white text-slate-700 font-black uppercase tracking-wider active:scale-95 transition-all text-sm flex items-center gap-2 shadow-sm"
+            >
+              <Users size={16} />
+              Visit Directory List
+            </Link>
+
             {(selectedStaff || isEnrollMode) && (
               <Button
                 className="h-12 px-6 rounded-xl bg-slate-600 hover:bg-slate-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-sm"
@@ -658,19 +666,7 @@ function StaffPageContent() {
                   <div className="px-4 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-black uppercase tracking-widest rounded-full">
                     ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStaff?.username || '—'))}
                   </div>
-                  <Link
-                    href="/admin/reporting?report=teachers"
-                    className="text-[11px] font-black text-indigo-600 hover:text-indigo-700 uppercase tracking-wider flex items-center gap-1.5 transition-colors border-l border-slate-200 pl-4 ml-1"
-                  >
-                    <Users size={14} />
-                    Visit Directory List
-                  </Link>
-                  {!isEnrollMode && !selectedStaff && (
-                    <div className="flex items-center gap-2 text-slate-400">
-                      <Search size={16} />
-                      <span className="text-xs font-bold">Search below to load a profile</span>
-                    </div>
-                  )}
+
                   {selectedStaff && !isEnrollMode && (
                     <div className="flex items-center gap-2 ml-2 pl-4 border-l border-slate-200">
                       {!isEditMode ? (
