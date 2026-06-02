@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense, useMemo } from 'react';
 import { 
   FileSpreadsheet, Users, HeartHandshake, Activity, 
   Award, Phone, FileCheck, Layers, BookCheck, 
   GraduationCap, Heart, Landmark, Users2, 
   UserCheck, ShieldCheck, BookOpen, Contact, 
   Briefcase, Calendar, ArrowRight, ArrowLeft,
-  Search
+  Search, Edit, Eye
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { api, StudentProfile, Grade } from '@/lib/api';
+import { api, StudentProfile, Grade, Teacher } from '@/lib/api';
 
 function ReportingDashboard() {
   return (
@@ -61,7 +61,7 @@ function ReportingDashboard() {
           title="Teacher Records" 
           color="#6f42c1"
           items={[
-            { name: 'Class Teacher List', icon: UserCheck, href: '#' },
+            { name: 'Class Teacher List', icon: UserCheck, href: '/admin/reporting?report=teachers' },
             { name: 'Teacher Incharge List', icon: ShieldCheck, href: '#' },
             { name: 'Subject Wise List', icon: BookOpen, href: '#' },
           ]} 
@@ -302,12 +302,178 @@ function StudentListReport() {
   );
 }
 
+function TeacherListReport() {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchTeachers = async () => {
+    setIsLoading(true);
+    try {
+      const res = await api.getTeacherOverview();
+      setTeachers(res || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTeachers();
+  }, []);
+
+  const filteredTeachers = useMemo(() => {
+    return teachers.filter(t =>
+      (t.name || t.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [teachers, searchTerm]);
+
+  return (
+    <div className="flex flex-col bg-white rounded-2xl shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500 border border-slate-200/60">
+      <div className="flex-none p-5 border-b border-slate-100 bg-slate-50/50">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <Link 
+              href="/admin/reporting" 
+              className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-all shadow-sm animate-in fade-in"
+            >
+              <ArrowLeft size={16} strokeWidth={2.5} />
+            </Link>
+            <div>
+              <h2 className="text-sm font-black text-black uppercase tracking-tight flex items-center gap-2">
+                <Briefcase size={16} className="text-[#6f42c1]" />
+                Class Teacher List
+              </h2>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{filteredTeachers.length} Records Found</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap gap-2">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+            <input
+              type="text"
+              placeholder="Search by ID or Name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full table-fixed text-left text-sm text-slate-600 border-collapse">
+          <colgroup>
+            <col style={{ width: '15%' }} />
+            <col style={{ width: '35%' }} />
+            <col style={{ width: '15%' }} />
+            <col style={{ width: '23%' }} />
+            <col style={{ width: '12%' }} />
+          </colgroup>
+          <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-20">
+            <tr>
+              <th className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black">Teacher ID</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black">Name & Designation</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-center">Grade Focus</th>
+              <th className="px-2 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black">Class Assignments</th>
+              <th className="px-4 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-black text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading && Array.from({ length: 5 }).map((_, i) => (
+              <tr key={`sk-${i}`} className="border-b border-slate-100">
+                <td colSpan={5} className="px-4 py-3 animate-pulse"><div className="h-3 bg-slate-100 rounded-full w-full" /></td>
+              </tr>
+            ))}
+
+            {!isLoading && filteredTeachers.length === 0 && (
+              <tr>
+                <td colSpan={5} className="py-12 text-center">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center opacity-20"><Search size={20} /></div>
+                    <p className="text-black font-black italic opacity-40 uppercase tracking-widest text-[10px]">No Records Found</p>
+                  </div>
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && filteredTeachers.map(staff => (
+              <tr key={staff.id || staff.username} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                <td className="px-4 py-3">
+                  <Link href={`/admin/staff?username=${staff.username}`} className="font-black text-indigo-600 font-mono tracking-tighter text-xs truncate hover:text-primary transition-colors cursor-pointer block">
+                    {staff.username}
+                  </Link>
+                </td>
+                <td className="px-2 py-3">
+                  <div className="flex flex-col text-left">
+                    <Link href={`/admin/staff?username=${staff.username}`} className="text-xs font-black text-black truncate hover:text-primary transition-colors cursor-pointer block">
+                      {staff.name || staff.fullName || <span className="text-rose-500 italic font-bold">Incomplete</span>}
+                    </Link>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-0.5">{staff.designation || 'Class Teacher'}</span>
+                  </div>
+                </td>
+                <td className="px-2 py-3 text-center">
+                  <span className="px-2 py-0.5 rounded-full bg-slate-100 text-black text-[10px] font-black uppercase tracking-widest border border-slate-200">
+                    {staff.gradeName || 'General'}
+                  </span>
+                </td>
+                <td className="px-2 py-3">
+                  <div className="flex flex-wrap gap-1">
+                    {staff.classes && staff.classes.length > 0 ? (
+                      staff.classes.map((cls: any, idx: number) => (
+                        <div key={idx} className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 border border-indigo-100 text-[10px]">
+                          <span className="font-black uppercase tracking-tighter">{cls.className}</span>
+                          <div className="h-2 w-px bg-indigo-200 mx-1" />
+                          <span className="font-bold opacity-70">{cls.studentCount} St.</span>
+                        </div>
+                      ))
+                    ) : (
+                      <span className="text-[9px] font-black text-black italic uppercase tracking-widest">Unassigned</span>
+                    )}
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-right">
+                  <div className="flex justify-end gap-1.5">
+                    <Link
+                      href={`/admin/staff?username=${staff.username}`}
+                      title="View Profile"
+                      className="p-1.5 border rounded-xl bg-white border-slate-200 hover:border-indigo-600 hover:text-indigo-600 transition-all text-slate-600 hover:bg-slate-50 active:scale-95 shadow-sm inline-flex items-center justify-center"
+                    >
+                      <Eye size={14} />
+                    </Link>
+                    <Link
+                      href={`/admin/staff?username=${staff.username}&edit=true`}
+                      title="Edit Profile"
+                      className="p-1.5 border rounded-xl bg-white border-slate-200 hover:border-indigo-600 hover:text-indigo-600 transition-all text-slate-600 hover:bg-slate-50 active:scale-95 shadow-sm inline-flex items-center justify-center"
+                    >
+                      <Edit size={14} />
+                    </Link>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function ReportingContent() {
   const searchParams = useSearchParams();
   const report = searchParams.get('report');
 
   if (report === 'students') {
     return <StudentListReport />;
+  }
+
+  if (report === 'teachers') {
+    return <TeacherListReport />;
   }
 
   return <ReportingDashboard />;

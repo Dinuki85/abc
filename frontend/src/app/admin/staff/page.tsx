@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState, Suspense, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/Table';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import {
@@ -11,6 +10,8 @@ import {
   Users, RotateCcw, Edit, Eye, Lock
 } from 'lucide-react';
 import { api, Teacher } from '@/lib/api';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 // ─── Blank form template for staff ───────────────────────────────────────────
 const BLANK_FORM = {
@@ -262,6 +263,11 @@ function ActiveBadge({ value }: { value: any }) {
 function StaffPageContent() {
   const workspaceRef = useRef<HTMLDivElement>(null);
 
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const queryUsername = searchParams.get('username');
+  const queryEdit = searchParams.get('edit');
+
   // ── Directory state ────────────────────────────────────────────────────────
   const [staffMembers, setStaffMembers] = useState<Teacher[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -298,6 +304,18 @@ function StaffPageContent() {
       setIsLoading(false);
     }
   };
+
+  // Load staff profile if query parameter is set
+  useEffect(() => {
+    if (queryUsername && staffMembers.length > 0) {
+      const matched = staffMembers.find(s => s.username === queryUsername);
+      if (matched) {
+        if (!selectedStaff || selectedStaff.username !== queryUsername || isEditMode !== (queryEdit === 'true')) {
+          handleSelectStaff(matched, queryEdit === 'true', false);
+        }
+      }
+    }
+  }, [queryUsername, queryEdit, staffMembers, selectedStaff, isEditMode]);
 
   // Auto-calculate age from DOB
   useEffect(() => {
@@ -351,6 +369,7 @@ function StaffPageContent() {
     setActiveTab('basic');
     setFormData({ ...BLANK_FORM, username: 'Generating...', tempPassword: 'temp' + Math.floor(100 + Math.random() * 900) });
     setMessage(null);
+    router.push('/admin/staff');
     try {
       const idx = await api.getNextTeacherIndex();
       setFormData((p: any) => ({ ...p, username: idx }));
@@ -367,6 +386,7 @@ function StaffPageContent() {
     setFormData({ ...BLANK_FORM });
     setSearchTerm('');
     setMessage(null);
+    router.push('/admin/staff');
   };
 
   const handleSelectStaff = async (t: Teacher, editOnLoad = false, scrollToWorkspace = true) => {
@@ -416,12 +436,16 @@ function StaffPageContent() {
 
   const handleStartEdit = () => {
     setIsEditMode(true);
+    if (selectedStaff) {
+      router.push(`/admin/staff?username=${selectedStaff.username}&edit=true`);
+    }
   };
 
   const handleCancelEdit = () => {
     setIsEditMode(false);
     if (selectedStaff) {
       setFormData(mergeAdditional(selectedStaff));
+      router.push(`/admin/staff?username=${selectedStaff.username}`);
     }
   };
 
@@ -466,6 +490,7 @@ function StaffPageContent() {
           setSelectedStaff(mappedFresh);
           setFormData(mergeAdditional(mappedFresh));
         }
+        router.push(`/admin/staff?username=${username}`);
       } else if (selectedStaff) {
         // Update teacher profile
         await api.saveStaffProfile(username, buildPayload(formData));
@@ -478,6 +503,7 @@ function StaffPageContent() {
           setSelectedStaff(mappedFresh);
           setFormData(mergeAdditional(mappedFresh));
         }
+        router.push(`/admin/staff?username=${username}`);
       }
       fetchStaff();
     } catch (err: any) {
@@ -632,6 +658,13 @@ function StaffPageContent() {
                   <div className="px-4 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-black uppercase tracking-widest rounded-full">
                     ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStaff?.username || '—'))}
                   </div>
+                  <Link
+                    href="/admin/reporting?report=teachers"
+                    className="text-[11px] font-black text-indigo-600 hover:text-indigo-700 uppercase tracking-wider flex items-center gap-1.5 transition-colors border-l border-slate-200 pl-4 ml-1"
+                  >
+                    <Users size={14} />
+                    Visit Directory List
+                  </Link>
                   {!isEnrollMode && !selectedStaff && (
                     <div className="flex items-center gap-2 text-slate-400">
                       <Search size={16} />
@@ -1031,136 +1064,7 @@ function StaffPageContent() {
             </Card>
           </form>
 
-        {/* ── Directory Table (Standby Mode Display) ─────────────────────── */}
-        <div className={isEnrollMode || isEditMode ? 'hidden' : 'block animate-in fade-in duration-500'}>
-          <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white">
-            <CardHeader className="px-8 py-6 flex flex-row items-center justify-between border-b border-gray-50">
-              <div className="flex items-center gap-3">
-                <div className="w-2.5 h-6 bg-indigo-600 rounded-full" />
-                <CardTitle className="text-lg font-black text-black">Faculty & Personnel Directory</CardTitle>
-              </div>
-              <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-full border border-gray-100">
-                <FileSpreadsheet size={14} className="text-indigo-600" />
-                <span className="text-[12px] font-black uppercase tracking-[0.2em] text-black">
-                  {filteredStaff.length} Records Total
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader className="bg-slate-50 border-b border-slate-200">
-                    <TableRow className="border-none">
-                      <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black w-[180px]">Teacher ID</TableHead>
-                      <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Name & Designation</TableHead>
-                      <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-center w-[150px]">Grade Focus</TableHead>
-                      <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black w-[200px]">Class Assignments</TableHead>
-                      <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-right w-[150px]">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {isLoading && Array.from({ length: 5 }).map((_, i) => (
-                      <TableRow key={`loading-${i}`}>
-                        <TableCell colSpan={5} className="px-8 py-8 animate-pulse">
-                          <div className="h-4 bg-slate-100 rounded-full w-full" />
-                        </TableCell>
-                      </TableRow>
-                    ))}
 
-                    {!isLoading && filteredStaff.length === 0 && (
-                      <TableRow>
-                        <TableCell colSpan={5} className="py-24 text-center">
-                          <div className="flex flex-col items-center gap-4">
-                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-400">
-                              <Search size={32} />
-                            </div>
-                            <p className="text-slate-400 font-bold italic">No personnel records found</p>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )}
-
-                    {!isLoading && filteredStaff.map((staff) => (
-                      <TableRow
-                        key={staff.id}
-                        onClick={() => handleSelectStaff(staff)}
-                        className={`transition-colors cursor-pointer group ${
-                          selectedStaff?.id === staff.id
-                            ? 'bg-indigo-50 border-l-4 border-l-indigo-500'
-                            : 'hover:bg-slate-50/50'
-                        }`}
-                      >
-                        <TableCell className="px-8 py-5 font-black text-indigo-600 font-mono tracking-tighter text-base">
-                          {staff.username}
-                        </TableCell>
-                        <TableCell className="py-5">
-                          <div className="flex flex-col">
-                            <span className="text-sm font-black text-black">{staff.name || staff.fullName}</span>
-                            <span className="text-[13px] font-black text-slate-500 uppercase tracking-widest mt-0.5">
-                              {staff.designation || 'Class Teacher'}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="py-5 text-center">
-                          <span className="px-3 py-1 rounded-full bg-slate-100 text-black text-[12px] font-black uppercase tracking-widest border border-slate-200">
-                            {staff.gradeName || 'General'}
-                          </span>
-                        </TableCell>
-                        <TableCell className="py-5">
-                          <div className="flex flex-wrap gap-2">
-                            {staff.classes && staff.classes.length > 0 ? (
-                              staff.classes.map((cls: any, idx: number) => (
-                                <div key={idx} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 transition-all hover:bg-indigo-100">
-                                  <span className="text-[12px] font-black uppercase tracking-tighter">{cls.className}</span>
-                                  <div className="h-3 w-px bg-indigo-200" />
-                                  <span className="text-[12px] font-bold opacity-70">{cls.studentCount} St.</span>
-                                </div>
-                              ))
-                            ) : (
-                              <span className="text-[9px] font-black text-black italic uppercase tracking-widest">Unassigned</span>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell className="px-8 py-5 text-right">
-                          <div className="flex justify-end gap-2">
-                            <button
-                              type="button"
-                              title="View Profile"
-                              onClick={(e) => { e.stopPropagation(); handleSelectStaff(staff); }}
-                              className={`p-2.5 border rounded-xl transition-all shadow-sm active:scale-90 ${
-                                selectedStaff?.id === staff.id
-                                  ? 'bg-indigo-600 border-indigo-600 text-white'
-                                  : 'bg-white border-gray-200 hover:border-indigo-600 hover:text-indigo-600'
-                              }`}
-                            >
-                              <Eye size={16} />
-                            </button>
-                            <button
-                              type="button"
-                              title="Edit Profile"
-                              onClick={(e) => { e.stopPropagation(); handleSelectStaff(staff, true); }}
-                              className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-indigo-600 hover:text-indigo-600 transition-all shadow-sm active:scale-90"
-                            >
-                              <Edit size={16} />
-                            </button>
-                            <button
-                              type="button"
-                              title="Delete"
-                              onClick={(e) => { e.stopPropagation(); handleDelete(staff.id); }}
-                              className="p-2.5 bg-white border border-gray-200 rounded-xl hover:border-rose-500 hover:text-rose-500 transition-all shadow-sm active:scale-90"
-                            >
-                              <DeleteIcon size={16} />
-                            </button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
       </div>
     </FormContext.Provider>
