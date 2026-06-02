@@ -150,6 +150,60 @@ export interface Teacher {
   classes?: any[];
   additionalData?: string;
   profileCompleted?: boolean;
+
+  // Sri Lankan School registry fields
+  nameSinhala?: string;
+  nameWithInitialSinhala?: string;
+  birthCertificateNo?: string;
+  district?: string;
+  motherName?: string;
+  fatherName?: string;
+  guardianId?: string;
+  civilState?: string;
+  maritalState?: string;
+  height?: string;
+  weight?: string;
+  specialPhysicalCondition?: string;
+  longTermDiseases?: string;
+  healthDescription?: string;
+  firstAppointmentDate?: string;
+  firstAppointmentDistrict?: string;
+  firstAppointmentInstitute?: string;
+  hierarchyCarder?: string;
+  position?: string;
+  incrementDate?: string;
+  servicePeriod?: string;
+  salaryCode?: string;
+  holdingPosition?: string;
+  grade?: string;
+  appointmentMedium?: string;
+  temporaryAddress?: string;
+  emergencyContactNo?: string;
+  whatsappNo?: string;
+  homeNo?: string;
+  distanceToSchool?: string;
+  gceOl?: string;
+  gceAl?: string;
+  diploma?: string;
+  degree?: string;
+  postGraduate?: string;
+  master?: string;
+  phd?: string;
+  otherQual1?: string;
+  otherQual2?: string;
+  otherQual3?: string;
+  otherQual4?: string;
+  otherQual5?: string;
+  spouseName?: string;
+  spouseDesignation?: string;
+  spouseWorkingAddress?: string;
+  spouseTempAddress?: string;
+  spouseOfficeContact?: string;
+  spouseEmergencyContact?: string;
+  spouseEmergencyEmail?: string;
+  spouseWorkingCompany?: string;
+  childrenDetails?: string;
+  isActiveStaff?: boolean;
 }
 
 export interface Guardian {
@@ -340,8 +394,8 @@ class ApiService {
     return true;
   }
 
-  async saveStaffProfile(id: number, profile: Teacher) {
-    const response = await fetch(`${API_BASE_URL}/admin/teachers/${id}/profile`, {
+  async saveStaffProfile(username: string, profile: Teacher) {
+    const response = await fetch(`${API_BASE_URL}/admin/teachers/profile?username=${username}`, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(profile),
@@ -352,6 +406,15 @@ class ApiService {
       throw new Error(errorMsg || 'Failed to save profile');
     }
     return response.json();
+  }
+
+  async getNextTeacherIndex(): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/admin/next-teacher-index`, {
+      headers: this.getHeaders()
+    });
+    if (!response.ok) throw new Error(await response.text());
+    const data = await response.json();
+    return data.nextIndex;
   }
 
   async updateMyStaffProfile(profile: any) {
@@ -381,6 +444,14 @@ class ApiService {
 
   async getTeacherOverview(): Promise<any> {
     const response = await fetch(`${API_BASE_URL}/admin/teachers/overview`, {
+      headers: this.getHeaders()
+    });
+    if (response.ok) return await response.json();
+    return null;
+  }
+
+  async getFullStaffProfile(username: string): Promise<Teacher | null> {
+    const response = await fetch(`${API_BASE_URL}/admin/teachers/profile?username=${encodeURIComponent(username)}`, {
       headers: this.getHeaders()
     });
     if (response.ok) return await response.json();
