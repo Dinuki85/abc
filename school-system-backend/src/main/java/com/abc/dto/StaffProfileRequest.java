@@ -70,7 +70,7 @@ public class StaffProfileRequest {
     private String otherQual4;
     private String otherQual5;
 
-    // Tab 6
+    // Tab 6: Spouse & Children
     private String spouseName;
     private String spouseDesignation;
     private String spouseWorkingAddress;
@@ -80,6 +80,9 @@ public class StaffProfileRequest {
     private String spouseEmergencyEmail;
     private String spouseWorkingCompany;
     private String childrenDetails;
+
+    // Visibility
+    private Boolean isActiveStaff;
 
     public StaffProfileRequest() {}
 
@@ -212,6 +215,8 @@ public class StaffProfileRequest {
     public void setSpouseWorkingCompany(String spouseWorkingCompany) { this.spouseWorkingCompany = spouseWorkingCompany; }
     public String getChildrenDetails() { return childrenDetails; }
     public void setChildrenDetails(String childrenDetails) { this.childrenDetails = childrenDetails; }
+    public Boolean getIsActiveStaff() { return isActiveStaff; }
+    public void setIsActiveStaff(Boolean isActiveStaff) { this.isActiveStaff = isActiveStaff; }
 
     // Aliases
     public String getContactEmail() { return email; }
