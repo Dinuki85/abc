@@ -205,6 +205,36 @@ public class AdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @Autowired
+    private com.abc.service.StaffService staffService;
+
+    @Autowired
+    private com.abc.repository.StaffRepository staffRepository;
+
+    @GetMapping("/next-teacher-index")
+    public ResponseEntity<java.util.Map<String, String>> getNextTeacherIndex() {
+        String nextIndex = adminService.generateNextTeacherIndex();
+        return ResponseEntity.ok(java.util.Collections.singletonMap("nextIndex", nextIndex));
+    }
+
+    @PostMapping("/teachers/profile")
+    public ResponseEntity<?> saveStaffProfile(@RequestParam String username, @RequestBody com.abc.dto.StaffProfileRequest request) {
+        try {
+            return ResponseEntity.ok(staffService.saveStaffProfile(username, request));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/teachers/profile")
+    public ResponseEntity<?> getStaffProfile(@RequestParam String username) {
+        try {
+            return ResponseEntity.ok(staffService.getStaffByUsername(username));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
 
 // Granular commit 1 for Step 4 (Admin & Dashboard Logic)
