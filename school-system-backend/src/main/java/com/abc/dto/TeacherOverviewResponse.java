@@ -8,13 +8,15 @@ public class TeacherOverviewResponse {
     private String name;
     private String gradeName;
     private List<ClassBriefResponse> classes;
+    private Boolean isActiveStaff;
 
-    public TeacherOverviewResponse(Long id, String username, String name, String gradeName, List<ClassBriefResponse> classes) {
+    public TeacherOverviewResponse(Long id, String username, String name, String gradeName, List<ClassBriefResponse> classes, Boolean isActiveStaff) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.gradeName = gradeName;
         this.classes = classes;
+        this.isActiveStaff = isActiveStaff;
     }
 
     public Long getId() { return id; }
@@ -31,4 +33,7 @@ public class TeacherOverviewResponse {
 
     public List<ClassBriefResponse> getClasses() { return classes; }
     public void setClasses(List<ClassBriefResponse> classes) { this.classes = classes; }
+
+    public Boolean getIsActiveStaff() { return isActiveStaff; }
+    public void setIsActiveStaff(Boolean isActiveStaff) { this.isActiveStaff = isActiveStaff; }
 }
