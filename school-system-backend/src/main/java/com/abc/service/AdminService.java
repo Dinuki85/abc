@@ -357,7 +357,8 @@ public class AdminService {
                     staff.getUser().getUsername(),
                     staff.getName(),
                     gradeName,
-                    assignedClasses
+                    assignedClasses,
+                    staff.isActiveStaff()
             );
         }).collect(Collectors.toList());
     }
@@ -376,6 +377,28 @@ public class AdminService {
             return schoolIndexPrefix + "00001";
         }
     }
+
+    public String generateNextTeacherIndex() {
+        Optional<String> maxUsernameOpt = userRepository.findAll().stream()
+                .filter(u -> u.getRole() == Role.ROLE_TEACHER || u.getRole() == Role.ROLE_STAFF)
+                .map(User::getUsername)
+                .filter(u -> u.toUpperCase().startsWith("TEA"))
+                .max(String::compareTo);
+        if (maxUsernameOpt.isPresent()) {
+            String maxStr = maxUsernameOpt.get().toUpperCase();
+            String numStr = maxStr.replaceAll("[^0-9]", "");
+            if (!numStr.isEmpty()) {
+                try {
+                    int lastDigits = Integer.parseInt(numStr);
+                    return "TEA" + String.format("%05d", lastDigits + 1);
+                } catch (NumberFormatException e) {
+                    return "TEA00001";
+                }
+            }
+        }
+        return "TEA00001";
+    }
+
 
     @Transactional
     public void enrollStudent(EnrollStudentRequest request) {
