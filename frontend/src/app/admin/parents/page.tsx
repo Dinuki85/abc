@@ -144,6 +144,39 @@ export default function ParentsPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Search and select student state
+  const [studentSearch, setStudentSearch] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Click outside to close searchable dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  // List of students that do NOT currently have a guardian assigned
+  const unassignedStudents = useMemo(() => {
+    return studentsList.filter(st => !st.guardianName && !st.guardianIdRef && !st.guardianNic);
+  }, [studentsList]);
+
+  // Filtered unassigned students list for dropdown search
+  const filteredUnassignedStudents = useMemo(() => {
+    if (!studentSearch.trim()) return unassignedStudents;
+    const term = studentSearch.toLowerCase();
+    return unassignedStudents.filter(st =>
+      st.username.toLowerCase().includes(term) ||
+      (st.fullName || '').toLowerCase().includes(term)
+    );
+  }, [unassignedStudents, studentSearch]);
+
   // Fetch all students to map the guardians
   const fetchStudents = async () => {
     setIsLoading(true);
@@ -214,10 +247,7 @@ export default function ParentsPage() {
       });
   }, [studentsList]);
 
-  // List of students that do NOT currently have a guardian assigned
-  const unassignedStudents = useMemo(() => {
-    return studentsList.filter(st => !st.guardianName && !st.guardianIdRef && !st.guardianNic);
-  }, [studentsList]);
+
 
   // Handle URL query matching
   useEffect(() => {
@@ -284,6 +314,8 @@ export default function ParentsPage() {
     setActiveTab('basic');
     setFormData({ ...BLANK_FORM, guardianId: 'Select student...' });
     setMessage(null);
+    setStudentSearch('');
+    setIsDropdownOpen(false);
     router.push('/admin/parents');
     setTimeout(() => workspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
   };
@@ -294,6 +326,8 @@ export default function ParentsPage() {
     setIsEditMode(false);
     setFormData({ ...BLANK_FORM });
     setSearchTerm('');
+    setStudentSearch('');
+    setIsDropdownOpen(false);
     setMessage(null);
     router.push('/admin/parents');
   };
@@ -303,6 +337,8 @@ export default function ParentsPage() {
     setIsEnrollMode(false);
     setIsEditMode(editOnLoad);
     setFormData(g);
+    setStudentSearch(`${g.studentUsername} - ${g.studentName}`);
+    setIsDropdownOpen(false);
     setTimeout(() => workspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
   };
 
@@ -622,21 +658,51 @@ export default function ParentsPage() {
                             <div className="space-y-1">
                               <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Select Student</label>
                               {isEnrollMode ? (
-                                <select
-                                  name="studentUsername"
-                                  value={formData.studentUsername}
-                                  onChange={handleChange}
-                                  required
-                                  title="Select Student"
-                                  className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-xs font-bold text-black"
-                                >
-                                  <option value="">Choose Student (Unassigned)</option>
-                                  {unassignedStudents.map(st => (
-                                    <option key={st.username} value={st.username}>
-                                      {st.username} - {st.fullName} ({st.gradeName || 'N/A'} - {st.className || 'N/A'})
-                                    </option>
-                                  ))}
-                                </select>
+                                <div className="relative" ref={dropdownRef}>
+                                  <Input
+                                    type="text"
+                                    placeholder="Search by Index No or Name..."
+                                    value={studentSearch}
+                                    onChange={(e) => {
+                                      setStudentSearch(e.target.value);
+                                      setIsDropdownOpen(true);
+                                      if (formData.studentUsername) {
+                                        setFormData((p: any) => ({ ...p, studentUsername: '', guardianId: 'Select student...' }));
+                                      }
+                                    }}
+                                    onFocus={() => setIsDropdownOpen(true)}
+                                    className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:ring-2 focus:ring-emerald-500/10 text-xs font-bold text-black"
+                                  />
+                                  {isDropdownOpen && (
+                                    <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                      {filteredUnassignedStudents.length === 0 ? (
+                                        <div className="p-3 text-xs text-slate-500 font-bold text-center">
+                                          No unassigned students found
+                                        </div>
+                                      ) : (
+                                        filteredUnassignedStudents.map((st) => (
+                                          <button
+                                            key={st.username}
+                                            type="button"
+                                            className="w-full text-left px-4 py-2.5 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer"
+                                            onClick={() => {
+                                              setFormData((p: any) => ({
+                                                ...p,
+                                                studentUsername: st.username,
+                                                guardianId: `GDN-${st.username}`
+                                              }));
+                                              setStudentSearch(`${st.username} - ${st.fullName}`);
+                                              setIsDropdownOpen(false);
+                                            }}
+                                          >
+                                            <div className="font-black text-black">{st.username} - {st.fullName}</div>
+                                            <div className="text-[10px] text-slate-400 font-semibold">{st.gradeName || 'N/A'} - {st.className || 'N/A'}</div>
+                                          </button>
+                                        ))
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                               ) : (
                                 <div className="p-3 bg-white border border-slate-200 rounded-xl font-bold text-black text-xs">
                                   {formData.studentUsername} - {selectedGuardian?.studentName} ({selectedGuardian?.studentGrade} - {selectedGuardian?.studentClass})
