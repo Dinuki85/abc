@@ -149,18 +149,25 @@ export default function ParentsPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Guardian search dropdown state
+  const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const searchDropdownRef = useRef<HTMLDivElement>(null);
+
   // Click outside to close searchable dropdown
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
+      if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target as Node)) {
+        setIsSearchDropdownOpen(false);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, [dropdownRef, searchDropdownRef]);
 
   // List of students that do NOT currently have a guardian assigned
   const unassignedStudents = useMemo(() => {
@@ -492,14 +499,55 @@ export default function ParentsPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
-            <div className="relative flex-1 lg:min-w-[350px]">
+            <div className="relative flex-1 lg:min-w-[350px]" ref={searchDropdownRef}>
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <Input
                 placeholder="Search by guardian name, ID, NIC or student..."
                 className="pl-12 h-12 w-full rounded-xl border-slate-100 bg-slate-50 focus:bg-white transition-all text-sm font-bold text-black"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setIsSearchDropdownOpen(true);
+                }}
+                onFocus={() => setIsSearchDropdownOpen(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && filteredGuardians.length > 0) {
+                    handleSelectGuardian(filteredGuardians[0], false);
+                    setSearchTerm('');
+                    setIsSearchDropdownOpen(false);
+                  }
+                }}
               />
+              {isSearchDropdownOpen && searchTerm && (
+                <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-80 overflow-y-auto custom-scrollbar">
+                  {filteredGuardians.length === 0 ? (
+                    <div className="p-4 text-xs text-slate-500 font-bold text-center">
+                      No guardians found
+                    </div>
+                  ) : (
+                    filteredGuardians.map((g) => (
+                      <button
+                        key={g.guardianId}
+                        type="button"
+                        className="w-full text-left px-5 py-3 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer flex flex-col gap-1"
+                        onClick={() => {
+                          handleSelectGuardian(g, false);
+                          setSearchTerm('');
+                          setIsSearchDropdownOpen(false);
+                        }}
+                      >
+                        <div className="font-black text-black text-sm">{g.guardianName}</div>
+                        <div className="text-[11px] text-slate-500 font-bold">
+                          ID: {g.guardianId} {g.guardianNic && `| NIC: ${g.guardianNic}`}
+                        </div>
+                        <div className="text-[10px] text-emerald-600 font-black uppercase tracking-wider mt-1">
+                          Linked Student: {g.studentName} ({g.studentUsername})
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
             </div>
 
             {(selectedGuardian || isEnrollMode) && (
