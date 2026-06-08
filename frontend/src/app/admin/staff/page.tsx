@@ -597,9 +597,43 @@ function StaffPageContent() {
 
   return (
     <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStaff, formErrors }}>
-      <div className="flex flex-col space-y-6 animate-in fade-in duration-700 pb-20">
-        
-        {/* ── Toolbar ─────────────────────────────────────────────────────────── */}
+      <div className="flex flex-col space-y-3 animate-in fade-in duration-700 pb-20">
+
+        {/* ── Header Banner — only on landing, hidden in viewOneMode & enrollMode ── */}
+        {!isViewOneMode && !isEnrollMode && (
+          <div className="flex flex-col items-center text-center bg-white py-10 px-6 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/3 to-transparent pointer-events-none" />
+            <Briefcase className="text-indigo-600 mb-3 relative z-10" size={40} />
+            <h1 className="text-3xl font-semibold text-slate-800 tracking-tight relative z-10">Staff Registry</h1>
+            <p className="text-sm font-medium text-slate-500 mt-1 mb-6 relative z-10">Add and manage staff information securely and efficiently.</p>
+
+            {/* Quick Actions — shown only on landing */}
+            {!selectedStaff && !isEnrollMode && (
+              <div className="flex flex-wrap justify-center gap-3 relative z-10">
+                <Button type="button" onClick={handleStartEnrollmentInline}
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  <UserPlus size={15} className="mr-2 text-indigo-600" /> Enroll New Staff
+                </Button>
+                <Button type="button" onClick={() => setIsViewOneMode(true)}
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  <Search size={15} className="mr-2 text-indigo-600" /> View One Staff
+                </Button>
+                <Link href="/admin/reporting?report=teachers"
+                  className="h-10 px-5 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-600/20 active:scale-95 transition-all">
+                  <Users size={15} className="mr-2" /> Visit Directory List
+                </Link>
+              </div>
+            )}
+
+            {/* Back button when in enroll / selectedStaff mode */}
+            {(selectedStaff || isEnrollMode) && (
+              <Button type="button" onClick={handleReset}
+                className="h-9 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs shadow-sm transition-all relative z-10">
+                <RotateCcw size={13} className="mr-2" /> Back to Directory
+              </Button>
+            )}
+          </div>
+        )}
         <div className="max-w-[1600px] mx-auto w-full bg-white p-3 px-4 rounded-[2rem] border border-slate-100 shadow-xl flex flex-col xl:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4 px-2 w-full xl:w-auto">
             <div className="w-12 h-12 bg-indigo-600/10 rounded-2xl flex items-center justify-center text-indigo-600">
