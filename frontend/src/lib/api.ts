@@ -262,7 +262,13 @@ class ApiService {
 
   async getStudentProfile(username: string): Promise<StudentProfile | null> {
     try {
-      const response = await fetch(`${API_BASE_URL}/student/${username}`, {
+      const user = this.getCurrentUser();
+      const isAdminOrStaffOrTeacher = user && (user.role === 'ROLE_ADMIN' || user.role === 'ROLE_TEACHER' || user.role === 'ROLE_STAFF');
+      const url = isAdminOrStaffOrTeacher 
+        ? `${API_BASE_URL}/admin/students/search/${username}`
+        : `${API_BASE_URL}/student/${username}`;
+
+      const response = await fetch(url, {
         headers: this.getHeaders()
       });
       if (response.ok) return await response.json();
