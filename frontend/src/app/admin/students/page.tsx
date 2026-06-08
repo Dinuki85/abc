@@ -127,11 +127,11 @@ function ActiveBadge({ value }: { value: unknown }) {
 const FormContext = React.createContext<unknown>(null);
 
 // ── Inline FormInput: editable in enrollMode or editMode, read-only when viewing student ─
-function FormInput({ label, name, type = 'text', options = null, disabled = false, placeholder = '' }: {
+function FormInput({ label, name, type = 'text', options = null, disabled = false, placeholder = '', required = false }: {
   key?: React.Key;
   label: string; name: string; type?: string;
   options?: { label: string; value: any }[] | null;
-  disabled?: boolean; placeholder?: string;
+  disabled?: boolean; placeholder?: string; required?: boolean;
 }) {
   const ctx = React.useContext(FormContext) as {
     formData: Record<string, unknown>;
@@ -139,8 +139,10 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
     isEnrollMode: boolean;
     isEditMode: boolean;
     selectedStudent: StudentProfile | null;
+    formErrors: Record<string, string>;
   };
-  const { formData, handleChange, isEnrollMode, isEditMode, selectedStudent } = ctx;
+  const { formData, handleChange, isEnrollMode, isEditMode, selectedStudent, formErrors } = ctx;
+  const hasError = !!(formErrors && formErrors[name]);
 
   // Read-only view when student is selected but not in edit/enroll mode
   if (!isEnrollMode && !isEditMode && selectedStudent) {
@@ -155,31 +157,41 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   }
 
   const isDisabled = disabled || (!isEnrollMode && !isEditMode) || (name === 'username');
+  const borderCls = hasError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-200 focus:ring-primary/10';
 
   if (options) return (
     <div className="space-y-1 text-left">
-      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
-        className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-sm font-bold text-black disabled:opacity-50">
+        className={`w-full h-10 bg-white border ${borderCls} rounded-xl px-3 focus:outline-none focus:ring-2 text-sm font-bold text-black disabled:opacity-50`}>
         <option value="">Choose {label}</option>
         {options.map((o: { label: string; value: unknown }) => <option key={String(o.value)} value={String(o.value)}>{o.label}</option>)}
       </select>
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
   if (type === 'textarea') return (
     <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
-      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder} rows={3}
-        className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 focus:ring-primary/10 custom-scrollbar disabled:opacity-50" />
+        className={`w-full p-3 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 custom-scrollbar disabled:opacity-50`} />
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
   return (
     <div className="space-y-1 text-left">
-      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder}
-        className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-primary/10 disabled:opacity-50" />
+        className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:ring-2 disabled:opacity-50`} />
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
 }
@@ -219,6 +231,7 @@ function StudentsPageContent() {
   const [classes, setClasses] = useState<{ id: number; name: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isViewOneMode, setIsViewOneMode] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // ── Data fetchers ──────────────────────────────────────────────────────────
   const fetchGrades = async () => {
@@ -315,6 +328,8 @@ function StudentsPageContent() {
     const { name, value, type } = e.target;
     const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
     setFormData((p: Record<string, unknown>) => ({ ...p, [name]: val }));
+    // Clear validation error when user types
+    if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
   };
 
   const handleStartEnrollmentInline = async () => {
@@ -347,7 +362,36 @@ function StudentsPageContent() {
     setFormData({ ...BLANK_FORM });
     setSearchTerm('');
     setIsViewOneMode(false);
+    setFormErrors({});
     router.replace('/admin/students');
+  };
+
+  // ── Validation ─────────────────────────────────────────────────────────────
+  const REQUIRED_FIELDS = [
+    { key: 'fullName', label: 'Full Name' },
+    { key: 'nameSinhala', label: 'Name in Sinhala' },
+    { key: 'dob', label: 'Date of Birth' },
+    { key: 'religion', label: 'Religion' },
+    { key: 'gender', label: 'Gender' },
+    { key: 'motherName', label: 'Mother Name' },
+    { key: 'fatherName', label: 'Father Name' },
+    { key: 'district', label: 'District' },
+  ];
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+    REQUIRED_FIELDS.forEach(({ key, label }) => {
+      if (!formData[key] || String(formData[key]).trim() === '') {
+        errors[key] = `${label} is required`;
+      }
+    });
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      setActiveTab('basic');
+      setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
+      return false;
+    }
+    return true;
   };
 
   const _handleSelectStudent = (st: StudentProfile) => {
@@ -401,6 +445,7 @@ function StudentsPageContent() {
     if (!username || username === 'Generating...') {
       setMessage({ type: 'error', text: 'Index No is required.' }); return;
     }
+    if (!validateForm()) return;
     setIsSubmitting(true);
     setMessage(null);
     try {
@@ -509,7 +554,7 @@ function StudentsPageContent() {
 
   // ────────────────────────────────────────────────────────────────────────────
   return (
-    <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStudent }}>
+    <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStudent, formErrors }}>
       <div className="flex flex-col space-y-3 animate-in fade-in duration-700 pb-6">
 
         {/* ── Header Banner — only on landing, hidden in viewOneMode & enrollMode ── */}
@@ -743,18 +788,18 @@ function StudentsPageContent() {
                         )}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                           <FormInput label="Index No" name="username" disabled />
-                          <FormInput label="Full Name" name="fullName" />
-                          <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" />
+                          <FormInput label="Full Name" name="fullName" required />
+                          <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
                           <FormInput label="Name with Initial" name="nameWithInitials" />
                           <FormInput label="Name with Initial Sinhala" name="nameWithInitialSinhala" />
-                          <FormInput label="Date Of Birth" name="dob" type="date" />
+                          <FormInput label="Date Of Birth" name="dob" type="date" required />
                           <FormInput label="NIC" name="nic" />
                           <FormInput label="Birth Certificate No" name="birthCertificateNumber" />
-                          <FormInput label="District" name="district" />
-                          <FormInput label="Religion" name="religion" />
-                          <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} />
-                          <FormInput label="Mother Name" name="motherName" />
-                          <FormInput label="Father Name" name="fatherName" />
+                          <FormInput label="District" name="district" required />
+                          <FormInput label="Religion" name="religion" required />
+                          <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} required />
+                          <FormInput label="Mother Name" name="motherName" required />
+                          <FormInput label="Father Name" name="fatherName" required />
                           {/* Guardian ID Link to Parent Directory */}
                           <div className="space-y-1 text-left">
                             <label className="text-xs font-semibold text-slate-500 ml-1">Guardian ID</label>

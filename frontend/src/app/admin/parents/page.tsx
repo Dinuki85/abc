@@ -61,13 +61,14 @@ const TABS = [
 
 const FormContext = React.createContext<any>(null);
 
-function FormInput({ label, name, type = 'text', options = null, disabled = false, placeholder = '' }: {
+function FormInput({ label, name, type = 'text', options = null, disabled = false, placeholder = '', required = false }: {
   label: string; name: string; type?: string;
   options?: { label: string; value: any }[] | null;
-  disabled?: boolean; placeholder?: string;
+  disabled?: boolean; placeholder?: string; required?: boolean;
 }) {
   const ctx = React.useContext(FormContext);
-  const { formData, handleChange, isEnrollMode, isEditMode, selectedGuardian } = ctx;
+  const { formData, handleChange, isEnrollMode, isEditMode, selectedGuardian, formErrors } = ctx;
+  const hasError = !!(formErrors && formErrors[name]);
 
   if (!isEnrollMode && !isEditMode && selectedGuardian) {
     let displayVal = formData[name];
@@ -84,31 +85,41 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   }
 
   const isDisabled = disabled || (!isEnrollMode && !isEditMode) || (name === 'guardianId');
+  const borderCls = hasError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-200 focus:ring-emerald-500/10';
 
   if (options) return (
     <div className="space-y-1 text-left">
-      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
-        className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-sm font-bold text-black disabled:opacity-50">
+        className={`w-full h-10 bg-white border ${borderCls} rounded-xl px-3 focus:outline-none focus:ring-2 text-sm font-bold text-black disabled:opacity-50`}>
         <option value="">Choose {label}</option>
         {options.map((o: any) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
   if (type === 'textarea') return (
     <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
-      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder} rows={3}
-        className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/10 custom-scrollbar disabled:opacity-50" />
+        className={`w-full p-3 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:outline-none focus:ring-2 custom-scrollbar disabled:opacity-50`} />
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
   return (
     <div className="space-y-1 text-left">
-      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder}
-        className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-sm focus:ring-2 focus:ring-emerald-500/10 disabled:opacity-50" />
+        className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:ring-2 disabled:opacity-50`} />
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
 }
@@ -146,6 +157,7 @@ export default function ParentsPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isViewOneMode, setIsViewOneMode] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // Search and select student state
   const [studentSearch, setStudentSearch] = useState('');
@@ -325,6 +337,7 @@ export default function ParentsPage() {
       }
       return updated;
     });
+    if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
   };
 
   const handleStartEnrollmentInline = () => {
@@ -349,10 +362,38 @@ export default function ParentsPage() {
     setIsEditMode(false);
     setFormData({ ...BLANK_FORM });
     setStudentSearch('');
-    setStudentSearch('');
     setIsDropdownOpen(false);
     setMessage(null);
+    setFormErrors({});
     router.push('/admin/parents');
+  };
+
+  // ── Validation ───────────────────────────────────────────────────────────
+  const REQUIRED_FIELDS = [
+    { key: 'guardianName', label: 'Full Name' },
+    { key: 'guardianGender', label: 'Gender' },
+    { key: 'guardianDob', label: 'Date of Birth' },
+    { key: 'guardianNic', label: 'NIC' },
+    { key: 'guardianContact', label: 'Mobile No' },
+  ];
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!formData.studentUsername) {
+      errors['studentUsername'] = 'Linked Student is required';
+    }
+    REQUIRED_FIELDS.forEach(({ key, label }) => {
+      if (!formData[key] || String(formData[key]).trim() === '') {
+        errors[key] = `${label} is required`;
+      }
+    });
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      setActiveTab('basic');
+      setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
+      return false;
+    }
+    return true;
   };
 
   const handleSelectGuardian = (g: any, editOnLoad = false) => {
@@ -426,11 +467,8 @@ export default function ParentsPage() {
 
   const handleSaveWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
     const studentUsername = formData.studentUsername;
-    if (!studentUsername) {
-      setMessage({ type: 'error', text: 'Linked Student selection is required.' });
-      return;
-    }
 
     setIsSubmitting(true);
     setMessage(null);
@@ -496,7 +534,7 @@ export default function ParentsPage() {
   ];
 
   return (
-    <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedGuardian }}>
+    <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedGuardian, formErrors }}>
       <div className="flex flex-col space-y-6 animate-in fade-in duration-700 pb-20">
         
         {/* ── Header Banner — only on landing, hidden in viewOneMode & enrollMode ── */}
@@ -813,16 +851,16 @@ export default function ParentsPage() {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                          <FormInput label="Full Name" name="guardianName" />
+                          <FormInput label="Full Name" name="guardianName" required />
                           <FormInput label="Name in Sinhala as Birth Certificate" name="guardianNameSinhala" />
                           <FormInput label="Name with Initial" name="guardianNameWithInitials" />
                           <FormInput label="Name with Initial Sinhala" name="guardianNameWithInitialSinhala" />
-                          <FormInput label="Date Of Birth" name="guardianDob" type="date" />
-                          <FormInput label="NIC" name="guardianNic" />
+                          <FormInput label="Date Of Birth" name="guardianDob" type="date" required />
+                          <FormInput label="NIC" name="guardianNic" required />
                           <FormInput label="Birth Certificate No" name="guardianBirthCertificateNo" />
                           <FormInput label="District" name="guardianDistrict" />
                           <FormInput label="Religion" name="guardianReligion" />
-                          <FormInput label="Gender" name="guardianGender" options={GENDER_OPTIONS} />
+                          <FormInput label="Gender" name="guardianGender" options={GENDER_OPTIONS} required />
                           <FormInput label="Age - Auto Calculate" name="guardianAge" disabled placeholder="Auto-calculated" />
                           <FormInput label="Civil State" name="guardianCivilState" options={CIVIL_OPTIONS} />
                         </div>
@@ -866,7 +904,7 @@ export default function ParentsPage() {
                           <FormInput label="Emergency Contact No" name="guardianEmergencyContactNo" />
                           <FormInput label="Whatsapp No" name="guardianWhatsappNo" />
                           <FormInput label="Home No" name="guardianHomeNo" />
-                          <FormInput label="Mobile No" name="guardianContact" />
+                          <FormInput label="Mobile No" name="guardianContact" required />
                           <FormInput label="Email Address" name="guardianEmail" type="email" />
                           <FormInput label="Distance to School" name="guardianDistanceToSchool" />
                         </div>

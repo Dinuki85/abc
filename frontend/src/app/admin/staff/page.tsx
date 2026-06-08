@@ -185,13 +185,14 @@ const TABS = [
 
 const FormContext = React.createContext<any>(null);
 
-function FormInput({ label, name, type = 'text', options = null, disabled = false, placeholder = '' }: {
+function FormInput({ label, name, type = 'text', options = null, disabled = false, placeholder = '', required = false }: {
   label: string; name: string; type?: string;
   options?: { label: string; value: any }[] | null;
-  disabled?: boolean; placeholder?: string;
+  disabled?: boolean; placeholder?: string; required?: boolean;
 }) {
   const ctx = React.useContext(FormContext);
-  const { formData, handleChange, isEnrollMode, isEditMode, selectedStaff } = ctx;
+  const { formData, handleChange, isEnrollMode, isEditMode, selectedStaff, formErrors } = ctx;
+  const hasError = !!(formErrors && formErrors[name]);
 
   if (!isEnrollMode && !isEditMode && selectedStaff) {
     let displayVal = formData[name];
@@ -208,31 +209,41 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   }
 
   const isDisabled = disabled || (!isEnrollMode && !isEditMode) || (name === 'username');
+  const borderCls = hasError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-200 focus:ring-indigo-500/10';
 
   if (options) return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
-        className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/10 text-xs font-bold text-black disabled:opacity-50">
+        className={`w-full h-10 bg-white border ${borderCls} rounded-xl px-3 focus:outline-none focus:ring-2 text-xs font-bold text-black disabled:opacity-50`}>
         <option value="">Choose {label}</option>
         {options.map((o: any) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
   if (type === 'textarea') return (
     <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder} rows={3}
-        className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/10 custom-scrollbar disabled:opacity-50" />
+        className={`w-full p-3 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 custom-scrollbar disabled:opacity-50`} />
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
   return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+        {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+      </label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder}
-        className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-indigo-500/10 disabled:opacity-50" />
+        className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:ring-2 disabled:opacity-50`} />
+      {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
 }
@@ -282,6 +293,7 @@ function StaffPageContent() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isViewOneMode, setIsViewOneMode] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   const filteredStaff = useMemo(() => {
     return staffMembers.filter(s =>
@@ -360,6 +372,7 @@ function StaffPageContent() {
     const { name, value, type } = e.target;
     const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
     setFormData((p: any) => ({ ...p, [name]: val }));
+    if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
   };
 
   const handleStartEnrollmentInline = async () => {
@@ -387,7 +400,34 @@ function StaffPageContent() {
     setFormData({ ...BLANK_FORM });
     setSearchTerm('');
     setMessage(null);
+    setFormErrors({});
     router.push('/admin/staff');
+  };
+
+  // ── Validation ───────────────────────────────────────────────────────────
+  const REQUIRED_FIELDS = [
+    { key: 'fullName', label: 'Full Name' },
+    { key: 'nameSinhala', label: 'Name in Sinhala' },
+    { key: 'dob', label: 'Date of Birth' },
+    { key: 'gender', label: 'Gender' },
+    { key: 'nic', label: 'NIC' },
+    { key: 'district', label: 'District' },
+  ];
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+    REQUIRED_FIELDS.forEach(({ key, label }) => {
+      if (!formData[key] || String(formData[key]).trim() === '') {
+        errors[key] = `${label} is required`;
+      }
+    });
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      setActiveTab('basic');
+      setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
+      return false;
+    }
+    return true;
   };
 
   const handleSelectStaff = async (t: Teacher, editOnLoad = false, scrollToWorkspace = true) => {
@@ -469,6 +509,7 @@ function StaffPageContent() {
       setMessage({ type: 'error', text: 'Teacher ID is required.' });
       return;
     }
+    if (!validateForm()) return;
     setIsSubmitting(true);
     setMessage(null);
     try {
@@ -555,7 +596,7 @@ function StaffPageContent() {
   ];
 
   return (
-    <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStaff }}>
+    <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStaff, formErrors }}>
       <div className="flex flex-col space-y-6 animate-in fade-in duration-700 pb-20">
         
         {/* ── Toolbar ─────────────────────────────────────────────────────────── */}
@@ -783,16 +824,16 @@ function StaffPageContent() {
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             <FormInput label="Teacher ID - Auto" name="username" disabled />
-                            <FormInput label="Full Name" name="fullName" />
-                            <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" />
+                            <FormInput label="Full Name" name="fullName" required />
+                            <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
                             <FormInput label="Name with Initial" name="nameWithInitials" />
                             <FormInput label="Name with Initial Sinhala" name="nameWithInitialSinhala" />
-                            <FormInput label="Date Of Birth" name="dob" type="date" />
-                            <FormInput label="NIC" name="nic" />
+                            <FormInput label="Date Of Birth" name="dob" type="date" required />
+                            <FormInput label="NIC" name="nic" required />
                             <FormInput label="Birth Certificate No" name="birthCertificateNo" />
-                            <FormInput label="District" name="district" />
+                            <FormInput label="District" name="district" required />
                             <FormInput label="Religion" name="religion" />
-                            <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} />
+                            <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} required />
                             <FormInput label="Mother Name" name="motherName" />
                             <FormInput label="Father Name" name="fatherName" />
                             <FormInput label="Guardian ID" name="guardianId" />
