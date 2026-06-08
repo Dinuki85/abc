@@ -405,14 +405,77 @@ function StaffPageContent() {
   };
 
   // ── Validation ───────────────────────────────────────────────────────────
+  const REQUIRED_FIELDS_BY_TAB: Record<string, { key: string; label: string }[]> = {
+    basic: [
+      { key: 'username', label: 'Teacher ID' },
+      { key: 'fullName', label: 'Full Name' },
+      { key: 'nameSinhala', label: 'Name in Sinhala' },
+      { key: 'dob', label: 'Date of Birth' },
+      { key: 'gender', label: 'Gender' },
+      { key: 'nic', label: 'NIC' },
+      { key: 'district', label: 'District' },
+    ],
+    health: [],
+    service: [],
+    contact: [],
+    qualification: [],
+    family: [],
+    visibility: [],
+  };
+
   const REQUIRED_FIELDS = [
-    { key: 'fullName', label: 'Full Name' },
-    { key: 'nameSinhala', label: 'Name in Sinhala' },
-    { key: 'dob', label: 'Date of Birth' },
-    { key: 'gender', label: 'Gender' },
-    { key: 'nic', label: 'NIC' },
-    { key: 'district', label: 'District' },
+    ...REQUIRED_FIELDS_BY_TAB.basic,
+    ...REQUIRED_FIELDS_BY_TAB.health,
+    ...REQUIRED_FIELDS_BY_TAB.service,
+    ...REQUIRED_FIELDS_BY_TAB.contact,
+    ...REQUIRED_FIELDS_BY_TAB.qualification,
+    ...REQUIRED_FIELDS_BY_TAB.family,
+    ...REQUIRED_FIELDS_BY_TAB.visibility,
   ];
+
+  const TAB_ORDER = ['basic', 'health', 'service', 'contact', 'qualification', 'family', 'visibility'];
+
+  const handleTabChange = (targetTabId: string) => {
+    if (!isEnrollMode && !isEditMode) {
+      setActiveTab(targetTabId);
+      return;
+    }
+
+    const currentIndex = TAB_ORDER.indexOf(activeTab);
+    const targetIndex = TAB_ORDER.indexOf(targetTabId);
+
+    if (targetIndex > currentIndex) {
+      // Validate all tabs from basic up to current activeTab
+      const errors: Record<string, string> = { ...formErrors };
+      let firstTabWithErrors = '';
+
+      for (let i = 0; i <= currentIndex; i++) {
+        const tabId = TAB_ORDER[i];
+        const fields = REQUIRED_FIELDS_BY_TAB[tabId] || [];
+        fields.forEach(({ key, label }) => {
+          if (!formData[key] || String(formData[key]).trim() === '') {
+            errors[key] = `${label} is required`;
+            if (!firstTabWithErrors) {
+              firstTabWithErrors = tabId;
+            }
+          } else {
+            delete errors[key];
+          }
+        });
+      }
+
+      if (Object.keys(errors).some(k => REQUIRED_FIELDS.some(rf => rf.key === k))) {
+        setFormErrors(errors);
+        if (firstTabWithErrors) {
+          setActiveTab(firstTabWithErrors);
+        }
+        setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
+        return;
+      }
+    }
+
+    setActiveTab(targetTabId);
+  };
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -423,7 +486,15 @@ function StaffPageContent() {
     });
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      setActiveTab('basic');
+      // Find the first tab with errors and switch to it
+      for (const tabId of TAB_ORDER) {
+        const fields = REQUIRED_FIELDS_BY_TAB[tabId] || [];
+        const hasTabError = fields.some(({ key }) => errors[key]);
+        if (hasTabError) {
+          setActiveTab(tabId);
+          break;
+        }
+      }
       setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
       return false;
     }
@@ -804,7 +875,7 @@ function StaffPageContent() {
                       <button
                         key={tab.id}
                         type="button"
-                        onClick={() => setActiveTab(tab.id)}
+                        onClick={() => handleTabChange(tab.id)}
                         className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold text-xs text-left ${
                           activeTab === tab.id
                             ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30'
