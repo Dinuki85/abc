@@ -164,7 +164,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
       <label className="text-xs font-semibold text-slate-500 ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
-      <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
+      <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label} required={required}
         className={`w-full h-10 bg-white border ${borderCls} rounded-xl px-3 focus:outline-none focus:ring-2 text-sm font-bold text-black disabled:opacity-50`}>
         <option value="">Choose {label}</option>
         {options.map((o: { label: string; value: unknown }) => <option key={String(o.value)} value={String(o.value)}>{o.label}</option>)}
@@ -178,7 +178,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
-        disabled={isDisabled} placeholder={placeholder} rows={3}
+        disabled={isDisabled} placeholder={placeholder} rows={3} required={required}
         className={`w-full p-3 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 custom-scrollbar disabled:opacity-50`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
@@ -189,7 +189,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
-        disabled={isDisabled} placeholder={placeholder}
+        disabled={isDisabled} placeholder={placeholder} required={required}
         className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:ring-2 disabled:opacity-50`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
@@ -412,6 +412,12 @@ function StudentsPageContent() {
     const targetIndex = TAB_ORDER.indexOf(targetTabId);
 
     if (targetIndex > currentIndex) {
+      // Trigger native HTML5 validation for the current tab's DOM
+      const form = document.querySelector('form');
+      if (form && !form.reportValidity()) {
+        return;
+      }
+
       // Validate all tabs from basic up to current activeTab
       const errors: Record<string, string> = { ...formErrors };
       let firstTabWithErrors = '';
@@ -825,7 +831,7 @@ function StudentsPageContent() {
                 <div className="w-full lg:w-60 bg-slate-50/50 border-r border-slate-100 p-3 flex lg:flex-col gap-1 overflow-x-auto whitespace-nowrap lg:whitespace-normal custom-scrollbar shrink-0">
                   {TABS.filter(tab => tab.id !== 'visibility' || !isEnrollMode).map(tab => (
                     <button key={tab.id} type="button" onClick={() => handleTabChange(tab.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-[10px] text-left ${activeTab === tab.id ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-slate-500 hover:bg-white hover:text-primary'}`}>
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-xs text-left ${activeTab === tab.id ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-slate-500 hover:bg-white hover:text-primary'}`}>
                       <tab.icon size={14} />{tab.name}
                     </button>
                   ))}
