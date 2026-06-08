@@ -115,7 +115,7 @@ const TABS = [
 function ActiveBadge({ value }: { value: unknown }) {
   const active = value === true || value === 'true';
   return (
-    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-semibold border ${active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
+    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
       }`}>
       <span className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
       {active ? 'Active' : 'Inactive'}
@@ -158,9 +158,9 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
 
   if (options) return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
       <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
-        className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black disabled:opacity-50">
+        className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-sm font-bold text-black disabled:opacity-50">
         <option value="">Choose {label}</option>
         {options.map((o: { label: string; value: unknown }) => <option key={String(o.value)} value={String(o.value)}>{o.label}</option>)}
       </select>
@@ -168,7 +168,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
   if (type === 'textarea') return (
     <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
-      <label className="text-[10px] font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder} rows={3}
         className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 focus:ring-primary/10 custom-scrollbar disabled:opacity-50" />
@@ -176,7 +176,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
   return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-semibold text-slate-500 ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder}
         className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-primary/10 disabled:opacity-50" />
@@ -630,7 +630,7 @@ function StudentsPageContent() {
         {(selectedStudent || isEnrollMode) && (
           <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
             <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-blue-500 animate-pulse'}`} />
-            <span className="text-[10px] font-semibold text-slate-600">
+            <span className="text-xs font-semibold text-slate-600">
               {isEnrollMode
                 ? isLoadedExistingStudent
                   ? `Workspace Mode: Editing Existing Student — ${formData.username}`
@@ -660,7 +660,7 @@ function StudentsPageContent() {
               </div>
               <div className="flex items-center gap-2">
                 <ActiveBadge value={formData.isActive} />
-                <div className="px-3 py-1 bg-primary/10 rounded-full text-[10px] font-semibold text-primary">
+                <div className="px-3 py-1 bg-primary/10 rounded-full text-xs font-semibold text-primary">
                   ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStudent?.username || '—'))}
                 </div>
                 {selectedStudent && !isEnrollMode && (
@@ -720,20 +720,20 @@ function StudentsPageContent() {
                       <div className="space-y-4 animate-in fade-in duration-300">
                         {isEnrollMode && (
                           <div className="bg-slate-50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                            <h4 className="text-[10px] font-semibold text-primary">Academic Cell</h4>
+                            <h4 className="text-xs font-semibold text-primary">Academic Cell</h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
                               <div className="space-y-1">
-                                <label className="text-[10px] font-semibold text-slate-500 ml-1">Primary Grade</label>
+                                <label className="text-xs font-semibold text-slate-500 ml-1">Primary Grade</label>
                                 <select value={selectedGradeId} onChange={e => { const g = parseInt(e.target.value); setSelectedGradeId(g); setSelectedClassId(''); fetchClassesForGrade(g); }} required title="Select Primary Grade"
-                                  className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black">
+                                  className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-sm font-bold text-black">
                                   <option value="">Choose Grade</option>
                                   {grades.map((g: Grade) => <option key={g.id} value={g.id}>{g.name}</option>)}
                                 </select>
                               </div>
                               <div className="space-y-1">
-                                <label className="text-[10px] font-semibold text-slate-500 ml-1">Class Section</label>
+                                <label className="text-xs font-semibold text-slate-500 ml-1">Class Section</label>
                                 <select value={selectedClassId} onChange={e => setSelectedClassId(parseInt(e.target.value))} required disabled={!selectedGradeId} title="Select Class Section"
-                                  className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black disabled:opacity-50">
+                                  className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-sm font-bold text-black disabled:opacity-50">
                                   <option value="">Choose Class</option>
                                   {classes.map((c: { id: number; name: string }) => <option key={c.id} value={c.id}>{c.name}</option>)}
                                 </select>
@@ -757,12 +757,12 @@ function StudentsPageContent() {
                           <FormInput label="Father Name" name="fatherName" />
                           {/* Guardian ID Link to Parent Directory */}
                           <div className="space-y-1 text-left">
-                            <label className="text-[10px] font-semibold text-slate-500 ml-1">Guardian ID</label>
+                            <label className="text-xs font-semibold text-slate-500 ml-1">Guardian ID</label>
                             <div className="flex gap-2">
                               <div className="flex-1">
                                 {(!isEnrollMode && !isEditMode && selectedStudent) ? (
                                   <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left h-full flex flex-col justify-center">
-                                    <span className="block text-xs font-semibold text-black leading-tight wrap-break-word">
+                                    <span className="block text-sm font-semibold text-black leading-tight wrap-break-word">
                                       {String(formData.guardianIdRef || '—')}
                                     </span>
                                   </div>
@@ -804,14 +804,14 @@ function StudentsPageContent() {
                     {activeTab === 'skills' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                          <h4 className="text-[10px] font-semibold text-primary">Achievements</h4>
+                          <h4 className="text-xs font-semibold text-primary">Achievements</h4>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
                             {ACHIEVEMENT_FIELDS.map(a => <FormInput key={a.name} label={a.label} name={a.name} options={ACHIEVEMENT_OPTIONS} />)}
                           </div>
                           <FormInput label="Achievements Description" name="talentDescription" type="textarea" />
                         </div>
                         <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                          <h4 className="text-[10px] font-semibold text-slate-500">Additional Talent Areas</h4>
+                          <h4 className="text-xs font-semibold text-slate-500">Additional Talent Areas</h4>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                             {TALENT_FIELDS.map(t => (
                               <label key={t.name} className={`flex items-center gap-3 p-2 px-3 bg-white border border-slate-200 rounded-xl transition-all ${(isEnrollMode || isEditMode) ? 'cursor-pointer hover:border-primary' : 'cursor-default opacity-80'}`}>
@@ -851,7 +851,7 @@ function StudentsPageContent() {
                               <Eye className="text-blue-600" size={20} />
                             </div>
                             <div>
-                              <h4 className="text-[10px] font-semibold text-blue-700">Student Status</h4>
+                              <h4 className="text-xs font-semibold text-blue-700">Student Status</h4>
                               <p className="text-[9px] text-blue-600 font-semibold">Manage student visibility and enrollment status</p>
                             </div>
                           </div>
@@ -950,8 +950,8 @@ export default function StudentsPage() {
 function FormField({ label, value }: { label: string; value: unknown }) {
   return (
     <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left hover:bg-slate-100 hover:border-slate-200/60 transition-all">
-      <span className="block text-[9px] font-semibold text-slate-400 leading-none mb-1.5">{label}</span>
-      <span className="block text-xs font-semibold text-black leading-tight wrap-break-word">
+      <span className="block text-xs font-semibold text-slate-400 leading-none mb-1.5">{label}</span>
+      <span className="block text-sm font-semibold text-black leading-tight wrap-break-word">
         {value === true || value === 'true' ? 'Active' : value === false || value === 'false' ? 'Inactive' : String(value || '—')}
       </span>
     </div>
