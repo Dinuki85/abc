@@ -286,12 +286,13 @@ export default function ParentsPage() {
 
   // Filter list by search term
   const filteredGuardians = useMemo(() => {
+    const term = searchTerm.toLowerCase();
     return guardiansList.filter(g =>
-      g.guardianName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      g.guardianId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      g.guardianNic.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      g.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      g.studentUsername.toLowerCase().includes(searchTerm.toLowerCase())
+      (g.guardianName || '').toLowerCase().includes(term) ||
+      (g.guardianId || '').toLowerCase().includes(term) ||
+      (g.guardianNic || '').toLowerCase().includes(term) ||
+      (g.studentName || '').toLowerCase().includes(term) ||
+      (g.studentUsername || '').toLowerCase().includes(term)
     );
   }, [guardiansList, searchTerm]);
 
