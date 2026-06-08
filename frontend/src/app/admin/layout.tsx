@@ -6,8 +6,9 @@ import MobileSidebar from "@/components/admin/MobileSidebar";
 import AdminBreadcrumbs from "@/components/admin/AdminBreadcrumbs";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import React, { createContext } from "react";
 import { api } from "@/lib/api";
-import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck, Landmark, UserPlus, Activity, FileSpreadsheet, GraduationCap, LayoutDashboard, Presentation } from "lucide-react";
+import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Settings, ShieldCheck, UserCheck, Landmark, UserPlus, Activity, FileSpreadsheet, GraduationCap, LayoutDashboard, Presentation, PanelLeftOpen, PanelLeftClose } from "lucide-react";
 
 const adminMenuItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -16,6 +17,11 @@ const adminMenuItems = [
   { name: 'Performance', href: '/admin/performance', icon: Activity },
   { name: 'Display', href: '/admin/reporting', icon: Presentation },
 ];
+
+export const BreadcrumbContext = createContext({
+  dynamicSuffix: '',
+  setDynamicSuffix: (s: string) => {}
+});
 
 
 export default function AdminLayout({
@@ -27,6 +33,8 @@ export default function AdminLayout({
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [dynamicSuffix, setDynamicSuffix] = useState('');
 
   useEffect(() => {
     const currentUser = api.getCurrentUser();
@@ -51,6 +59,7 @@ export default function AdminLayout({
   }
 
   return (
+    <BreadcrumbContext.Provider value={{ dynamicSuffix, setDynamicSuffix }}>
     <div className="h-[100dvh] overflow-hidden bg-[#f8fafc] font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 flex flex-col admin-layout-container">
       {/* Background decoration */}
       <div className="fixed -top-40 -right-40 w-96 h-96 bg-indigo-700/5 rounded-full filter blur-[128px] pointer-events-none z-0" />
@@ -66,8 +75,21 @@ export default function AdminLayout({
 
       {/* Dynamic Breadcrumbs Directory Bar */}
       {pathname !== '/admin' && (
-        <div className="bg-white border-b border-slate-200/80 px-4 md:px-8 py-2 flex-shrink-0 relative z-40 shadow-sm flex items-center">
+        <div className="bg-white border-b border-slate-200/80 px-4 md:px-8 py-2 flex-shrink-0 relative z-40 shadow-sm flex items-center gap-3">
           <AdminBreadcrumbs />
+          {/* Sidebar toggle — only on pages that hide the sidebar */}
+          {pathname === '/admin/students' && (
+            <button
+              type="button"
+              onClick={() => setSidebarVisible(v => !v)}
+              title={sidebarVisible ? 'Hide Navigation' : 'Show Navigation'}
+              className="ml-auto flex items-center gap-1.5 h-7 px-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-widest transition-all shrink-0"
+            >
+              {sidebarVisible
+                ? <><PanelLeftClose size={13} className="text-primary" /> Hide Nav</>
+                : <><PanelLeftOpen size={13} className="text-primary" /> Show Nav</>}
+            </button>
+          )}
         </div>
       )}
 
@@ -80,11 +102,11 @@ export default function AdminLayout({
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - Fixed/Static Column */}
-        {pathname !== '/admin' && (
+        {(pathname !== '/admin' && pathname !== '/admin/students') || (pathname === '/admin/students' && sidebarVisible) ? (
           <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
             <Sidebar menuItems={adminMenuItems} />
           </aside>
-        )}
+        ) : null}
 
         {/* Main Content - Conditional Scroll */}
         <main className={`flex-1 ${isNoScrollPage ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'} ${pathname === '/admin' ? 'p-0' : 'p-4 md:p-6'} relative`}>
@@ -94,6 +116,7 @@ export default function AdminLayout({
         </main>
       </div>
     </div>
+    </BreadcrumbContext.Provider>
   );
 }
 // Step 8-1 - Refine Sidebar styling with HSL colors

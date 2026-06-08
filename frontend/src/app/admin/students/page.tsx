@@ -4,11 +4,12 @@ import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import {
-  Search, X, GraduationCap,
-  CheckCircle2, AlertCircle, UserPlus, FileSpreadsheet,
-  Save, User, HeartPulse, Star, MapPin, FileCheck, RotateCcw, ArrowRight, Edit, Eye, Users
+  Search, X, GraduationCap, Filter,
+  CheckCircle2, AlertCircle, UserPlus,
+  Save, User, HeartPulse, Star, MapPin, FileCheck, RotateCcw, Edit, Eye, Users
 } from 'lucide-react';
 import { api, StudentProfile, Grade } from '@/lib/api';
+import { BreadcrumbContext } from '@/app/admin/layout';
 import { Input } from '@/components/ui/Input';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -114,7 +115,7 @@ const TABS = [
 function ActiveBadge({ value }: { value: unknown }) {
   const active = value === true || value === 'true';
   return (
-    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
+    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-semibold border ${active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
       }`}>
       <span className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
       {active ? 'Active' : 'Inactive'}
@@ -157,7 +158,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
 
   if (options) return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[10px] font-semibold text-slate-500 ml-1">{label}</label>
       <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
         className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black disabled:opacity-50">
         <option value="">Choose {label}</option>
@@ -167,7 +168,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
   if (type === 'textarea') return (
     <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[10px] font-semibold text-slate-500 ml-1">{label}</label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder} rows={3}
         className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 focus:ring-primary/10 custom-scrollbar disabled:opacity-50" />
@@ -175,7 +176,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
   return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-[10px] font-semibold text-slate-500 ml-1">{label}</label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder}
         className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-primary/10 disabled:opacity-50" />
@@ -183,11 +184,10 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
 }
 
-
-
 function StudentsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { setDynamicSuffix } = React.useContext(BreadcrumbContext);
   const initialSearch = searchParams.get('search') || '';
 
   const workspaceRef = useRef<HTMLDivElement>(null);
@@ -218,6 +218,7 @@ function StudentsPageContent() {
   const [selectedClassId, setSelectedClassId] = useState<number | ''>('');
   const [classes, setClasses] = useState<{ id: number; name: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isViewOneMode, setIsViewOneMode] = useState(false);
 
   // ── Data fetchers ──────────────────────────────────────────────────────────
   const fetchGrades = async () => {
@@ -244,6 +245,16 @@ function StudentsPageContent() {
 
   // ── Side-effects ───────────────────────────────────────────────────────────
   useEffect(() => { fetchGrades(); }, []);
+
+  useEffect(() => {
+    if (isEnrollMode) {
+      setDynamicSuffix('New Student Enrollment');
+    } else if (isViewOneMode && selectedStudent) {
+      setDynamicSuffix(`View Student: ${selectedStudent.fullName || 'Student'}`);
+    } else {
+      setDynamicSuffix('Student Registration');
+    }
+  }, [isEnrollMode, isViewOneMode, selectedStudent, setDynamicSuffix]);
 
   useEffect(() => {
     const t = setTimeout(() => fetchStudents(currentPage, currentPage !== 0), 300);
@@ -335,6 +346,7 @@ function StudentsPageContent() {
     setEnrollSearchId('');
     setFormData({ ...BLANK_FORM });
     setSearchTerm('');
+    setIsViewOneMode(false);
     router.replace('/admin/students');
   };
 
@@ -500,35 +512,105 @@ function StudentsPageContent() {
     <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStudent }}>
       <div className="flex flex-col space-y-3 animate-in fade-in duration-700 pb-6">
 
-        {/* ── Toolbar ─────────────────────────────────────────────────────────── */}
-        <div className="w-full bg-white p-2 px-3 rounded-xl border border-slate-100 shadow-md flex flex-col sm:flex-row items-center gap-2 justify-between shrink-0">
-          <div className="flex items-center gap-2 flex-1 w-full sm:max-w-[480px]">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-              <Input placeholder="Search index or name..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
-                className="pl-9 h-9 w-full rounded-lg border-slate-200 bg-slate-50 focus:bg-white transition-all text-xs font-bold text-black" />
-            </div>
-            <Link href="/admin/reporting?report=students" className="shrink-0 flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary font-black uppercase tracking-wider text-[10px] transition-all duration-200 active:scale-95">
-              <FileSpreadsheet size={13} /> View All Student List
-            </Link>
-          </div>
+        {/* ── Header Banner — only on landing, hidden in viewOneMode & enrollMode ── */}
+        {!isViewOneMode && !isEnrollMode && (
+          <div className="flex flex-col items-center text-center bg-white py-10 px-6 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/3 to-transparent pointer-events-none" />
+            <GraduationCap className="text-primary mb-3 relative z-10" size={40} />
+            <h1 className="text-3xl font-semibold text-slate-800 tracking-tight relative z-10">Student Registration</h1>
+            <p className="text-sm font-medium text-slate-500 mt-1 mb-6 relative z-10">Add and manage student information securely and efficiently.</p>
 
-          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
-
-            {(selectedStudent || isEnrollMode) && (
-              <Button className="h-9 px-3 rounded-lg bg-slate-600 hover:bg-slate-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs"
-                onClick={handleReset}>
-                <RotateCcw size={13} className="mr-1.5" />{isEnrollMode ? 'Back' : 'Clear Selection'}
-              </Button>
+            {/* Quick Actions — shown only on landing */}
+            {!selectedStudent && !isEnrollMode && (
+              <div className="flex flex-wrap justify-center gap-3 relative z-10">
+                <Button type="button" onClick={handleStartEnrollmentInline}
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-primary hover:bg-primary/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  <UserPlus size={15} className="mr-2 text-primary" /> Enroll New Student
+                </Button>
+                <Button type="button" onClick={() => setIsViewOneMode(true)}
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-primary hover:bg-primary/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  <Search size={15} className="mr-2 text-primary" /> View One Student
+                </Button>
+                <Link href="/admin/reporting?report=students"
+                  className="h-10 px-5 flex items-center justify-center rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-xs shadow-md shadow-primary/20 active:scale-95 transition-all">
+                  <Users size={15} className="mr-2" /> View All Students
+                </Link>
+              </div>
             )}
 
-            <Button
-              className="h-9 px-4 rounded-lg bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs shadow-md shadow-primary/20"
-              onClick={handleStartEnrollmentInline}>
-              <UserPlus size={13} className="mr-1.5" />Enroll Student
-            </Button>
+            {/* Back button when in enroll / selectedStudent mode */}
+            {(selectedStudent || isEnrollMode) && (
+              <Button type="button" onClick={handleReset}
+                className="h-9 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs shadow-sm transition-all relative z-10">
+                <RotateCcw size={13} className="mr-2" /> Back to Directory
+              </Button>
+            )}
           </div>
-        </div>
+        )}
+
+        {/* ── Toolbar — shown in viewOneMode AND enrollMode (Image-2 style) ── */}
+        {(isViewOneMode || isEnrollMode) && (
+          <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-200/60 shadow-sm">
+
+            {/* Left side: search (viewOne) OR enrollment label (enroll) */}
+            {isViewOneMode ? (
+              <div className="relative">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Input
+                  id="student-search-input"
+                  autoFocus
+                  placeholder="Search by Index No, Name, NIC..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className="pl-9 h-9 w-56 md:w-72 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
+                />
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <UserPlus size={15} className="text-primary" />
+                <span className="text-sm font-semibold text-slate-700 tracking-tight">
+                  {isLoadedExistingStudent ? `Editing: ${formData.username}` : 'New Student Enrollment'}
+                </span>
+              </div>
+            )}
+
+            {/* Filters button — only in viewOne mode */}
+            {isViewOneMode && (
+              <button type="button"
+                className="flex items-center gap-2 h-9 px-4 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 bg-white hover:bg-slate-50 transition-colors shrink-0">
+                <Filter size={13} className="text-slate-500" /> Filters
+              </button>
+            )}
+
+            <div className="flex-1" />
+
+            {/* Status badge */}
+            <div className={`flex items-center gap-1.5 h-9 px-3 border rounded-lg text-xs font-bold shrink-0 ${
+              !selectedStudent
+                ? 'border-slate-200 text-slate-500 bg-white'
+                : formData.isActive === true || formData.isActive === 'true'
+                  ? 'border-emerald-200 text-emerald-700 bg-emerald-50'
+                  : 'border-rose-200 text-rose-700 bg-rose-50'
+            }`}>
+              <span className={`w-2 h-2 rounded-full ${
+                !selectedStudent ? 'bg-slate-300' : (formData.isActive === true || formData.isActive === 'true') ? 'bg-emerald-500' : 'bg-rose-500'
+              }`} />
+              Status: {selectedStudent ? (formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive') : 'Active'}
+            </div>
+
+            {/* Student ID badge */}
+            <div className="flex items-center h-9 px-3 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 bg-white shrink-0">
+              Student ID: {selectedStudent?.username || 'Not Assigned'}
+            </div>
+
+            {/* Back to directory */}
+            <button type="button" onClick={handleReset}
+              className="flex items-center gap-1.5 h-9 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition-colors shrink-0">
+              <RotateCcw size={12} /> Back
+            </button>
+          </div>
+        )}
+
 
         {/* ── Page notification ───────────────────────────────────────────────── */}
         {message && (
@@ -537,37 +619,39 @@ function StudentsPageContent() {
               {message.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
             </div>
             <div className="text-left">
-              <p className="font-bold text-xs uppercase tracking-wide">Notification</p>
+              <p className="font-bold text-xs tracking-wide">Notification</p>
               <p className="text-xs font-semibold opacity-90 leading-tight">{message.text}</p>
             </div>
             <button onClick={() => setMessage(null)} className="ml-auto p-1.5 hover:bg-black/5 rounded-md transition-colors" title="Close notification"><X size={14} /></button>
           </div>
         )}
 
-        {/* ── Workspace mode indicator ────────────────────────────────────────── */}
-        <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
-          <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : selectedStudent ? 'bg-blue-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
-            {isEnrollMode
-              ? isLoadedExistingStudent
-                ? `Workspace Mode: Editing Existing Student — ${formData.username}`
-                : 'Workspace Mode: New Student Enrollment'
-              : isEditMode
-                ? `Workspace Mode: Editing Student — ${selectedStudent?.username}`
-                : selectedStudent
-                ? `Workspace Mode: Viewing Student — ${selectedStudent.username} (Read-Only)`
-                : 'Workspace Mode: Standby — Select a student or click Enroll Student'}
-          </span>
-        </div>
+        {/* ── Workspace mode indicator — only when form is active ─────────────── */}
+        {(selectedStudent || isEnrollMode) && (
+          <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
+            <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-blue-500 animate-pulse'}`} />
+            <span className="text-[10px] font-semibold text-slate-600">
+              {isEnrollMode
+                ? isLoadedExistingStudent
+                  ? `Workspace Mode: Editing Existing Student — ${formData.username}`
+                  : 'Workspace Mode: New Student Enrollment'
+                : isEditMode
+                  ? `Workspace Mode: Editing Student — ${selectedStudent?.username}`
+                  : `Workspace Mode: Viewing Student — ${selectedStudent?.username} (Read-Only)`}
+            </span>
+          </div>
+        )}
 
-        {/* ── Workspace card (view / legacy inline enroll) ─────────────────── */}
-        <div ref={workspaceRef} />
-        <form onSubmit={handleSaveWorkspace}>
+        {/* ── Workspace card — visible when student selected, in enroll mode, or in viewOne mode ── */}
+        {(selectedStudent || isEnrollMode || isViewOneMode) && (
+          <>
+          <div ref={workspaceRef} />
+          <form onSubmit={handleSaveWorkspace}>
           <Card className="rounded-2xl border-slate-200/60 shadow-xl overflow-hidden bg-white relative animate-in fade-in slide-in-from-top-3 duration-500">
             <CardHeader className="px-5 py-3 border-b border-slate-100 flex flex-row items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <GraduationCap className="text-primary" size={20} />
-                <CardTitle className="text-sm font-black text-black">
+                <CardTitle className="text-sm font-semibold text-black">
                   {isEnrollMode
                     ? isLoadedExistingStudent ? `Editing: ${formData.username}` : 'New Student Enrollment'
                     : isEditMode ? `Editing: ${formData.username}`
@@ -576,7 +660,7 @@ function StudentsPageContent() {
               </div>
               <div className="flex items-center gap-2">
                 <ActiveBadge value={formData.isActive} />
-                <div className="px-3 py-1 bg-primary/10 rounded-full text-[10px] font-black uppercase tracking-widest text-primary">
+                <div className="px-3 py-1 bg-primary/10 rounded-full text-[10px] font-semibold text-primary">
                   ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStudent?.username || '—'))}
                 </div>
                 {selectedStudent && !isEnrollMode && (
@@ -585,7 +669,7 @@ function StudentsPageContent() {
                       <>
                         <button
                           type="button"
-                          className="h-8 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-wider text-xs flex items-center gap-1 cursor-pointer select-none"
+                          className="h-8 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
                           onMouseDown={(e) => { e.preventDefault(); setIsEditMode(true); }}>
                           <Edit size={12} /> Edit
                         </button>
@@ -593,12 +677,12 @@ function StudentsPageContent() {
                     ) : (
                       <>
                         <Button type="submit"
-                          className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs"
+                          className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold active:scale-95 transition-all text-xs"
                           isLoading={isSubmitting}>
                           <Save size={12} className="mr-1" /> Save
                         </Button>
                         <Button type="button"
-                          className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs"
+                          className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-semibold active:scale-95 transition-all text-xs"
                           onClick={handleCancelEdit}>
                           <X size={12} className="mr-1" /> Cancel
                         </Button>
@@ -609,13 +693,20 @@ function StudentsPageContent() {
               </div>
             </CardHeader>
 
+            {/* ── No result hint in viewOneMode ── */}
+            {isViewOneMode && !selectedStudent && searchTerm && students.length === 0 && (
+              <div className="px-5 py-3 bg-rose-50 border-b border-rose-100 text-rose-600 text-xs font-bold flex items-center gap-2">
+                <AlertCircle size={14} /> No student found for "{searchTerm}". Try a different index or name.
+              </div>
+            )}
+
             <CardContent className="p-0">
               <div className="flex flex-col lg:flex-row">
                 {/* Sidebar */}
                 <div className="w-full lg:w-60 bg-slate-50/50 border-r border-slate-100 p-3 flex lg:flex-col gap-1 overflow-x-auto whitespace-nowrap lg:whitespace-normal custom-scrollbar shrink-0">
                   {TABS.filter(tab => tab.id !== 'visibility' || !isEnrollMode).map(tab => (
                     <button key={tab.id} type="button" onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-[10px] uppercase tracking-wider text-left ${activeTab === tab.id ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-slate-500 hover:bg-white hover:text-primary'}`}>
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-[10px] text-left ${activeTab === tab.id ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-slate-500 hover:bg-white hover:text-primary'}`}>
                       <tab.icon size={14} />{tab.name}
                     </button>
                   ))}
@@ -629,10 +720,10 @@ function StudentsPageContent() {
                       <div className="space-y-4 animate-in fade-in duration-300">
                         {isEnrollMode && (
                           <div className="bg-slate-50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-primary">Academic Cell</h4>
+                            <h4 className="text-[10px] font-semibold text-primary">Academic Cell</h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
                               <div className="space-y-1">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Primary Grade</label>
+                                <label className="text-[10px] font-semibold text-slate-500 ml-1">Primary Grade</label>
                                 <select value={selectedGradeId} onChange={e => { const g = parseInt(e.target.value); setSelectedGradeId(g); setSelectedClassId(''); fetchClassesForGrade(g); }} required title="Select Primary Grade"
                                   className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black">
                                   <option value="">Choose Grade</option>
@@ -640,7 +731,7 @@ function StudentsPageContent() {
                                 </select>
                               </div>
                               <div className="space-y-1">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Class Section</label>
+                                <label className="text-[10px] font-semibold text-slate-500 ml-1">Class Section</label>
                                 <select value={selectedClassId} onChange={e => setSelectedClassId(parseInt(e.target.value))} required disabled={!selectedGradeId} title="Select Class Section"
                                   className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-xs font-bold text-black disabled:opacity-50">
                                   <option value="">Choose Class</option>
@@ -666,12 +757,12 @@ function StudentsPageContent() {
                           <FormInput label="Father Name" name="fatherName" />
                           {/* Guardian ID Link to Parent Directory */}
                           <div className="space-y-1 text-left">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Guardian ID</label>
+                            <label className="text-[10px] font-semibold text-slate-500 ml-1">Guardian ID</label>
                             <div className="flex gap-2">
                               <div className="flex-1">
                                 {(!isEnrollMode && !isEditMode && selectedStudent) ? (
                                   <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left h-full flex flex-col justify-center">
-                                    <span className="block text-xs font-black text-black leading-tight wrap-break-word">
+                                    <span className="block text-xs font-semibold text-black leading-tight wrap-break-word">
                                       {String(formData.guardianIdRef || '—')}
                                     </span>
                                   </div>
@@ -713,14 +804,14 @@ function StudentsPageContent() {
                     {activeTab === 'skills' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                          <h4 className="text-[10px] font-black uppercase tracking-widest text-primary">Achievements</h4>
+                          <h4 className="text-[10px] font-semibold text-primary">Achievements</h4>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
                             {ACHIEVEMENT_FIELDS.map(a => <FormInput key={a.name} label={a.label} name={a.name} options={ACHIEVEMENT_OPTIONS} />)}
                           </div>
                           <FormInput label="Achievements Description" name="talentDescription" type="textarea" />
                         </div>
                         <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                          <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Additional Talent Areas</h4>
+                          <h4 className="text-[10px] font-semibold text-slate-500">Additional Talent Areas</h4>
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                             {TALENT_FIELDS.map(t => (
                               <label key={t.name} className={`flex items-center gap-3 p-2 px-3 bg-white border border-slate-200 rounded-xl transition-all ${(isEnrollMode || isEditMode) ? 'cursor-pointer hover:border-primary' : 'cursor-default opacity-80'}`}>
@@ -760,7 +851,7 @@ function StudentsPageContent() {
                               <Eye className="text-blue-600" size={20} />
                             </div>
                             <div>
-                              <h4 className="text-[10px] font-black uppercase tracking-widest text-blue-700">Student Status</h4>
+                              <h4 className="text-[10px] font-semibold text-blue-700">Student Status</h4>
                               <p className="text-[9px] text-blue-600 font-semibold">Manage student visibility and enrollment status</p>
                             </div>
                           </div>
@@ -772,7 +863,7 @@ function StudentsPageContent() {
                               </div>
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className={`text-sm font-black uppercase tracking-widest ${formData.isActive === true || formData.isActive === 'true' ? 'text-emerald-700' : 'text-rose-700'}`}>
+                              <p className={`text-sm font-semibold ${formData.isActive === true || formData.isActive === 'true' ? 'text-emerald-700' : 'text-rose-700'}`}>
                                 {formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive'}
                               </p>
                               <p className={`text-xs font-bold leading-tight mt-0.5 ${formData.isActive === true || formData.isActive === 'true' ? 'text-emerald-600' : 'text-rose-600'}`}>
@@ -792,11 +883,11 @@ function StudentsPageContent() {
                         </div>
                         {selectedStudent && (
                           <div className="mt-4 flex justify-end border-t border-slate-100 pt-4 gap-2">
-                            <Button type="submit" className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-emerald-600/20" isLoading={isSubmitting}>
+                            <Button type="submit" className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs active:scale-95 transition-all shadow-md shadow-emerald-600/20" isLoading={isSubmitting}>
                               <Save size={14} className="mr-2" />Save Changes
                             </Button>
                             {isEditMode && (
-                              <Button type="button" className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all" onClick={handleCancelEdit}>
+                              <Button type="button" className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all" onClick={handleCancelEdit}>
                                 <X size={14} className="mr-2" />Cancel
                               </Button>
                             )}
@@ -814,16 +905,16 @@ function StudentsPageContent() {
                         {(isEnrollMode || isEditMode) && (
                           <div className="mt-4 flex justify-end border-t border-slate-100 pt-4 gap-2">
                             {isEnrollMode && (
-                              <Button type="submit" className="h-10 px-8 rounded-xl bg-primary hover:bg-primary-hover text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-primary/20" isLoading={isSubmitting}>
+                              <Button type="submit" className="h-10 px-8 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-xs active:scale-95 transition-all shadow-md shadow-primary/20" isLoading={isSubmitting}>
                                 Save &amp; Enroll Student
                               </Button>
                             )}
                             {isEditMode && (
                               <>
-                                <Button type="submit" className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-emerald-600/20" isLoading={isSubmitting}>
+                                <Button type="submit" className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs active:scale-95 transition-all shadow-md shadow-emerald-600/20" isLoading={isSubmitting}>
                                   <Save size={14} className="mr-2" />Save Changes
                                 </Button>
-                                <Button type="button" className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all" onClick={handleCancelEdit}>
+                                <Button type="button" className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all" onClick={handleCancelEdit}>
                                   <X size={14} className="mr-2" />Cancel
                                 </Button>
                               </>
@@ -839,8 +930,9 @@ function StudentsPageContent() {
               </div>
             </CardContent>
           </Card>
-        </form>
-
+          </form>
+          </>
+        )}
 
       </div>
     </FormContext.Provider>
@@ -858,8 +950,8 @@ export default function StudentsPage() {
 function FormField({ label, value }: { label: string; value: unknown }) {
   return (
     <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left hover:bg-slate-100 hover:border-slate-200/60 transition-all">
-      <span className="block text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{label}</span>
-      <span className="block text-xs font-black text-black leading-tight wrap-break-word">
+      <span className="block text-[9px] font-semibold text-slate-400 leading-none mb-1.5">{label}</span>
+      <span className="block text-xs font-semibold text-black leading-tight wrap-break-word">
         {value === true || value === 'true' ? 'Active' : value === false || value === 'false' ? 'Inactive' : String(value || '—')}
       </span>
     </div>

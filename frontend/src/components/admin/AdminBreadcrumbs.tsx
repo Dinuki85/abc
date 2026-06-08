@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BreadcrumbContext } from '@/app/admin/layout';
 import { ChevronRight, Home, Landmark, ShieldCheck, Activity, FileSpreadsheet } from 'lucide-react';
 
 interface BreadcrumbItem {
@@ -113,9 +114,14 @@ function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
 
 export default function AdminBreadcrumbs() {
   const pathname = usePathname();
-  if (pathname === '/admin') return null;
-
+  const { dynamicSuffix } = React.useContext(BreadcrumbContext);
   const breadcrumbs = generateBreadcrumbs(pathname);
+
+  if (dynamicSuffix) {
+    breadcrumbs.push({ label: dynamicSuffix });
+  }
+
+  if (breadcrumbs.length === 0) return null;
 
   return (
     <nav aria-label="Breadcrumb" className="flex items-center gap-2 py-1 select-none">

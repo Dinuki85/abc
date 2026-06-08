@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Josefin_Sans, Nunito } from "next/font/google";
+import { Josefin_Sans, Nunito, Inter } from "next/font/google";
 import "./globals.css";
 
 const josefin = Josefin_Sans({
@@ -11,6 +11,12 @@ const josefin = Josefin_Sans({
 const nunito = Nunito({
   subsets: ["latin"],
   variable: "--font-nunito",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${josefin.variable} ${nunito.variable} h-full antialiased`}
+      className={`${josefin.variable} ${nunito.variable} ${inter.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-nunito">{children}</body>
