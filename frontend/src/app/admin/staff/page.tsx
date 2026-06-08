@@ -174,13 +174,13 @@ function ensureUsername(t: Teacher | null): Teacher | null {
 
 
 const TABS = [
-  { id: 'basic', name: 'Tab 1 - Basic Information', icon: User },
-  { id: 'health', name: 'Tab 2 - Health', icon: HeartPulse },
-  { id: 'service', name: 'Tab 3 - Service History', icon: Briefcase },
-  { id: 'contact', name: 'Tab 4 - Contact Information', icon: MapPin },
-  { id: 'qualification', name: 'Tab 5 - Qualification', icon: GraduationCap },
-  { id: 'family', name: 'Tab 6 - Spouse & Children', icon: Users },
-  { id: 'visibility', name: 'Tab 7 - Visibility', icon: Eye },
+  { id: 'basic', name: 'Basic Information', icon: User },
+  { id: 'health', name: 'Health', icon: HeartPulse },
+  { id: 'service', name: 'Service History', icon: Briefcase },
+  { id: 'contact', name: 'Contact Information', icon: MapPin },
+  { id: 'qualification', name: 'Qualification', icon: GraduationCap },
+  { id: 'family', name: 'Spouse & Children', icon: Users },
+  { id: 'visibility', name: 'Visibility', icon: Eye },
 ];
 
 const FormContext = React.createContext<any>(null);
@@ -216,7 +216,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
       <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
-      <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
+      <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label} required={required}
         className={`w-full h-10 bg-white border ${borderCls} rounded-xl px-3 focus:outline-none focus:ring-2 text-xs font-bold text-black disabled:opacity-50`}>
         <option value="">Choose {label}</option>
         {options.map((o: any) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -230,7 +230,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
-        disabled={isDisabled} placeholder={placeholder} rows={3}
+        disabled={isDisabled} placeholder={placeholder} rows={3} required={required}
         className={`w-full p-3 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 custom-scrollbar disabled:opacity-50`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
@@ -241,7 +241,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
-        disabled={isDisabled} placeholder={placeholder}
+        disabled={isDisabled} placeholder={placeholder} required={required}
         className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:ring-2 disabled:opacity-50`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
@@ -415,11 +415,29 @@ function StaffPageContent() {
       { key: 'gender', label: 'Gender' },
       { key: 'nic', label: 'NIC' },
       { key: 'district', label: 'District' },
+      { key: 'religion', label: 'Religion' },
+      { key: 'fatherName', label: 'Father Name' },
     ],
     health: [],
-    service: [],
-    contact: [],
-    qualification: [],
+    service: [
+      { key: 'firstAppointmentDate', label: '1st Appointment Date' },
+      { key: 'firstAppointmentDistrict', label: '1st Appointment District' },
+      { key: 'firstAppointmentInstitute', label: '1st Appointment Institute' },
+      { key: 'hierarchyCarder', label: 'Hierarchy Carder' },
+      { key: 'position', label: 'Position' },
+      { key: 'holdingPosition', label: 'Holding Position at School' },
+      { key: 'appointmentMedium', label: 'Appointment Medium' },
+    ],
+    contact: [
+      { key: 'address', label: 'Permanent Address' },
+      { key: 'emergencyContactNo', label: 'Emergency Contact No' },
+      { key: 'whatsappNo', label: 'Whatsapp No' },
+      { key: 'contactMobile', label: 'Mobile No' },
+    ],
+    qualification: [
+      { key: 'gceOl', label: 'GCE OL' },
+      { key: 'gceAl', label: 'GCE AL' },
+    ],
     family: [],
     visibility: [],
   };
@@ -446,6 +464,12 @@ function StaffPageContent() {
     const targetIndex = TAB_ORDER.indexOf(targetTabId);
 
     if (targetIndex > currentIndex) {
+      // Trigger native HTML5 validation for the current tab's DOM
+      const form = document.querySelector('form');
+      if (form && !form.reportValidity()) {
+        return;
+      }
+
       // Validate all tabs from basic up to current activeTab
       const errors: Record<string, string> = { ...formErrors };
       let firstTabWithErrors = '';
@@ -947,10 +971,10 @@ function StaffPageContent() {
                             <FormInput label="NIC" name="nic" required />
                             <FormInput label="Birth Certificate No" name="birthCertificateNo" />
                             <FormInput label="District" name="district" required />
-                            <FormInput label="Religion" name="religion" />
+                            <FormInput label="Religion" name="religion" required />
                             <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} required />
                             <FormInput label="Mother Name" name="motherName" />
-                            <FormInput label="Father Name" name="fatherName" />
+                            <FormInput label="Father Name" name="fatherName" required />
                             <FormInput label="Guardian ID" name="guardianId" />
                             <FormInput label="Age - Auto Calculate" name="age" disabled placeholder="Auto-calculated" />
                             <FormInput label="Civil State" name="civilState" />
@@ -985,17 +1009,17 @@ function StaffPageContent() {
                             <h3 className="text-lg font-bold text-slate-800">Service History</h3>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            <FormInput label="1st Appointment Date" name="firstAppointmentDate" type="date" />
-                            <FormInput label="1st Appointment District" name="firstAppointmentDistrict" />
-                            <FormInput label="1st Appointment Institute" name="firstAppointmentInstitute" />
-                            <FormInput label="Hierarchy Carder (Combo Box)" name="hierarchyCarder" options={CARDER_OPTIONS} />
-                            <FormInput label="Position" name="position" />
+                            <FormInput label="1st Appointment Date" name="firstAppointmentDate" type="date" required />
+                            <FormInput label="1st Appointment District" name="firstAppointmentDistrict" required />
+                            <FormInput label="1st Appointment Institute" name="firstAppointmentInstitute" required />
+                            <FormInput label="Hierarchy Carder (Combo Box)" name="hierarchyCarder" options={CARDER_OPTIONS} required />
+                            <FormInput label="Position" name="position" required />
                             <FormInput label="Increment Date" name="incrementDate" type="date" />
                             <FormInput label="Service Period" name="servicePeriod" />
                             <FormInput label="Salary Code (As per Pay sheet)" name="salaryCode" />
-                            <FormInput label="Holding Position at School" name="holdingPosition" options={HOLDING_POSITION_OPTIONS} />
+                            <FormInput label="Holding Position at School" name="holdingPosition" options={HOLDING_POSITION_OPTIONS} required />
                             <FormInput label="Grade" name="grade" />
-                            <FormInput label="Appointment Medium" name="appointmentMedium" />
+                            <FormInput label="Appointment Medium" name="appointmentMedium" required />
                           </div>
                         </div>
                       )}
@@ -1008,14 +1032,14 @@ function StaffPageContent() {
                             <h3 className="text-lg font-bold text-slate-800">Contact Information</h3>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <FormInput label="Permanent Address" name="address" type="textarea" />
+                            <FormInput label="Permanent Address" name="address" type="textarea" required />
                             <FormInput label="Temporary Address" name="temporaryAddress" type="textarea" />
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            <FormInput label="Emergency Contact No" name="emergencyContactNo" />
-                            <FormInput label="Whatsapp No" name="whatsappNo" />
+                            <FormInput label="Emergency Contact No" name="emergencyContactNo" required />
+                            <FormInput label="Whatsapp No" name="whatsappNo" required />
                             <FormInput label="Home No" name="homeNo" />
-                            <FormInput label="Mobile No" name="contactMobile" />
+                            <FormInput label="Mobile No" name="contactMobile" required />
                             <FormInput label="Email" name="email" type="email" />
                             <FormInput label="Distance to School" name="distanceToSchool" />
                           </div>
@@ -1033,8 +1057,8 @@ function StaffPageContent() {
                           <div className="space-y-4">
                                     <h4 className="text-xs font-semibold text-rose-500">Education</h4>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
-                                      <FormInput label="GCE OL" name="gceOl" />
-                                      <FormInput label="GCE AL" name="gceAl" />
+                                      <FormInput label="GCE OL" name="gceOl" required />
+                                      <FormInput label="GCE AL" name="gceAl" required />
                                       <FormInput label="Diploma" name="diploma" />
                                       <FormInput label="Degree" name="degree" />
                                       <FormInput label="Post Graduate" name="postGraduate" />
