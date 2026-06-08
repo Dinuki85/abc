@@ -54,9 +54,9 @@ const BLANK_FORM = {
 };
 
 const TABS = [
-  { id: 'basic', name: 'Tab 1 - Basic Information', icon: User },
-  { id: 'occupation', name: 'Tab 2 - Occupation', icon: Briefcase },
-  { id: 'contact', name: 'Tab 3 - Contact Information', icon: MapPin },
+  { id: 'basic', name: 'Basic Information', icon: User },
+  { id: 'occupation', name: 'Occupation', icon: Briefcase },
+  { id: 'contact', name: 'Contact Information', icon: MapPin },
 ];
 
 const FormContext = React.createContext<any>(null);
@@ -92,7 +92,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
       <label className="text-xs font-semibold text-slate-500 ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
-      <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
+      <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label} required={required}
         className={`w-full h-10 bg-white border ${borderCls} rounded-xl px-3 focus:outline-none focus:ring-2 text-sm font-bold text-black disabled:opacity-50`}>
         <option value="">Choose {label}</option>
         {options.map((o: any) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -106,7 +106,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
-        disabled={isDisabled} placeholder={placeholder} rows={3}
+        disabled={isDisabled} placeholder={placeholder} rows={3} required={required}
         className={`w-full p-3 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:outline-none focus:ring-2 custom-scrollbar disabled:opacity-50`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
@@ -117,7 +117,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
-        disabled={isDisabled} placeholder={placeholder}
+        disabled={isDisabled} placeholder={placeholder} required={required}
         className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:ring-2 disabled:opacity-50`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
@@ -375,7 +375,36 @@ export default function ParentsPage() {
     { key: 'guardianDob', label: 'Date of Birth' },
     { key: 'guardianNic', label: 'NIC' },
     { key: 'guardianContact', label: 'Mobile No' },
+    { key: 'guardianReligion', label: 'Religion' },
+    { key: 'guardianWorkingCompany', label: 'Working Company' },
+    { key: 'guardianDesignation', label: 'Designation' },
+    { key: 'guardianOfficeContact', label: 'Office Contact No' },
+    { key: 'guardianWorkingAddress', label: 'Working Address' },
+    { key: 'guardianEmergencyContactName', label: 'Emergency Contact Name' },
+    { key: 'guardianAddressPermanent', label: 'Permanent Address' },
+    { key: 'guardianEmergencyContactNo', label: 'Emergency Contact No' },
+    { key: 'guardianWhatsappNo', label: 'Whatsapp No' },
   ];
+
+  const TAB_ORDER = ['basic', 'occupation', 'contact'];
+
+  const handleTabChange = (targetTabId: string) => {
+    if (!isEnrollMode && !isEditMode) {
+      setActiveTab(targetTabId);
+      return;
+    }
+
+    const currentIndex = TAB_ORDER.indexOf(activeTab);
+    const targetIndex = TAB_ORDER.indexOf(targetTabId);
+
+    if (targetIndex > currentIndex) {
+      const form = document.querySelector('form');
+      if (form && !form.reportValidity()) {
+        return;
+      }
+    }
+    setActiveTab(targetTabId);
+  };
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -757,7 +786,7 @@ export default function ParentsPage() {
                     <button
                       key={tab.id}
                       type="button"
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => handleTabChange(tab.id)}
                       className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold text-xs text-left ${
                         activeTab === tab.id
                           ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-600/30'
@@ -859,7 +888,7 @@ export default function ParentsPage() {
                           <FormInput label="NIC" name="guardianNic" required />
                           <FormInput label="Birth Certificate No" name="guardianBirthCertificateNo" />
                           <FormInput label="District" name="guardianDistrict" />
-                          <FormInput label="Religion" name="guardianReligion" />
+                          <FormInput label="Religion" name="guardianReligion" required />
                           <FormInput label="Gender" name="guardianGender" options={GENDER_OPTIONS} required />
                           <FormInput label="Age - Auto Calculate" name="guardianAge" disabled placeholder="Auto-calculated" />
                           <FormInput label="Civil State" name="guardianCivilState" options={CIVIL_OPTIONS} />
@@ -876,12 +905,12 @@ export default function ParentsPage() {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                          <FormInput label="Working Company" name="guardianWorkingCompany" />
-                          <FormInput label="Designation" name="guardianDesignation" />
-                          <FormInput label="Office Contact No" name="guardianOfficeContact" />
-                          <FormInput label="Emergency Contact Name" name="guardianEmergencyContactName" />
+                          <FormInput label="Working Company" name="guardianWorkingCompany" required />
+                          <FormInput label="Designation" name="guardianDesignation" required />
+                          <FormInput label="Office Contact No" name="guardianOfficeContact" required />
+                          <FormInput label="Emergency Contact Name" name="guardianEmergencyContactName" required />
                           <FormInput label="Emergency Email" name="guardianEmergencyEmail" type="email" />
-                          <FormInput label="Working Address" name="guardianWorkingAddress" type="textarea" />
+                          <FormInput label="Working Address" name="guardianWorkingAddress" type="textarea" required />
                           <FormInput label="Temporary Address" name="guardianWorkingTempAddress" type="textarea" />
                         </div>
                       </div>
@@ -896,13 +925,13 @@ export default function ParentsPage() {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <FormInput label="Permanent Address" name="guardianAddressPermanent" type="textarea" />
+                          <FormInput label="Permanent Address" name="guardianAddressPermanent" type="textarea" required />
                           <FormInput label="Temporary Address" name="guardianAddressTemporary" type="textarea" />
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                          <FormInput label="Emergency Contact No" name="guardianEmergencyContactNo" />
-                          <FormInput label="Whatsapp No" name="guardianWhatsappNo" />
+                          <FormInput label="Emergency Contact No" name="guardianEmergencyContactNo" required />
+                          <FormInput label="Whatsapp No" name="guardianWhatsappNo" required />
                           <FormInput label="Home No" name="guardianHomeNo" />
                           <FormInput label="Mobile No" name="guardianContact" required />
                           <FormInput label="Email Address" name="guardianEmail" type="email" />
