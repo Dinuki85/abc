@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import {
   Search, X, GraduationCap,
   CheckCircle2, AlertCircle, UserPlus, FileSpreadsheet,
-  Save, User, HeartPulse, Star, MapPin, FileCheck, RotateCcw, ArrowRight, Edit, Eye
+  Save, User, HeartPulse, Star, MapPin, FileCheck, RotateCcw, ArrowRight, Edit, Eye, Users
 } from 'lucide-react';
 import { api, StudentProfile, Grade } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
@@ -664,7 +664,30 @@ function StudentsPageContent() {
                           <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} />
                           <FormInput label="Mother Name" name="motherName" />
                           <FormInput label="Father Name" name="fatherName" />
-                          <FormInput label="Guardian ID" name="guardianIdRef" />
+                          {/* Guardian ID Link to Parent Directory */}
+                          <div className="space-y-1 text-left">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Guardian ID</label>
+                            <div className="flex gap-2">
+                              <div className="flex-1">
+                                {(!isEnrollMode && !isEditMode && selectedStudent) ? (
+                                  <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left h-full flex flex-col justify-center">
+                                    <span className="block text-xs font-black text-black leading-tight wrap-break-word">
+                                      {String(formData.guardianIdRef || '—')}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <Input type="text" name="guardianIdRef" value={String(formData.guardianIdRef || '')} onChange={handleChange}
+                                    disabled={!isEnrollMode && !isEditMode} placeholder="e.g. GDN-..."
+                                    className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-primary/10 disabled:opacity-50 w-full" />
+                                )}
+                              </div>
+                              {Boolean(formData.guardianIdRef) && (
+                                <Link href={`/admin/parents?guardianId=${String(formData.guardianIdRef)}`} className="h-10 px-3 flex items-center justify-center rounded-xl bg-primary/10 hover:bg-primary/20 text-primary transition-colors border border-primary/20 shrink-0" title="View Guardian Profile">
+                                  <Users size={16} />
+                                </Link>
+                              )}
+                            </div>
+                          </div>
                           <FormInput label="Age - Auto Calculate" name="age" disabled placeholder="Auto-calculated" />
                           <FormInput label="Inter School House" name="interSchoolHouse" />
                           <FormInput label="Siblings" name="siblings" type="number" />
