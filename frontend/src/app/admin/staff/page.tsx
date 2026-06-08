@@ -281,6 +281,7 @@ function StaffPageContent() {
   const [isEnrollMode, setIsEnrollMode] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isViewOneMode, setIsViewOneMode] = useState(false);
 
   const filteredStaff = useMemo(() => {
     return staffMembers.filter(s =>
@@ -630,24 +631,26 @@ function StaffPageContent() {
           </div>
         )}
 
-        {/* ── Workspace Mode Indicator ────────────────────────────────────────── */}
-        <div className="flex items-center gap-2 bg-indigo-50 p-2.5 px-4 rounded-xl border border-indigo-100/50 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300">
-          <span className={`w-2.5 h-2.5 rounded-full ${isEnrollMode ? 'bg-amber-500' : selectedStaff ? 'bg-indigo-500' : 'bg-emerald-500'}`} />
-          <span className="text-[11px] font-black uppercase tracking-widest text-indigo-950">
-            {isEnrollMode
-              ? 'Workspace Mode: New Staff Registration'
-              : isEditMode
-              ? `Workspace Mode: Editing Staff — ${selectedStaff?.username}`
-              : selectedStaff
-              ? `Workspace Mode: Viewing Staff — ${selectedStaff.username} (Read-Only)`
-              : 'Workspace Mode: Standby — Select a staff member below or click Add Staff'}
-          </span>
-        </div>
+        {/* ── Workspace Mode Indicator ── */}
+        {(selectedStaff || isEnrollMode) && (
+          <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
+            <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-indigo-500 animate-pulse'}`} />
+            <span className="text-xs font-semibold text-slate-600">
+              {isEnrollMode
+                ? `Workspace Mode: New Staff Registration`
+                : isEditMode
+                  ? `Workspace Mode: Editing Staff — ${selectedStaff?.username}`
+                  : `Workspace Mode: Viewing Staff — ${selectedStaff?.username} (Read-Only)`}
+            </span>
+          </div>
+        )}
 
         {/* ── Workspace card (view / edit / enroll) ─────────────────────── */}
-        <div ref={workspaceRef} />
-        <form onSubmit={handleSaveWorkspace} className="animate-in fade-in slide-in-from-top-3 duration-500">
-          <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white relative">
+        {(selectedStaff || isEnrollMode || isViewOneMode) && (
+          <>
+            <div ref={workspaceRef} />
+            <form onSubmit={handleSaveWorkspace} className="animate-in fade-in slide-in-from-top-3 duration-500">
+              <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white relative">
               <CardHeader className="px-8 py-5 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <Briefcase className="text-indigo-600" size={24} />
@@ -663,24 +666,24 @@ function StaffPageContent() {
                 </div>
                 <div className="flex items-center gap-3">
                   <ActiveBadge value={formData.isActive} />
-                  <div className="px-4 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-black uppercase tracking-widest rounded-full">
+                  <div className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">
                     ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStaff?.username || '—'))}
                   </div>
 
                   {selectedStaff && !isEnrollMode && (
-                    <div className="flex items-center gap-2 ml-2 pl-4 border-l border-slate-200">
+                    <div className="flex items-center gap-1.5 ml-2 pl-2 border-l border-slate-200">
                       {!isEditMode ? (
                         <>
                           <button
                             type="button"
-                            className="h-10 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black uppercase tracking-wider text-xs flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-md shadow-indigo-600/10"
+                            className="h-8 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
                             onMouseDown={(e) => { e.preventDefault(); handleStartEdit(); }}
                           >
-                            <Edit size={14} className="mr-1.5" /> Edit
+                            <Edit size={12} className="mr-1" /> Edit
                           </button>
                           <Button
                             type="button"
-                            className="h-10 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black uppercase tracking-wider text-xs flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-md shadow-rose-600/10"
+                            className="h-8 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
                             onClick={() => handleDelete(selectedStaff.id)}
                           >
                             Delete
@@ -690,18 +693,18 @@ function StaffPageContent() {
                         <>
                           <Button
                             type="submit"
-                            className="h-10 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs shadow-md shadow-emerald-600/10"
+                            className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold active:scale-95 transition-all text-xs"
                             isLoading={isSubmitting}
                           >
-                            <Save size={14} className="mr-1.5" /> Save
+                            <Save size={12} className="mr-1" /> Save
                           </Button>
-                          <button
+                          <Button
                             type="button"
-                            className="h-10 px-5 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs flex items-center gap-1.5 cursor-pointer"
-                            onMouseDown={(e) => { e.preventDefault(); handleCancelEdit(); }}
+                            className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-semibold active:scale-95 transition-all text-xs"
+                            onClick={handleCancelEdit}
                           >
-                            <X size={14} className="mr-1.5" /> Cancel
-                          </button>
+                            <X size={12} className="mr-1" /> Cancel
+                          </Button>
                         </>
                       )}
                     </div>
@@ -718,7 +721,7 @@ function StaffPageContent() {
                         key={tab.id}
                         type="button"
                         onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-bold text-[11px] uppercase tracking-wider text-left ${
+                        className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold text-xs text-left ${
                           activeTab === tab.id
                             ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30'
                             : 'text-slate-500 hover:bg-white hover:text-indigo-600'
@@ -744,10 +747,10 @@ function StaffPageContent() {
                           
                           {isEnrollMode && (
                             <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
-                              <h4 className="text-[11px] font-black uppercase tracking-widest text-indigo-700">Account Authorization Details</h4>
+                              <h4 className="text-xs font-semibold text-indigo-700">Account Authorization Details</h4>
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Temporary Password</label>
+                                  <label className="text-xs font-semibold text-slate-500 ml-1">Temporary Password</label>
                                   <div className="relative">
                                     <Input
                                       type="text"
@@ -762,7 +765,7 @@ function StaffPageContent() {
                                   </div>
                                 </div>
                                 <div className="space-y-1">
-                                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Role / Designation</label>
+                                  <label className="text-xs font-semibold text-slate-500 ml-1">Role / Designation</label>
                                   <select
                                     name="designation"
                                     value={formData.designation}
@@ -872,20 +875,20 @@ function StaffPageContent() {
                           </div>
 
                           <div className="space-y-4">
-                            <h4 className="text-xs font-black text-rose-500 uppercase tracking-widest">Education</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
-                              <FormInput label="GCE OL" name="gceOl" />
-                              <FormInput label="GCE AL" name="gceAl" />
-                              <FormInput label="Diploma" name="diploma" />
-                              <FormInput label="Degree" name="degree" />
-                              <FormInput label="Post Graduate" name="postGraduate" />
-                              <FormInput label="Master" name="master" />
-                              <FormInput label="PhD" name="phd" />
-                            </div>
-                          </div>
+                                    <h4 className="text-xs font-semibold text-rose-500">Education</h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
+                                      <FormInput label="GCE OL" name="gceOl" />
+                                      <FormInput label="GCE AL" name="gceAl" />
+                                      <FormInput label="Diploma" name="diploma" />
+                                      <FormInput label="Degree" name="degree" />
+                                      <FormInput label="Post Graduate" name="postGraduate" />
+                                      <FormInput label="Master" name="master" />
+                                      <FormInput label="PhD" name="phd" />
+                                    </div>
+                                  </div>
 
-                          <div className="space-y-4 pt-4">
-                            <h4 className="text-xs font-black text-rose-500 uppercase tracking-widest">Other</h4>
+                                  <div className="space-y-4 pt-4">
+                                    <h4 className="text-xs font-semibold text-rose-500">Other</h4>
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
                               <FormInput label="1" name="otherQual1" />
                               <FormInput label="2" name="otherQual2" />
@@ -917,11 +920,11 @@ function StaffPageContent() {
                           </div>
 
                           <div className="space-y-4 pt-6 text-left">
-                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Children Details</h4>
+                            <h4 className="text-xs font-semibold text-slate-500">Children Details</h4>
                             <div className="p-6 bg-slate-50 border border-slate-200/70 rounded-2xl space-y-4">
                               <div className="grid grid-cols-2 gap-4">
-                                <span className="text-xs font-black text-slate-600 uppercase tracking-wider">Child Name</span>
-                                <span className="text-xs font-black text-slate-600 uppercase tracking-wider">Age</span>
+                                <span className="text-xs font-semibold text-slate-600">Child Name</span>
+                                <span className="text-xs font-semibold text-slate-600">Age</span>
                               </div>
                               <div className="space-y-3">
                                 {[0, 1, 2].map((i) => {
@@ -981,7 +984,7 @@ function StaffPageContent() {
                           <div className="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100/60 space-y-4">
                             <div className="flex items-center gap-3 mb-2">
                               <Eye className="text-indigo-600" size={20} />
-                              <h4 className="text-[10px] font-black uppercase tracking-widest text-indigo-700">Account Access</h4>
+                              <h4 className="text-xs font-semibold text-indigo-700">Account Access</h4>
                             </div>
 
                             <div className="flex flex-col gap-3 text-left">
@@ -1019,18 +1022,18 @@ function StaffPageContent() {
                         <div className="pt-6 border-t border-slate-100 flex justify-end gap-2">
                           <Button
                             type="submit"
-                            className="h-10 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black uppercase tracking-wider text-xs shadow-md shadow-indigo-600/20"
+                            className="h-10 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-600/20"
                             isLoading={isSubmitting}
                           >
                             Save &amp; Register Staff
                           </Button>
-                          <button
+                          <Button
                             type="button"
-                            className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider text-xs flex items-center gap-1.5 cursor-pointer"
-                            onMouseDown={(e) => { e.preventDefault(); handleReset(); }}
+                            className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all"
+                            onClick={handleReset}
                           >
                             Cancel
-                          </button>
+                          </Button>
                         </div>
                       )}
 
@@ -1038,18 +1041,18 @@ function StaffPageContent() {
                         <div className="pt-6 border-t border-slate-100 flex justify-end gap-2">
                           <Button
                             type="submit"
-                            className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider text-xs shadow-md shadow-emerald-600/20"
+                            className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-md shadow-emerald-600/20"
                             isLoading={isSubmitting}
                           >
-                            Save Changes
+                            <Save size={14} className="mr-2" /> Save Changes
                           </Button>
-                          <button
+                          <Button
                             type="button"
-                            className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider text-xs flex items-center gap-1.5 cursor-pointer"
-                            onMouseDown={(e) => { e.preventDefault(); handleCancelEdit(); }}
+                            className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all"
+                            onClick={handleCancelEdit}
                           >
                             Cancel
-                          </button>
+                          </Button>
                         </div>
                       )}
 
@@ -1059,6 +1062,8 @@ function StaffPageContent() {
               </CardContent>
             </Card>
           </form>
+          </>
+        )}
 
 
 

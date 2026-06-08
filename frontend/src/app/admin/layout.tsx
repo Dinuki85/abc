@@ -78,7 +78,7 @@ export default function AdminLayout({
         <div className="bg-white border-b border-slate-200/80 px-4 md:px-8 py-2 flex-shrink-0 relative z-40 shadow-sm flex items-center gap-3">
           <AdminBreadcrumbs />
           {/* Sidebar toggle — only on pages that hide the sidebar */}
-          {pathname === '/admin/students' && (
+          {['/admin/students', '/admin/staff', '/admin/parents'].includes(pathname) && (
             <button
               type="button"
               onClick={() => setSidebarVisible(v => !v)}
@@ -102,7 +102,7 @@ export default function AdminLayout({
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar - Fixed/Static Column */}
-        {(pathname !== '/admin' && pathname !== '/admin/students') || (pathname === '/admin/students' && sidebarVisible) ? (
+        {(!['/admin', '/admin/students', '/admin/staff', '/admin/parents'].includes(pathname)) || (['/admin/students', '/admin/staff', '/admin/parents'].includes(pathname) && sidebarVisible) ? (
           <aside className="hidden md:block w-64 border-r border-slate-200 bg-white z-30 overflow-y-auto custom-scrollbar flex-shrink-0">
             <Sidebar menuItems={adminMenuItems} />
           </aside>

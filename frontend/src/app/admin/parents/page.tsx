@@ -12,6 +12,7 @@ import {
 import { api, StudentProfile } from '@/lib/api';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { BreadcrumbContext } from '@/app/admin/layout';
 
 // ─── Blank form template for guardian ───────────────────────────────────────
 const BLANK_FORM = {
@@ -86,9 +87,9 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
 
   if (options) return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
       <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label}
-        className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-xs font-bold text-black disabled:opacity-50">
+        className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 text-sm font-bold text-black disabled:opacity-50">
         <option value="">Choose {label}</option>
         {options.map((o: any) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
@@ -96,18 +97,18 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
   if (type === 'textarea') return (
     <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder} rows={3}
-        className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/10 custom-scrollbar disabled:opacity-50" />
+        className="w-full p-3 rounded-xl border border-slate-200 bg-white font-bold text-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/10 custom-scrollbar disabled:opacity-50" />
     </div>
   );
   return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">{label}</label>
+      <label className="text-xs font-semibold text-slate-500 ml-1">{label}</label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
         disabled={isDisabled} placeholder={placeholder}
-        className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-emerald-500/10 disabled:opacity-50" />
+        className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-sm focus:ring-2 focus:ring-emerald-500/10 disabled:opacity-50" />
     </div>
   );
 }
@@ -115,8 +116,8 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
 function FormField({ label, value }: { label: string; value: any }) {
   return (
     <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left hover:bg-slate-100 hover:border-slate-200/60 transition-all">
-      <span className="block text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{label}</span>
-      <span className="block text-xs font-black text-black leading-tight wrap-break-word">
+      <span className="block text-xs font-semibold text-slate-400 leading-none mb-1.5">{label}</span>
+      <span className="block text-sm font-semibold text-black leading-tight wrap-break-word">
         {String(value || '—')}
       </span>
     </div>
@@ -129,6 +130,7 @@ export default function ParentsPage() {
   const searchParams = useSearchParams();
   const queryGuardianId = searchParams.get('guardianId');
   const queryEdit = searchParams.get('edit');
+  const { setDynamicSuffix } = React.useContext(BreadcrumbContext);
 
   // ── Directory state ────────────────────────────────────────────────────────
   const [studentsList, setStudentsList] = useState<StudentProfile[]>([]);
@@ -143,6 +145,7 @@ export default function ParentsPage() {
   const [isEnrollMode, setIsEnrollMode] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isViewOneMode, setIsViewOneMode] = useState(false);
 
   // Search and select student state
   const [studentSearch, setStudentSearch] = useState('');
@@ -200,6 +203,16 @@ export default function ParentsPage() {
   useEffect(() => {
     fetchStudents();
   }, []);
+
+  useEffect(() => {
+    if (isEnrollMode) {
+      setDynamicSuffix('New Guardian Registration');
+    } else if (isViewOneMode && selectedGuardian) {
+      setDynamicSuffix(`View Guardian: ${selectedGuardian.guardianName || 'Guardian'}`);
+    } else {
+      setDynamicSuffix('Guardian Registration');
+    }
+  }, [isEnrollMode, isViewOneMode, selectedGuardian, setDynamicSuffix]);
 
   // Compute guardian records from student profiles
   const guardiansList = useMemo(() => {
@@ -317,6 +330,7 @@ export default function ParentsPage() {
     setSearchTerm('');
     setSelectedGuardian(null);
     setIsEnrollMode(true);
+    setIsViewOneMode(false);
     setIsEditMode(false);
     setActiveTab('basic');
     setFormData({ ...BLANK_FORM, guardianId: 'Select student...' });
@@ -330,9 +344,10 @@ export default function ParentsPage() {
   const handleReset = () => {
     setSelectedGuardian(null);
     setIsEnrollMode(false);
+    setIsViewOneMode(false);
     setIsEditMode(false);
     setFormData({ ...BLANK_FORM });
-    setSearchTerm('');
+    setStudentSearch('');
     setStudentSearch('');
     setIsDropdownOpen(false);
     setMessage(null);
@@ -342,6 +357,7 @@ export default function ParentsPage() {
   const handleSelectGuardian = (g: any, editOnLoad = false) => {
     setSelectedGuardian(g);
     setIsEnrollMode(false);
+    setIsViewOneMode(true);
     setIsEditMode(editOnLoad);
     setFormData(g);
     setStudentSearch(`${g.studentUsername} - ${g.studentName}`);
@@ -482,93 +498,119 @@ export default function ParentsPage() {
     <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedGuardian }}>
       <div className="flex flex-col space-y-6 animate-in fade-in duration-700 pb-20">
         
-        {/* ── Toolbar ─────────────────────────────────────────────────────────── */}
-        <div className="max-w-[1600px] mx-auto w-full bg-white p-3 px-4 rounded-[2rem] border border-slate-100 shadow-xl flex flex-col xl:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4 px-2 w-full xl:w-auto">
-            <div className="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600">
-              <Users size={24} />
-            </div>
-            <div>
-              <h1 className="text-xl font-black text-black tracking-tighter leading-none">
-                Parents & Guardians
-              </h1>
-              <p className="text-[13px] text-black font-black uppercase tracking-[0.15em] mt-1">
-                Guardian Directory & Student Links
-              </p>
-            </div>
-          </div>
+        {/* ── Header Banner — only on landing, hidden in viewOneMode & enrollMode ── */}
+        {!isViewOneMode && !isEnrollMode && (
+          <div className="flex flex-col items-center text-center bg-white py-10 px-6 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/3 to-transparent pointer-events-none" />
+            <Users className="text-emerald-600 mb-3 relative z-10" size={40} />
+            <h1 className="text-3xl font-semibold text-slate-800 tracking-tight relative z-10">Parents & Guardians</h1>
+            <p className="text-sm font-medium text-slate-500 mt-1 mb-6 relative z-10">Guardian Directory & Student Links.</p>
 
-          <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end">
-            <div className="relative flex-1 lg:min-w-[350px]" ref={searchDropdownRef}>
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-              <Input
-                placeholder="Search by guardian name, ID, NIC or student..."
-                className="pl-12 h-12 w-full rounded-xl border-slate-100 bg-slate-50 focus:bg-white transition-all text-sm font-bold text-black"
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setIsSearchDropdownOpen(true);
-                }}
-                onFocus={() => setIsSearchDropdownOpen(true)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && filteredGuardians.length > 0) {
-                    handleSelectGuardian(filteredGuardians[0], false);
-                    setSearchTerm('');
-                    setIsSearchDropdownOpen(false);
-                  }
-                }}
-              />
-              {isSearchDropdownOpen && searchTerm && (
-                <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-80 overflow-y-auto custom-scrollbar">
-                  {filteredGuardians.length === 0 ? (
-                    <div className="p-4 text-xs text-slate-500 font-bold text-center">
-                      No guardians found
-                    </div>
-                  ) : (
-                    filteredGuardians.map((g) => (
-                      <button
-                        key={g.guardianId}
-                        type="button"
-                        className="w-full text-left px-5 py-3 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer flex flex-col gap-1"
-                        onClick={() => {
-                          handleSelectGuardian(g, false);
-                          setSearchTerm('');
-                          setIsSearchDropdownOpen(false);
-                        }}
-                      >
-                        <div className="font-black text-black text-sm">{g.guardianName}</div>
-                        <div className="text-[11px] text-slate-500 font-bold">
-                          ID: {g.guardianId} {g.guardianNic && `| NIC: ${g.guardianNic}`}
-                        </div>
-                        <div className="text-[10px] text-emerald-600 font-black uppercase tracking-wider mt-1">
-                          Linked Student: {g.studentName} ({g.studentUsername})
-                        </div>
-                      </button>
-                    ))
-                  )}
-                </div>
-              )}
-            </div>
-
-            {(selectedGuardian || isEnrollMode) && (
-              <Button
-                className="h-12 px-6 rounded-xl bg-slate-600 hover:bg-slate-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-sm"
-                onClick={handleReset}
-              >
-                <RotateCcw size={16} className="mr-2" />
-                {isEnrollMode ? 'Back' : 'Clear Selection'}
-              </Button>
+            {/* Quick Actions — shown only on landing */}
+            {!selectedGuardian && !isEnrollMode && (
+              <div className="flex flex-wrap justify-center gap-3 relative z-10">
+                <Button type="button" onClick={handleStartEnrollmentInline}
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-600 hover:bg-emerald-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  <UserPlus size={15} className="mr-2 text-emerald-600" /> Add Guardian
+                </Button>
+                <Button type="button" onClick={() => setIsViewOneMode(true)}
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-600 hover:bg-emerald-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  <Search size={15} className="mr-2 text-emerald-600" /> View Guardian Profile
+                </Button>
+              </div>
             )}
 
-            <Button
-              className="h-12 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-sm shadow-md shadow-emerald-600/20"
-              onClick={handleStartEnrollmentInline}
-            >
-              <UserPlus size={16} className="mr-2" />
-              Add Guardian
-            </Button>
+            {/* Back button when in enroll / selected mode */}
+            {(selectedGuardian || isEnrollMode) && (
+              <Button type="button" onClick={handleReset}
+                className="h-9 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs shadow-sm transition-all relative z-10">
+                <RotateCcw size={13} className="mr-2" /> Back to Directory
+              </Button>
+            )}
           </div>
-        </div>
+        )}
+
+        {/* ── Toolbar — shown in viewOneMode AND enrollMode (Image-2 style) ── */}
+        {(isViewOneMode || isEnrollMode) && (
+          <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-200/60 shadow-sm">
+
+            {/* Left side: search (viewOne) OR enrollment label (enroll) */}
+            {isViewOneMode ? (
+              <div className="relative" ref={searchDropdownRef}>
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Input
+                  id="guardian-search-input"
+                  autoFocus
+                  placeholder="Search by guardian name, ID, NIC..."
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setIsSearchDropdownOpen(true);
+                  }}
+                  onFocus={() => setIsSearchDropdownOpen(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && filteredGuardians.length > 0) {
+                      handleSelectGuardian(filteredGuardians[0], false);
+                      setSearchTerm('');
+                      setIsSearchDropdownOpen(false);
+                    }
+                  }}
+                  className="pl-9 h-9 w-64 md:w-80 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
+                />
+                {isSearchDropdownOpen && searchTerm && (
+                  <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-80 overflow-y-auto custom-scrollbar">
+                    {filteredGuardians.length === 0 ? (
+                      <div className="p-4 text-xs text-slate-500 font-bold text-center">
+                        No guardians found
+                      </div>
+                    ) : (
+                      filteredGuardians.map((g) => (
+                        <button
+                          key={g.guardianId}
+                          type="button"
+                          className="w-full text-left px-5 py-3 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer flex flex-col gap-1"
+                          onClick={() => {
+                            handleSelectGuardian(g, false);
+                            setSearchTerm('');
+                            setIsSearchDropdownOpen(false);
+                          }}
+                        >
+                          <div className="font-black text-black text-sm">{g.guardianName}</div>
+                          <div className="text-[11px] text-slate-500 font-bold">
+                            ID: {g.guardianId} {g.guardianNic && `| NIC: ${g.guardianNic}`}
+                          </div>
+                          <div className="text-[10px] text-emerald-600 font-black uppercase tracking-wider mt-1">
+                            Linked Student: {g.studentName} ({g.studentUsername})
+                          </div>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <UserPlus size={15} className="text-emerald-600" />
+                <span className="text-sm font-semibold text-slate-700 tracking-tight">
+                  New Guardian Registration
+                </span>
+              </div>
+            )}
+
+            <div className="flex-1" />
+
+            {/* Guardian ID badge */}
+            <div className="flex items-center h-9 px-3 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 bg-white shrink-0">
+              Guardian ID: {selectedGuardian?.guardianId || formData.guardianId || 'Not Assigned'}
+            </div>
+
+            {/* Back to directory */}
+            <button type="button" onClick={handleReset}
+              className="flex items-center gap-1.5 h-9 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition-colors shrink-0">
+              <RotateCcw size={12} /> Back
+            </button>
+          </div>
+        )}
 
         {/* ── Page Notification ───────────────────────────────────────────────── */}
         {message && (
@@ -588,24 +630,26 @@ export default function ParentsPage() {
           </div>
         )}
 
-        {/* ── Workspace Mode Indicator ────────────────────────────────────────── */}
-        <div className="flex items-center gap-2 bg-emerald-50 p-2.5 px-4 rounded-xl border border-emerald-100/50 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300">
-          <span className={`w-2.5 h-2.5 rounded-full ${isEnrollMode ? 'bg-amber-500' : selectedGuardian ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-          <span className="text-[11px] font-black uppercase tracking-widest text-emerald-950">
-            {isEnrollMode
-              ? 'Workspace Mode: New Guardian Registration'
-              : isEditMode
-              ? `Workspace Mode: Editing Guardian — ${selectedGuardian?.guardianId}`
-              : selectedGuardian
-              ? `Workspace Mode: Viewing Guardian — ${selectedGuardian.guardianId} (Read-Only)`
-              : 'Workspace Mode: Standby — Select a guardian below or click Add Guardian'}
-          </span>
-        </div>
+        {/* ── Workspace Mode Indicator ── */}
+        {(selectedGuardian || isEnrollMode) && (
+          <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
+            <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
+            <span className="text-xs font-semibold text-slate-600">
+              {isEnrollMode
+                ? `Workspace Mode: New Guardian Registration`
+                : isEditMode
+                  ? `Workspace Mode: Editing Guardian — ${selectedGuardian?.guardianId}`
+                  : `Workspace Mode: Viewing Guardian — ${selectedGuardian?.guardianId} (Read-Only)`}
+            </span>
+          </div>
+        )}
 
         {/* ── Workspace card (view / edit / enroll) ─────────────────────── */}
-        <div ref={workspaceRef} />
-        <form onSubmit={handleSaveWorkspace} className="animate-in fade-in slide-in-from-top-3 duration-500">
-          <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white relative">
+        {(selectedGuardian || isEnrollMode || isViewOneMode) && (
+          <>
+            <div ref={workspaceRef} />
+            <form onSubmit={handleSaveWorkspace} className="animate-in fade-in slide-in-from-top-3 duration-500">
+              <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white relative">
             <CardHeader className="px-8 py-5 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <Users className="text-emerald-600" size={24} />
@@ -620,24 +664,24 @@ export default function ParentsPage() {
                 </CardTitle>
               </div>
               <div className="flex items-center gap-3">
-                <div className="px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-black uppercase tracking-widest rounded-full">
+                <div className="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">
                   ID: {String(isEnrollMode ? (formData.guardianId || 'Select student...') : (selectedGuardian?.guardianId || '—'))}
                 </div>
 
                 {selectedGuardian && !isEnrollMode && (
-                  <div className="flex items-center gap-2 ml-2 pl-4 border-l border-slate-200">
+                  <div className="flex items-center gap-1.5 ml-2 pl-2 border-l border-slate-200">
                     {!isEditMode ? (
                       <>
                         <button
                           type="button"
-                          className="h-10 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider text-xs flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-md shadow-emerald-600/10"
+                          className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
                           onMouseDown={(e) => { e.preventDefault(); handleStartEdit(); }}
                         >
-                          <Edit size={14} className="mr-1.5" /> Edit
+                          <Edit size={12} className="mr-1" /> Edit
                         </button>
                         <Button
                           type="button"
-                          className="h-10 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black uppercase tracking-wider text-xs flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-md shadow-rose-600/10"
+                          className="h-8 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
                           onClick={() => handleDelete(selectedGuardian.studentUsername)}
                         >
                           Delete
@@ -647,18 +691,18 @@ export default function ParentsPage() {
                       <>
                         <Button
                           type="submit"
-                          className="h-10 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs shadow-md shadow-emerald-600/10"
+                          className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold active:scale-95 transition-all text-xs"
                           isLoading={isSubmitting}
                         >
-                          <Save size={14} className="mr-1.5" /> Save
+                          <Save size={12} className="mr-1" /> Save
                         </Button>
-                        <button
+                        <Button
                           type="button"
-                          className="h-10 px-5 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider active:scale-95 transition-all text-xs flex items-center gap-1.5 cursor-pointer"
-                          onMouseDown={(e) => { e.preventDefault(); handleCancelEdit(); }}
+                          className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-semibold active:scale-95 transition-all text-xs"
+                          onClick={handleCancelEdit}
                         >
-                          <X size={14} className="mr-1.5" /> Cancel
-                        </button>
+                          <X size={12} className="mr-1" /> Cancel
+                        </Button>
                       </>
                     )}
                   </div>
@@ -675,7 +719,7 @@ export default function ParentsPage() {
                       key={tab.id}
                       type="button"
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-bold text-[11px] uppercase tracking-wider text-left ${
+                      className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold text-xs text-left ${
                         activeTab === tab.id
                           ? 'bg-emerald-600 text-white shadow-xl shadow-emerald-600/30'
                           : 'text-slate-500 hover:bg-white hover:text-emerald-600'
@@ -701,10 +745,10 @@ export default function ParentsPage() {
 
                         {/* Student Connection Field */}
                         <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
-                          <h4 className="text-[11px] font-black uppercase tracking-widest text-emerald-700">Linked Student Account</h4>
+                          <h4 className="text-xs font-semibold text-emerald-700">Linked Student Account</h4>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Select Student</label>
+                              <label className="text-xs font-semibold text-slate-500 ml-1">Select Student</label>
                               {isEnrollMode ? (
                                 <div className="relative" ref={dropdownRef}>
                                   <Input
@@ -719,7 +763,7 @@ export default function ParentsPage() {
                                       }
                                     }}
                                     onFocus={() => setIsDropdownOpen(true)}
-                                    className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:ring-2 focus:ring-emerald-500/10 text-xs font-bold text-black"
+                                    className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:ring-2 focus:ring-emerald-500/10 text-sm font-bold text-black"
                                   />
                                   {isDropdownOpen && (
                                     <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
@@ -752,15 +796,15 @@ export default function ParentsPage() {
                                   )}
                                 </div>
                               ) : (
-                                <div className="p-3 bg-white border border-slate-200 rounded-xl font-bold text-black text-xs">
+                                <div className="p-3 bg-white border border-slate-200 rounded-xl font-bold text-black text-sm">
                                   {formData.studentUsername} - {selectedGuardian?.studentName} ({selectedGuardian?.studentGrade} - {selectedGuardian?.studentClass})
                                 </div>
                               )}
                             </div>
 
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Generated Guardian ID</label>
-                              <div className="p-3 bg-slate-100 border border-slate-200 rounded-xl font-bold text-slate-600 text-xs">
+                              <label className="text-xs font-semibold text-slate-500 ml-1">Generated Guardian ID</label>
+                              <div className="p-3 bg-slate-100 border border-slate-200 rounded-xl font-bold text-slate-600 text-sm">
                                 {formData.guardianId || 'Select a student to generate ID'}
                               </div>
                             </div>
@@ -831,7 +875,7 @@ export default function ParentsPage() {
                           <div className="mt-4 flex justify-end border-t border-slate-100 pt-6 gap-2">
                             <Button
                               type="submit"
-                              className="h-12 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all shadow-md shadow-emerald-600/20"
+                              className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs active:scale-95 transition-all shadow-md shadow-emerald-600/20"
                               isLoading={isSubmitting}
                             >
                               <Save size={14} className="mr-2" />
@@ -839,7 +883,7 @@ export default function ParentsPage() {
                             </Button>
                             <Button
                               type="button"
-                              className="h-12 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-black uppercase tracking-wider text-xs active:scale-95 transition-all"
+                              className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all"
                               onClick={isEnrollMode ? handleReset : handleCancelEdit}
                             >
                               <X size={14} className="mr-2" />
@@ -856,9 +900,11 @@ export default function ParentsPage() {
             </CardContent>
           </Card>
         </form>
+        </>
+      )}
 
         {/* ── Registered Guardians Table ────────────────────────────────────── */}
-        {!isEnrollMode && !isEditMode && (
+        {!isEnrollMode && !isEditMode && !isViewOneMode && (
           <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white">
             <CardHeader className="px-8 py-6 border-b border-gray-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
