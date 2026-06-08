@@ -401,6 +401,7 @@ function StaffPageContent() {
     setSearchTerm('');
     setMessage(null);
     setFormErrors({});
+    setIsViewOneMode(false);
     router.push('/admin/staff');
   };
 
@@ -937,7 +938,7 @@ function StaffPageContent() {
                           )}
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            <FormInput label="Teacher ID - Auto" name="username" disabled />
+                            <FormInput label="Teacher ID - Auto" name="username" disabled required />
                             <FormInput label="Full Name" name="fullName" required />
                             <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
                             <FormInput label="Name with Initial" name="nameWithInitials" />
