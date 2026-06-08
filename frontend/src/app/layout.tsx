@@ -1,23 +1,5 @@
 import type { Metadata } from "next";
-import { Josefin_Sans, Nunito, Inter } from "next/font/google";
 import "./globals.css";
-
-const josefin = Josefin_Sans({
-  subsets: ["latin"],
-  variable: "--font-handlee",
-  weight: ["400", "500", "600", "700"],
-});
-
-const nunito = Nunito({
-  subsets: ["latin"],
-  variable: "--font-nunito",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
 
 export const metadata: Metadata = {
   title: "Andiambalama MV",
@@ -37,9 +19,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${josefin.variable} ${nunito.variable} ${inter.variable} h-full antialiased`}
+      className="h-full antialiased"
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Josefin+Sans:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-full flex flex-col font-nunito">{children}</body>
     </html>
   );

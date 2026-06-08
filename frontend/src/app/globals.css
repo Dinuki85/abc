@@ -4,6 +4,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-handlee: "Josefin Sans", sans-serif;
+  --font-nunito: "Nunito", sans-serif;
+  --font-inter: "Inter", system-ui, sans-serif;
 }
 
 @theme inline {
@@ -15,9 +18,10 @@
   --color-secondary-hover: #e0a800;
   --color-dark: #343a40;
   --color-light: #f8f9fa;
-  --font-handlee: var(--font-handlee), sans-serif;
-  --font-nunito: var(--font-nunito), sans-serif;
-  
+  --font-handlee: var(--font-handlee);
+  --font-nunito: var(--font-nunito);
+  --font-inter: var(--font-inter);
+
   --shadow-professional: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
   --shadow-professional-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
   --radius-xl: 1rem;
@@ -34,12 +38,12 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-nunito), Arial, Helvetica, sans-serif;
+  font-family: "Nunito", Arial, Helvetica, sans-serif;
   line-height: 1.6;
 }
 
 h1, h2, h3, h4, .font-handlee {
-  font-family: var(--font-handlee), sans-serif;
+  font-family: "Josefin Sans", sans-serif;
 }
 
 .section-spacing {
