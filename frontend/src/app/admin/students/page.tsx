@@ -367,16 +367,82 @@ function StudentsPageContent() {
   };
 
   // ── Validation ─────────────────────────────────────────────────────────────
+  const REQUIRED_FIELDS_BY_TAB: Record<string, { key: string; label: string }[]> = {
+    basic: [
+      { key: 'username', label: 'Index No' },
+      { key: 'fullName', label: 'Full Name' },
+      { key: 'nic', label: 'NIC' },
+      { key: 'dob', label: 'Date of Birth' },
+      { key: 'religion', label: 'Religion' },
+      { key: 'fatherName', label: 'Father Name' },
+      { key: 'gender', label: 'Gender' },
+    ],
+    health: [],
+    skills: [],
+    contact: [
+      { key: 'addressPermanent', label: 'Permanent Address' },
+      { key: 'contactEmergency', label: 'Emergency Contact' },
+      { key: 'contactWhatsapp', label: 'WhatsApp' },
+    ],
+    exams: [
+      { key: 'resultGrade05', label: 'Grade 05 Exam Result' },
+      { key: 'resultGceOl', label: 'GCE OL Exam Result' },
+    ],
+    visibility: [],
+  };
+
   const REQUIRED_FIELDS = [
-    { key: 'fullName', label: 'Full Name' },
-    { key: 'nameSinhala', label: 'Name in Sinhala' },
-    { key: 'dob', label: 'Date of Birth' },
-    { key: 'religion', label: 'Religion' },
-    { key: 'gender', label: 'Gender' },
-    { key: 'motherName', label: 'Mother Name' },
-    { key: 'fatherName', label: 'Father Name' },
-    { key: 'district', label: 'District' },
+    ...REQUIRED_FIELDS_BY_TAB.basic,
+    ...REQUIRED_FIELDS_BY_TAB.health,
+    ...REQUIRED_FIELDS_BY_TAB.skills,
+    ...REQUIRED_FIELDS_BY_TAB.contact,
+    ...REQUIRED_FIELDS_BY_TAB.exams,
+    ...REQUIRED_FIELDS_BY_TAB.visibility,
   ];
+
+  const TAB_ORDER = ['basic', 'health', 'skills', 'contact', 'exams', 'visibility'];
+
+  const handleTabChange = (targetTabId: string) => {
+    if (!isEnrollMode && !isEditMode) {
+      setActiveTab(targetTabId);
+      return;
+    }
+
+    const currentIndex = TAB_ORDER.indexOf(activeTab);
+    const targetIndex = TAB_ORDER.indexOf(targetTabId);
+
+    if (targetIndex > currentIndex) {
+      // Validate all tabs from basic up to current activeTab
+      const errors: Record<string, string> = { ...formErrors };
+      let firstTabWithErrors = '';
+
+      for (let i = 0; i <= currentIndex; i++) {
+        const tabId = TAB_ORDER[i];
+        const fields = REQUIRED_FIELDS_BY_TAB[tabId] || [];
+        fields.forEach(({ key, label }) => {
+          if (!formData[key] || String(formData[key]).trim() === '') {
+            errors[key] = `${label} is required`;
+            if (!firstTabWithErrors) {
+              firstTabWithErrors = tabId;
+            }
+          } else {
+            delete errors[key];
+          }
+        });
+      }
+
+      if (Object.keys(errors).some(k => REQUIRED_FIELDS.some(rf => rf.key === k))) {
+        setFormErrors(errors);
+        if (firstTabWithErrors) {
+          setActiveTab(firstTabWithErrors);
+        }
+        setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
+        return;
+      }
+    }
+
+    setActiveTab(targetTabId);
+  };
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -387,7 +453,15 @@ function StudentsPageContent() {
     });
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      setActiveTab('basic');
+      // Find the first tab with errors and switch to it
+      for (const tabId of TAB_ORDER) {
+        const fields = REQUIRED_FIELDS_BY_TAB[tabId] || [];
+        const hasTabError = fields.some(({ key }) => errors[key]);
+        if (hasTabError) {
+          setActiveTab(tabId);
+          break;
+        }
+      }
       setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
       return false;
     }
@@ -750,7 +824,7 @@ function StudentsPageContent() {
                 {/* Sidebar */}
                 <div className="w-full lg:w-60 bg-slate-50/50 border-r border-slate-100 p-3 flex lg:flex-col gap-1 overflow-x-auto whitespace-nowrap lg:whitespace-normal custom-scrollbar shrink-0">
                   {TABS.filter(tab => tab.id !== 'visibility' || !isEnrollMode).map(tab => (
-                    <button key={tab.id} type="button" onClick={() => setActiveTab(tab.id)}
+                    <button key={tab.id} type="button" onClick={() => handleTabChange(tab.id)}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all font-bold text-[10px] text-left ${activeTab === tab.id ? 'bg-primary text-white shadow-md shadow-primary/20' : 'text-slate-500 hover:bg-white hover:text-primary'}`}>
                       <tab.icon size={14} />{tab.name}
                     </button>
@@ -787,18 +861,18 @@ function StudentsPageContent() {
                           </div>
                         )}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          <FormInput label="Index No" name="username" disabled />
+                          <FormInput label="Index No" name="username" disabled required />
                           <FormInput label="Full Name" name="fullName" required />
-                          <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
+                          <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" />
                           <FormInput label="Name with Initial" name="nameWithInitials" />
                           <FormInput label="Name with Initial Sinhala" name="nameWithInitialSinhala" />
                           <FormInput label="Date Of Birth" name="dob" type="date" required />
-                          <FormInput label="NIC" name="nic" />
+                          <FormInput label="NIC" name="nic" required />
                           <FormInput label="Birth Certificate No" name="birthCertificateNumber" />
-                          <FormInput label="District" name="district" required />
+                          <FormInput label="District" name="district" />
                           <FormInput label="Religion" name="religion" required />
                           <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} required />
-                          <FormInput label="Mother Name" name="motherName" required />
+                          <FormInput label="Mother Name" name="motherName" />
                           <FormInput label="Father Name" name="fatherName" required />
                           {/* Guardian ID Link to Parent Directory */}
                           <div className="space-y-1 text-left">
@@ -874,12 +948,12 @@ function StudentsPageContent() {
                     {activeTab === 'contact' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <FormInput label="Permanent Address" name="addressPermanent" type="textarea" />
+                          <FormInput label="Permanent Address" name="addressPermanent" type="textarea" required />
                           <FormInput label="Temporary Address" name="addressTemporary" type="textarea" />
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                          <FormInput label="Emergency Contact" name="contactEmergency" />
-                          <FormInput label="Whatsapp No" name="contactWhatsapp" />
+                          <FormInput label="Emergency Contact" name="contactEmergency" required />
+                          <FormInput label="Whatsapp No" name="contactWhatsapp" required />
                           <FormInput label="Home No" name="contactHome" />
                           <FormInput label="Mobile No" name="contactMobile" />
                           <FormInput label="Email Address" name="contactEmail" type="email" />
@@ -944,8 +1018,8 @@ function StudentsPageContent() {
                     {activeTab === 'exams' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <FormInput label="Grade 05 Exam Result" name="resultGrade05" />
-                          <FormInput label="GCE OL Exam Result" name="resultGceOl" />
+                          <FormInput label="Grade 05 Exam Result" name="resultGrade05" required />
+                          <FormInput label="GCE OL Exam Result" name="resultGceOl" required />
                         </div>
                         {(isEnrollMode || isEditMode) && (
                           <div className="mt-4 flex justify-end border-t border-slate-100 pt-4 gap-2">
