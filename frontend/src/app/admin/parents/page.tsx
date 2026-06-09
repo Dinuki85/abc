@@ -220,9 +220,9 @@ export default function ParentsPage() {
     if (isEnrollMode) {
       setDynamicSuffix('New Guardian Registration');
     } else if (isViewOneMode && selectedGuardian) {
-      setDynamicSuffix(`View Guardian: ${selectedGuardian.guardianName || 'Guardian'}`);
+      setDynamicSuffix(`${selectedGuardian.guardianName || 'Guardian'}`);
     } else {
-      setDynamicSuffix('Guardian Registration');
+      setDynamicSuffix('');
     }
   }, [isEnrollMode, isViewOneMode, selectedGuardian, setDynamicSuffix]);
 
