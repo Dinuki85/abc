@@ -12,6 +12,7 @@ import {
 import { api, Teacher } from '@/lib/api';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { BreadcrumbContext } from '@/app/admin/layout';
 
 // ─── Blank form template for staff ───────────────────────────────────────────
 const BLANK_FORM = {
@@ -294,6 +295,19 @@ function StaffPageContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isViewOneMode, setIsViewOneMode] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+
+  // ── Breadcrumb ─────────────────────────────────────────────────────────────
+  const { setDynamicSuffix } = React.useContext(BreadcrumbContext);
+  useEffect(() => {
+    if (isEnrollMode) {
+      setDynamicSuffix('New Staff Registration');
+    } else if (isViewOneMode && selectedStaff) {
+      setDynamicSuffix(`${selectedStaff.fullName || selectedStaff.name || 'Staff'}`);
+    } else {
+      setDynamicSuffix('');
+    }
+  }, [isEnrollMode, isViewOneMode, selectedStaff, setDynamicSuffix]);
 
   const filteredStaff = useMemo(() => {
     return staffMembers.filter(s =>
@@ -358,15 +372,14 @@ function StaffPageContent() {
     }
   }, [filteredStaff, searchTerm, isEnrollMode, isEditMode, selectedStaff]);
 
-  // Clear selection when search is cleared
+  // Clear selection when search is cleared (only if no staff is currently loaded)
   const prevSearchTermRef = useRef(searchTerm);
   useEffect(() => {
-    if (searchTerm === '' && prevSearchTermRef.current !== '') {
-      setSelectedStaff(null);
+    if (searchTerm === '' && prevSearchTermRef.current !== '' && !selectedStaff) {
       setIsEditMode(false);
     }
     prevSearchTermRef.current = searchTerm;
-  }, [searchTerm]);
+  }, [searchTerm, selectedStaff]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -754,15 +767,48 @@ function StaffPageContent() {
             {/* Left side: search (viewOne) OR enrollment label (enroll) */}
             {isViewOneMode ? (
               <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
                 <Input
                   id="staff-search-input"
                   autoFocus
                   placeholder="Search by Teacher ID, Name, NIC..."
                   value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
+                  onChange={e => { setSearchTerm(e.target.value); setShowSearchDropdown(true); }}
+                  onFocus={() => setShowSearchDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowSearchDropdown(false), 150)}
                   className="pl-9 h-9 w-56 md:w-72 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
                 />
+                {showSearchDropdown && searchTerm.length > 0 && (() => {
+                  const suggestions = staffMembers.filter(s =>
+                    (s.fullName || s.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    s.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (s.nic || '').toLowerCase().includes(searchTerm.toLowerCase())
+                  ).slice(0, 8);
+                  return suggestions.length > 0 ? (
+                    <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                      {suggestions.map(s => (
+                        <button
+                          key={s.username}
+                          type="button"
+                          onMouseDown={() => {
+                            handleSelectStaff(s);
+                            setSearchTerm(s.fullName || s.name || s.username);
+                            setShowSearchDropdown(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 text-left transition-colors border-b border-slate-100 last:border-0"
+                        >
+                          <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                            <span className="text-[10px] font-black text-indigo-600">{(s.fullName || s.name || s.username || '?')[0].toUpperCase()}</span>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold text-slate-800 truncate">{s.fullName || s.name || s.username}</p>
+                            <p className="text-[10px] text-slate-400 font-semibold">{s.username}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null;
+                })()}
               </div>
             ) : (
               <div className="flex items-center gap-2">
