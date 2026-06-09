@@ -232,6 +232,7 @@ function StudentsPageContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isViewOneMode, setIsViewOneMode] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
 
   // ── Data fetchers ──────────────────────────────────────────────────────────
   const fetchGrades = async () => {
@@ -263,9 +264,9 @@ function StudentsPageContent() {
     if (isEnrollMode) {
       setDynamicSuffix('New Student Enrollment');
     } else if (isViewOneMode && selectedStudent) {
-      setDynamicSuffix(`View Student: ${selectedStudent.fullName || 'Student'}`);
+      setDynamicSuffix(`${selectedStudent.fullName || 'Student'}`);
     } else {
-      setDynamicSuffix('Student Registration');
+      setDynamicSuffix('');
     }
   }, [isEnrollMode, isViewOneMode, selectedStudent, setDynamicSuffix]);
 
@@ -695,17 +696,53 @@ function StudentsPageContent() {
           <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-200/60 shadow-sm">
 
             {/* Left side: search (viewOne) OR enrollment label (enroll) */}
-            {isViewOneMode ? (
+              {isViewOneMode ? (
               <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
                 <Input
                   id="student-search-input"
                   autoFocus
                   placeholder="Search by Index No, Name, NIC..."
                   value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
+                  onChange={e => { setSearchTerm(e.target.value); setShowSearchDropdown(true); }}
+                  onFocus={() => setShowSearchDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowSearchDropdown(false), 150)}
                   className="pl-9 h-9 w-56 md:w-72 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
                 />
+                {showSearchDropdown && searchTerm.length > 0 && (() => {
+                  const suggestions = students.filter(s =>
+                    (s.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    s.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (s.nic || '').toLowerCase().includes(searchTerm.toLowerCase())
+                  ).slice(0, 8);
+                  return suggestions.length > 0 ? (
+                    <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                      {suggestions.map(s => (
+                        <button
+                          key={s.username}
+                          type="button"
+                          onMouseDown={() => {
+                            setSelectedStudent(s);
+                            setIsEnrollMode(false);
+                            setIsEditMode(false);
+                            setSearchTerm(s.fullName || s.username);
+                            setShowSearchDropdown(false);
+                            setTimeout(() => workspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 text-left transition-colors border-b border-slate-100 last:border-0"
+                        >
+                          <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                            <span className="text-[10px] font-black text-primary">{(s.fullName || s.username || '?')[0].toUpperCase()}</span>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold text-slate-800 truncate">{s.fullName || s.username}</p>
+                            <p className="text-[10px] text-slate-400 font-semibold">{s.username}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null;
+                })()}
               </div>
             ) : (
               <div className="flex items-center gap-2">
