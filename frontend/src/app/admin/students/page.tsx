@@ -156,7 +156,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
     return <FormField label={label} value={displayVal} />;
   }
 
-  const isDisabled = disabled || (!isEnrollMode && !isEditMode) || (name === 'username');
+  const isDisabled = disabled || (!isEnrollMode && !isEditMode);
   const borderCls = hasError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-200 focus:ring-primary/10';
 
   if (options) return (
@@ -326,7 +326,20 @@ function StudentsPageContent() {
   // ── Workspace handlers ─────────────────────────────────────────────────────
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+    let val: any = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    // Telephone number validation: allow only digits
+    const phoneFields = ['contactEmergency', 'contactWhatsapp', 'contactHome', 'contactMobile'];
+    if (phoneFields.includes(name) && typeof val === 'string') {
+      val = val.replace(/\D/g, '');
+    }
+
+    // Sinhala text validation: allow only Sinhala characters and spaces
+    const sinhalaFields = ['nameSinhala', 'nameWithInitialSinhala'];
+    if (sinhalaFields.includes(name) && typeof val === 'string') {
+      val = val.replace(/[^\u0D80-\u0DFF\s]/g, '');
+    }
+
     setFormData((p: Record<string, unknown>) => ({ ...p, [name]: val }));
     // Clear validation error when user types
     if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
@@ -465,6 +478,10 @@ function StudentsPageContent() {
         const hasTabError = fields.some(({ key }) => errors[key]);
         if (hasTabError) {
           setActiveTab(tabId);
+          setTimeout(() => {
+            const form = document.querySelector('form');
+            if (form) form.reportValidity();
+          }, 0);
           break;
         }
       }
@@ -867,7 +884,7 @@ function StudentsPageContent() {
                           </div>
                         )}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          <FormInput label="Index No" name="username" disabled required />
+                          <FormInput label="Index No" name="username" disabled={!isEnrollMode} required />
                           <FormInput label="Full Name" name="fullName" required />
                           <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" />
                           <FormInput label="Name with Initial" name="nameWithInitials" />

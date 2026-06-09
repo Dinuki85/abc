@@ -328,7 +328,20 @@ export default function ParentsPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+    let val: any = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    // Telephone number validation: allow only digits
+    const phoneFields = ['guardianOfficeContact', 'guardianEmergencyContactNo', 'guardianWhatsappNo', 'guardianHomeNo', 'guardianContact'];
+    if (phoneFields.includes(name) && typeof val === 'string') {
+      val = val.replace(/\D/g, '');
+    }
+
+    // Sinhala text validation: allow only Sinhala characters and spaces
+    const sinhalaFields = ['guardianNameSinhala', 'guardianNameWithInitialSinhala'];
+    if (sinhalaFields.includes(name) && typeof val === 'string') {
+      val = val.replace(/[^\u0D80-\u0DFF\s]/g, '');
+    }
+
     setFormData((p: any) => {
       const updated = { ...p, [name]: val };
       // Auto-generate Guardian ID when student is selected in enroll mode
@@ -369,21 +382,33 @@ export default function ParentsPage() {
   };
 
   // ── Validation ───────────────────────────────────────────────────────────
+  const REQUIRED_FIELDS_BY_TAB: Record<string, { key: string; label: string }[]> = {
+    basic: [
+      { key: 'guardianName', label: 'Full Name' },
+      { key: 'guardianGender', label: 'Gender' },
+      { key: 'guardianDob', label: 'Date of Birth' },
+      { key: 'guardianNic', label: 'NIC' },
+      { key: 'guardianReligion', label: 'Religion' },
+    ],
+    occupation: [
+      { key: 'guardianWorkingCompany', label: 'Working Company' },
+      { key: 'guardianDesignation', label: 'Designation' },
+      { key: 'guardianOfficeContact', label: 'Office Contact No' },
+      { key: 'guardianWorkingAddress', label: 'Working Address' },
+      { key: 'guardianEmergencyContactName', label: 'Emergency Contact Name' },
+    ],
+    contact: [
+      { key: 'guardianContact', label: 'Mobile No' },
+      { key: 'guardianAddressPermanent', label: 'Permanent Address' },
+      { key: 'guardianEmergencyContactNo', label: 'Emergency Contact No' },
+      { key: 'guardianWhatsappNo', label: 'Whatsapp No' },
+    ]
+  };
+
   const REQUIRED_FIELDS = [
-    { key: 'guardianName', label: 'Full Name' },
-    { key: 'guardianGender', label: 'Gender' },
-    { key: 'guardianDob', label: 'Date of Birth' },
-    { key: 'guardianNic', label: 'NIC' },
-    { key: 'guardianContact', label: 'Mobile No' },
-    { key: 'guardianReligion', label: 'Religion' },
-    { key: 'guardianWorkingCompany', label: 'Working Company' },
-    { key: 'guardianDesignation', label: 'Designation' },
-    { key: 'guardianOfficeContact', label: 'Office Contact No' },
-    { key: 'guardianWorkingAddress', label: 'Working Address' },
-    { key: 'guardianEmergencyContactName', label: 'Emergency Contact Name' },
-    { key: 'guardianAddressPermanent', label: 'Permanent Address' },
-    { key: 'guardianEmergencyContactNo', label: 'Emergency Contact No' },
-    { key: 'guardianWhatsappNo', label: 'Whatsapp No' },
+    ...REQUIRED_FIELDS_BY_TAB.basic,
+    ...REQUIRED_FIELDS_BY_TAB.occupation,
+    ...REQUIRED_FIELDS_BY_TAB.contact,
   ];
 
   const TAB_ORDER = ['basic', 'occupation', 'contact'];
@@ -418,7 +443,18 @@ export default function ParentsPage() {
     });
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      setActiveTab('basic');
+      for (const tabId of TAB_ORDER) {
+        const fields = REQUIRED_FIELDS_BY_TAB[tabId] || [];
+        const hasTabError = fields.some(({ key }) => errors[key]) || (tabId === 'basic' && errors['studentUsername']);
+        if (hasTabError) {
+          setActiveTab(tabId);
+          setTimeout(() => {
+            const form = document.querySelector('form');
+            if (form) form.reportValidity();
+          }, 0);
+          break;
+        }
+      }
       setMessage({ type: 'error', text: 'Please fill in all required fields marked with *' });
       return false;
     }

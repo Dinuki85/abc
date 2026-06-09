@@ -370,7 +370,20 @@ function StaffPageContent() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+    let val: any = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    // Telephone number validation: allow only digits
+    const phoneFields = ['emergencyContactNo', 'whatsappNo', 'homeNo', 'contactMobile', 'spouseOfficeContact', 'spouseEmergencyContact'];
+    if (phoneFields.includes(name) && typeof val === 'string') {
+      val = val.replace(/\D/g, '');
+    }
+
+    // Sinhala text validation: allow only Sinhala characters and spaces
+    const sinhalaFields = ['nameSinhala', 'nameWithInitialSinhala'];
+    if (sinhalaFields.includes(name) && typeof val === 'string') {
+      val = val.replace(/[^\u0D80-\u0DFF\s]/g, '');
+    }
+
     setFormData((p: any) => ({ ...p, [name]: val }));
     if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
   };
@@ -517,6 +530,10 @@ function StaffPageContent() {
         const hasTabError = fields.some(({ key }) => errors[key]);
         if (hasTabError) {
           setActiveTab(tabId);
+          setTimeout(() => {
+            const form = document.querySelector('form');
+            if (form) form.reportValidity();
+          }, 0);
           break;
         }
       }
