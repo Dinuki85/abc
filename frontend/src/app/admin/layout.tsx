@@ -36,6 +36,11 @@ export default function AdminLayout({
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [dynamicSuffix, setDynamicSuffix] = useState('');
 
+  // Clear the breadcrumb suffix whenever the page changes so stale labels never bleed across pages
+  useEffect(() => {
+    setDynamicSuffix('');
+  }, [pathname]);
+
   useEffect(() => {
     const currentUser = api.getCurrentUser();
     if (!currentUser || currentUser.role !== 'ROLE_ADMIN') {
