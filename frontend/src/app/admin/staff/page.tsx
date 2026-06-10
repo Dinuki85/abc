@@ -302,8 +302,8 @@ function StaffPageContent() {
   useEffect(() => {
     if (isEnrollMode) {
       setDynamicSuffix('New Staff Registration');
-    } else if (isViewOneMode && selectedStaff) {
-      setDynamicSuffix(`${selectedStaff.fullName || selectedStaff.name || 'Staff'}`);
+    } else if (isViewOneMode || selectedStaff) {
+      setDynamicSuffix('Search staff');
     } else {
       setDynamicSuffix('');
     }
@@ -315,6 +315,21 @@ function StaffPageContent() {
       s.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [staffMembers, searchTerm]);
+
+  useEffect(() => {
+    const onReset = () => {
+      setSelectedStaff(null);
+      setIsEnrollMode(false);
+      setIsEditMode(false);
+      setFormData({ ...BLANK_FORM });
+      setSearchTerm('');
+      setIsViewOneMode(false);
+      setFormErrors({});
+      router.replace('/admin/staff');
+    };
+    window.addEventListener('resetDirectoryView', onReset);
+    return () => window.removeEventListener('resetDirectoryView', onReset);
+  }, [router]);
 
   useEffect(() => {
     fetchStaff();
@@ -760,101 +775,7 @@ function StaffPageContent() {
             )}
           </div>
         )}
-        {/* ── Toolbar — shown in viewOneMode AND enrollMode ── */}
-        {(isViewOneMode || isEnrollMode) && (
-          <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-200/60 shadow-sm">
 
-            {/* Left side: search (viewOne) OR enrollment label (enroll) */}
-            {isViewOneMode ? (
-              <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
-                <Input
-                  id="staff-search-input"
-                  autoFocus
-                  placeholder="Search by Teacher ID, Name, NIC..."
-                  value={searchTerm}
-                  onChange={e => { setSearchTerm(e.target.value); setShowSearchDropdown(true); }}
-                  onFocus={() => setShowSearchDropdown(true)}
-                  onBlur={() => setTimeout(() => setShowSearchDropdown(false), 150)}
-                  className="pl-9 h-9 w-56 md:w-72 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
-                />
-                {showSearchDropdown && searchTerm.length > 0 && (() => {
-                  const suggestions = staffMembers.filter(s =>
-                    (s.fullName || s.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    s.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    (s.nic || '').toLowerCase().includes(searchTerm.toLowerCase())
-                  ).slice(0, 8);
-                  return suggestions.length > 0 ? (
-                    <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
-                      {suggestions.map(s => (
-                        <button
-                          key={s.username}
-                          type="button"
-                          onMouseDown={() => {
-                            handleSelectStaff(s);
-                            setSearchTerm(s.fullName || s.name || s.username);
-                            setShowSearchDropdown(false);
-                          }}
-                          className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 text-left transition-colors border-b border-slate-100 last:border-0"
-                        >
-                          <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
-                            <span className="text-[10px] font-black text-indigo-600">{(s.fullName || s.name || s.username || '?')[0].toUpperCase()}</span>
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-xs font-bold text-slate-800 truncate">{s.fullName || s.name || s.username}</p>
-                            <p className="text-[10px] text-slate-400 font-semibold">{s.username}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  ) : null;
-                })()}
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <UserPlus size={15} className="text-indigo-600" />
-                <span className="text-sm font-semibold text-slate-700 tracking-tight">
-                  New Staff Registration
-                </span>
-              </div>
-            )}
-
-            {/* Filters button — only in viewOne mode */}
-            {isViewOneMode && (
-              <button type="button"
-                className="flex items-center gap-2 h-9 px-4 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 bg-white hover:bg-slate-50 transition-colors shrink-0">
-                <Filter size={13} className="text-slate-500" /> Filters
-              </button>
-            )}
-
-            <div className="flex-1" />
-
-            {/* Status badge */}
-            <div className={`flex items-center gap-1.5 h-9 px-3 border rounded-lg text-xs font-bold shrink-0 ${
-              !selectedStaff
-                ? 'border-slate-200 text-slate-500 bg-white'
-                : formData.isActive === true || formData.isActive === 'true'
-                  ? 'border-emerald-200 text-emerald-700 bg-emerald-50'
-                  : 'border-rose-200 text-rose-700 bg-rose-50'
-            }`}>
-              <span className={`w-2.5 h-2.5 rounded-full ${
-                !selectedStaff ? 'bg-slate-300' : (formData.isActive === true || formData.isActive === 'true') ? 'bg-emerald-500' : 'bg-rose-500'
-              }`} />
-              Status: {selectedStaff ? (formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive') : 'Active'}
-            </div>
-
-            {/* Staff ID badge */}
-            <div className="flex items-center h-9 px-3 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 bg-white shrink-0">
-              Staff ID: {selectedStaff?.username || 'Not Assigned'}
-            </div>
-
-            {/* Back to directory */}
-            <button type="button" onClick={handleReset}
-              className="flex items-center gap-1.5 h-9 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition-colors shrink-0">
-              <RotateCcw size={12} /> Back
-            </button>
-          </div>
-        )}
 
         {/* ── Page Notification ───────────────────────────────────────────────── */}
         {message && (
@@ -904,10 +825,56 @@ function StaffPageContent() {
                       ? `Editing: ${formData.username || selectedStaff?.username}`
                       : selectedStaff
                       ? `${selectedStaff.name || selectedStaff.fullName || selectedStaff.username}`
-                      : 'Search or Select a Staff Member'}
+                      : 'Search staff details'}
                   </CardTitle>
                 </div>
                 <div className="flex items-center gap-3">
+                  {isViewOneMode && (
+                    <div className="relative mr-2">
+                      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
+                      <Input
+                        id="staff-search-input"
+                        autoFocus
+                        placeholder="Search..."
+                        value={searchTerm}
+                        onChange={e => { setSearchTerm(e.target.value); setShowSearchDropdown(true); }}
+                        onFocus={() => setShowSearchDropdown(true)}
+                        onBlur={() => setTimeout(() => setShowSearchDropdown(false), 150)}
+                        className="pl-9 h-8 w-48 md:w-64 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
+                      />
+                      {showSearchDropdown && searchTerm.length > 0 && (() => {
+                        const suggestions = staffMembers.filter(s =>
+                          (s.fullName || s.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          s.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          (s.nic || '').toLowerCase().includes(searchTerm.toLowerCase())
+                        ).slice(0, 8);
+                        return suggestions.length > 0 ? (
+                          <div className="absolute top-full right-0 mt-1 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 text-left">
+                            {suggestions.map(s => (
+                              <button
+                                key={s.username}
+                                type="button"
+                                onMouseDown={() => {
+                                  handleSelectStaff(s);
+                                  setSearchTerm(s.fullName || s.name || s.username);
+                                  setShowSearchDropdown(false);
+                                }}
+                                className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 text-left transition-colors border-b border-slate-100 last:border-0"
+                              >
+                                <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                                  <span className="text-[10px] font-black text-indigo-600">{(s.fullName || s.name || s.username || '?')[0].toUpperCase()}</span>
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-xs font-bold text-slate-800 truncate">{s.fullName || s.name || s.username}</p>
+                                  <p className="text-[10px] text-slate-400 font-semibold">{s.username}</p>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        ) : null;
+                      })()}
+                    </div>
+                  )}
                   <ActiveBadge value={formData.isActive} />
                   <div className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">
                     ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStaff?.username || '—'))}
@@ -991,7 +958,7 @@ function StaffPageContent() {
                           {isEnrollMode && (
                             <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
                               <h4 className="text-xs font-semibold text-indigo-700">Account Authorization Details</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                                 <div className="space-y-1">
                                   <label className="text-xs font-semibold text-slate-500 ml-1">Temporary Password</label>
                                   <div className="relative">
@@ -1024,7 +991,7 @@ function StaffPageContent() {
                             </div>
                           )}
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                             <FormInput label="Teacher ID - Auto" name="username" disabled required />
                             <FormInput label="Full Name" name="fullName" required />
                             <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
@@ -1053,7 +1020,7 @@ function StaffPageContent() {
                             <HeartPulse className="text-rose-600" size={20} />
                             <h3 className="text-lg font-bold text-slate-800">Health Information</h3>
                           </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                             <FormInput label="Height" name="height" />
                             <FormInput label="Weight" name="weight" />
                             <FormInput label="Blood Type" name="bloodGroup" options={BLOOD_OPTIONS} />
@@ -1071,7 +1038,7 @@ function StaffPageContent() {
                             <Briefcase className="text-amber-600" size={20} />
                             <h3 className="text-lg font-bold text-slate-800">Service History</h3>
                           </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                             <FormInput label="1st Appointment Date" name="firstAppointmentDate" type="date" required />
                             <FormInput label="1st Appointment District" name="firstAppointmentDistrict" required />
                             <FormInput label="1st Appointment Institute" name="firstAppointmentInstitute" required />
@@ -1094,11 +1061,11 @@ function StaffPageContent() {
                             <MapPin className="text-indigo-600" size={20} />
                             <h3 className="text-lg font-bold text-slate-800">Contact Information</h3>
                           </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                             <FormInput label="Permanent Address" name="address" type="textarea" required />
                             <FormInput label="Temporary Address" name="temporaryAddress" type="textarea" />
                           </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                             <FormInput label="Emergency Contact No" name="emergencyContactNo" required />
                             <FormInput label="Whatsapp No" name="whatsappNo" required />
                             <FormInput label="Home No" name="homeNo" />
@@ -1151,7 +1118,7 @@ function StaffPageContent() {
                             <h3 className="text-lg font-bold text-slate-800">Spouse & Children</h3>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                             <FormInput label="Spouse Name" name="spouseName" />
                             <FormInput label="Designation" name="spouseDesignation" />
                             <FormInput label="Working Company" name="spouseWorkingCompany" />
