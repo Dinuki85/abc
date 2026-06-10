@@ -669,19 +669,7 @@ export default function ParentsPage() {
           </div>
         )}
 
-        {/* ── Workspace Mode Indicator ── */}
-        {(selectedGuardian || isEnrollMode) && (
-          <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
-            <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}`} />
-            <span className="text-xs font-semibold text-slate-600">
-              {isEnrollMode
-                ? `Workspace Mode: New Guardian Registration`
-                : isEditMode
-                  ? `Workspace Mode: Editing Guardian — ${selectedGuardian?.guardianId}`
-                  : `Workspace Mode: Viewing Guardian — ${selectedGuardian?.guardianId} (Read-Only)`}
-            </span>
-          </div>
-        )}
+
 
         {/* ── Workspace card (view / edit / enroll) ─────────────────────── */}
         {(selectedGuardian || isEnrollMode || isViewOneMode) && (

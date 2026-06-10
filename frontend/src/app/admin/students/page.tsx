@@ -738,21 +738,7 @@ function StudentsPageContent() {
           </div>
         )}
 
-        {/* ── Workspace mode indicator — only when form is active ─────────────── */}
-        {(selectedStudent || isEnrollMode) && (
-          <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
-            <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-blue-500 animate-pulse'}`} />
-            <span className="text-xs font-semibold text-slate-600">
-              {isEnrollMode
-                ? isLoadedExistingStudent
-                  ? `Workspace Mode: Editing Existing Student — ${formData.username}`
-                  : 'Workspace Mode: New Student Enrollment'
-                : isEditMode
-                  ? `Workspace Mode: Editing Student — ${selectedStudent?.username}`
-                  : `Workspace Mode: Viewing Student — ${selectedStudent?.username} (Read-Only)`}
-            </span>
-          </div>
-        )}
+
 
         {/* ── Workspace card — visible when student selected, in enroll mode, or in viewOne mode ── */}
         {(selectedStudent || isEnrollMode || isViewOneMode) && (
@@ -879,29 +865,7 @@ function StudentsPageContent() {
 
                     {activeTab === 'basic' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
-                        {isEnrollMode && (
-                          <div className="bg-slate-50 p-4 rounded-xl border border-slate-100/80 space-y-3">
-                            <h4 className="text-xs font-semibold text-primary">Academic Cell</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 text-left">
-                              <div className="space-y-1">
-                                <label className="text-xs font-semibold text-slate-500 ml-1">Primary Grade</label>
-                                <select value={selectedGradeId} onChange={e => { const g = parseInt(e.target.value); setSelectedGradeId(g); setSelectedClassId(''); fetchClassesForGrade(g); }} required title="Select Primary Grade"
-                                  className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-sm font-bold text-black">
-                                  <option value="">Choose Grade</option>
-                                  {grades.map((g: Grade) => <option key={g.id} value={g.id}>{g.name}</option>)}
-                                </select>
-                              </div>
-                              <div className="space-y-1">
-                                <label className="text-xs font-semibold text-slate-500 ml-1">Class Section</label>
-                                <select value={selectedClassId} onChange={e => setSelectedClassId(parseInt(e.target.value))} required disabled={!selectedGradeId} title="Select Class Section"
-                                  className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-primary/10 text-sm font-bold text-black disabled:opacity-50">
-                                  <option value="">Choose Class</option>
-                                  {classes.map((c: { id: number; name: string }) => <option key={c.id} value={c.id}>{c.name}</option>)}
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                        )}
+
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                           <FormInput label="Index No" name="username" disabled={!isEnrollMode} required />
                           <FormInput label="Full Name" name="fullName" required />

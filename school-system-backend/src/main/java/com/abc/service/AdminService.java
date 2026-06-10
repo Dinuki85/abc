@@ -382,21 +382,20 @@ public class AdminService {
         Optional<String> maxUsernameOpt = userRepository.findAll().stream()
                 .filter(u -> u.getRole() == Role.ROLE_TEACHER || u.getRole() == Role.ROLE_STAFF)
                 .map(User::getUsername)
-                .filter(u -> u.toUpperCase().startsWith("TEA"))
+                .filter(u -> u != null && u.matches("\\d+"))
                 .max(String::compareTo);
         if (maxUsernameOpt.isPresent()) {
-            String maxStr = maxUsernameOpt.get().toUpperCase();
-            String numStr = maxStr.replaceAll("[^0-9]", "");
+            String numStr = maxUsernameOpt.get().replaceAll("[^0-9]", "");
             if (!numStr.isEmpty()) {
                 try {
                     int lastDigits = Integer.parseInt(numStr);
-                    return "TEA" + String.format("%05d", lastDigits + 1);
+                    return String.format("%05d", lastDigits + 1);
                 } catch (NumberFormatException e) {
-                    return "TEA00001";
+                    return "00001";
                 }
             }
         }
-        return "TEA00001";
+        return "00001";
     }
 
 

@@ -214,7 +214,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
 
   if (options) return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+      <label className="text-xs font-semibold text-slate-500 ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <select name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} title={label} required={required}
@@ -227,7 +227,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
   if (type === 'textarea') return (
     <div className="space-y-1 text-left w-full sm:col-span-2 md:col-span-3">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+      <label className="text-xs font-semibold text-slate-500 ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <textarea name={name} value={String(formData[name] || '')} onChange={handleChange}
@@ -238,7 +238,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   );
   return (
     <div className="space-y-1 text-left">
-      <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+      <label className="text-xs font-semibold text-slate-500 ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
       <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
@@ -252,7 +252,7 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
 function FormField({ label, value }: { label: string; value: any }) {
   return (
     <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left hover:bg-slate-100 hover:border-slate-200/60 transition-all">
-      <span className="block text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{label}</span>
+      <span className="block text-xs font-semibold text-slate-500 leading-none mb-1.5">{label}</span>
       <span className="block text-xs font-black text-black leading-tight wrap-break-word">
         {value === true || value === 'true' ? 'Active' : value === false || value === 'false' ? 'Inactive' : String(value || '—')}
       </span>
@@ -263,9 +263,8 @@ function FormField({ label, value }: { label: string; value: any }) {
 function ActiveBadge({ value }: { value: any }) {
   const active = value === true || value === 'true';
   return (
-    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
-      active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
-    }`}>
+    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'
+      }`}>
       <span className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-emerald-500' : 'bg-rose-500'}`} />
       {active ? 'Active' : 'Inactive'}
     </div>
@@ -779,9 +778,8 @@ function StaffPageContent() {
 
         {/* ── Page Notification ───────────────────────────────────────────────── */}
         {message && (
-          <div className={`p-5 rounded-2xl flex items-center gap-4 animate-in slide-in-from-top-4 duration-500 shadow-md ${
-            message.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'
-          }`}>
+          <div className={`p-5 rounded-2xl flex items-center gap-4 animate-in slide-in-from-top-4 duration-500 shadow-md ${message.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'
+            }`}>
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${message.type === 'success' ? 'bg-emerald-100' : 'bg-rose-100'}`}>
               {message.type === 'success' ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
             </div>
@@ -795,19 +793,7 @@ function StaffPageContent() {
           </div>
         )}
 
-        {/* ── Workspace Mode Indicator ── */}
-        {(selectedStaff || isEnrollMode) && (
-          <div className="flex items-center gap-2 bg-slate-50 p-2 px-3 rounded-lg border border-slate-100 shadow-sm w-fit animate-in fade-in slide-in-from-top-2 duration-300 shrink-0">
-            <span className={`w-2 h-2 rounded-full ${isEnrollMode ? 'bg-amber-500 animate-pulse' : 'bg-indigo-500 animate-pulse'}`} />
-            <span className="text-xs font-semibold text-slate-600">
-              {isEnrollMode
-                ? `Workspace Mode: New Staff Registration`
-                : isEditMode
-                  ? `Workspace Mode: Editing Staff — ${selectedStaff?.username}`
-                  : `Workspace Mode: Viewing Staff — ${selectedStaff?.username} (Read-Only)`}
-            </span>
-          </div>
-        )}
+
 
         {/* ── Workspace card (view / edit / enroll) ─────────────────────── */}
         {(selectedStaff || isEnrollMode || isViewOneMode) && (
@@ -815,463 +801,446 @@ function StaffPageContent() {
             <div ref={workspaceRef} />
             <form onSubmit={handleSaveWorkspace} className="animate-in fade-in slide-in-from-top-3 duration-500">
               <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white relative">
-              <CardHeader className="px-8 py-5 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <Briefcase className="text-indigo-600" size={24} />
-                  <CardTitle className="text-lg font-black text-black">
-                    {isEnrollMode
-                      ? 'New Staff Registration'
-                      : isEditMode
-                      ? `Editing: ${formData.username || selectedStaff?.username}`
-                      : selectedStaff
-                      ? `${selectedStaff.name || selectedStaff.fullName || selectedStaff.username}`
-                      : 'Search staff details'}
-                  </CardTitle>
-                </div>
-                <div className="flex items-center gap-3">
-                  {isViewOneMode && (
-                    <div className="relative mr-2">
-                      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
-                      <Input
-                        id="staff-search-input"
-                        autoFocus
-                        placeholder="Search..."
-                        value={searchTerm}
-                        onChange={e => { setSearchTerm(e.target.value); setShowSearchDropdown(true); }}
-                        onFocus={() => setShowSearchDropdown(true)}
-                        onBlur={() => setTimeout(() => setShowSearchDropdown(false), 150)}
-                        className="pl-9 h-8 w-48 md:w-64 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
-                      />
-                      {showSearchDropdown && searchTerm.length > 0 && (() => {
-                        const suggestions = staffMembers.filter(s =>
-                          (s.fullName || s.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          s.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          (s.nic || '').toLowerCase().includes(searchTerm.toLowerCase())
-                        ).slice(0, 8);
-                        return suggestions.length > 0 ? (
-                          <div className="absolute top-full right-0 mt-1 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 text-left">
-                            {suggestions.map(s => (
-                              <button
-                                key={s.username}
-                                type="button"
-                                onMouseDown={() => {
-                                  handleSelectStaff(s);
-                                  setSearchTerm(s.fullName || s.name || s.username);
-                                  setShowSearchDropdown(false);
-                                }}
-                                className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 text-left transition-colors border-b border-slate-100 last:border-0"
-                              >
-                                <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
-                                  <span className="text-[10px] font-black text-indigo-600">{(s.fullName || s.name || s.username || '?')[0].toUpperCase()}</span>
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="text-xs font-bold text-slate-800 truncate">{s.fullName || s.name || s.username}</p>
-                                  <p className="text-[10px] text-slate-400 font-semibold">{s.username}</p>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        ) : null;
-                      })()}
-                    </div>
-                  )}
-                  <ActiveBadge value={formData.isActive} />
-                  <div className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">
-                    ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStaff?.username || '—'))}
+                <CardHeader className="px-8 py-5 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <Briefcase className="text-indigo-600" size={24} />
+                    <CardTitle className="text-lg font-black text-black">
+                      {isEnrollMode
+                        ? 'New Staff Registration'
+                        : isEditMode
+                          ? `Editing: ${formData.username || selectedStaff?.username}`
+                          : selectedStaff
+                            ? `${selectedStaff.name || selectedStaff.fullName || selectedStaff.username}`
+                            : 'Search staff details'}
+                    </CardTitle>
                   </div>
-
-                  {selectedStaff && !isEnrollMode && (
-                    <div className="flex items-center gap-1.5 ml-2 pl-2 border-l border-slate-200">
-                      {!isEditMode ? (
-                        <>
-                          <button
-                            type="button"
-                            className="h-8 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
-                            onMouseDown={(e) => { e.preventDefault(); handleStartEdit(); }}
-                          >
-                            <Edit size={12} className="mr-1" /> Edit
-                          </button>
-                          <Button
-                            type="button"
-                            className="h-8 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
-                            onClick={() => handleDelete(selectedStaff.id)}
-                          >
-                            Delete
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            type="submit"
-                            className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold active:scale-95 transition-all text-xs"
-                            isLoading={isSubmitting}
-                          >
-                            <Save size={12} className="mr-1" /> Save
-                          </Button>
-                          <Button
-                            type="button"
-                            className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-semibold active:scale-95 transition-all text-xs"
-                            onClick={handleCancelEdit}
-                          >
-                            <X size={12} className="mr-1" /> Cancel
-                          </Button>
-                        </>
-                      )}
+                  <div className="flex items-center gap-3">
+                    {isViewOneMode && (
+                      <div className="relative mr-2">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 z-10" />
+                        <Input
+                          id="staff-search-input"
+                          autoFocus
+                          placeholder="Search..."
+                          value={searchTerm}
+                          onChange={e => { setSearchTerm(e.target.value); setShowSearchDropdown(true); }}
+                          onFocus={() => setShowSearchDropdown(true)}
+                          onBlur={() => setTimeout(() => setShowSearchDropdown(false), 150)}
+                          className="pl-9 h-8 w-48 md:w-64 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
+                        />
+                        {showSearchDropdown && searchTerm.length > 0 && (() => {
+                          const suggestions = staffMembers.filter(s =>
+                            (s.fullName || s.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            s.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            (s.nic || '').toLowerCase().includes(searchTerm.toLowerCase())
+                          ).slice(0, 8);
+                          return suggestions.length > 0 ? (
+                            <div className="absolute top-full right-0 mt-1 w-72 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 text-left">
+                              {suggestions.map(s => (
+                                <button
+                                  key={s.username}
+                                  type="button"
+                                  onMouseDown={() => {
+                                    handleSelectStaff(s);
+                                    setSearchTerm(s.fullName || s.name || s.username);
+                                    setShowSearchDropdown(false);
+                                  }}
+                                  className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-50 text-left transition-colors border-b border-slate-100 last:border-0"
+                                >
+                                  <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                                    <span className="text-[10px] font-black text-indigo-600">{(s.fullName || s.name || s.username || '?')[0].toUpperCase()}</span>
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="text-xs font-bold text-slate-800 truncate">{s.fullName || s.name || s.username}</p>
+                                    <p className="text-[10px] text-slate-400 font-semibold">{s.username}</p>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          ) : null;
+                        })()}
+                      </div>
+                    )}
+                    <ActiveBadge value={formData.isActive} />
+                    <div className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold rounded-full">
+                      ID: {String(isEnrollMode ? (formData.username || 'Generating...') : (selectedStaff?.username || '—'))}
                     </div>
-                  )}
-                </div>
-              </CardHeader>
 
-              <CardContent className="p-0">
-                <div className="flex flex-col lg:flex-row min-h-[500px]">
-                  {/* Sidebar Tabs */}
-                  <div className="w-full lg:w-72 bg-slate-50/50 border-r border-slate-100 p-4 flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto whitespace-nowrap lg:whitespace-normal custom-scrollbar shrink-0">
-                    {TABS.filter(t => t.id !== 'visibility' || !isEnrollMode).map(tab => (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => handleTabChange(tab.id)}
-                        className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold text-xs text-left ${
-                          activeTab === tab.id
-                            ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30'
-                            : 'text-slate-500 hover:bg-white hover:text-indigo-600'
-                        }`}
-                      >
-                        <tab.icon size={16} />
-                        {tab.name}
-                      </button>
-                    ))}
+                    {selectedStaff && !isEnrollMode && (
+                      <div className="flex items-center gap-1.5 ml-2 pl-2 border-l border-slate-200">
+                        {!isEditMode ? (
+                          <>
+                            <button
+                              type="button"
+                              className="h-8 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
+                              onMouseDown={(e) => { e.preventDefault(); handleStartEdit(); }}
+                            >
+                              <Edit size={12} className="mr-1" /> Edit
+                            </button>
+                            <Button
+                              type="button"
+                              className="h-8 px-3 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs flex items-center gap-1 cursor-pointer select-none"
+                              onClick={() => handleDelete(selectedStaff.id)}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              type="submit"
+                              className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold active:scale-95 transition-all text-xs"
+                              isLoading={isSubmitting}
+                            >
+                              <Save size={12} className="mr-1" /> Save
+                            </Button>
+                            <Button
+                              type="button"
+                              className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-semibold active:scale-95 transition-all text-xs"
+                              onClick={handleCancelEdit}
+                            >
+                              <X size={12} className="mr-1" /> Cancel
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    )}
                   </div>
+                </CardHeader>
 
-                  {/* Tab Panes */}
-                  <div className="flex-1 p-6 sm:p-10 bg-white relative">
-                    <div className="space-y-8 max-w-4xl">
-                      
-                      {/* Tab 1: Basic Information */}
-                      {activeTab === 'basic' && (
-                        <div className="space-y-6 animate-in fade-in duration-300">
-                          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                            <User className="text-indigo-600" size={20} />
-                            <h3 className="text-lg font-bold text-slate-800">Basic Information</h3>
-                          </div>
-                          
-                          {isEnrollMode && (
-                            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
-                              <h4 className="text-xs font-semibold text-indigo-700">Account Authorization Details</h4>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                                <div className="space-y-1">
-                                  <label className="text-xs font-semibold text-slate-500 ml-1">Temporary Password</label>
-                                  <div className="relative">
-                                    <Input
-                                      type="text"
-                                      name="tempPassword"
-                                      value={formData.tempPassword || ''}
+                <CardContent className="p-0">
+                  <div className="flex flex-col lg:flex-row min-h-[500px]">
+                    {/* Sidebar Tabs */}
+                    <div className="w-full lg:w-72 bg-slate-50/50 border-r border-slate-100 p-4 flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto whitespace-nowrap lg:whitespace-normal custom-scrollbar shrink-0">
+                      {TABS.filter(t => t.id !== 'visibility' || !isEnrollMode).map(tab => (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => handleTabChange(tab.id)}
+                          className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all font-semibold text-xs text-left ${activeTab === tab.id
+                              ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30'
+                              : 'text-slate-500 hover:bg-white hover:text-indigo-600'
+                            }`}
+                        >
+                          <tab.icon size={16} />
+                          {tab.name}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Tab Panes */}
+                    <div className="flex-1 p-6 sm:p-10 bg-white relative">
+                      <div className="space-y-8 max-w-4xl">
+
+                        {/* Tab 1: Basic Information */}
+                        {activeTab === 'basic' && (
+                          <div className="space-y-6 animate-in fade-in duration-300">
+                            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                              <User className="text-indigo-600" size={20} />
+                              <h3 className="text-lg font-bold text-slate-800">Basic Information</h3>
+                            </div>
+
+                            {isEnrollMode && (
+                              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
+                                <h4 className="text-xs font-semibold text-indigo-700">Account Authorization Details</h4>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                                  <div className="space-y-1">
+                                    <label className="text-xs font-semibold text-slate-500 ml-1">Staff Category</label>
+                                    <select
+                                      name="designation"
+                                      value={formData.designation}
                                       onChange={handleChange}
-                                      placeholder="Temporary Password"
-                                      required
-                                      className="pl-9 h-10 rounded-xl border border-slate-200 font-bold text-xs"
-                                    />
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                                      className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/10 text-xs font-bold text-black"
+                                    >
+                                      <option value="">Select Category</option>
+                                      <option value="Academic">Academic</option>
+                                      <option value="Non Academic">Non Academic</option>
+                                    </select>
                                   </div>
                                 </div>
-                                <div className="space-y-1">
-                                  <label className="text-xs font-semibold text-slate-500 ml-1">Role / Designation</label>
-                                  <select
-                                    name="designation"
-                                    value={formData.designation}
-                                    onChange={handleChange}
-                                    className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/10 text-xs font-bold text-black"
-                                  >
-                                    {DESIGNATION_OPTIONS.map(opt => (
-                                      <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                    ))}
-                                  </select>
+                              </div>
+                            )}
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+                              <FormInput label="Staff ID - Auto" name="username" disabled required placeholder="00001" />
+                              <FormInput label="Salary ID" name="salaryCode" required />
+                              <FormInput label="Full Name" name="fullName" required />
+                              <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
+                              <FormInput label="Name with Initial" name="nameWithInitials" />
+                              <FormInput label="Name with Initial Sinhala" name="nameWithInitialSinhala" />
+                              <FormInput label="Date Of Birth" name="dob" type="date" required />
+                              <FormInput label="NIC" name="nic" required />
+                              <FormInput label="Birth Certificate No" name="birthCertificateNo" />
+                              <FormInput label="District" name="district" required />
+                              <FormInput label="Religion" name="religion" required />
+                              <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} required />
+                              <FormInput label="Mother Name" name="motherName" />
+                              <FormInput label="Father Name" name="fatherName" required />
+                              <FormInput label="Guardian ID" name="guardianId" />
+                              <FormInput label="Age - Auto Calculate" name="age" disabled placeholder="Auto-calculated" />
+                              <FormInput label="Civil State" name="civilState" />
+                              <FormInput label="Marital State" name="maritalState" options={CIVIL_OPTIONS} />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tab 2: Health */}
+                        {activeTab === 'health' && (
+                          <div className="space-y-6 animate-in fade-in duration-300">
+                            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                              <HeartPulse className="text-rose-600" size={20} />
+                              <h3 className="text-lg font-bold text-slate-800">Health Information</h3>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+                              <FormInput label="Height" name="height" />
+                              <FormInput label="Weight" name="weight" />
+                              <FormInput label="Blood Type" name="bloodGroup" options={BLOOD_OPTIONS} />
+                              <FormInput label="Special Physical Condition" name="specialPhysicalCondition" />
+                              <FormInput label="Long Term Diseases" name="longTermDiseases" />
+                            </div>
+                            <FormInput label="Description" name="healthDescription" type="textarea" />
+                          </div>
+                        )}
+
+                        {/* Tab 3: Service History */}
+                        {activeTab === 'service' && (
+                          <div className="space-y-6 animate-in fade-in duration-300">
+                            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                              <Briefcase className="text-amber-600" size={20} />
+                              <h3 className="text-lg font-bold text-slate-800">Service History</h3>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+                              <FormInput label="1st Appointment Date" name="firstAppointmentDate" type="date" required />
+                              <FormInput label="1st Appointment District" name="firstAppointmentDistrict" required />
+                              <FormInput label="1st Appointment Institute" name="firstAppointmentInstitute" required />
+                              <FormInput label="Hierarchy Carder (Combo Box)" name="hierarchyCarder" options={CARDER_OPTIONS} required />
+                              <FormInput label="Position" name="position" required />
+                              <FormInput label="Increment Date" name="incrementDate" type="date" />
+                              <FormInput label="Service Period" name="servicePeriod" />
+                              <FormInput label="Salary Code (As per Pay sheet)" name="salaryCode" />
+                              <FormInput label="Holding Position at School" name="holdingPosition" options={HOLDING_POSITION_OPTIONS} required />
+                              <FormInput label="Grade" name="grade" />
+                              <FormInput label="Appointment Medium" name="appointmentMedium" required />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tab 4: Contact Information */}
+                        {activeTab === 'contact' && (
+                          <div className="space-y-6 animate-in fade-in duration-300">
+                            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                              <MapPin className="text-indigo-600" size={20} />
+                              <h3 className="text-lg font-bold text-slate-800">Contact Information</h3>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                              <FormInput label="Permanent Address" name="address" type="textarea" required />
+                              <FormInput label="Temporary Address" name="temporaryAddress" type="textarea" />
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+                              <FormInput label="Emergency Contact No" name="emergencyContactNo" required />
+                              <FormInput label="Whatsapp No" name="whatsappNo" required />
+                              <FormInput label="Home No" name="homeNo" />
+                              <FormInput label="Mobile No" name="contactMobile" required />
+                              <FormInput label="Email" name="email" type="email" />
+                              <FormInput label="Distance to School" name="distanceToSchool" />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tab 5: Qualification */}
+                        {activeTab === 'qualification' && (
+                          <div className="space-y-6 animate-in fade-in duration-300">
+                            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                              <GraduationCap className="text-emerald-600" size={20} />
+                              <h3 className="text-lg font-bold text-slate-800">Qualifications</h3>
+                            </div>
+
+                            <div className="space-y-4">
+                              <h4 className="text-xs font-semibold text-rose-500">Education</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
+                                <FormInput label="GCE OL" name="gceOl" required />
+                                <FormInput label="GCE AL" name="gceAl" required />
+                                <FormInput label="Diploma" name="diploma" />
+                                <FormInput label="Degree" name="degree" />
+                                <FormInput label="Post Graduate" name="postGraduate" />
+                                <FormInput label="Master" name="master" />
+                                <FormInput label="PhD" name="phd" />
+                              </div>
+                            </div>
+
+                            <div className="space-y-4 pt-4">
+                              <h4 className="text-xs font-semibold text-rose-500">Other</h4>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
+                                <FormInput label="1" name="otherQual1" />
+                                <FormInput label="2" name="otherQual2" />
+                                <FormInput label="3" name="otherQual3" />
+                                <FormInput label="4" name="otherQual4" />
+                                <FormInput label="5" name="otherQual5" />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tab 6: Spouse & Children */}
+                        {activeTab === 'family' && (
+                          <div className="space-y-6 animate-in fade-in duration-300">
+                            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                              <Users className="text-slate-600" size={20} />
+                              <h3 className="text-lg font-bold text-slate-800">Spouse & Children</h3>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+                              <FormInput label="Spouse Name" name="spouseName" />
+                              <FormInput label="Designation" name="spouseDesignation" />
+                              <FormInput label="Working Company" name="spouseWorkingCompany" />
+                              <FormInput label="Office Contact No" name="spouseOfficeContact" />
+                              <FormInput label="Emergency Contact" name="spouseEmergencyContact" />
+                              <FormInput label="Emergency Email" name="spouseEmergencyEmail" type="email" />
+                              <FormInput label="Working Address" name="spouseWorkingAddress" type="textarea" />
+                              <FormInput label="Temporary Address" name="spouseTempAddress" type="textarea" />
+                            </div>
+
+                            <div className="space-y-4 pt-6 text-left">
+                              <h4 className="text-xs font-semibold text-slate-500">Children Details</h4>
+                              <div className="p-6 bg-slate-50 border border-slate-200/70 rounded-2xl space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                  <span className="text-xs font-semibold text-slate-600">Child Name</span>
+                                  <span className="text-xs font-semibold text-slate-600">Age</span>
                                 </div>
-                              </div>
-                            </div>
-                          )}
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-                            <FormInput label="Teacher ID - Auto" name="username" disabled required />
-                            <FormInput label="Full Name" name="fullName" required />
-                            <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
-                            <FormInput label="Name with Initial" name="nameWithInitials" />
-                            <FormInput label="Name with Initial Sinhala" name="nameWithInitialSinhala" />
-                            <FormInput label="Date Of Birth" name="dob" type="date" required />
-                            <FormInput label="NIC" name="nic" required />
-                            <FormInput label="Birth Certificate No" name="birthCertificateNo" />
-                            <FormInput label="District" name="district" required />
-                            <FormInput label="Religion" name="religion" required />
-                            <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} required />
-                            <FormInput label="Mother Name" name="motherName" />
-                            <FormInput label="Father Name" name="fatherName" required />
-                            <FormInput label="Guardian ID" name="guardianId" />
-                            <FormInput label="Age - Auto Calculate" name="age" disabled placeholder="Auto-calculated" />
-                            <FormInput label="Civil State" name="civilState" />
-                            <FormInput label="Marital State" name="maritalState" options={CIVIL_OPTIONS} />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Tab 2: Health */}
-                      {activeTab === 'health' && (
-                        <div className="space-y-6 animate-in fade-in duration-300">
-                          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                            <HeartPulse className="text-rose-600" size={20} />
-                            <h3 className="text-lg font-bold text-slate-800">Health Information</h3>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-                            <FormInput label="Height" name="height" />
-                            <FormInput label="Weight" name="weight" />
-                            <FormInput label="Blood Type" name="bloodGroup" options={BLOOD_OPTIONS} />
-                            <FormInput label="Special Physical Condition" name="specialPhysicalCondition" />
-                            <FormInput label="Long Term Diseases" name="longTermDiseases" />
-                          </div>
-                          <FormInput label="Description" name="healthDescription" type="textarea" />
-                        </div>
-                      )}
-
-                      {/* Tab 3: Service History */}
-                      {activeTab === 'service' && (
-                        <div className="space-y-6 animate-in fade-in duration-300">
-                          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                            <Briefcase className="text-amber-600" size={20} />
-                            <h3 className="text-lg font-bold text-slate-800">Service History</h3>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-                            <FormInput label="1st Appointment Date" name="firstAppointmentDate" type="date" required />
-                            <FormInput label="1st Appointment District" name="firstAppointmentDistrict" required />
-                            <FormInput label="1st Appointment Institute" name="firstAppointmentInstitute" required />
-                            <FormInput label="Hierarchy Carder (Combo Box)" name="hierarchyCarder" options={CARDER_OPTIONS} required />
-                            <FormInput label="Position" name="position" required />
-                            <FormInput label="Increment Date" name="incrementDate" type="date" />
-                            <FormInput label="Service Period" name="servicePeriod" />
-                            <FormInput label="Salary Code (As per Pay sheet)" name="salaryCode" />
-                            <FormInput label="Holding Position at School" name="holdingPosition" options={HOLDING_POSITION_OPTIONS} required />
-                            <FormInput label="Grade" name="grade" />
-                            <FormInput label="Appointment Medium" name="appointmentMedium" required />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Tab 4: Contact Information */}
-                      {activeTab === 'contact' && (
-                        <div className="space-y-6 animate-in fade-in duration-300">
-                          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                            <MapPin className="text-indigo-600" size={20} />
-                            <h3 className="text-lg font-bold text-slate-800">Contact Information</h3>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                            <FormInput label="Permanent Address" name="address" type="textarea" required />
-                            <FormInput label="Temporary Address" name="temporaryAddress" type="textarea" />
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-                            <FormInput label="Emergency Contact No" name="emergencyContactNo" required />
-                            <FormInput label="Whatsapp No" name="whatsappNo" required />
-                            <FormInput label="Home No" name="homeNo" />
-                            <FormInput label="Mobile No" name="contactMobile" required />
-                            <FormInput label="Email" name="email" type="email" />
-                            <FormInput label="Distance to School" name="distanceToSchool" />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Tab 5: Qualification */}
-                      {activeTab === 'qualification' && (
-                        <div className="space-y-6 animate-in fade-in duration-300">
-                          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                            <GraduationCap className="text-emerald-600" size={20} />
-                            <h3 className="text-lg font-bold text-slate-800">Qualifications</h3>
-                          </div>
-
-                          <div className="space-y-4">
-                                    <h4 className="text-xs font-semibold text-rose-500">Education</h4>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
-                                      <FormInput label="GCE OL" name="gceOl" required />
-                                      <FormInput label="GCE AL" name="gceAl" required />
-                                      <FormInput label="Diploma" name="diploma" />
-                                      <FormInput label="Degree" name="degree" />
-                                      <FormInput label="Post Graduate" name="postGraduate" />
-                                      <FormInput label="Master" name="master" />
-                                      <FormInput label="PhD" name="phd" />
-                                    </div>
-                                  </div>
-
-                                  <div className="space-y-4 pt-4">
-                                    <h4 className="text-xs font-semibold text-rose-500">Other</h4>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
-                              <FormInput label="1" name="otherQual1" />
-                              <FormInput label="2" name="otherQual2" />
-                              <FormInput label="3" name="otherQual3" />
-                              <FormInput label="4" name="otherQual4" />
-                              <FormInput label="5" name="otherQual5" />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Tab 6: Spouse & Children */}
-                      {activeTab === 'family' && (
-                        <div className="space-y-6 animate-in fade-in duration-300">
-                          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                            <Users className="text-slate-600" size={20} />
-                            <h3 className="text-lg font-bold text-slate-800">Spouse & Children</h3>
-                          </div>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-                            <FormInput label="Spouse Name" name="spouseName" />
-                            <FormInput label="Designation" name="spouseDesignation" />
-                            <FormInput label="Working Company" name="spouseWorkingCompany" />
-                            <FormInput label="Office Contact No" name="spouseOfficeContact" />
-                            <FormInput label="Emergency Contact" name="spouseEmergencyContact" />
-                            <FormInput label="Emergency Email" name="spouseEmergencyEmail" type="email" />
-                            <FormInput label="Working Address" name="spouseWorkingAddress" type="textarea" />
-                            <FormInput label="Temporary Address" name="spouseTempAddress" type="textarea" />
-                          </div>
-
-                          <div className="space-y-4 pt-6 text-left">
-                            <h4 className="text-xs font-semibold text-slate-500">Children Details</h4>
-                            <div className="p-6 bg-slate-50 border border-slate-200/70 rounded-2xl space-y-4">
-                              <div className="grid grid-cols-2 gap-4">
-                                <span className="text-xs font-semibold text-slate-600">Child Name</span>
-                                <span className="text-xs font-semibold text-slate-600">Age</span>
-                              </div>
-                              <div className="space-y-3">
-                                {[0, 1, 2].map((i) => {
-                                  const showEditable = isEnrollMode || isEditMode;
-                                  if (!showEditable) {
+                                <div className="space-y-3">
+                                  {[0, 1, 2].map((i) => {
+                                    const showEditable = isEnrollMode || isEditMode;
+                                    if (!showEditable) {
+                                      return (
+                                        <div key={i} className="grid grid-cols-2 gap-4">
+                                          <div className="p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs text-black">
+                                            {formData.children?.[i]?.name || '—'}
+                                          </div>
+                                          <div className="p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs text-black">
+                                            {formData.children?.[i]?.age || '—'}
+                                          </div>
+                                        </div>
+                                      );
+                                    }
                                     return (
                                       <div key={i} className="grid grid-cols-2 gap-4">
-                                        <div className="p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs text-black">
-                                          {formData.children?.[i]?.name || '—'}
-                                        </div>
-                                        <div className="p-2.5 bg-white border border-slate-200 rounded-xl font-bold text-xs text-black">
-                                          {formData.children?.[i]?.age || '—'}
-                                        </div>
+                                        <Input
+                                          placeholder="Child Name"
+                                          value={formData.children?.[i]?.name || ''}
+                                          onChange={(e) => {
+                                            const children = [...(formData.children || [{}, {}, {}])];
+                                            children[i] = { ...children[i], name: e.target.value };
+                                            setFormData({ ...formData, children });
+                                          }}
+                                          className="h-10 bg-white border-slate-200 font-bold text-xs"
+                                        />
+                                        <Input
+                                          placeholder="Age"
+                                          type="number"
+                                          value={formData.children?.[i]?.age || ''}
+                                          onChange={(e) => {
+                                            const children = [...(formData.children || [{}, {}, {}])];
+                                            children[i] = { ...children[i], age: e.target.value };
+                                            setFormData({ ...formData, children });
+                                          }}
+                                          className="h-10 bg-white border-slate-200 font-bold text-xs"
+                                        />
                                       </div>
                                     );
-                                  }
-                                  return (
-                                    <div key={i} className="grid grid-cols-2 gap-4">
-                                      <Input
-                                        placeholder="Child Name"
-                                        value={formData.children?.[i]?.name || ''}
-                                        onChange={(e) => {
-                                          const children = [...(formData.children || [{}, {}, {}])];
-                                          children[i] = { ...children[i], name: e.target.value };
-                                          setFormData({ ...formData, children });
-                                        }}
-                                        className="h-10 bg-white border-slate-200 font-bold text-xs"
-                                      />
-                                      <Input
-                                        placeholder="Age"
-                                        type="number"
-                                        value={formData.children?.[i]?.age || ''}
-                                        onChange={(e) => {
-                                          const children = [...(formData.children || [{}, {}, {}])];
-                                          children[i] = { ...children[i], age: e.target.value };
-                                          setFormData({ ...formData, children });
-                                        }}
-                                        className="h-10 bg-white border-slate-200 font-bold text-xs"
-                                      />
-                                    </div>
-                                  );
-                                })}
+                                  })}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {/* Tab 7: Visibility */}
-                      {activeTab === 'visibility' && (
-                        <div className="space-y-6 animate-in fade-in duration-300">
-                          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                            <Eye className="text-indigo-600" size={20} />
-                            <h3 className="text-lg font-bold text-slate-800">System Visibility</h3>
-                          </div>
-                          
-                          <div className="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100/60 space-y-4">
-                            <div className="flex items-center gap-3 mb-2">
+                        {/* Tab 7: Visibility */}
+                        {activeTab === 'visibility' && (
+                          <div className="space-y-6 animate-in fade-in duration-300">
+                            <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                               <Eye className="text-indigo-600" size={20} />
-                              <h4 className="text-xs font-semibold text-indigo-700">Account Access</h4>
+                              <h3 className="text-lg font-bold text-slate-800">System Visibility</h3>
                             </div>
 
-                            <div className="flex flex-col gap-3 text-left">
-                              <label className={`flex items-center gap-4 p-4 rounded-xl transition-all border-2 cursor-pointer ${
-                                formData.isActive === true || formData.isActive === 'true'
-                                  ? 'bg-emerald-50 border-emerald-300'
-                                  : 'bg-rose-50 border-rose-300'
-                              }`}>
-                                <input
-                                  type="checkbox"
-                                  name="isActive"
-                                  checked={formData.isActive === true || formData.isActive === 'true'}
-                                  onChange={handleChange}
-                                  disabled={!isEnrollMode && !isEditMode}
-                                  className="w-5 h-5 text-indigo-600 focus:ring-indigo-500 rounded border-slate-300"
-                                />
-                                <div>
-                                  <p className={`text-sm font-black uppercase tracking-widest ${
-                                    formData.isActive === true || formData.isActive === 'true' ? 'text-emerald-700' : 'text-rose-700'
+                            <div className="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100/60 space-y-4">
+                              <div className="flex items-center gap-3 mb-2">
+                                <Eye className="text-indigo-600" size={20} />
+                                <h4 className="text-xs font-semibold text-indigo-700">Account Access</h4>
+                              </div>
+
+                              <div className="flex flex-col gap-3 text-left">
+                                <label className={`flex items-center gap-4 p-4 rounded-xl transition-all border-2 cursor-pointer ${formData.isActive === true || formData.isActive === 'true'
+                                    ? 'bg-emerald-50 border-emerald-300'
+                                    : 'bg-rose-50 border-rose-300'
                                   }`}>
-                                    {formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive'}
-                                  </p>
-                                  <p className="text-xs font-bold text-slate-500 leading-tight mt-0.5">
-                                    Determines whether this personnel record is active in school services.
-                                  </p>
-                                </div>
-                              </label>
+                                  <input
+                                    type="checkbox"
+                                    name="isActive"
+                                    checked={formData.isActive === true || formData.isActive === 'true'}
+                                    onChange={handleChange}
+                                    disabled={!isEnrollMode && !isEditMode}
+                                    className="w-5 h-5 text-indigo-600 focus:ring-indigo-500 rounded border-slate-300"
+                                  />
+                                  <div>
+                                    <p className={`text-sm font-black uppercase tracking-widest ${formData.isActive === true || formData.isActive === 'true' ? 'text-emerald-700' : 'text-rose-700'
+                                      }`}>
+                                      {formData.isActive === true || formData.isActive === 'true' ? 'Active' : 'Inactive'}
+                                    </p>
+                                    <p className="text-xs font-bold text-slate-500 leading-tight mt-0.5">
+                                      Determines whether this personnel record is active in school services.
+                                    </p>
+                                  </div>
+                                </label>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {/* Workspace Controls */}
-                      {isEnrollMode && (
-                        <div className="pt-6 border-t border-slate-100 flex justify-end gap-2">
-                          <Button
-                            type="submit"
-                            className="h-10 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-600/20"
-                            isLoading={isSubmitting}
-                          >
-                            Save &amp; Register Staff
-                          </Button>
-                          <Button
-                            type="button"
-                            className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all"
-                            onClick={handleReset}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      )}
+                        {/* Workspace Controls */}
+                        {isEnrollMode && (
+                          <div className="pt-6 border-t border-slate-100 flex justify-end gap-2">
+                            <Button
+                              type="submit"
+                              className="h-10 px-8 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-600/20"
+                              isLoading={isSubmitting}
+                            >
+                              Save &amp; Register Staff
+                            </Button>
+                            <Button
+                              type="button"
+                              className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all"
+                              onClick={handleReset}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        )}
 
-                      {isEditMode && (
-                        <div className="pt-6 border-t border-slate-100 flex justify-end gap-2">
-                          <Button
-                            type="submit"
-                            className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-md shadow-emerald-600/20"
-                            isLoading={isSubmitting}
-                          >
-                            <Save size={14} className="mr-2" /> Save Changes
-                          </Button>
-                          <Button
-                            type="button"
-                            className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all"
-                            onClick={handleCancelEdit}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      )}
+                        {isEditMode && (
+                          <div className="pt-6 border-t border-slate-100 flex justify-end gap-2">
+                            <Button
+                              type="submit"
+                              className="h-10 px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-md shadow-emerald-600/20"
+                              isLoading={isSubmitting}
+                            >
+                              <Save size={14} className="mr-2" /> Save Changes
+                            </Button>
+                            <Button
+                              type="button"
+                              className="h-10 px-8 rounded-xl bg-slate-500 hover:bg-slate-600 text-white font-semibold text-xs active:scale-95 transition-all"
+                              onClick={handleCancelEdit}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        )}
 
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </form>
+                </CardContent>
+              </Card>
+            </form>
           </>
         )}
 

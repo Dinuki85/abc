@@ -120,6 +120,16 @@ export default function AdminLayout({
           </div>
         </main>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200/80 px-4 md:px-8 py-3 flex-shrink-0 relative z-50 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+          © 2026 WP/NG ANDIAMBALAMA MAHA VIDHYALAYA. ALL RIGHTS RESERVED.
+        </div>
+        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+          POWERED BY <span className="text-indigo-600 font-black tracking-widest ml-1">ITMIND</span>
+        </div>
+      </footer>
     </div>
     </BreadcrumbContext.Provider>
   );
