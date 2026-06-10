@@ -465,5 +465,154 @@ h1, h2, h3, h4, .font-handlee {
   font-weight: 800 !important;
 }
 
+/* ==========================================================================
+   MOBILE RESPONSIVENESS — purely additive, no existing styles changed
+   ========================================================================== */
 
+/* 1. Prevent horizontal overflow on all screen sizes */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
 
+/* 2. Smooth scrolling without blocking touch scroll */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 3. Ensure images never exceed their container */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 4. Section spacing — tighter on mobile */
+.section-spacing {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+@media (min-width: 768px) {
+  .section-spacing {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .section-spacing {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* 5. Container horizontal padding — safe on tiny phones */
+.container-custom {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .container-custom {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container-custom {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* 6. Large display headings — scale down on mobile.
+   Tailwind classes like text-5xl / text-6xl are used without a small
+   breakpoint in several components (Academic, Sports, Team, Facilities, Hero).
+   These media queries provide the mobile-first scaling without touching JSX. */
+@media (max-width: 639px) {
+  /* Hero headline */
+  section h1.font-handlee,
+  section h2.font-handlee {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    line-height: 1.2;
+  }
+
+  /* Section sub-titles that use text-5xl / text-6xl */
+  .text-5xl  { font-size: clamp(1.75rem, 7vw, 2.25rem) !important; line-height: 1.2 !important; }
+  .text-6xl  { font-size: clamp(1.75rem, 7.5vw, 2.5rem) !important; line-height: 1.2 !important; }
+  .text-7xl  { font-size: clamp(2rem, 8vw, 3rem)       !important; line-height: 1.15 !important; }
+
+  /* Reduce large section padding on mobile */
+  .py-24  { padding-top: 3rem  !important; padding-bottom: 3rem  !important; }
+  .py-20  { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+  .py-16  { padding-top: 2rem  !important; padding-bottom: 2rem  !important; }
+
+  /* Reduce oversized card / content padding on mobile */
+  .p-10 { padding: 1.25rem !important; }
+  .p-8  { padding: 1rem   !important; }
+
+  /* Footer grid gap — stack neatly */
+  footer .gap-16 { gap: 2.5rem !important; }
+  footer .mb-20  { margin-bottom: 2.5rem !important; }
+
+  /* Stat cards — full width on tiny screens */
+  .amv-stat-card { padding: 10px 6px; }
+
+  /* Module buttons — readable on tiny screens */
+  .amv-btn-title { font-size: 10px !important; }
+  .amv-btn-sub   { font-size: 7px  !important; }
+}
+
+/* 7. Tablet tweaks (640 – 1023 px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .text-6xl { font-size: clamp(2.25rem, 5vw, 3rem) !important; line-height: 1.15 !important; }
+  .text-7xl { font-size: clamp(2.5rem, 6vw, 3.75rem) !important; line-height: 1.1 !important; }
+}
+
+/* 8. Minimum touch-target size for interactive elements */
+@media (max-width: 1023px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Exception: small inline icons / decorators shouldn't grow */
+  svg {
+    min-height: unset;
+    min-width: unset;
+  }
+}
+
+/* 9. Admin layout — prevent overflow on narrow screens */
+@media (max-width: 767px) {
+  .admin-layout-container {
+    overflow-x: hidden;
+  }
+
+  /* Admin page padding on mobile */
+  .admin-layout-container main {
+    padding: 0.75rem !important;
+  }
+}
+
+/* 10. Ensure the Navbar logo text doesn't overflow on very small screens */
+@media (max-width: 360px) {
+  .max-w-\[120px\] {
+    max-width: 80px !important;
+  }
+}
+
+/* 11. Carousel navigation — always visible on touch (no hover state on mobile) */
+@media (max-width: 1023px) {
+  .group:hover .opacity-0,
+  .group .opacity-0 {
+    opacity: 1 !important;
+    transform: translate(0, 0) !important;
+  }
+}
+
+/* 12. Word-break for long email / phone strings in footer */
+footer p, footer a {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
