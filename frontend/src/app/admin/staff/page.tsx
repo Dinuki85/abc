@@ -761,7 +761,7 @@ function StaffPageContent() {
                 </Button>
                 <Link href="/admin/reporting?report=teachers"
                   className="h-10 px-5 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-600/20 active:scale-95 transition-all">
-                  <Users size={15} className="mr-2" /> Visit Directory List
+                  <Users size={15} className="mr-2" /> Visit All Staff
                 </Link>
               </div>
             )}
