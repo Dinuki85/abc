@@ -217,10 +217,25 @@ export default function ParentsPage() {
   }, []);
 
   useEffect(() => {
+    const onReset = () => {
+      setSelectedGuardian(null);
+      setIsEnrollMode(false);
+      setIsEditMode(false);
+      setFormData({ ...BLANK_FORM });
+      setSearchTerm('');
+      setIsViewOneMode(false);
+      setFormErrors({});
+      router.replace('/admin/parents');
+    };
+    window.addEventListener('resetDirectoryView', onReset);
+    return () => window.removeEventListener('resetDirectoryView', onReset);
+  }, [router]);
+
+  useEffect(() => {
     if (isEnrollMode) {
       setDynamicSuffix('New Guardian Registration');
-    } else if (isViewOneMode && selectedGuardian) {
-      setDynamicSuffix(`${selectedGuardian.guardianName || 'Guardian'}`);
+    } else if (isViewOneMode || selectedGuardian) {
+      setDynamicSuffix('Search guardian');
     } else {
       setDynamicSuffix('');
     }
@@ -634,87 +649,7 @@ export default function ParentsPage() {
           </div>
         )}
 
-        {/* ── Toolbar — shown in viewOneMode AND enrollMode (Image-2 style) ── */}
-        {(isViewOneMode || isEnrollMode) && (
-          <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-2xl border border-slate-200/60 shadow-sm">
 
-            {/* Left side: search (viewOne) OR enrollment label (enroll) */}
-            {isViewOneMode ? (
-              <div className="relative" ref={searchDropdownRef}>
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <Input
-                  id="guardian-search-input"
-                  autoFocus
-                  placeholder="Search by guardian name, ID, NIC..."
-                  value={searchTerm}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    setIsSearchDropdownOpen(true);
-                  }}
-                  onFocus={() => setIsSearchDropdownOpen(true)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && filteredGuardians.length > 0) {
-                      handleSelectGuardian(filteredGuardians[0], false);
-                      setSearchTerm('');
-                      setIsSearchDropdownOpen(false);
-                    }
-                  }}
-                  className="pl-9 h-9 w-64 md:w-80 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
-                />
-                {isSearchDropdownOpen && searchTerm && (
-                  <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-80 overflow-y-auto custom-scrollbar">
-                    {filteredGuardians.length === 0 ? (
-                      <div className="p-4 text-xs text-slate-500 font-bold text-center">
-                        No guardians found
-                      </div>
-                    ) : (
-                      filteredGuardians.map((g) => (
-                        <button
-                          key={g.guardianId}
-                          type="button"
-                          className="w-full text-left px-5 py-3 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer flex flex-col gap-1"
-                          onClick={() => {
-                            handleSelectGuardian(g, false);
-                            setSearchTerm('');
-                            setIsSearchDropdownOpen(false);
-                          }}
-                        >
-                          <div className="font-black text-black text-sm">{g.guardianName}</div>
-                          <div className="text-[11px] text-slate-500 font-bold">
-                            ID: {g.guardianId} {g.guardianNic && `| NIC: ${g.guardianNic}`}
-                          </div>
-                          <div className="text-[10px] text-emerald-600 font-black uppercase tracking-wider mt-1">
-                            Linked Student: {g.studentName} ({g.studentUsername})
-                          </div>
-                        </button>
-                      ))
-                    )}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <UserPlus size={15} className="text-emerald-600" />
-                <span className="text-sm font-semibold text-slate-700 tracking-tight">
-                  New Guardian Registration
-                </span>
-              </div>
-            )}
-
-            <div className="flex-1" />
-
-            {/* Guardian ID badge */}
-            <div className="flex items-center h-9 px-3 border border-slate-200 rounded-lg text-xs font-bold text-slate-600 bg-white shrink-0">
-              Guardian ID: {selectedGuardian?.guardianId || formData.guardianId || 'Not Assigned'}
-            </div>
-
-            {/* Back to directory */}
-            <button type="button" onClick={handleReset}
-              className="flex items-center gap-1.5 h-9 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold transition-colors shrink-0">
-              <RotateCcw size={12} /> Back
-            </button>
-          </div>
-        )}
 
         {/* ── Page Notification ───────────────────────────────────────────────── */}
         {message && (
@@ -764,10 +699,64 @@ export default function ParentsPage() {
                     ? `Editing: ${formData.guardianName || selectedGuardian?.guardianName}`
                     : selectedGuardian
                     ? `${selectedGuardian.guardianName}`
-                    : 'Search or Select a Guardian'}
+                    : 'Search guardian details'}
                 </CardTitle>
               </div>
               <div className="flex items-center gap-3">
+                {isViewOneMode && (
+                  <div className="relative mr-2" ref={searchDropdownRef}>
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      id="guardian-search-input"
+                      autoFocus
+                      placeholder="Search..."
+                      value={searchTerm}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setIsSearchDropdownOpen(true);
+                      }}
+                      onFocus={() => setIsSearchDropdownOpen(true)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && filteredGuardians.length > 0) {
+                          handleSelectGuardian(filteredGuardians[0], false);
+                          setSearchTerm('');
+                          setIsSearchDropdownOpen(false);
+                        }
+                      }}
+                      className="pl-9 h-8 w-48 md:w-64 border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 focus:bg-white"
+                    />
+                    {isSearchDropdownOpen && searchTerm && (
+                      <div className="absolute right-0 z-50 w-72 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-80 overflow-y-auto custom-scrollbar text-left">
+                        {filteredGuardians.length === 0 ? (
+                          <div className="p-4 text-xs text-slate-500 font-bold text-center">
+                            No guardians found
+                          </div>
+                        ) : (
+                          filteredGuardians.map((g) => (
+                            <button
+                              key={g.guardianId}
+                              type="button"
+                              className="w-full text-left px-5 py-3 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer flex flex-col gap-1"
+                              onClick={() => {
+                                handleSelectGuardian(g, false);
+                                setSearchTerm('');
+                                setIsSearchDropdownOpen(false);
+                              }}
+                            >
+                              <div className="font-black text-black text-sm">{g.guardianName}</div>
+                              <div className="text-[11px] text-slate-500 font-bold">
+                                ID: {g.guardianId} {g.guardianNic && `| NIC: ${g.guardianNic}`}
+                              </div>
+                              <div className="text-[10px] text-emerald-600 font-black uppercase tracking-wider mt-1">
+                                Linked Student: {g.studentName} ({g.studentUsername})
+                              </div>
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
                 <div className="px-3 py-1 bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">
                   ID: {String(isEnrollMode ? (formData.guardianId || 'Select student...') : (selectedGuardian?.guardianId || '—'))}
                 </div>
@@ -850,7 +839,7 @@ export default function ParentsPage() {
                         {/* Student Connection Field */}
                         <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
                           <h4 className="text-xs font-semibold text-emerald-700">Linked Student Account</h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                             <div className="space-y-1">
                               <label className="text-xs font-semibold text-slate-500 ml-1">Select Student</label>
                               {isEnrollMode ? (
@@ -915,7 +904,7 @@ export default function ParentsPage() {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                           <FormInput label="Full Name" name="guardianName" required />
                           <FormInput label="Name in Sinhala as Birth Certificate" name="guardianNameSinhala" />
                           <FormInput label="Name with Initial" name="guardianNameWithInitials" />
@@ -940,7 +929,7 @@ export default function ParentsPage() {
                           <h3 className="text-lg font-bold text-slate-800">Occupation Details</h3>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                           <FormInput label="Working Company" name="guardianWorkingCompany" required />
                           <FormInput label="Designation" name="guardianDesignation" required />
                           <FormInput label="Office Contact No" name="guardianOfficeContact" required />
@@ -960,12 +949,12 @@ export default function ParentsPage() {
                           <h3 className="text-lg font-bold text-slate-800">Contact Information</h3>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
                           <FormInput label="Permanent Address" name="guardianAddressPermanent" type="textarea" required />
                           <FormInput label="Temporary Address" name="guardianAddressTemporary" type="textarea" />
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                           <FormInput label="Emergency Contact No" name="guardianEmergencyContactNo" required />
                           <FormInput label="Whatsapp No" name="guardianWhatsappNo" required />
                           <FormInput label="Home No" name="guardianHomeNo" />
