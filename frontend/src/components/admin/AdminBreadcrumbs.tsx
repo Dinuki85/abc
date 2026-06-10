@@ -143,6 +143,12 @@ export default function AdminBreadcrumbs() {
               ) : (
                 <Link
                   href={item.href}
+                  onClick={(e) => {
+                    if (item.href === pathname) {
+                      e.preventDefault();
+                      window.dispatchEvent(new CustomEvent('resetDirectoryView'));
+                    }
+                  }}
                   className="flex items-center gap-1 text-[11px] md:text-xs font-bold text-slate-500 hover:text-black hover:bg-slate-200/30 px-1.5 py-0.5 rounded-lg transition-all duration-200 active:scale-95 tracking-tight"
                 >
                   {Icon && <Icon size={12} className="text-slate-500 stroke-[2.2] group-hover:text-black" />}
