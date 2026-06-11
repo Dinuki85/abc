@@ -84,8 +84,29 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
     return <FormField label={label} value={displayVal} />;
   }
 
-  const isDisabled = disabled || (!isEnrollMode && !isEditMode) || (name === 'guardianId');
+  const isDisabled = disabled || (!isEnrollMode && !isEditMode) || (name === 'guardianId' && !isEnrollMode);
   const borderCls = hasError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-200 focus:ring-emerald-500/10';
+
+  if ((name === 'username' || name === 'guardianId') && isEnrollMode) {
+    const valStr = String(formData[name] || '');
+    const prefix = valStr.length >= 10 ? valStr.slice(0, 10) : valStr;
+    return (
+      <div className="space-y-1 text-left">
+        <label className="text-xs font-semibold text-slate-500 ml-1">
+          {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+        </label>
+        <Input type="text" maxLength={15} value={valStr} 
+          onChange={(e) => {
+             const v = e.target.value.replace(/\D/g, '');
+             if (!v.startsWith(prefix)) return;
+             handleChange({ target: { name, value: v, type: 'text' } } as any);
+          }}
+          className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:ring-2`}
+        />
+        {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
+      </div>
+    );
+  }
 
   if (options) return (
     <div className="space-y-1 text-left">
@@ -431,7 +452,7 @@ export default function ParentsPage() {
     if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
   };
 
-  const handleStartEnrollmentInline = () => {
+  const handleStartEnrollmentInline = async () => {
     setSearchTerm('');
     setSelectedGuardian(null);
     setIsEnrollMode(true);
@@ -440,8 +461,13 @@ export default function ParentsPage() {
     setActiveTab('basic');
 
     // Auto-generate guardian ID
-    const nextNum = guardiansList.length + 1;
-    const generatedId = String(nextNum).padStart(5, '0');
+    let generatedId = '';
+    try {
+      generatedId = await api.getNextGuardianIndex();
+    } catch (e) {
+      const nextNum = guardiansList.length + 1;
+      generatedId = String(nextNum).padStart(5, '0');
+    }
 
     setFormData({ ...BLANK_FORM, guardianId: generatedId });
     setMessage(null);
