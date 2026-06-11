@@ -269,7 +269,8 @@ class ApiService {
         : `${API_BASE_URL}/student/${username}`;
 
       const response = await fetch(url, {
-        headers: this.getHeaders()
+        headers: this.getHeaders(),
+        cache: 'no-store'
       });
       if (response.ok) return await response.json();
       return null;
@@ -474,7 +475,8 @@ class ApiService {
 
   async getStudents(): Promise<StudentProfile[]> {
     const response = await fetch(`${API_BASE_URL}/admin/students?all=true`, {
-      headers: this.getHeaders()
+      headers: this.getHeaders(),
+      cache: 'no-store'
     });
     if (response.ok) return await response.json();
     return [];
@@ -507,7 +509,8 @@ class ApiService {
     
     try {
       const response = await fetch(url, {
-        headers: this.getHeaders()
+        headers: this.getHeaders(),
+        cache: 'no-store'
       });
       if (response.ok) return await response.json();
       return { content: [], totalElements: 0, totalPages: 0 };
@@ -535,7 +538,8 @@ class ApiService {
 
   async searchAdminStudent(username: string): Promise<StudentProfile | null> {
     const response = await fetch(`${API_BASE_URL}/admin/students/search/${username}`, {
-      headers: this.getHeaders()
+      headers: this.getHeaders(),
+      cache: 'no-store'
     });
     if (response.ok) return await response.json();
     if (response.status === 400) {
