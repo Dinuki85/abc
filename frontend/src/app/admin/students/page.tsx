@@ -206,6 +206,7 @@ function StudentsPageContent() {
 
   // ── Directory state ────────────────────────────────────────────────────────
   const [students, setStudents] = useState<StudentProfile[]>([]);
+  const [allStudentsRaw, setAllStudentsRaw] = useState<StudentProfile[]>([]);
   const [_isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [grades, setGrades] = useState<Grade[]>([]);
@@ -234,6 +235,10 @@ function StudentsPageContent() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
 
+  const [showGuardianDropdown, setShowGuardianDropdown] = useState(false);
+  const [guardianSearchTerm, setGuardianSearchTerm] = useState('');
+  const guardianDropdownRef = useRef<HTMLDivElement>(null);
+
   // ── Data fetchers ──────────────────────────────────────────────────────────
   const fetchGrades = async () => {
     try { setGrades(await api.getGrades()); } catch { }
@@ -243,8 +248,10 @@ function StudentsPageContent() {
     if (!silent) setIsLoading(true);
     try {
       const res = await api.getPaginatedStudents(page, pageSize, searchTerm, filterGradeId, filterClassId);
-      setStudents(res.content);
-      setTotalElements(res.totalElements);
+      setAllStudentsRaw(res.content);
+      const filtered = res.content.filter((st: any) => !st.username.startsWith('GDN-HOST-'));
+      setStudents(filtered);
+      setTotalElements(filtered.length);
       setCurrentPage(page);
     } catch { }
     finally { if (!silent) setIsLoading(false); }
@@ -259,6 +266,16 @@ function StudentsPageContent() {
 
   // ── Side-effects ───────────────────────────────────────────────────────────
   useEffect(() => { fetchGrades(); }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (guardianDropdownRef.current && !guardianDropdownRef.current.contains(event.target as Node)) {
+        setShowGuardianDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const onReset = () => {
@@ -303,6 +320,69 @@ function StudentsPageContent() {
       }
     }
   }, [formData.dob]);
+
+  const guardiansList = React.useMemo(() => {
+    const list = allStudentsRaw
+      .filter(st => st.guardianName || st.guardianIdRef || st.guardianNic)
+      .map(st => {
+        let extra: any = {};
+        if (st.additionalData) {
+          try { extra = JSON.parse(st.additionalData); } catch (e) {}
+        }
+        return {
+          guardianId: st.guardianIdRef || `GDN-${st.username}`,
+          guardianName: st.guardianName || extra.guardianName || '',
+        };
+      });
+    const unique = [];
+    const ids = new Set();
+    for (const g of list) {
+      if (g.guardianId && !ids.has(g.guardianId)) {
+        ids.add(g.guardianId);
+        unique.push(g);
+      }
+    }
+    return unique;
+  }, [allStudentsRaw]);
+
+  const filteredGuardians = React.useMemo(() => {
+    if (!guardianSearchTerm) return guardiansList;
+    const term = guardianSearchTerm.toLowerCase();
+    return guardiansList.filter(g => 
+      g.guardianId.toLowerCase().includes(term) || 
+      g.guardianName.toLowerCase().includes(term)
+    );
+  }, [guardiansList, guardianSearchTerm]);
+
+  // Auto-fill guardian details if a valid guardianIdRef is entered or changed
+  useEffect(() => {
+    const gid = String(formData.guardianIdRef || '').trim();
+    if (gid && (isEnrollMode || isEditMode)) {
+      // Find a student profile that has this guardianIdRef and has details
+      const match = allStudentsRaw.find(s => (s.guardianIdRef === gid || `GDN-${s.username}` === gid) && s.guardianName);
+      if (match) {
+        let extra: any = {};
+        if (match.additionalData) {
+          try { extra = JSON.parse(match.additionalData); } catch {}
+        }
+        setFormData((p: any) => {
+          if (
+            p.guardianName === match.guardianName &&
+            p.guardianNic === (match.guardianNic || extra.guardianNic) &&
+            p.guardianContact === (match.guardianContact || extra.guardianContact)
+          ) {
+            return p;
+          }
+          return {
+            ...p,
+            guardianName: match.guardianName || '',
+            guardianNic: match.guardianNic || extra.guardianNic || '',
+            guardianContact: match.guardianContact || extra.guardianContact || '',
+          };
+        });
+      }
+    }
+  }, [formData.guardianIdRef, allStudentsRaw, isEnrollMode, isEditMode]);
 
   // Load selected student into workspace
   // isEditMode is in deps so formData is NOT overwritten while user is editing
@@ -428,10 +508,7 @@ function StudentsPageContent() {
       { key: 'contactEmergency', label: 'Emergency Contact' },
       { key: 'contactWhatsapp', label: 'WhatsApp' },
     ],
-    exams: [
-      { key: 'resultGrade05', label: 'Grade 05 Exam Result' },
-      { key: 'resultGceOl', label: 'GCE OL Exam Result' },
-    ],
+    exams: [],
     visibility: [],
   };
 
@@ -597,12 +674,12 @@ function StudentsPageContent() {
           }
         } else {
           // New student enrollment
-          if (!selectedGradeId || !selectedClassId) {
-            setMessage({ type: 'error', text: 'Primary Grade and Class Section are required.' });
-            setIsSubmitting(false);
-            return;
-          }
-          await api.enrollStudent(username, '', selectedGradeId as number, selectedClassId as number);
+          await api.enrollStudent(
+            username,
+            '',
+            selectedGradeId ? Number(selectedGradeId) : undefined as any,
+            selectedClassId ? Number(selectedClassId) : undefined as any
+          );
           const savedProfile = await api.saveStudentProfile(username, buildPayload(formData));
           setMessage({ type: 'success', text: `Student enrolled: ${username}` });
           setIsEnrollMode(false);
@@ -697,15 +774,15 @@ function StudentsPageContent() {
             {!selectedStudent && !isEnrollMode && (
               <div className="flex flex-wrap justify-center gap-3 relative z-10">
                 <Button type="button" onClick={handleStartEnrollmentInline}
-                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-primary hover:bg-primary/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-primary hover:bg-primary/5 text-slate-700 font-semibold text-xs shadow-sm transition-all !normal-case">
                   <UserPlus size={15} className="mr-2 text-primary" /> Enroll New Student
                 </Button>
                 <Button type="button" onClick={() => setIsViewOneMode(true)}
-                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-primary hover:bg-primary/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-primary hover:bg-primary/5 text-slate-700 font-semibold text-xs shadow-sm transition-all !normal-case">
                   <Search size={15} className="mr-2 text-primary" /> View One Student
                 </Button>
                 <Link href="/admin/reporting?report=students"
-                  className="h-10 px-5 flex items-center justify-center rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-xs shadow-md shadow-primary/20 active:scale-95 transition-all">
+                  className="h-10 px-5 flex items-center justify-center rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-xs shadow-md shadow-primary/20 active:scale-95 transition-all !normal-case">
                   <Users size={15} className="mr-2" /> View All Students
                 </Link>
               </div>
@@ -884,7 +961,7 @@ function StudentsPageContent() {
                           <div className="space-y-1 text-left">
                             <label className="text-xs font-semibold text-slate-500 ml-1">Guardian ID</label>
                             <div className="flex gap-2">
-                              <div className="flex-1">
+                              <div className="flex-1 relative" ref={guardianDropdownRef}>
                                 {(!isEnrollMode && !isEditMode && selectedStudent) ? (
                                   <div className="bg-slate-50/70 p-2.5 px-3.5 rounded-xl border border-slate-100/85 text-left h-full flex flex-col justify-center">
                                     <span className="block text-sm font-semibold text-black leading-tight wrap-break-word">
@@ -892,9 +969,50 @@ function StudentsPageContent() {
                                     </span>
                                   </div>
                                 ) : (
-                                  <Input type="text" name="guardianIdRef" value={String(formData.guardianIdRef || '')} onChange={handleChange}
-                                    disabled={!isEnrollMode && !isEditMode} placeholder="e.g. GDN-..."
-                                    className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-primary/10 disabled:opacity-50 w-full" />
+                                  <>
+                                    <Input 
+                                      type="text" 
+                                      name="guardianIdRef" 
+                                      value={showGuardianDropdown ? guardianSearchTerm : String(formData.guardianIdRef || '')} 
+                                      onChange={(e) => {
+                                        handleChange(e);
+                                        setGuardianSearchTerm(e.target.value);
+                                        setShowGuardianDropdown(true);
+                                      }}
+                                      onFocus={() => {
+                                        setGuardianSearchTerm(String(formData.guardianIdRef || ''));
+                                        setShowGuardianDropdown(true);
+                                      }}
+                                      disabled={!isEnrollMode && !isEditMode} 
+                                      placeholder="e.g. GDN-..."
+                                      className="h-10 rounded-xl border border-slate-200 bg-white font-bold text-black text-xs focus:ring-2 focus:ring-primary/10 disabled:opacity-50 w-full" 
+                                    />
+                                    {showGuardianDropdown && (isEnrollMode || isEditMode) && (
+                                      <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
+                                        {filteredGuardians.length === 0 ? (
+                                          <div className="p-3 text-xs text-slate-500 font-bold text-center">
+                                            No guardians found
+                                          </div>
+                                        ) : (
+                                          filteredGuardians.map((g) => (
+                                            <button
+                                              key={g.guardianId}
+                                              type="button"
+                                              className="w-full text-left px-4 py-2.5 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer"
+                                              onClick={() => {
+                                                setFormData((p: any) => ({ ...p, guardianIdRef: g.guardianId }));
+                                                setGuardianSearchTerm('');
+                                                setShowGuardianDropdown(false);
+                                              }}
+                                            >
+                                              <div className="font-black text-black">{g.guardianId}</div>
+                                              {g.guardianName && <div className="text-[10px] text-slate-400 font-semibold">{g.guardianName}</div>}
+                                            </button>
+                                          ))
+                                        )}
+                                      </div>
+                                    )}
+                                  </>
                                 )}
                               </div>
                               {Boolean(formData.guardianIdRef) && (
@@ -1024,8 +1142,8 @@ function StudentsPageContent() {
                     {activeTab === 'exams' && (
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <FormInput label="Grade 05 Exam Result" name="resultGrade05" required />
-                          <FormInput label="GCE OL Exam Result" name="resultGceOl" required />
+                          <FormInput label="Grade 05 Exam Result" name="resultGrade05" />
+                          <FormInput label="GCE OL Exam Result" name="resultGceOl" />
                         </div>
                         {(isEnrollMode || isEditMode) && (
                           <div className="mt-4 flex justify-end border-t border-slate-100 pt-4 gap-2">
