@@ -41,8 +41,8 @@ export default function AdminDashboard() {
   ];
 
   const modules = [
-    { title: 'Administration', sub: 'Create Your School Basic Profile', href: '/admin/institutional', icon: Settings,        variant: 'indigo'  },
-    { title: 'Registration',   sub: 'Add Students and Staff',           href: '/admin/registration',  icon: UserPlus,        variant: 'emerald' },
+    { title: 'Registration', sub: 'Create Your School Basic Profile', href: '/admin/institutional', icon: Settings,        variant: 'indigo'  },
+    { title: 'Enrollment',   sub: 'Add Students and Staff',           href: '/admin/registration',  icon: UserPlus,        variant: 'emerald' },
     { title: 'Performance',    sub: 'Enter Performance',                href: '/admin/performance',   icon: Activity,        variant: 'amber'   },
     { title: 'Display',        sub: 'Reports and Analytics',            href: '/admin/reporting',     icon: FileSpreadsheet, variant: 'rose'    },
   ];
