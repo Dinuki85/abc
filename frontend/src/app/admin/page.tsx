@@ -80,11 +80,11 @@ export default function AdminDashboard() {
 
         {/* ── 1. WELCOME & STATS ──────────────────────────────── */}
         <div
-          className="amv-fadeup flex-shrink-0 flex flex-col justify-center gap-4 relative overflow-hidden group/banner"
+          className="amv-fadeup flex-shrink-0 flex flex-col justify-center gap-6 relative overflow-hidden group/banner"
           style={{
             background: 'linear-gradient(to right, #111424, #1a1f35)',
             borderRadius: 20,
-            padding: '20px 24px',
+            padding: '28px 24px',
             boxShadow: '0 12px 30px -8px rgba(0,0,0,0.5)',
             border: '1px solid rgba(255,255,255,0.06)',
           }}
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
                     ? `1px solid ${s.color === '#343a40' ? '#cbd5e1' : s.color}` 
                     : '1px solid rgba(255,255,255,0.08)',
                   borderRadius: 20,
-                  padding: '12px 10px',
+                  padding: '24px 16px',
                   boxShadow: hoveredIdx === i
                     ? `0 20px 40px -10px ${s.color === '#343a40' ? 'rgba(255,255,255,0.1)' : `${s.color}35`}`
                     : '0 20px 40px -10px rgba(0,0,0,0.3)',
@@ -197,8 +197,8 @@ export default function AdminDashboard() {
           {modules.map((m, i) => (
             <Link key={i} href={m.href} className={`amv-btn amv-btn-${m.variant}`} style={{ padding: '12px 12px' }}>
               <span className="amv-btn-arrow"><ArrowRight size={14} /></span>
-              <div className="amv-btn-icon" style={{ width: 48, height: 48, borderRadius: 14, marginBottom: 4 }}>
-                <m.icon size={24} strokeWidth={2} />
+              <div className="amv-btn-icon" style={{ width: 64, height: 64, borderRadius: 18, marginBottom: 8 }}>
+                <m.icon size={32} strokeWidth={2} />
               </div>
               <div className="flex flex-col items-center gap-1">
                 <span className="amv-btn-title" style={{ fontSize: 'clamp(13px, 1.4vw, 18px)', letterSpacing: '0.02em' }}>{m.title}</span>
