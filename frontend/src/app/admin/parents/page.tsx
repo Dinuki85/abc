@@ -135,6 +135,46 @@ function FormField({ label, value }: { label: string; value: any }) {
   );
 }
 
+// ─── Pure helper: extract all guardian fields from a full student profile ────
+function buildGuardianFromProfile(base: any, fullProfile: any): any {
+  let extra: any = {};
+  if (fullProfile.additionalData) {
+    try { extra = JSON.parse(fullProfile.additionalData); } catch {}
+  }
+  return {
+    ...base,
+    guardianId: base.guardianId || fullProfile.guardianIdRef || `GDN-${fullProfile.username}`,
+    studentUsername: base.studentUsername || fullProfile.username,
+    guardianName: fullProfile.guardianName || extra.guardianName || base.guardianName || '',
+    guardianNic: fullProfile.guardianNic || extra.guardianNic || base.guardianNic || '',
+    guardianContact: fullProfile.guardianContact || extra.guardianContact || base.guardianContact || '',
+    guardianNameSinhala: extra.guardianNameSinhala || base.guardianNameSinhala || '',
+    guardianNameWithInitials: extra.guardianNameWithInitials || base.guardianNameWithInitials || '',
+    guardianNameWithInitialSinhala: extra.guardianNameWithInitialSinhala || base.guardianNameWithInitialSinhala || '',
+    guardianDob: extra.guardianDob || base.guardianDob || '',
+    guardianBirthCertificateNo: extra.guardianBirthCertificateNo || base.guardianBirthCertificateNo || '',
+    guardianDistrict: extra.guardianDistrict || base.guardianDistrict || '',
+    guardianReligion: extra.guardianReligion || base.guardianReligion || '',
+    guardianGender: extra.guardianGender || base.guardianGender || '',
+    guardianAge: extra.guardianAge || base.guardianAge || '',
+    guardianCivilState: extra.guardianCivilState || base.guardianCivilState || '',
+    guardianWorkingAddress: extra.guardianWorkingAddress || base.guardianWorkingAddress || '',
+    guardianWorkingTempAddress: extra.guardianWorkingTempAddress || base.guardianWorkingTempAddress || '',
+    guardianOfficeContact: extra.guardianOfficeContact || base.guardianOfficeContact || '',
+    guardianEmergencyContactName: extra.guardianEmergencyContactName || base.guardianEmergencyContactName || '',
+    guardianEmergencyEmail: extra.guardianEmergencyEmail || base.guardianEmergencyEmail || '',
+    guardianWorkingCompany: extra.guardianWorkingCompany || base.guardianWorkingCompany || '',
+    guardianDesignation: extra.guardianDesignation || base.guardianDesignation || '',
+    guardianAddressPermanent: extra.guardianAddressPermanent || base.guardianAddressPermanent || '',
+    guardianAddressTemporary: extra.guardianAddressTemporary || base.guardianAddressTemporary || '',
+    guardianEmergencyContactNo: extra.guardianEmergencyContactNo || base.guardianEmergencyContactNo || '',
+    guardianWhatsappNo: extra.guardianWhatsappNo || base.guardianWhatsappNo || '',
+    guardianHomeNo: extra.guardianHomeNo || base.guardianHomeNo || '',
+    guardianEmail: extra.guardianEmail || base.guardianEmail || '',
+    guardianDistanceToSchool: extra.guardianDistanceToSchool || base.guardianDistanceToSchool || '',
+  };
+}
+
 export default function ParentsPage() {
   const workspaceRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -243,7 +283,7 @@ export default function ParentsPage() {
 
   // Compute guardian records from student profiles
   const guardiansList = useMemo(() => {
-    return studentsList
+    const list = studentsList
       .filter(st => st.guardianName || st.guardianIdRef || st.guardianNic)
       .map(st => {
         let extra: any = {};
@@ -264,8 +304,8 @@ export default function ParentsPage() {
           studentName: st.fullName,
           studentGrade: st.gradeName || 'N/A',
           studentClass: st.className || 'N/A',
-          
-          // Detailed fields
+
+          // Detailed fields — check both extra and top-level student profile fields
           guardianNameSinhala: extra.guardianNameSinhala || '',
           guardianNameWithInitials: extra.guardianNameWithInitials || '',
           guardianNameWithInitialSinhala: extra.guardianNameWithInitialSinhala || '',
@@ -292,24 +332,51 @@ export default function ParentsPage() {
           guardianDistanceToSchool: extra.guardianDistanceToSchool || '',
         };
       });
+
+    const uniqueMap = new Map();
+    for (const g of list) {
+      if (!g.guardianId) continue;
+      const existing = uniqueMap.get(g.guardianId);
+      if (!existing) {
+        uniqueMap.set(g.guardianId, { ...g });
+      } else {
+        // Merge properties to ensure no data is lost if some students have incomplete guardian data
+        const gAny = g as any;
+        const existingAny = existing as any;
+        for (const key of Object.keys(gAny)) {
+          if (gAny[key] && (!existingAny[key] || existingAny[key] === '' || existingAny[key] === 'N/A')) {
+            existingAny[key] = gAny[key];
+          }
+        }
+      }
+    }
+    return Array.from(uniqueMap.values());
   }, [studentsList]);
 
 
 
-  // Handle URL query matching
+  // Handle URL query matching — always re-load from guardiansList so fresh data shows after save
   useEffect(() => {
     if (queryGuardianId && guardiansList.length > 0) {
       const matched = guardiansList.find(g => g.guardianId === queryGuardianId);
       if (matched) {
-        if (!selectedGuardian || selectedGuardian.guardianId !== queryGuardianId || isEditMode !== (queryEdit === 'true')) {
-          setSelectedGuardian(matched);
-          setFormData(matched);
-          setIsEnrollMode(false);
-          setIsEditMode(queryEdit === 'true');
-        }
+        // Set basic data first for immediate display
+        setSelectedGuardian(matched);
+        setFormData(matched);
+        setIsEnrollMode(false);
+        setIsEditMode(queryEdit === 'true');
+        // Then fetch full profile to populate all additionalData fields
+        api.getStudentProfile(matched.studentUsername).then(fullProfile => {
+          if (fullProfile) {
+            const fullGuardian = buildGuardianFromProfile(matched, fullProfile);
+            setSelectedGuardian(fullGuardian);
+            setFormData(fullGuardian);
+          }
+        }).catch(console.error);
       }
     }
-  }, [queryGuardianId, queryEdit, guardiansList, selectedGuardian, isEditMode]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryGuardianId, queryEdit, guardiansList]);
 
   // Filter list by search term
   const filteredGuardians = useMemo(() => {
@@ -359,10 +426,6 @@ export default function ParentsPage() {
 
     setFormData((p: any) => {
       const updated = { ...p, [name]: val };
-      // Auto-generate Guardian ID when student is selected in enroll mode
-      if (name === 'studentUsername' && isEnrollMode && val) {
-        updated.guardianId = `GDN-${val}`;
-      }
       return updated;
     });
     if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
@@ -375,7 +438,12 @@ export default function ParentsPage() {
     setIsViewOneMode(false);
     setIsEditMode(false);
     setActiveTab('basic');
-    setFormData({ ...BLANK_FORM, guardianId: 'Select student...' });
+
+    // Auto-generate guardian ID
+    const nextNum = guardiansList.length + 1;
+    const generatedId = String(nextNum).padStart(5, '0');
+
+    setFormData({ ...BLANK_FORM, guardianId: generatedId });
     setMessage(null);
     setStudentSearch('');
     setIsDropdownOpen(false);
@@ -448,9 +516,6 @@ export default function ParentsPage() {
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
-    if (!formData.studentUsername) {
-      errors['studentUsername'] = 'Linked Student is required';
-    }
     REQUIRED_FIELDS.forEach(({ key, label }) => {
       if (!formData[key] || String(formData[key]).trim() === '') {
         errors[key] = `${label} is required`;
@@ -460,7 +525,7 @@ export default function ParentsPage() {
       setFormErrors(errors);
       for (const tabId of TAB_ORDER) {
         const fields = REQUIRED_FIELDS_BY_TAB[tabId] || [];
-        const hasTabError = fields.some(({ key }) => errors[key]) || (tabId === 'basic' && errors['studentUsername']);
+        const hasTabError = fields.some(({ key }) => errors[key]);
         if (hasTabError) {
           setActiveTab(tabId);
           setTimeout(() => {
@@ -476,7 +541,8 @@ export default function ParentsPage() {
     return true;
   };
 
-  const handleSelectGuardian = (g: any, editOnLoad = false) => {
+  const handleSelectGuardian = async (g: any, editOnLoad = false) => {
+    // Show basic data immediately while full profile loads
     setSelectedGuardian(g);
     setIsEnrollMode(false);
     setIsViewOneMode(true);
@@ -484,7 +550,22 @@ export default function ParentsPage() {
     setFormData(g);
     setStudentSearch(`${g.studentUsername} - ${g.studentName}`);
     setIsDropdownOpen(false);
+    setMessage(null);
+    setFormErrors({});
     setTimeout(() => workspaceRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+
+    // Fetch the full individual student profile to get complete additionalData
+    // (the list endpoint does not return additionalData)
+    try {
+      const fullProfile = await api.getStudentProfile(g.studentUsername);
+      if (fullProfile) {
+        const fullGuardian = buildGuardianFromProfile(g, fullProfile);
+        setSelectedGuardian(fullGuardian);
+        setFormData(fullGuardian);
+      }
+    } catch (e) {
+      console.error('Failed to load full guardian profile', e);
+    }
   };
 
   const handleStartEdit = () => {
@@ -547,13 +628,24 @@ export default function ParentsPage() {
 
   const handleSaveWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Only save when in enroll or edit mode
+    if (!isEnrollMode && !isEditMode) return;
     if (!validateForm()) return;
-    const studentUsername = formData.studentUsername;
+    let studentUsername = formData.studentUsername;
 
     setIsSubmitting(true);
     setMessage(null);
 
     try {
+      if (!studentUsername) {
+        // Generate a host student username for this unlinked guardian
+        studentUsername = `GDN-HOST-${formData.guardianId}`;
+        formData.studentUsername = studentUsername;
+
+        // Create the host student profile
+        await api.enrollStudent(studentUsername, '', undefined as any, undefined as any);
+      }
+
       // 1. Fetch full student profile to preserve existing fields
       const studentProfile = await api.getStudentProfile(studentUsername);
       if (!studentProfile) {
@@ -587,14 +679,22 @@ export default function ParentsPage() {
 
       // 4. Save student profile
       const savedStudent = await api.saveStudentProfile(studentUsername, studentProfile);
+
+      // Build complete guardian object directly from the saved student data (most reliable source)
+      const savedGuardian = buildGuardianFromProfile(
+        { guardianId: generatedId, studentUsername, studentName: savedStudent?.fullName || studentProfile.fullName || '' },
+        savedStudent || studentProfile
+      );
+
       setMessage({ type: 'success', text: isEnrollMode ? 'Guardian registered successfully!' : 'Guardian profile updated.' });
       setIsEnrollMode(false);
       setIsEditMode(false);
+      setSelectedGuardian(savedGuardian);
+      setFormData(savedGuardian);
+      setIsViewOneMode(true);
 
-      // Reload students
-      await fetchStudents();
-
-      // Set selection
+      // Reload students list in background and push URL
+      fetchStudents();
       router.push(`/admin/parents?guardianId=${generatedId}`);
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message || 'Save failed.' });
@@ -629,13 +729,17 @@ export default function ParentsPage() {
             {!selectedGuardian && !isEnrollMode && (
               <div className="flex flex-wrap justify-center gap-3 relative z-10">
                 <Button type="button" onClick={handleStartEnrollmentInline}
-                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-600 hover:bg-emerald-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-600 hover:bg-emerald-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all !normal-case">
                   <UserPlus size={15} className="mr-2 text-emerald-600" /> Add Guardian
                 </Button>
                 <Button type="button" onClick={() => setIsViewOneMode(true)}
-                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-600 hover:bg-emerald-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-emerald-600 hover:bg-emerald-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all !normal-case">
                   <Search size={15} className="mr-2 text-emerald-600" /> View Guardian Profile
                 </Button>
+                <Link href="/admin/reporting?report=guardians"
+                  className="h-10 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm transition-all flex items-center justify-center !normal-case capitalize">
+                  <Users size={15} className="mr-2" /> View All Guardians
+                </Link>
               </div>
             )}
 
@@ -736,7 +840,7 @@ export default function ParentsPage() {
                                 ID: {g.guardianId} {g.guardianNic && `| NIC: ${g.guardianNic}`}
                               </div>
                               <div className="text-[10px] text-emerald-600 font-black uppercase tracking-wider mt-1">
-                                Linked Student: {g.studentName} ({g.studentUsername})
+                                Linked Student: {g.studentUsername?.startsWith('GDN-HOST-') ? 'Unlinked' : `${g.studentName} (${g.studentUsername})`}
                               </div>
                             </button>
                           ))
@@ -824,73 +928,7 @@ export default function ParentsPage() {
                           <h3 className="text-lg font-bold text-slate-800">Basic Information</h3>
                         </div>
 
-                        {/* Student Connection Field */}
-                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
-                          <h4 className="text-xs font-semibold text-emerald-700">Linked Student Account</h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                            <div className="space-y-1">
-                              <label className="text-xs font-semibold text-slate-500 ml-1">Select Student</label>
-                              {isEnrollMode ? (
-                                <div className="relative" ref={dropdownRef}>
-                                  <Input
-                                    type="text"
-                                    placeholder="Search by Index No or Name..."
-                                    value={studentSearch}
-                                    onChange={(e) => {
-                                      setStudentSearch(e.target.value);
-                                      setIsDropdownOpen(true);
-                                      if (formData.studentUsername) {
-                                        setFormData((p: any) => ({ ...p, studentUsername: '', guardianId: 'Select student...' }));
-                                      }
-                                    }}
-                                    onFocus={() => setIsDropdownOpen(true)}
-                                    className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:ring-2 focus:ring-emerald-500/10 text-sm font-bold text-black"
-                                  />
-                                  {isDropdownOpen && (
-                                    <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto custom-scrollbar">
-                                      {filteredUnassignedStudents.length === 0 ? (
-                                        <div className="p-3 text-xs text-slate-500 font-bold text-center">
-                                          No unassigned students found
-                                        </div>
-                                      ) : (
-                                        filteredUnassignedStudents.map((st) => (
-                                          <button
-                                            key={st.username}
-                                            type="button"
-                                            className="w-full text-left px-4 py-2.5 text-xs font-bold text-black hover:bg-emerald-50 hover:text-emerald-700 transition-colors border-b border-slate-100 last:border-none cursor-pointer"
-                                            onClick={() => {
-                                              setFormData((p: any) => ({
-                                                ...p,
-                                                studentUsername: st.username,
-                                                guardianId: `GDN-${st.username}`
-                                              }));
-                                              setStudentSearch(`${st.username} - ${st.fullName}`);
-                                              setIsDropdownOpen(false);
-                                            }}
-                                          >
-                                            <div className="font-black text-black">{st.username} - {st.fullName}</div>
-                                            <div className="text-[10px] text-slate-400 font-semibold">{st.gradeName || 'N/A'} - {st.className || 'N/A'}</div>
-                                          </button>
-                                        ))
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
-                              ) : (
-                                <div className="p-3 bg-white border border-slate-200 rounded-xl font-bold text-black text-sm">
-                                  {formData.studentUsername} - {selectedGuardian?.studentName} ({selectedGuardian?.studentGrade} - {selectedGuardian?.studentClass})
-                                </div>
-                              )}
-                            </div>
 
-                            <div className="space-y-1">
-                              <label className="text-xs font-semibold text-slate-500 ml-1">Generated Guardian ID</label>
-                              <div className="p-3 bg-slate-100 border border-slate-200 rounded-xl font-bold text-slate-600 text-sm">
-                                {formData.guardianId || 'Select a student to generate ID'}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                           <FormInput label="Full Name" name="guardianName" required />
@@ -984,102 +1022,7 @@ export default function ParentsPage() {
         </>
       )}
 
-        {/* ── Registered Guardians Table ────────────────────────────────────── */}
-        {!isEnrollMode && !isEditMode && !isViewOneMode && (
-          <Card className="rounded-[2.5rem] border-slate-200/60 shadow-2xl overflow-hidden bg-white">
-            <CardHeader className="px-8 py-6 border-b border-gray-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <CardTitle className="text-lg font-black text-black">Registered Guardians</CardTitle>
-                <p className="text-xs text-slate-500 font-bold mt-1">Directory of parents/guardians with linked student records</p>
-              </div>
-              <div className="px-4 py-2 bg-slate-50 rounded-xl border border-slate-100 text-xs font-bold text-black">
-                Total Guardians: <span className="text-emerald-600 font-black">{filteredGuardians.length}</span>
-              </div>
-            </CardHeader>
-            <CardContent className="p-0">
-              {isLoading ? (
-                <div className="p-12 text-center text-sm font-bold text-slate-500">
-                  Loading guardian directory...
-                </div>
-              ) : filteredGuardians.length === 0 ? (
-                <div className="p-12 text-center text-sm font-bold text-slate-500">
-                  {searchTerm ? 'No guardians matched your search.' : 'No guardians registered yet.'}
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader className="sticky top-0 z-20 bg-slate-50 border-b border-slate-200 shadow-sm">
-                      <TableRow className="border-none">
-                        <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Guardian ID</TableHead>
-                        <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Name</TableHead>
-                        <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">NIC</TableHead>
-                        <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Linked Student</TableHead>
-                        <TableHead className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Contact</TableHead>
-                        <TableHead className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-right">Manage</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredGuardians.map((g) => (
-                        <TableRow key={g.guardianId} className="hover:bg-slate-50/80 transition-colors">
-                          <TableCell className="px-8 font-black text-black">{g.guardianId}</TableCell>
-                          <TableCell className="font-bold text-black">{g.guardianName}</TableCell>
-                          <TableCell className="font-bold text-slate-600">{g.guardianNic || '—'}</TableCell>
-                          <TableCell>
-                            <div className="flex flex-col">
-                              <span className="font-black text-emerald-600 uppercase text-[12px]">{g.studentName}</span>
-                              <span className="text-[10px] text-slate-400 font-bold">ID: {g.studentUsername} | {g.studentGrade} - {g.studentClass}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col space-y-1 text-black font-black text-[12px]">
-                              {g.guardianEmail && (
-                                <span className="flex items-center uppercase tracking-tighter">
-                                  <Mail size={12} className="mr-1 text-emerald-600" /> {g.guardianEmail}
-                                </span>
-                              )}
-                              {g.guardianContact && (
-                                <span className="flex items-center uppercase tracking-tighter">
-                                  <Phone size={12} className="mr-1 text-emerald-600" /> {g.guardianContact}
-                                </span>
-                              )}
-                              {!g.guardianEmail && !g.guardianContact && <span className="text-slate-400 font-normal">—</span>}
-                            </div>
-                          </TableCell>
-                          <TableCell className="px-8 text-right space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 text-slate-400 hover:text-emerald-600"
-                              onClick={() => handleSelectGuardian(g, false)}
-                            >
-                              <Eye size={16} />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600"
-                              onClick={() => handleSelectGuardian(g, true)}
-                            >
-                              <Edit size={16} />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 text-slate-400 hover:text-rose-600"
-                              onClick={() => handleDelete(g.studentUsername)}
-                            >
-                              <Trash2 size={16} />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+
       </div>
     </FormContext.Provider>
   );
