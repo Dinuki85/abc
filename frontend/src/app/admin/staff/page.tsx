@@ -751,15 +751,15 @@ function StaffPageContent() {
             {!selectedStaff && !isEnrollMode && (
               <div className="flex flex-wrap justify-center gap-3 relative z-10">
                 <Button type="button" onClick={handleStartEnrollmentInline}
-                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all !normal-case">
                   <UserPlus size={15} className="mr-2 text-indigo-600" /> Enroll New Staff
                 </Button>
                 <Button type="button" onClick={() => setIsViewOneMode(true)}
-                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all">
+                  className="h-10 px-5 rounded-xl bg-white border-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-600/5 text-slate-700 font-semibold text-xs shadow-sm transition-all !normal-case">
                   <Search size={15} className="mr-2 text-indigo-600" /> View One Staff
                 </Button>
                 <Link href="/admin/reporting?report=teachers"
-                  className="h-10 px-5 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-600/20 active:scale-95 transition-all">
+                  className="h-10 px-5 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md shadow-indigo-600/20 active:scale-95 transition-all !normal-case">
                   <Users size={15} className="mr-2" /> Visit All Staff
                 </Link>
               </div>
@@ -976,7 +976,7 @@ function StaffPageContent() {
                               <FormInput label="Gender" name="gender" options={GENDER_OPTIONS} required />
                               <FormInput label="Mother Name" name="motherName" />
                               <FormInput label="Father Name" name="fatherName" required />
-                              <FormInput label="Guardian ID" name="guardianId" />
+
                               <FormInput label="Age - Auto Calculate" name="age" disabled placeholder="Auto-calculated" />
                               <FormInput label="Civil State" name="civilState" />
                               <FormInput label="Marital State" name="maritalState" options={CIVIL_OPTIONS} />
