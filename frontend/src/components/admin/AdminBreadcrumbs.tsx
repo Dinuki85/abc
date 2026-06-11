@@ -23,51 +23,51 @@ function generateBreadcrumbs(pathname: string): BreadcrumbItem[] {
 
   // Institutional Administration sub-pages
   if (pathname === '/admin/institutional') {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
   } else if (pathname.startsWith('/admin/students')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Student Management', href: '/admin/students' });
   } else if (pathname === '/admin/staff/assignment') {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Staff Management', href: '/admin/staff' });
     items.push({ label: 'Teacher Grade Assignment', href: '/admin/staff/assignment' });
   } else if (pathname.startsWith('/admin/staff')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Staff Management', href: '/admin/staff' });
   } else if (pathname.startsWith('/admin/parents')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Guardian Management', href: '/admin/parents' });
   } else if (pathname.startsWith('/admin/grades')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Section Management', href: '/admin/grades' });
   } else if (pathname.startsWith('/admin/subjects')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Subject Management', href: '/admin/subjects' });
   } else if (pathname.startsWith('/admin/classes')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Class Management', href: '/admin/classes' });
   } else if (pathname.startsWith('/admin/sports')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Sport Management', href: '/admin/sports' });
   } else if (pathname.startsWith('/admin/cocircular')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Co-Curricular Management', href: '/admin/cocircular' });
   } else if (pathname.startsWith('/admin/exams')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Exam Management', href: '/admin/exams' });
   } else if (pathname.startsWith('/admin/assignment')) {
-    items.push({ label: 'Institutional Administration', href: '/admin/institutional', icon: Landmark });
+    items.push({ label: 'Registration', href: '/admin/institutional', icon: Landmark });
     items.push({ label: 'Assignment Management', href: '/admin/assignment' });
   }
 
   // Registration sub-pages
   else if (pathname === '/admin/registration') {
-    items.push({ label: 'Registration', href: '/admin/registration', icon: ShieldCheck });
+    items.push({ label: 'Enrollment', href: '/admin/registration', icon: ShieldCheck });
   } else if (pathname.startsWith('/admin/registration/add-to-class')) {
-    items.push({ label: 'Registration', href: '/admin/registration', icon: ShieldCheck });
+    items.push({ label: 'Enrollment', href: '/admin/registration', icon: ShieldCheck });
     items.push({ label: 'Add To Classes', href: '/admin/registration/add-to-class' });
   } else if (pathname.startsWith('/admin/registration')) {
-    items.push({ label: 'Registration', href: '/admin/registration', icon: ShieldCheck });
+    items.push({ label: 'Enrollment', href: '/admin/registration', icon: ShieldCheck });
     const sub = pathname.replace('/admin/registration/', '');
     if (sub) {
       items.push({ label: sub.charAt(0).toUpperCase() + sub.slice(1).replace(/-/g, ' '), href: pathname });
