@@ -218,6 +218,12 @@ public class AdminController {
         return ResponseEntity.ok(java.util.Collections.singletonMap("nextIndex", nextIndex));
     }
 
+    @GetMapping("/next-guardian-index")
+    public ResponseEntity<java.util.Map<String, String>> getNextGuardianIndex() {
+        String nextIndex = adminService.generateNextGuardianIndex();
+        return ResponseEntity.ok(java.util.Collections.singletonMap("nextIndex", nextIndex));
+    }
+
     @PostMapping("/teachers/profile")
     public ResponseEntity<?> saveStaffProfile(@RequestParam String username, @RequestBody com.abc.dto.StaffProfileRequest request) {
         try {
