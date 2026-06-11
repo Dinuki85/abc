@@ -424,6 +424,15 @@ class ApiService {
     return data.nextIndex;
   }
 
+  async getNextGuardianIndex(): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/admin/next-guardian-index`, {
+      headers: this.getHeaders()
+    });
+    if (!response.ok) throw new Error(await response.text());
+    const data = await response.json();
+    return data.nextIndex;
+  }
+
   async updateMyStaffProfile(profile: any) {
     const response = await fetch(`${API_BASE_URL}/staff/profile`, {
       method: 'POST',
