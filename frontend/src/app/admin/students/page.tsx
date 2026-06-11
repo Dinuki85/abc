@@ -159,6 +159,27 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
   const isDisabled = disabled || (!isEnrollMode && !isEditMode) || (name === 'username' && !isEnrollMode);
   const borderCls = hasError ? 'border-rose-400 focus:ring-rose-400/20' : 'border-slate-200 focus:ring-primary/10';
 
+  if ((name === 'username' || name === 'guardianId') && isEnrollMode) {
+    const valStr = String(formData[name] || '');
+    const prefix = valStr.length >= 10 ? valStr.slice(0, 10) : valStr;
+    return (
+      <div className="space-y-1 text-left">
+        <label className="text-xs font-semibold text-slate-500 ml-1">
+          {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+        </label>
+        <Input type="text" maxLength={15} value={valStr} 
+          onChange={(e) => {
+             const v = e.target.value.replace(/\D/g, '');
+             if (!v.startsWith(prefix)) return;
+             handleChange({ target: { name, value: v, type: 'text' } } as any);
+          }}
+          className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:ring-2`}
+        />
+        {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
+      </div>
+    );
+  }
+
   if (options) return (
     <div className="space-y-1 text-left">
       <label className="text-xs font-semibold text-slate-500 ml-1">
@@ -436,19 +457,6 @@ function StudentsPageContent() {
     const sinhalaFields = ['nameSinhala', 'nameWithInitialSinhala'];
     if (sinhalaFields.includes(name) && typeof val === 'string') {
       val = val.replace(/[^\u0D80-\u0DFF\s]/g, '');
-    }
-
-    if (name === 'username' && isEnrollMode) {
-      setFormData((p: Record<string, unknown>) => {
-        const original = String(p.username || '');
-        const prefix = original.length >= 5 ? original.slice(0, 5) : '11246';
-        if (!val.startsWith(prefix)) {
-          return p;
-        }
-        return { ...p, [name]: val };
-      });
-      if (formErrors[name]) setFormErrors(p => { const n = { ...p }; delete n[name]; return n; });
-      return;
     }
 
     setFormData((p: Record<string, unknown>) => ({ ...p, [name]: val }));
