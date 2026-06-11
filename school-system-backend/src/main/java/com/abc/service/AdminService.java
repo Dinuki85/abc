@@ -306,6 +306,7 @@ public class AdminService {
         response.setResultGrade05(student.getResultGrade05());
         response.setResultGceOl(student.getResultGceOl());
         response.setActiveStudent(student.isActiveStudent());
+        response.setAdditionalData(student.getAdditionalData());
 
         return response;
     }
