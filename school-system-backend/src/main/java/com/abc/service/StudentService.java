@@ -101,6 +101,9 @@ public class StudentService {
         student.setDistanceToSchool(request.getDistanceToSchool());
         student.setResultGrade05(request.getResultGrade05());
         student.setResultGceOl(request.getResultGceOl());
+        if (request.getAdditionalData() != null) {
+            student.setAdditionalData(request.getAdditionalData());
+        }
         
         if (request.getClassId() != null) {
             com.abc.entity.SchoolClass schoolClass = schoolClassRepository.findById(request.getClassId())
