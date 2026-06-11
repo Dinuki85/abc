@@ -365,38 +365,56 @@ public class AdminService {
     }
 
     public String generateNextStudentIndex() {
-        Optional<String> maxUsernameOpt = userRepository.findMaxStudentUsernameWithPrefix(schoolIndexPrefix);
-        if (maxUsernameOpt.isPresent() && maxUsernameOpt.get().startsWith(schoolIndexPrefix)) {
+        String prefix = "1011241001";
+        Optional<String> maxUsernameOpt = userRepository.findMaxStudentUsernameWithPrefix(prefix);
+        if (maxUsernameOpt.isPresent() && maxUsernameOpt.get().startsWith(prefix)) {
             String maxStr = maxUsernameOpt.get();
             try {
-                int lastDigits = Integer.parseInt(maxStr.substring(schoolIndexPrefix.length()));
-                return schoolIndexPrefix + String.format("%05d", lastDigits + 1);
+                int lastDigits = Integer.parseInt(maxStr.substring(prefix.length()));
+                return prefix + String.format("%05d", lastDigits + 1);
             } catch (NumberFormatException e) {
-                return schoolIndexPrefix + "00001";
+                return prefix + "00001";
             }
         } else {
-            return schoolIndexPrefix + "00001";
+            return prefix + "00001";
         }
     }
 
     public String generateNextTeacherIndex() {
+        String prefix = "1021241001";
         Optional<String> maxUsernameOpt = userRepository.findAll().stream()
                 .filter(u -> u.getRole() == Role.ROLE_TEACHER || u.getRole() == Role.ROLE_STAFF)
                 .map(User::getUsername)
-                .filter(u -> u != null && u.matches("\\d+"))
+                .filter(u -> u != null && u.startsWith(prefix))
                 .max(String::compareTo);
         if (maxUsernameOpt.isPresent()) {
-            String numStr = maxUsernameOpt.get().replaceAll("[^0-9]", "");
-            if (!numStr.isEmpty()) {
-                try {
-                    int lastDigits = Integer.parseInt(numStr);
-                    return String.format("%05d", lastDigits + 1);
-                } catch (NumberFormatException e) {
-                    return "00001";
-                }
+            String maxStr = maxUsernameOpt.get();
+            try {
+                int lastDigits = Integer.parseInt(maxStr.substring(prefix.length()));
+                return prefix + String.format("%05d", lastDigits + 1);
+            } catch (NumberFormatException e) {
+                return prefix + "00001";
             }
         }
-        return "00001";
+        return prefix + "00001";
+    }
+
+    public String generateNextGuardianIndex() {
+        String prefix = "1031241001";
+        Optional<String> maxOpt = studentRepository.findAll().stream()
+                .map(Student::getGuardianIdRef)
+                .filter(id -> id != null && id.startsWith(prefix))
+                .max(String::compareTo);
+        if (maxOpt.isPresent()) {
+            String maxStr = maxOpt.get();
+            try {
+                int lastDigits = Integer.parseInt(maxStr.substring(prefix.length()));
+                return prefix + String.format("%05d", lastDigits + 1);
+            } catch (NumberFormatException e) {
+                return prefix + "00001";
+            }
+        }
+        return prefix + "00001";
     }
 
 
