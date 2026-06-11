@@ -62,6 +62,7 @@ public class StudentProfileRequest {
     @JsonProperty("isActiveStudent")
     @JsonAlias({"activeStudent", "isActive"})
     private Boolean isActiveStudent;
+    private String additionalData;
 
     public StudentProfileRequest() {}
 
@@ -240,4 +241,7 @@ public class StudentProfileRequest {
 
     public String getResultGceOl() { return resultGceOl; }
     public void setResultGceOl(String resultGceOl) { this.resultGceOl = resultGceOl; }
+
+    public String getAdditionalData() { return additionalData; }
+    public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
 }
