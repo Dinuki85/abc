@@ -12,8 +12,8 @@ import { BarChart3, Users, UserSquare2, Award, BookOpen, Users2, FileCheck, Sett
 
 const adminMenuItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { name: 'Institutional', href: '/admin/institutional', icon: Landmark },
-  { name: 'Registration', href: '/admin/registration', icon: ShieldCheck },
+  { name: 'Registration', href: '/admin/institutional', icon: Landmark },
+  { name: 'Enrollment', href: '/admin/registration', icon: ShieldCheck },
   { name: 'Performance', href: '/admin/performance', icon: Activity },
   { name: 'Display', href: '/admin/reporting', icon: Presentation },
 ];
