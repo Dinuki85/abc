@@ -70,6 +70,7 @@ public class StudentResponse {
     private String resultGrade05;
     private String resultGceOl;
     private boolean isActiveStudent;
+    private String additionalData;
 
     public StudentResponse() {}
 
@@ -205,4 +206,6 @@ public class StudentResponse {
     public void setResultGceOl(String resultGceOl) { this.resultGceOl = resultGceOl; }
     public boolean isActiveStudent() { return isActiveStudent; }
     public void setActiveStudent(boolean isActiveStudent) { this.isActiveStudent = isActiveStudent; }
+    public String getAdditionalData() { return additionalData; }
+    public void setAdditionalData(String additionalData) { this.additionalData = additionalData; }
 }
