@@ -7,7 +7,7 @@ import {
   GraduationCap, Heart, Landmark, Users2, 
   UserCheck, ShieldCheck, BookOpen, Contact, 
   Briefcase, Calendar, ArrowRight, ArrowLeft,
-  Search, Edit, Eye
+  Search, Edit, Eye, Trash2, Mail
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -32,33 +32,38 @@ function ReportingDashboard() {
 
       <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-3 content-start overflow-y-auto md:overflow-visible">
         <ReportSection 
-          title="All School Data" 
+          title="All School" 
           color="#17a2b8"
           items={[
-            { name: 'All Student List', icon: Users, href: '/admin/reporting?report=students' },
-            { name: 'Welfare Paid/Not Paid', icon: HeartHandshake, href: '#' },
+            { name: 'All List', icon: Users, href: '/admin/reporting?report=students' },
+            { name: 'Welfair paid/not paid List', icon: HeartHandshake, href: '#' },
             { name: 'Health Report', icon: Activity, href: '#' },
-            { name: 'Skill Matrix Report', icon: Award, href: '#' },
-            { name: 'Contact Directory', icon: Phone, href: '#' },
-            { name: 'School Exam Report', icon: FileCheck, href: '#' },
+            { name: 'Skill Report', icon: Award, href: '#' },
+            { name: 'Contact Report', icon: Phone, href: '#' },
+            { name: 'Exam Report', icon: FileCheck, href: '#' },
           ]} 
         />
 
         <ReportSection 
-          title="Student Categorization" 
+          title="Student List" 
           color="#d97706"
           items={[
-            { name: 'Section Based List', icon: Layers, href: '#' },
-            { name: 'Subject Based List', icon: BookCheck, href: '#' },
-            { name: 'Scholarship Roll', icon: GraduationCap, href: '#' },
-            { name: 'Religion Based List', icon: Heart, href: '#' },
-            { name: 'Nationality Based List', icon: Landmark, href: '#' },
-            { name: 'Gender Based List', icon: Users2, href: '#' },
+            { name: 'Section Based All Student', icon: Layers, href: '#' },
+            { name: 'Sport Based  All Student', icon: Award, href: '#' },
+            { name: 'Scholarship Based  All Student', icon: GraduationCap, href: '#' },
+            { name: 'Religeon Based  All Student', icon: Heart, href: '#' },
+            { name: 'Nationality Based  All Student', icon: Landmark, href: '#' },
+            { name: 'Gender Based  All Student', icon: Users2, href: '#' },
+            { name: 'Exam Wise Report', icon: FileCheck, href: '#' },
+            { name: 'Subject Wise Report', icon: BookCheck, href: '#' },
+            { name: 'Mask Wise Report', icon: FileSpreadsheet, href: '#' },
+            { name: 'Grade Wise Report', icon: Users, href: '#' },
+            { name: 'Sport Wise Report', icon: Award, href: '#' },
           ]} 
         />
 
         <ReportSection 
-          title="Teacher Records" 
+          title="Teacher" 
           color="#6f42c1"
           items={[
             { name: 'Class Teacher List', icon: UserCheck, href: '/admin/reporting?report=teachers' },
@@ -68,12 +73,13 @@ function ReportingDashboard() {
         />
 
         <ReportSection 
-          title="Individual CV & Files" 
+          title="Individual" 
           color="#343a40"
           items={[
-            { name: 'Student Curriculum Vitae', icon: Contact, href: '#' },
-            { name: 'Teacher Curriculum Vitae', icon: Briefcase, href: '#' },
-            { name: 'Guardian Curriculum Vitae', icon: Heart, href: '#' },
+            { name: 'Student CV', icon: Contact, href: '#' },
+            { name: 'Teacher CV', icon: Briefcase, href: '#' },
+            { name: 'Guardian CV', icon: Heart, href: '#' },
+            { name: 'All Guardian List', icon: Users, href: '/admin/reporting?report=guardians' },
             { name: 'Teacher Timetable', icon: Calendar, href: '#' },
           ]} 
         />
@@ -464,6 +470,217 @@ function TeacherListReport() {
   );
 }
 
+function GuardianListReport() {
+  const [studentsList, setStudentsList] = useState<StudentProfile[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchStudents = async () => {
+    setIsLoading(true);
+    try {
+      const data = await api.getStudents();
+      setStudentsList(data || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const guardiansList = useMemo(() => {
+    return studentsList
+      .filter(st => st.guardianName || st.guardianIdRef || st.guardianNic)
+      .map(st => {
+        let extra: any = {};
+        if (st.additionalData) {
+          try {
+            extra = JSON.parse(st.additionalData);
+          } catch (e) {}
+        }
+        const isDummy = st.username.startsWith('GDN-HOST-');
+        return {
+          id: st.id,
+          guardianId: st.guardianIdRef || `GDN-${st.username}`,
+          guardianName: st.guardianName || extra.guardianName || '',
+          guardianNic: st.guardianNic || extra.guardianNic || '',
+          guardianContact: st.guardianContact || extra.guardianContact || '',
+          guardianEmail: extra.guardianEmail || '',
+          studentUsername: isDummy ? 'Unlinked' : st.username,
+          studentName: isDummy ? 'Unlinked' : st.fullName,
+          studentGrade: isDummy ? '—' : (st.gradeName || 'N/A'),
+          studentClass: isDummy ? '—' : (st.className || 'N/A'),
+        };
+      });
+  }, [studentsList]);
+
+  const filteredGuardians = useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return guardiansList.filter(g =>
+      (g.guardianName || '').toLowerCase().includes(term) ||
+      (g.guardianId || '').toLowerCase().includes(term) ||
+      (g.guardianNic || '').toLowerCase().includes(term) ||
+      (g.studentName || '').toLowerCase().includes(term) ||
+      (g.studentUsername || '').toLowerCase().includes(term)
+    );
+  }, [guardiansList, searchTerm]);
+
+  const handleDelete = async (studentUsername: string) => {
+    if (!confirm('Are you sure you want to remove this guardian? This will clear all guardian data linked to the student.')) return;
+    try {
+      const studentProfile = await api.getStudentProfile(studentUsername);
+      if (!studentProfile) throw new Error('Student profile not found.');
+
+      studentProfile.guardianName = '';
+      studentProfile.guardianNic = '';
+      studentProfile.guardianContact = '';
+      studentProfile.guardianIdRef = '';
+
+      let additional: any = {};
+      if (studentProfile.additionalData) {
+        try { additional = JSON.parse(studentProfile.additionalData); } catch (e) {}
+      }
+
+      const guardianKeys = [
+        'guardianName', 'guardianNameSinhala', 'guardianNameWithInitials', 'guardianNameWithInitialSinhala',
+        'guardianDob', 'guardianNic', 'guardianBirthCertificateNo', 'guardianDistrict', 'guardianReligion',
+        'guardianGender', 'guardianAge', 'guardianCivilState', 'guardianWorkingAddress', 'guardianWorkingTempAddress',
+        'guardianOfficeContact', 'guardianEmergencyContactName', 'guardianEmergencyEmail', 'guardianWorkingCompany',
+        'guardianDesignation', 'guardianAddressPermanent', 'guardianAddressTemporary', 'guardianEmergencyContactNo',
+        'guardianWhatsappNo', 'guardianHomeNo', 'guardianContact', 'guardianEmail', 'guardianDistanceToSchool'
+      ];
+      guardianKeys.forEach(k => delete additional[k]);
+      studentProfile.additionalData = JSON.stringify(additional);
+
+      await api.saveStudentProfile(studentUsername, studentProfile);
+      alert('Guardian profile deleted successfully!');
+      fetchStudents();
+    } catch (error: any) {
+      alert(error.message || 'Failed to delete guardian record');
+    }
+  };
+
+  return (
+    <div className="flex flex-col bg-white rounded-2xl shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-500 border border-slate-200/60">
+      <div className="flex-none p-5 border-b border-slate-100 bg-slate-50/50">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <Link 
+              href="/admin/reporting" 
+              className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-black hover:border-black transition-all shadow-sm"
+            >
+              <ArrowLeft size={16} strokeWidth={2.5} />
+            </Link>
+            <div>
+              <h2 className="text-sm font-black text-black uppercase tracking-tight flex items-center gap-2">
+                <Users size={16} className="text-[#343a40]" />
+                Registered Guardians
+              </h2>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Directory of parents/guardians with linked student records</p>
+            </div>
+          </div>
+          <div className="px-4 py-2 bg-white rounded-xl border border-slate-100 text-xs font-bold text-black shadow-sm">
+            Total Guardians: <span className="text-emerald-600 font-black">{filteredGuardians.length}</span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+            <input
+              type="text"
+              placeholder="Search by ID, Name or Linked Student..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full h-9 pl-9 pr-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full table-fixed text-left text-sm text-slate-600 border-collapse">
+          <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-20">
+            <tr>
+              <th className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black w-48">Guardian ID</th>
+              <th className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Name</th>
+              <th className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black w-32">NIC</th>
+              <th className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Linked Student</th>
+              <th className="py-4 text-sm font-black uppercase tracking-[0.15em] text-black">Contact</th>
+              <th className="px-8 py-4 text-sm font-black uppercase tracking-[0.15em] text-black text-right w-32">Manage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading && Array.from({ length: 5 }).map((_, i) => (
+              <tr key={`sk-${i}`} className="border-b border-slate-100">
+                <td colSpan={6} className="px-8 py-4 animate-pulse"><div className="h-3 bg-slate-100 rounded-full w-full" /></td>
+              </tr>
+            ))}
+            {!isLoading && filteredGuardians.length === 0 && (
+              <tr>
+                <td colSpan={6} className="py-12 text-center text-sm font-bold text-slate-500">
+                  {searchTerm ? 'No guardians matched your search.' : 'No guardians registered yet.'}
+                </td>
+              </tr>
+            )}
+            {!isLoading && filteredGuardians.map((g) => (
+              <tr key={`${g.guardianId}-${g.studentUsername}`} className="hover:bg-slate-50/80 transition-colors border-b border-slate-100">
+                <td className="px-8 py-4 font-black text-black">{g.guardianId}</td>
+                <td className="py-4 font-bold text-black">{g.guardianName}</td>
+                <td className="py-4 font-bold text-slate-600">{g.guardianNic || '—'}</td>
+                <td className="py-4">
+                  <div className="flex flex-col">
+                    <span className="font-black text-emerald-600 uppercase text-[12px]">{g.studentName}</span>
+                    <span className="text-[10px] text-slate-400 font-bold">ID: {g.studentUsername} | {g.studentGrade} - {g.studentClass}</span>
+                  </div>
+                </td>
+                <td className="py-4">
+                  <div className="flex flex-col space-y-1 text-black font-black text-[12px]">
+                    {g.guardianEmail && (
+                      <span className="flex items-center uppercase tracking-tighter">
+                        <Mail size={12} className="mr-1 text-emerald-600" /> {g.guardianEmail}
+                      </span>
+                    )}
+                    {g.guardianContact && (
+                      <span className="flex items-center uppercase tracking-tighter">
+                        <Phone size={12} className="mr-1 text-emerald-600" /> {g.guardianContact}
+                      </span>
+                    )}
+                    {!g.guardianEmail && !g.guardianContact && <span className="text-slate-400 font-normal">—</span>}
+                  </div>
+                </td>
+                <td className="px-8 py-4 text-right space-x-2">
+                  <Link
+                    href={`/admin/parents?guardianId=${g.guardianId}`}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-400 hover:text-emerald-600 hover:bg-slate-100 transition-colors"
+                  >
+                    <Eye size={16} />
+                  </Link>
+                  <Link
+                    href={`/admin/parents?guardianId=${g.guardianId}&edit=true`}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-400 hover:text-blue-600 hover:bg-slate-100 transition-colors"
+                  >
+                    <Edit size={16} />
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(g.studentUsername)}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-400 hover:text-rose-600 hover:bg-slate-100 transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function ReportingContent() {
   const searchParams = useSearchParams();
   const report = searchParams.get('report');
@@ -474,6 +691,10 @@ function ReportingContent() {
 
   if (report === 'teachers') {
     return <TeacherListReport />;
+  }
+
+  if (report === 'guardians') {
+    return <GuardianListReport />;
   }
 
   return <ReportingDashboard />;
