@@ -356,8 +356,8 @@ function InstitutionalGrid() {
           <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" strokeWidth={3} />
         </Link>
         <div>
-          <h1 className="text-base font-black text-black uppercase tracking-tight leading-none">Institutional Administration</h1>
-          <p className="text-[9px] font-black text-black/50 uppercase tracking-[0.2em] mt-0.5">Command Center / Institutional</p>
+          <h1 className="text-base font-black text-black uppercase tracking-tight leading-none">Registration</h1>
+          <p className="text-[9px] font-black text-black/50 uppercase tracking-[0.2em] mt-0.5">Command Center / Registration</p>
         </div>
       </div>
 
