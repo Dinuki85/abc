@@ -112,6 +112,9 @@ function buildPayload(data: Record<string, any>) {
   // Ensure name/fullName are consistent
   if (payload.fullName) payload.name = payload.fullName;
 
+  // Prevent Jackson deserialization conflict on backend
+  delete payload.contactEmail;
+
   return payload as unknown as Teacher;
 }
 
@@ -273,7 +276,15 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
       <label className="text-xs font-semibold text-slate-500 ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
-      <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
+      <Input type={type} name={name} value={String(formData[name] || '')} 
+        onChange={(e) => {
+          if (type === 'email') {
+            const v = e.target.value.toLowerCase().replace(/\s/g, '');
+            handleChange({ target: { name, value: v, type } } as any);
+          } else {
+            handleChange(e);
+          }
+        }}
         disabled={isDisabled} placeholder={placeholder} required={required}
         className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-xs focus:ring-2 disabled:opacity-50`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
@@ -926,13 +937,6 @@ function StaffPageContent() {
                           </>
                         ) : (
                           <>
-                            <Button
-                              type="submit"
-                              className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold active:scale-95 transition-all text-xs"
-                              isLoading={isSubmitting}
-                            >
-                              <Save size={12} className="mr-1" /> Save
-                            </Button>
                             <Button
                               type="button"
                               className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-semibold active:scale-95 transition-all text-xs"
