@@ -429,6 +429,15 @@ export default function ParentsPage() {
     }
   }, [selectedGuardian, isEnrollMode]);
 
+  // Clear selection when search is cleared
+  useEffect(() => {
+    if (searchTerm === '') {
+      setSelectedGuardian(null);
+      setIsEditMode(false);
+      setFormData({ ...BLANK_FORM });
+    }
+  }, [searchTerm]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     let val: any = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
