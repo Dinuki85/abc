@@ -13,6 +13,7 @@ import { BreadcrumbContext } from '@/app/admin/layout';
 import { Input } from '@/components/ui/Input';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { GceOlResultModal } from '@/components/GceOlResultModal';
 
 // ─── Blank form template (reused for reset & new enrollment) ─────────────────
 const BLANK_FORM = {
@@ -258,6 +259,7 @@ function StudentsPageContent() {
 
   const [showGuardianDropdown, setShowGuardianDropdown] = useState(false);
   const [guardianSearchTerm, setGuardianSearchTerm] = useState('');
+  const [isOlPopupOpen, setIsOlPopupOpen] = useState(false);
   const guardianDropdownRef = useRef<HTMLDivElement>(null);
 
   // ── Data fetchers ──────────────────────────────────────────────────────────
@@ -1152,7 +1154,19 @@ function StudentsPageContent() {
                       <div className="space-y-4 animate-in fade-in duration-300">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <FormInput label="Grade 05 Exam Result" name="resultGrade05" />
-                          <FormInput label="GCE OL Exam Result" name="resultGceOl" />
+                          <div className="space-y-1 text-left flex flex-col h-full">
+                            <label className="text-xs font-semibold text-slate-500 ml-1 shrink-0">GCE OL Exam Result</label>
+                            <div className="flex-1 relative">
+                              <Button 
+                                type="button" 
+                                onClick={() => setIsOlPopupOpen(true)}
+                                className="w-full h-10 rounded-xl border border-slate-200 bg-white font-bold text-slate-700 hover:bg-slate-50 transition-colors flex justify-between items-center px-3 !normal-case"
+                              >
+                                <span>{formData.resultGceOl && formData.resultGceOl !== '{}' ? 'View/Edit Results' : 'Add Results'}</span>
+                                <Edit size={14} className="text-slate-400" />
+                              </Button>
+                            </div>
+                          </div>
                         </div>
                         {(isEnrollMode || isEditMode) && (
                           <div className="mt-4 flex justify-end border-t border-slate-100 pt-4 gap-2">
@@ -1186,6 +1200,13 @@ function StudentsPageContent() {
           </>
         )}
 
+        <GceOlResultModal
+          isOpen={isOlPopupOpen}
+          onClose={() => setIsOlPopupOpen(false)}
+          initialData={String(formData.resultGceOl || '')}
+          onSave={(data) => setFormData((p: any) => ({ ...p, resultGceOl: data }))}
+          readOnly={!isEnrollMode && !isEditMode}
+        />
       </div>
     </FormContext.Provider>
   );
