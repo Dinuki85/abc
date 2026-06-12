@@ -439,6 +439,7 @@ function StudentsPageContent() {
     if (searchTerm === '') {
       setSelectedStudent(null);
       setIsEditMode(false);
+      setFormData({ ...BLANK_FORM });
     }
   }, [searchTerm]);
 
