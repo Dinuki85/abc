@@ -155,6 +155,15 @@ function mergeAdditional(t: Teacher) {
     data.fullName = data.name;
   }
 
+  // Load staff category from backend's designations array
+  if ((t as any).designations && Array.isArray((t as any).designations) && (t as any).designations.length > 0) {
+    data.designation = (t as any).designations[0];
+  } else if (!data.designation && (t as any).user?.role === 'ROLE_STAFF') {
+    data.designation = 'STAFF';
+  } else if (!data.designation && (t as any).user?.role === 'ROLE_TEACHER') {
+    data.designation = 'CLASS_TEACHER';
+  }
+
   return data;
 }
 
@@ -407,14 +416,14 @@ function StaffPageContent() {
     }
   }, [filteredStaff, searchTerm, isEnrollMode, isEditMode, selectedStaff]);
 
-  // Clear selection when search is cleared (only if no staff is currently loaded)
-  const prevSearchTermRef = useRef(searchTerm);
+  // Clear selection when search is cleared
   useEffect(() => {
-    if (searchTerm === '' && prevSearchTermRef.current !== '' && !selectedStaff) {
+    if (searchTerm === '') {
+      setSelectedStaff(null);
       setIsEditMode(false);
+      setFormData({ ...BLANK_FORM });
     }
-    prevSearchTermRef.current = searchTerm;
-  }, [searchTerm, selectedStaff]);
+  }, [searchTerm]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -478,6 +487,7 @@ function StaffPageContent() {
       { key: 'district', label: 'District' },
       { key: 'religion', label: 'Religion' },
       { key: 'fatherName', label: 'Father Name' },
+      { key: 'designation', label: 'Staff Category' },
     ],
     health: [],
     service: [
@@ -755,6 +765,10 @@ function StaffPageContent() {
     { label: 'Office Staff', value: 'OFFICE_STAFF' },
     { label: 'Principal', value: 'PRINCIPAL' }
   ];
+  const CATEGORY_OPTIONS = [
+    { label: 'Academic', value: 'CLASS_TEACHER' },
+    { label: 'Non Academic', value: 'STAFF' }
+  ];
 
   return (
     <FormContext.Provider value={{ formData, handleChange, isEnrollMode, isEditMode, selectedStaff, formErrors }}>
@@ -961,29 +975,9 @@ function StaffPageContent() {
                               <h3 className="text-lg font-bold text-slate-800">Basic Information</h3>
                             </div>
 
-                            {isEnrollMode && (
-                              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 space-y-4 text-left">
-                                <h4 className="text-xs font-semibold text-indigo-700">Account Authorization Details</h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                                  <div className="space-y-1">
-                                    <label className="text-xs font-semibold text-slate-500 ml-1">Staff Category</label>
-                                    <select
-                                      name="designation"
-                                      value={formData.designation}
-                                      onChange={handleChange}
-                                      className="w-full h-10 bg-white border border-slate-200 rounded-xl px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/10 text-xs font-bold text-black"
-                                    >
-                                      <option value="">Select Category</option>
-                                      <option value="Academic">Academic</option>
-                                      <option value="Non Academic">Non Academic</option>
-                                    </select>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
                               <FormInput label="Staff ID - Auto" name="username" disabled required placeholder="00001" />
+                              <FormInput label="Staff Category" name="designation" options={CATEGORY_OPTIONS} required />
                               <FormInput label="Salary ID" name="salaryCode" required />
                               <FormInput label="Full Name" name="fullName" required />
                               <FormInput label="Name in Sinhala as Birth Certificate" name="nameSinhala" required />
