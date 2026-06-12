@@ -13,6 +13,8 @@ import { api, Teacher } from '@/lib/api';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { BreadcrumbContext } from '@/app/admin/layout';
+import { GceOlResultModal } from '@/components/GceOlResultModal';
+import { GceAlResultModal } from '@/components/GceAlResultModal';
 
 // ─── Blank form template for staff ───────────────────────────────────────────
 const BLANK_FORM = {
@@ -325,6 +327,8 @@ function StaffPageContent() {
   const [isViewOneMode, setIsViewOneMode] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [isOlPopupOpen, setIsOlPopupOpen] = useState(false);
+  const [isAlPopupOpen, setIsAlPopupOpen] = useState(false);
 
   // ── Breadcrumb ─────────────────────────────────────────────────────────────
   const { setDynamicSuffix } = React.useContext(BreadcrumbContext);
@@ -1073,8 +1077,32 @@ function StaffPageContent() {
                             <div className="space-y-4">
                               <h4 className="text-xs font-semibold text-rose-500">Education</h4>
                               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-4 border-l-2 border-rose-100">
-                                <FormInput label="GCE OL" name="gceOl" required />
-                                <FormInput label="GCE AL" name="gceAl" required />
+                                <div className="space-y-1 text-left flex flex-col h-full">
+                                  <label className="text-xs font-semibold text-slate-500 ml-1 shrink-0">GCE OL<span className="text-rose-500 ml-1">*</span></label>
+                                  <div className="flex-1 relative">
+                                    <Button 
+                                      type="button" 
+                                      onClick={() => setIsOlPopupOpen(true)}
+                                      className="w-full h-10 rounded-xl border border-slate-200 bg-white font-bold text-slate-700 hover:bg-slate-50 transition-colors flex justify-between items-center px-3 !normal-case"
+                                    >
+                                      <span>{formData.gceOl && formData.gceOl !== '{}' ? 'View/Edit Results' : 'Add Results'}</span>
+                                      <Edit size={14} className="text-slate-400" />
+                                    </Button>
+                                  </div>
+                                </div>
+                                <div className="space-y-1 text-left flex flex-col h-full">
+                                  <label className="text-xs font-semibold text-slate-500 ml-1 shrink-0">GCE AL<span className="text-rose-500 ml-1">*</span></label>
+                                  <div className="flex-1 relative">
+                                    <Button 
+                                      type="button" 
+                                      onClick={() => setIsAlPopupOpen(true)}
+                                      className="w-full h-10 rounded-xl border border-slate-200 bg-white font-bold text-slate-700 hover:bg-slate-50 transition-colors flex justify-between items-center px-3 !normal-case"
+                                    >
+                                      <span>{formData.gceAl && formData.gceAl !== '{}' ? 'View/Edit Results' : 'Add Results'}</span>
+                                      <Edit size={14} className="text-slate-400" />
+                                    </Button>
+                                  </div>
+                                </div>
                                 <FormInput label="Diploma" name="diploma" />
                                 <FormInput label="Degree" name="degree" />
                                 <FormInput label="Post Graduate" name="postGraduate" />
@@ -1260,7 +1288,20 @@ function StaffPageContent() {
         )}
 
 
-
+        <GceOlResultModal
+          isOpen={isOlPopupOpen}
+          onClose={() => setIsOlPopupOpen(false)}
+          initialData={String(formData.gceOl || '')}
+          onSave={(data) => setFormData((p: any) => ({ ...p, gceOl: data }))}
+          readOnly={!isEnrollMode && !isEditMode}
+        />
+        <GceAlResultModal
+          isOpen={isAlPopupOpen}
+          onClose={() => setIsAlPopupOpen(false)}
+          initialData={String(formData.gceAl || '')}
+          onSave={(data) => setFormData((p: any) => ({ ...p, gceAl: data }))}
+          readOnly={!isEnrollMode && !isEditMode}
+        />
       </div>
     </FormContext.Provider>
   );
