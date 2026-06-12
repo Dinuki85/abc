@@ -108,6 +108,28 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
     );
   }
 
+  if (name === 'nic' || name === 'guardianNic') {
+    return (
+      <div className="space-y-1 text-left">
+        <label className="text-xs font-semibold text-slate-500 ml-1">
+          {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+        </label>
+        <Input type="text" maxLength={12} value={String(formData[name] || '')} 
+          onChange={(e) => {
+             const v = e.target.value.toUpperCase();
+             if (/^([0-9]{0,12}|[0-9]{0,9}[XV])$/.test(v)) {
+               handleChange({ target: { name, value: v, type: 'text' } } as any);
+             }
+          }}
+          disabled={isDisabled}
+          required={required}
+          className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:ring-2 disabled:opacity-50 w-full`}
+        />
+        {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
+      </div>
+    );
+  }
+
   if (options) return (
     <div className="space-y-1 text-left">
       <label className="text-xs font-semibold text-slate-500 ml-1">
@@ -132,14 +154,46 @@ function FormInput({ label, name, type = 'text', options = null, disabled = fals
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
+  if (type === 'date') {
+    return (
+      <div className="space-y-1 text-left">
+        <label className="text-xs font-semibold text-slate-500 ml-1">
+          {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
+        </label>
+        <div className="relative">
+          <Input type="text" value={String(formData[name] || '')} disabled={isDisabled} placeholder={placeholder || 'yyyy-mm-dd'} readOnly
+            className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:ring-2 disabled:opacity-50 w-full pr-10 cursor-pointer`} />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+            </svg>
+          </div>
+          <input type="date" name={name} value={String(formData[name] || '')} onChange={handleChange} disabled={isDisabled} required={required}
+            onClick={(e) => { try { (e.target as any).showPicker(); } catch(err){} }}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+        </div>
+        {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-1 text-left">
       <label className="text-xs font-semibold text-slate-500 ml-1">
         {label}{required && <span className="text-rose-500 ml-0.5">*</span>}
       </label>
-      <Input type={type} name={name} value={String(formData[name] || '')} onChange={handleChange}
+      <Input type={type} 
+        name={name} value={String(formData[name] || '')} 
+        onChange={(e) => {
+          if (type === 'email') {
+            const v = e.target.value.toLowerCase().replace(/\s/g, '');
+            handleChange({ target: { name, value: v, type } } as any);
+          } else {
+            handleChange(e);
+          }
+        }}
         disabled={isDisabled} placeholder={placeholder} required={required}
-        className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:ring-2 disabled:opacity-50`} />
+        className={`h-10 rounded-xl border ${borderCls} bg-white font-bold text-black text-sm focus:ring-2 disabled:opacity-50 w-full`} />
       {hasError && <p className="text-xs text-rose-500 ml-1 mt-0.5">{formErrors[name]}</p>}
     </div>
   );
@@ -740,6 +794,9 @@ export default function ParentsPage() {
 
   // Option lists
   const GENDER_OPTIONS = [{ label: 'Male', value: 'MALE' }, { label: 'Female', value: 'FEMALE' }];
+  const RELIGION_OPTIONS = [
+    "Buddhism", "Hinduism", "Islam", "Christianity", "Roman Catholic", "Other"
+  ].map(r => ({ label: r, value: r }));
   const CIVIL_OPTIONS = [
     { label: 'Single', value: 'Single' },
     { label: 'Married', value: 'Married' },
@@ -908,22 +965,9 @@ export default function ParentsPage() {
                         </Button>
                       </>
                     ) : (
-                      <>
-                        <Button
-                          type="submit"
-                          className="h-8 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold active:scale-95 transition-all text-xs"
-                          isLoading={isSubmitting}
-                        >
-                          <Save size={12} className="mr-1" /> Save
-                        </Button>
-                        <Button
-                          type="button"
-                          className="h-8 px-3 rounded-lg bg-slate-500 hover:bg-slate-600 text-white font-semibold active:scale-95 transition-all text-xs"
-                          onClick={handleCancelEdit}
-                        >
-                          <X size={12} className="mr-1" /> Cancel
-                        </Button>
-                      </>
+                      <div className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                        Editing Profile...
+                      </div>
                     )}
                   </div>
                 )}
@@ -974,9 +1018,9 @@ export default function ParentsPage() {
                           <FormInput label="NIC" name="guardianNic" required />
                           <FormInput label="Birth Certificate No" name="guardianBirthCertificateNo" />
                           <FormInput label="District" name="guardianDistrict" />
-                          <FormInput label="Religion" name="guardianReligion" required />
+                          <FormInput label="Religion" name="guardianReligion" options={RELIGION_OPTIONS} required />
                           <FormInput label="Gender" name="guardianGender" options={GENDER_OPTIONS} required />
-                          <FormInput label="Age - Auto Calculate" name="guardianAge" disabled placeholder="Auto-calculated" />
+                          <FormInput label="Age - Auto Calculate" name="guardianAge" disabled />
                           <FormInput label="Civil State" name="guardianCivilState" options={CIVIL_OPTIONS} />
                         </div>
                       </div>
